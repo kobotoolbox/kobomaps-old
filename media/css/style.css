@@ -1,0 +1,69 @@
+@CHARSET "UTF-8";
+
+div.data_specify_div
+{
+	width:1000px;
+	height:500px;
+	overflow:scroll;
+	border: solid 3px black;
+	padding:10px;
+}
+
+table.data_specify_table{
+	border-collapse:collapse;	
+}
+
+table.data_specify_table tr td{
+	border: solid 1px #888;
+	}
+	
+table.data_specify_table tr th.header{
+	border: solid 1px #888;
+	}
+
+table.data_specify_table tr td.header{
+	text-align:center;
+	font-weight:bold;	
+	}
+	
+ul.context_menu{
+	float:right;
+	list-style-type: none;
+}
+
+.navback{
+	float:left;
+}
+
+.navforward{
+	float:right;
+}
+
+.mapWLoading{
+	position:relative;
+	width:1000px; 
+	height:400px;	
+}
+
+.mapWLoading div#map_div{
+	position:absolute;
+	width:1000px; 
+	height:400px;
+	top:0px;
+	left:0px	
+}
+
+.mapWLoading #map_loading{
+	display:none; 
+	background:rgba(125, 125, 125, .5); 
+	z-index:100; 
+	background-image:url('../img/waiter_barber.gif');
+	background-position:center; 
+	background-repeat:no-repeat;
+	position:absolute;
+	width:1000px; 
+	height:400px;
+	top:0px;
+	left:0px	
+}
+*/

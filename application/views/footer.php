@@ -1,0 +1,1 @@
+<h3>Copyright KoBo <?php echo date('Y');?></h3>
