@@ -7,5 +7,6 @@ original_code_temp
 .buildpath
 .hg
 .hgignore
+.htaccess
 .project
 .settings/
