@@ -89,7 +89,7 @@
 		</td>
 		<td style="width:200px;">
 			<a href="<?php echo url::base(); ?>mymaps/add1/?id=<?php echo $map->id;?>" > <?php echo __('edit');?></a>
-			<a href="#" onclick="deleteForm(<?php echo $map->id?>);"> <?php echo __('delete');?></a>
+			<a href="#" onclick="deleteMap(<?php echo $map->id?>);"> <?php echo __('delete');?></a>
 		</td>
 	</tr>
 	<?php }?>

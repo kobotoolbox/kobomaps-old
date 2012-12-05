@@ -1,0 +1,11 @@
+uploads
+application/bootstrap.php
+application/config/database.php
+application/cache
+application/logs
+original_code_temp
+.buildpath
+.hg
+.hgignore
+.project
+.settings/

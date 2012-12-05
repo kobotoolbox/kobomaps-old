@@ -58,17 +58,19 @@
 <?php 
 }
 ?>
-<div class="mapWLoading">
-	<div id="map_div"></div>	
-	<div id="map_loading"></div>
-</div>
-
 
 <?php 
-	echo Form::open(NULL, array('id'=>'add_map_form', 'enctype'=>'multipart/form-data')); 
+	echo Form::open(NULL, array('id'=>'add_map_form', 'enctype'=>'multipart/form-data', 'onsubmit'=>'setMapViewSettings()')); 
 	echo Form::hidden('action','edit', array('id'=>'action'));
 	echo Form::hidden('map_id',$map_id, array('id'=>'map_id'));
+	
+	//pull the map object from the DB
+	$map = ORM::factory('Map', $map_id);
+	echo Form::input('lat', $map->lat, array('id'=>'lat'));
+	echo Form::input('lon', $map->lon, array('id'=>'lon'));
+	echo Form::input('zoom', $map->zoom, array('id'=>'zoom'));
 ?>
+
 
 <div class="data_specify_div">
 	<table >
@@ -81,6 +83,7 @@
 		</tr>	
 	
 <?php 	
+	
 	if(count($templates) == 0)
 	{
 		echo '<tr><td colspan="4">'.__('There are no templates').'</td></tr>';
@@ -102,8 +105,19 @@
 	</table>
 </div>
 
+
+<!-- map display -->
+<br />
+<p> Adjust the default view of the map</p>
+<div class="mapWLoading">
+	<div id="map_div"></div>	
+	<div id="map_loading"></div>
+</div>
+
+
+
 <?php
-	echo Form::submit('Submit', 'Submit');
+	echo Form::submit('Submit', 'Submit', array('onmouseover'=>'setMapViewSettings()'));	//, array('onmouseover'=>'setMapViewSettings()')
 	echo Form::close();
 ?>
 

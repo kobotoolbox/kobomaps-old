@@ -24,7 +24,7 @@
 	</li>
 	<li>
 		<strong><?php echo __('Data Rows');?></strong> - <?php echo __('Tell us which rows are used to store data for an indicator. 
-				You can specify as many data rows as needed')?>
+				You can specify as many data rows as needed, but there must be at least one.')?>
 	</li>
 	<li>
 		<strong><?php echo __('Indicator Columns');?></strong> - <?php echo __('Tell us which columns are used to specify the indicators or questions that the data in the rest 
@@ -35,8 +35,11 @@
 				You can speicfy mulitple region columns.')?>
 	</li>
 	<li>
-		<strong><?php echo __('Totlal Column - Optional');?></strong> - <?php echo __('Which column represents the total for all geographic regions.
+		<strong><?php echo __('Total Column - Optional');?></strong> - <?php echo __('Which column represents the total for all geographic regions.
 				You can only specify one total column')?>
+	</li>
+	<li>
+		<strong><?php echo __('Total Label Column - Optional');?></strong> - <?php echo __('Which column presents the lable for the total column for each indicator (for example, this would not have to be labeled "total"). ')?>
 	</li>
 	<li>
 		<strong><?php echo __('Unit Column - Optional');?></strong> - <?php echo __('Which column stores the units for each indicator. You can only specify

@@ -95,12 +95,28 @@ class Model_Map extends ORM {
 	public function update_map($values)
 	{
 	
-		$expected = array('title', 'description', 'user_id', 'file', 'map_style', 'CSS', 'lat', 'lon', 'zoom', 'template_id','json_file');
+		$expected = array('title', 'description', 'user_id', 'file', 'map_style', 'CSS', 'lat', 'lon', 'zoom', 
+				'template_id','json_file', 'is_private', 'private_password');
 	
 		$this->values($values, $expected);
 		$this->check();
 		$this->save();
 	}//end function
+	
+	
+	/**
+	 * A helper function to remove maps from the database
+	 * @param int $id the id of the map to be deleted
+	 */
+	public static function delete_map($id)
+	{
+		$map = ORM::factory('map',$id);
+		
+		$directory = DOCROOT.'uploads/data/';
+		unlink($directory.$map->file);
+		unlink($directory.$map->json_file);
+		$map->delete();
+	}
 
 
 	

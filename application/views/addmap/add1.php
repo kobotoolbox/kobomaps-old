@@ -65,20 +65,43 @@
 	echo '</td><td>';
 	echo Form::textarea('description', $data['description'], array('id'=>'description', 'style'=>'width:600px;'));
 	echo '</td></tr><tr><td>';
+	
+	echo Form::label('description', __('Should this map be private').": ");
+	echo '</td><td>';
+	echo Form::checkbox('is_private', null, 1==$data['is_private'], array('onchange'=>"toggle('private_password_row')"));
+	echo '</td></tr>';
+	
+	if($data['is_private'] != 1)
+	{
+		$password_style = "display:none";		
+	}
+	else {
+		$password_style = "";
+	}
+	
+	echo '<tr id="private_password_row" style="'.$password_style.'"><td>';
+	echo Form::label('private_password', __('Password (if private)').": ");
+	echo '</td><td>';
+	echo Form::password('private_password', $data['private_password'], array('id'=>'private_password', 'style'=>'width:300px;'));
+	echo '</td></tr><tr><td>';
+	
 	echo Form::label('file', __('Spreadsheet (.xls, .xlsx)').": ");
 	echo '</td><td>';
 	echo Form::file('file', array('id'=>'file', 'style'=>'width:300px;'));	
-	echo '</td></tr><tr><td>';
+	echo '</td></tr>';
+	
+	//do we ultimately want to clean this up a bit?
+	echo '<tr style="display:none"><td>';
 	echo Form::label('lat', __('Latitude of center of map').": ");
 	echo '</td><td>';
 	echo Form::input('lat', $data['lat'], array('id'=>'lat', 'style'=>'width:300px;'));
 	
-	echo '</td></tr><tr><td>';
+	echo '</td></tr><tr style="display:none"><td>';
 	echo Form::label('lon', __('Longitude of center of map').": ");
 	echo '</td><td>';
 	echo Form::input('lon', $data['lon'], array('id'=>'lon', 'style'=>'width:300px;'));
 	
-	echo '</td></tr><tr><td>';
+	echo '</td></tr><tr style="display:none"><td>';
 	echo Form::label('zoom', __('Default map zoom').": ");
 	echo '</td><td>';
 	echo Form::select('zoom', array(1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9,10=>10,11=>11,12=>12,13=>13,14=>14,15=>15,16=>16,17=>17,18=>18),$data['zoom'], array('id'=>'zoom', 'style'=>'width:300px;'));
@@ -100,7 +123,7 @@
 	echo '</td><td></td></tr></table>';
 	echo Form::close();
 ?>
-</table>
+
 </div>
 
 

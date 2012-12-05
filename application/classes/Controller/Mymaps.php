@@ -92,9 +92,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'CSS'=>'',
 			'lat'=>'0',
 			'lon'=>'0',
-			'zoom'=>'8',
+			'zoom'=>'1',
 			'map_style'=>'',
-			'user_id'=>$this->user->id);
+			'user_id'=>$this->user->id,
+			'is_private'=>0,
+			'private_password'=>null);
 		
 		$map = null;
 		
@@ -113,7 +115,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['zoom'] = $map->zoom;
 			$data['map_style'] = $map->map_style;
 			$data['user_id'] = $map->user_id;
+			$data['is_private'] = $map->is_private;
+			$data['private_password'] = $map->private_password;
 		}
+		
+				
+		
 		 
 		
 		/***Now that we have the form, lets initialize the UI***/
@@ -130,9 +137,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 		$this->template->content->messages = array();
 		$this->template->content->header = $header;
 		//set the JS
-		//$js = view::factory('admin/form_edit_js');
+		
+		//$js = view::factory('add1_js/form_edit_js');
+		$js = view::factory('addmap/add1_js');
 		//$js->is_add = $is_add;
-		//$this->template->html_head->script_views[] = $js;
+		$this->template->html_head->script_views[] = $js;
+		
 		$this->template->html_head->script_views[] = view::factory('js/messages');
 		
 		//get the status
@@ -166,6 +176,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 					$_POST['template_id'] = $map->template_id;
 					$_POST['json_file'] = $map->json_file;
 				}
+				//this handles is private
+				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;
 				$map->update_map($_POST);
 				
 				
@@ -209,8 +221,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 				}
 				
 				
-				
-				HTTP::redirect('mymaps/add2?id='.$map->id);				
+				HTTP::redirect('mymaps/add2?id='.$map->id);	
+							
 				
 			}
 			catch (ORM_Validation_Exception $e)
@@ -235,6 +247,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 			}		
 		}
 	 }//end action_add1
+	 
+	 
+	 
+	
 	 
 	 
 	 /**
@@ -348,6 +364,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 			'source'=>__('Source'),
 	 			'source link'=>__('Source Link'),
 	 			'ignore'=>__('Ignore'),
+	 			'total_label'=>__('Total Label')
 	 			);
 	 	$this->template->content->column_types = $column_types;
 	 	
@@ -388,6 +405,14 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 						$old_col->delete();
 	 					}
 	 					
+	 					$indicator_count = 0;
+	 					$region_count = 0;
+	 					$total_count = 0;
+	 					$total_label_count = 0;
+	 					$unit_count = 0;
+	 					$source_count = 0;
+	 					$source_link_count = 0;
+	 					
 	 					foreach($sheet as $column_name=>$column_type) //loop over the column data
 	 					{
 	 						$column = ORM::factory('Column');
@@ -396,10 +421,76 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 						$column->type = $column_type;
 	 						$column->save();
 	 						
+	 						if($column_type == "indicator")
+	 						{
+	 							$indicator_count++;
+	 						}
+	 						if($column_type == "region")
+	 						{
+	 							$region_count++;
+	 						}
+	 						if($column_type == "total")
+	 						{
+	 							$total_count++;
+	 						}
+	 						if($column_type == "total_label")
+	 						{
+	 							$total_label_count++;
+	 						}
+	 						if($column_type == "unit")
+	 						{
+	 							$unit_count++;
+	 						}
+	 						if($column_type == "source")
+	 						{
+	 							$source_count++;
+	 						}
+	 						if($column_type == "source link")
+	 						{
+	 							$source_link_count++;
+	 						}
+	 					}
+	 					
+	 						 					
+	 					//validate sheets by checking column counts
+	 					if($indicator_count < 1)
+	 					{
+	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs at least one column set as an indicator');
+	 					}
+	 					if($region_count < 1)
+	 					{
+	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs at least one column set for region.');
+	 					}
+	 					if($total_count > 1)
+	 					{
+	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one total column.');
+	 					}
+	 					if($total_label_count > 1)
+	 					{
+	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one total label column.');
+	 					}
+	 					if($unit_count > 1)
+	 					{
+	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one unit column.');
+	 					}
+	 					if($source_count > 1)
+	 					{
+	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one source column.');
+	 					}
+	 					if($source_link_count > 1)
+	 					{
+	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one source link column.');
 	 					}
 	 				}
 	 				
-	 				//now hanlde the rows
+	 				//now handle the rows
 	 				foreach($_POST['row'] as $sheet_id=>$sheet) //loop over the column data for each sheet
 	 				{
 	 					//first we blow away any column data associated with this sheet
@@ -411,6 +502,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 						$old_row->delete();
 	 					}
 	 					
+	 					$header_count = 0;
+	 					$data_count = 0;
+	 					
 	 					foreach($sheet as $row_name=>$row_type) //loop over the column data
 	 					{
 	 						$row = ORM::factory('Row');
@@ -418,10 +512,38 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 						$row->name = $row_name;
 	 						$row->type = $row_type;
 	 						$row->save();
+	 						
+	 						if($row_type == "header")
+	 						{
+	 							$header_count++;
+	 						}
+	 						if($row_type == "data")
+	 						{
+	 							$data_count++;
+	 						}
+	 						
 	 					}
 	 				}
 	 				
-	 				HTTP::redirect('mymaps/add3?id='.$map->id);
+	 				$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+	 				
+	 				//validate sheets by checking row counts
+	 				if($header_count != 1)
+	 				{
+	 					$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs exactly one row set as a header row.');	
+	 				}
+	 				
+	 				if($data_count < 1)
+	 				{
+	 					$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs at least one row set as a data row.');
+	 				}
+	 				
+	 				
+	 				//send to next page if no errors
+	 				if(count($this->template->content->errors) == 0)
+	 				{
+	 					HTTP::redirect('mymaps/add3?id='.$map->id);
+	 				}
 	 			}
 	 
 	 			
@@ -674,6 +796,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content->errors = array();
 	 	$this->template->html_head->script_views[] = view::factory('js/messages');
 	 	$js =  view::factory("addmap/add4_js");
+	 	$js->lat = $map->lat;
+	 	$js->lon = $map->lon;
+	 	$js->zoom = $map->zoom;
 	 	$this->template->html_head->script_views[] = $js;
 	 
 	 	//get the status
@@ -694,6 +819,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 			{
 					$map_array = $map->as_array();
 					$map_array['template_id'] = $_POST['template_id'];
+					
+					$map_array['lat'] = $_POST['lat'];
+					$map_array['lon'] = $_POST['lon'];
+					$map_array['zoom'] = $_POST['zoom'];
+					
 					$map->update_map($map_array);
 	 				HTTP::redirect('mymaps/add5?id='.$map->id);
 	 			}
@@ -931,12 +1061,19 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					->where('mapsheet_id', '=', $sheet->id)
 	 					->where('type','=','source link')
 	 					->find();
+	 					
 	 					//get total column
 	 					$total_column = ORM::factory('Column')
 	 					->where('mapsheet_id', '=', $sheet->id)
 	 					->where('type','=','total')
 	 					->find();
 	 						
+	 					//get total label column
+	 					$total_label_column = ORM::factory('Column')
+	 					->where('mapsheet_id', '=', $sheet->id)
+	 					->where('type','=','total_label')
+	 					->find();
+	 					
 	 					
 	 					//get the sheet in array form
 	 					$sheet_excel = $excel->getSheetByName($sheet->name);
@@ -944,7 +1081,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$indicators = array();
 	 					//get a helper function in here
 	 					$indicators = $this->_build_indicators_array($sheet_array, $indicator_columns, $data_rows, $region_columns, $header_row, $indicators,
-	 							 $unit_column, $src_column, $src_link_column, $total_column);
+	 							 $unit_column, $src_column, $src_link_column, $total_column, $total_label_column);
 	 					
 	 					$json['sheets'][$sheet->id] = array('sheetName'=>$sheet->name, 'indicators'=>$indicators);
 	 					
@@ -1152,10 +1289,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 	  * @param dbOject $src_column Database object representing the source column in the excel data
 	  * @param dbOject $src_link_column Database object representing the source link column in the excel data
 	  * @param dbOject $total_column Database object representing the total column in the excel data
+	  * @param dbObject $total_label_column Database object representing the total label column in the data
 	  * @return array Array of indicators that will be turned into JSON
 	  */
 	 protected function _build_indicators_array($sheet, $indicator_columns, $data_rows, $region_columns, $header_row, $indicators, 
-	 		$unit_column, $src_column, $src_link_column, $total_column)
+	 		$unit_column, $src_column, $src_link_column, $total_column, $total_label_column)
 	 {
 	 		//$_GET['debug'] = true;
 	 	
@@ -1260,14 +1398,53 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					//todo need a better way to know what's been ignored, both for the purpose
 	 					//of showing ignored things in the UI to the user, and so we don't have to check for empty.
 	 				}
+	 				
+	 				//TODO respond appropriately if data is not a number
 	 				$indicator_array_ptr['data'] = $data;
-	 				$indicator_array_ptr['unit'] = $sheet[$data_row->name][$unit_column->name];
-	 				$indicator_array_ptr['total'] = $sheet[$data_row->name][$total_column->name];
-	 				$indicator_array_ptr['total'] = str_replace("%", "",$indicator_array_ptr['total']);
-	 				$indicator_array_ptr['total'] = str_replace("$", "",$indicator_array_ptr['total']);
-	 				$indicator_array_ptr['total'] = str_replace("#", "",$indicator_array_ptr['total']);
-	 				$indicator_array_ptr['src'] = $sheet[$data_row->name][$src_column->name];
-	 				$indicator_array_ptr['src_link'] = $sheet[$data_row->name][$src_link_column->name];
+	 				
+	 				//checking for optional columns
+	 				if($unit_column->loaded())
+	 				{
+	 					$indicator_array_ptr['unit'] = $sheet[$data_row->name][$unit_column->name];
+	 				}
+	 				else
+	 				{
+	 					$indicator_array_ptr['unit'] = "";
+	 				}
+	 				
+	 				if($total_column->loaded())
+	 				{
+		 				$indicator_array_ptr['total'] = $sheet[$data_row->name][$total_column->name];
+		 				$indicator_array_ptr['total'] = str_replace("%", "",$indicator_array_ptr['total']);
+		 				$indicator_array_ptr['total'] = str_replace("$", "",$indicator_array_ptr['total']);
+		 				$indicator_array_ptr['total'] = str_replace("#", "",$indicator_array_ptr['total']);
+	 				}
+	 				//js code checks if this is undefined
+	 				
+	 				if($src_column->loaded())
+	 				{
+	 					$indicator_array_ptr['src'] = $sheet[$data_row->name][$src_column->name];
+	 				}
+	 				else 
+	 				{
+	 					$indicator_array_ptr['src'] = "";	
+	 				}
+	 					 				
+	 				if($src_link_column->loaded())
+	 				{
+	 					$indicator_array_ptr['src_link'] = $sheet[$data_row->name][$src_link_column->name];
+	 				}
+	 				else
+	 				{
+	 					$indicator_array_ptr['src_link'] = "";
+	 				}
+	 				
+	 				
+	 				if($total_label_column->loaded())
+	 				{
+	 					$indicator_array_ptr['total_label'] = $sheet[$data_row->name][$total_label_column->name];
+	 				}
+	 				
 	 			}
 	 		}
 	 	}

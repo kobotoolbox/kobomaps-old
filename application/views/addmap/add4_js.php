@@ -115,8 +115,8 @@ var labels = new Array();
 		]; 
 
 	var myOptions = {
-			zoom: 1, 	//creates the initial zoom level. This is defined in the container file as it is country-specific
-			center: new google.maps.LatLng(0,0), //creates the coordiantes that will center the map. This is defined in the container file as it is country-specific
+			zoom: <?php echo $zoom?>, 	//creates the initial zoom level. This is defined in the container file as it is country-specific
+			center: new google.maps.LatLng(<?php echo $lat?>,<?php echo $lon?>), //creates the coordiantes that will center the map. This is defined in the container file as it is country-specific
 			streetViewControl: false,
 			panControl: false,
 			mapTypeControl: true,
@@ -233,7 +233,27 @@ var labels = new Array();
 		
 
 	 }//end parse json
-		
+
+
+	 function setMapViewSettings()
+	 {
+		$("#lat").val(map.getCenter().lat());
+		var lon_no_wrap = map.getCenter().lng()%360;
+		if(lon_no_wrap > 180)
+		{
+			lon = lon_no_wrap -360; 
+		}
+		else if(lon_no_wrap < -180)
+		{
+			lon = lon_no_wrap +360;
+		}
+		else
+		{
+			lon = lon_no_wrap;
+		}
+		$("#lon").val(lon);
+		$("#zoom").val(map.getZoom());		
+	 }
 
 
 </script>

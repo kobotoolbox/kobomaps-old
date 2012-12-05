@@ -28,6 +28,36 @@ class Controller_Public extends Controller_Main {
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	 
+	 
+	 	$auth = Auth::instance();
+	 	//is the user logged in?
+	 	if($auth->logged_in())
+	 	{
+	 		$user = ORM::factory('user',$auth->get_user());
+	 		if($user->id != $map->user_id)
+	 		{
+	 			if($map->is_private)
+	 			{
+	 				if(!(isset($_POST['private_password']) AND $_POST['private_password'] == $map->private_password))
+	 				{
+	 					$this->template->content = view::factory('addmap/private_password');
+	 					return;
+	 				}
+	 				
+	 			}
+	 		}
+	 	}
+	 	else
+	 	{
+	 		if($map->is_private)
+	 		{
+	 			if(!(isset($_POST['private_password']) AND $_POST['private_password'] == $map->private_password))
+	 				{
+	 					$this->template->content = view::factory('addmap/private_password');
+	 					return;
+	 				}
+	 		}
+	 	}
 	 	
 	 	$map_template = ORM::factory('Template', $map->template_id);
 	 	
@@ -295,6 +325,46 @@ class Controller_Public extends Controller_Main {
 	 	return $indicators;
 	 	
 	 }//end function
+	 
+	 
+	 /**
+	  * the function for editing a form
+	  * super exciting
+	  *
+	  * Redirect to set password for private maps
+	  */
+	 public function action_private_password()
+	 {
+	 	//get the id
+	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+	 	//something when wrong, kick them back to add1
+	 	if($map_id == 0)
+	 	{
+	 		HTTP::redirect('');
+	 	}
+	 	 
+	 	if(!empty($_POST)) // They've submitted the form to update his/her wish
+	 	{ 
+	 	
+		 	//pull the map object from the DB
+		 	$map = ORM::factory('Map', $map_id);
+		 	 
+		 	if($_POST['private_password'] == $map->private_password)
+		 	{
+		 		
+		 	}
+	 	}
+	 	else	 		
+	 	{	
+	 		$this->template->content = view::factory("addmap/private_password");
+	 	}
+	 	 
+	 	 
+	 	 
+	 	//echo __("test");
+	 	//$password =
+	 }
+	 
 	
 	
 }//end of class

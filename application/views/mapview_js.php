@@ -96,10 +96,10 @@ var indicatorsToUpdateParams = new Array();
  */
 var round = true;
 
-//add a title to the map
+//add a title to the map 
 	$(document).ready(function() {
 	   $("#kmapTitle").html('<?php echo $map->title;?>');
-	   $("#nationalaveragelabel").html('Fix Later: <?php echo $template->admin_level?>:');
+	   
 	   initialize_map();
 	});
 
@@ -397,7 +397,11 @@ function parseJsonData(jsonDataUrl)
 			
 			var nationalAverage = dataPtr["total"]; 
 			var unit = dataPtr["unit"];
-			UpdateAreaAllData(title, data, nationalAverage, indicator, unit);
+			
+			var totalLabel = dataPtr["total_label"];
+			console.log(totalLabel);
+			
+			UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel);
 			
 			$.address.parameter("indicator", indicator);
 			/*
@@ -412,7 +416,7 @@ function parseJsonData(jsonDataUrl)
 			*/
 			
 			//check and see if there is a source to link to
-			if(dataPtr["src"] == "")
+			if(dataPtr["src"] == "" || dataPtr["src"] == "undefined")
 			{
 				//if there's no source then hide the source div
 				$("#sourcetextspan").hide();
@@ -423,7 +427,7 @@ function parseJsonData(jsonDataUrl)
 				$("#sourcetextspan").show();
 				
 				//make sure there's a valid link
-				if(dataPtr["src_link"] == "")
+				if(dataPtr["src_link"] == "" || dataPtr["src_link"] == "undefined")
 				{
 					//not a valid link
 					$("#sourceURL").hide();
@@ -896,7 +900,7 @@ function calculateMinSpread(data)
 * Data: associative array of the percentages keyed by Area names as defined in the JSON that defines areas and their bounds
 * Note: All of this assumes positive numbers. 
 */
-function UpdateAreaAllData(title, data, nationalAverage, indicator, unit)
+function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel)
 {
 	
 	//first zero out all the current map data. Do this incase certain indicators don't apply to all geographic areas
@@ -915,18 +919,28 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit)
 	//update the key
 	updateKey(min, spread, title, unit);
 	//console.log("National Average: " + nationalAverage);
+	
 	//update the national average
 	if(typeof nationalAverage !== "undefined" && !isNaN(nationalAverage))
 	{
 		$("#nationalaveragediv").show();
 		$("#nationalIndicatorChart").show();
-		updateNationalAverage(min, spread, nationalAverage, unit, indicator);
+
+		//total label -- defaults to "Total"
+		if(typeof totalLabel == "undefined")
+		{
+			totalLabel = "";
+		}
+		//totalLabel = "Total";
+		
+		updateNationalAverage(min, spread, nationalAverage, unit, indicator, totalLabel);
 	}
 	else
 	{
 		$("#nationalaveragediv").hide();
 		$("#nationalIndicatorChart").hide();
 	}
+
 }
 
 function calculateMagnitude(num)
@@ -972,7 +986,7 @@ function calculateMagnitude(num)
 * This takes in the min score, the spread between the min and the max, and the national average
 * and then updates the nationalaveragediv element
 */
-function updateNationalAverage(min, spread, nationalAverage, unit, indicator)
+function updateNationalAverage(min, spread, nationalAverage, unit, indicator, totalLabel)
 {
 	////////////////////////////////////////////////////////////////
 	//displays the box container
@@ -986,6 +1000,8 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator)
 	$("#nationalaveragediv").css("background-color", color);
 	$("#nationalaverageimg").text(addCommas(nationalAverage)+" "+htmlDecode(unit));
 
+	$("#nationalaveragelabel").html(totalLabel);
+	
 	////////////////////////////////////////////////////////////////
 	//updates the national average chart
 	////////////////////////////////////////////////////////////////
@@ -1025,10 +1041,11 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator)
 	var spread = spreadMin["spread"];
 	var nationalChart = createChart(questionText + ' ('+kmapAllAdminAreas+')', dataForNational, mainIndicatorText, indicator+"_by_indicator_national_chart", unit, min, spread);
 	$("#nationalIndicatorChart").html(nationalChart);
-		
+	
 }
 
-
+//changed this to take another input 
+//TODO -> make sure this doesn't mess anything up
 function updateKey(min, span, title, unit)
 {
 	$("#percentleft").attr("title", addCommas(min)+" "+htmlDecode(unit));
@@ -1039,7 +1056,7 @@ function updateKey(min, span, title, unit)
 	
 	
 	$("#spanLegendText").html(title);
-	
+
 }
 
 /**

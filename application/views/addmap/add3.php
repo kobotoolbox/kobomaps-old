@@ -16,7 +16,7 @@
 
 <h3><?php echo $map->title;?></h3>
 <p><?php echo $map->description;?></p>
-<p><?php echo __("Confirm that the below is true. If it is continue on to page 4, otherwise go back to page 3 and make some corrects");?></p>
+<p><?php echo __("Confirm that the below is true. If it is continue on to page 4, otherwise go back to page 2 and make some corrections.");?></p>
 
 
 

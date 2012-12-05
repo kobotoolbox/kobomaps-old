@@ -163,4 +163,10 @@ ALTER TABLE  `regionmapping` ADD INDEX  `mapping_region` (  `template_region_id`
 ALTER TABLE  `maps` ADD  `template_id` INT( 11 ) UNSIGNED NOT NULL AFTER  `user_id`;
 ALTER TABLE  `maps` ADD  `json_file` char(254) NOT NULL AFTER  `user_id`;
 
+
+/** 2012-12-03 Added a field to specify if maps are private or not**/
+ALTER TABLE  `maps` ADD  `is_private` TINYINT NOT NULL DEFAULT  '0';
+
+/** 2012-12-03 Willy Douglas added private password column**/
+ALTER TABLE  `maps` ADD  `private_password` CHAR(255) NULL DEFAULT  NULL;
   

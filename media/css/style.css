@@ -2,8 +2,8 @@
 
 div.data_specify_div
 {
-	width:1000px;
-	height:500px;
+	width:980px;
+	height:200px;
 	overflow:scroll;
 	border: solid 3px black;
 	padding:10px;
@@ -65,5 +65,9 @@ ul.context_menu{
 	height:400px;
 	top:0px;
 	left:0px	
+}
+
+.errors{
+	background:red;
 }
 */
