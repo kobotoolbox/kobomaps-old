@@ -9,7 +9,7 @@
 class Controller_Mymaps extends Controller_Loggedin {
 
 
-  	
+
 	/**
 	where users go to change their profiel
 	*/
@@ -29,6 +29,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 		$js = view::factory('mymaps_js');
 		$this->template->html_head->script_views[] = $js;
 		$this->template->html_head->script_views[] = view::factory('js/messages');
+		
 		
 		/********Check if we're supposed to do something ******/
 		if(!empty($_POST)) // They've submitted the form to update his/her wish
@@ -141,9 +142,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 		//$js = view::factory('add1_js/form_edit_js');
 		$js = view::factory('addmap/add1_js');
 		//$js->is_add = $is_add;
-		$this->template->html_head->script_views[] = $js;
-		
+		$this->template->html_head->script_views[] = $js;		
 		$this->template->html_head->script_views[] = view::factory('js/messages');
+		$this->template->html_head->script_views[] = view::factory('js/gspreadsheetselect');
 		
 		//get the status
 		$status = isset($_GET['status']) ? $_GET['status'] : null;
