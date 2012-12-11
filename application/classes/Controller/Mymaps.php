@@ -9,7 +9,7 @@
 class Controller_Mymaps extends Controller_Loggedin {
 
 
-  	
+
 	/**
 	where users go to change their profiel
 	*/

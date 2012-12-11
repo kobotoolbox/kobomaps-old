@@ -1,6 +1,7 @@
 uploads
 application/bootstrap.php
 application/config/database.php
+application/config/googleapi.php
 application/cache
 application/logs
 original_code_temp

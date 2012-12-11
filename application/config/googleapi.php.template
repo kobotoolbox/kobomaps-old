@@ -1,0 +1,17 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');
+/**
+ * Configuration file for the Google APIs this application uses. 
+ * When installing this application, the various fields below must be completed. 
+ * 
+ * @author John Etherton <john@ethertontech.com>
+ * @category KoboMaps
+ * @package KoboMaps
+ * 
+ */
+
+return array(
+
+	'client_id'       => '174019753361.apps.googleusercontent.com',
+	'client_secret'   => 'u7f79Se9pbfM_dmAy-Iu406V',
+	
+);
