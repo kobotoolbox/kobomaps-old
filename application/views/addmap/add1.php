@@ -84,10 +84,34 @@
 	echo '</td><td>';
 	echo Form::password('private_password', $data['private_password'], array('id'=>'private_password', 'style'=>'width:300px;'));
 	echo '</td></tr><tr><td>';
+	echo Form::label('filetype', __('Is the data source').": ");
+	echo '</td><td>';
+	echo Form::radio('filetype', 'excel', true, array('onclick'=>"toggle('googledoc');toggle('excelfile')")). ' '.__('Excel File') . ' '.
+		Form::radio('filetype', 'google',false, array('onclick'=>"toggle('googledoc');toggle('excelfile')")). ' '.__('Google Spreadsheet');
+
+	echo '</td></tr><tr id="excelfile"><td>';
 	
 	echo Form::label('file', __('Spreadsheet (.xls, .xlsx)').": ");
 	echo '</td><td>';
 	echo Form::file('file', array('id'=>'file', 'style'=>'width:300px;'));	
+
+	echo '</td></tr><tr id="googledoc" style="display:none;"><td>';
+	
+	echo Form::label('googleurl', __('Google Spreadsheet').": ");
+	echo '</td><td>';
+	echo '<input type="button" id="authorizeButton" value="Authorize" onclick="authorizeKoboMaps();"/>';
+	?>
+		<img src="<?php echo url::base();?>media/img/loading.gif" id="googlewaiter" style="display:none;"/>
+		<div id="googleFileListHolder">
+			<table id="googleFilesList">
+				<tr>
+					<th></th><th><?php echo __('Name')?></th><th><?php echo __('Owner')?></th><th><?php echo __('Date')?></th>
+				</tr>
+			</table>
+		</div>
+	
+	<?php 
+	echo Form::input('googleurl' );
 	echo '</td></tr>';
 	
 	//do we ultimately want to clean this up a bit?
