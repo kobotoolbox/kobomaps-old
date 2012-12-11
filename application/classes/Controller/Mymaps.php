@@ -1019,12 +1019,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 		 						$mapping = ORM::factory('Regionmapping')
 		 							->where('column_id', '=',$column)
 		 							->find();
-		 						if(!$mapping->loaded())
-		 						{
-		 							$mapping->column_id = $column;
-		 							$mapping->template_region_id = $region_id;
-		 							$mapping->save();
-		 						}
+	 							$mapping->column_id = $column;
+	 							$mapping->template_region_id = $region_id;
+	 							$mapping->save();
 	 						}
 	 					}
 	 				}
