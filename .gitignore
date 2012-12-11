@@ -8,4 +8,5 @@ original_code_temp
 .hg
 .hgignore
 .project
+.htaccess
 .settings/
