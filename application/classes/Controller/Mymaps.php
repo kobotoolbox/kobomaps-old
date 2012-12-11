@@ -398,13 +398,13 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				foreach($_POST['column'] as $sheet_id=>$sheet) //loop over the column data for each sheet
 	 				{
 	 					//first we blow away any column data associated with this sheet
-	 					$old_cols = ORM::factory('Column')
+	 				/* 	$old_cols = ORM::factory('Column')
 	 						->where('mapsheet_id', '=', $sheet_id)
 	 						->find_all();
 	 					foreach($old_cols as $old_col)
 	 					{
 	 						$old_col->delete();
-	 					}
+	 					} */
 	 					
 	 					$indicator_count = 0;
 	 					$region_count = 0;
@@ -414,9 +414,23 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$source_count = 0;
 	 					$source_link_count = 0;
 	 					
+	 					$sql = "";
+	 					
 	 					foreach($sheet as $column_name=>$column_type) //loop over the column data
 	 					{
-	 						$column = ORM::factory('Column');
+	 						
+	 						if(strlen($sql) > 0){
+	 							$sql .= " AND ";
+	 						}
+	 						$sql .= "(name <> '".$column_name."' AND mapsheet_id <> ".$sheet_id.") ";
+	 						
+	 						
+	 						//$column = ORM::factory('Column');
+	 						$column = ORM::factory('Column')
+	 						->where('mapsheet_id', '=', $sheet_id)
+	 						->where('name', '=', $column_name)
+	 						->find();
+	 						
 	 						$column->mapsheet_id = $sheet_id;
 	 						$column->name = $column_name;
 	 						$column->type = $column_type;
@@ -452,7 +466,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 						}
 	 					}
 	 					
-	 						 					
+	 					$db = Database::instance();
+     				  	$old_columns_to_delete = $db->query(Database::DELETE, 'DELETE FROM columns WHERE '.$sql, TRUE);
+
+     				  	
 	 					//validate sheets by checking column counts
 	 					if($indicator_count < 1)
 	 					{
