@@ -41,12 +41,23 @@ $client_id = $config['client_id'];
 			{
 				var item = data.items[i];
 
-				$("#googleFilesList").append("<tr><td></td><td>"+item.title+"</td><td>"+item.ownerNames[0]+"</td><td>"+item.modifiedDate+"</td></tr>");
+				$("#googleFilesList").append('<tr><td><input type="radio" name="googleFile" value="'+item.id+'" onclick="googleFileSelected(\''+item.id+'\',\''+item.exportLinks["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]+'\');"></td><td>'+item.title+"</td><td>"+item.ownerNames[0]+"</td><td>"+item.modifiedDate+"</td></tr>");
 			}
-
+			console.log(data.items);
 			$("#googlewaiter").hide();
 		}      
-      
+
+	  /**
+       * Called when a user selects the checkbox for a given google spreadsheet
+       *
+       * @param {String} id The id of the google file
+       * @param {String} link The url to the Excel version of the file
+       */
+       function googleFileSelected(id, link)
+       {
+           $("#googleid").val(id);
+           $("#googlelink").val(link);
+       }
 
        /**
         * Called when authorization server replies.

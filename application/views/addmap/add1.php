@@ -111,7 +111,8 @@
 		</div>
 	
 	<?php 
-	echo Form::input('googleurl' );
+	echo Form::hidden('googleid','',array('id'=>'googleid'));
+	echo Form::hidden('googlelink','',array('id'=>'googlelink'));
 	echo '</td></tr>';
 	
 	//do we ultimately want to clean this up a bit?
