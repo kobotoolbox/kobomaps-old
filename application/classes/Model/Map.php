@@ -47,7 +47,7 @@ class Model_Map extends ORM {
 				'zoom' => array(
 						array('not_empty'),
 						array('numeric'),
-						array('range', array(':value',1,24)),
+						array('range', array(':value',-1,24)),
 				),
 				'description' => array(
 						array('max_length', array(':value', 65533)),
