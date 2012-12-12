@@ -1013,8 +1013,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				{
 	 					foreach($sheet as $column=>$region_id)
 	 					{
-	 						if(intval($region_id) != 0)
-	 						{
+	 					//	if(intval($region_id) != 0)
+	 					//	{
 		 						//blow away all the current mappings
 		 						$mapping = ORM::factory('Regionmapping')
 		 							->where('column_id', '=',$column)
@@ -1022,7 +1022,16 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 							$mapping->column_id = $column;
 	 							$mapping->template_region_id = $region_id;
 	 							$mapping->save();
-	 						}
+	 					//	}
+	 						/*else 
+	 						{
+	 							$mapping = ORM::factory('Regionmapping')
+	 							->where('column_id', '=',$column)
+	 							->find();
+	 							$mapping->column_id = $column;
+	 							$mapping->template_region_id = 0;
+	 							$mapping->save();	
+	 						}*/
 	 					}
 	 				}
 

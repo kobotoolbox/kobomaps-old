@@ -170,3 +170,33 @@ ALTER TABLE  `maps` ADD  `is_private` TINYINT NOT NULL DEFAULT  '0';
 /** 2012-12-03 Willy Douglas added private password column**/
 ALTER TABLE  `maps` ADD  `private_password` CHAR(255) NULL DEFAULT  NULL;
   
+
+
+/** 2012-12-12 Willy Douglas added ignore rows to refernce for saving info for ignored regions **/
+
+/** create ignore map template **/
+INSERT INTO  `kobomaps`.`templates` (
+`id` ,
+`title` ,
+`description` ,
+`admin_level` ,
+`file` ,
+`decimals` ,
+`lat` ,
+`lon` ,
+`zoom`
+)
+VALUES (
+'0',  'Ignore_template',  'ignore',  '0',  'null',  '0',  '0',  '0',  '0'
+);
+
+/** Create ignore region **/
+INSERT INTO  `kobomaps`.`template_regions` (
+`id` ,
+`template_id` ,
+`title`
+)
+VALUES (
+'0',  '0',  'ignore_region'
+);
+
