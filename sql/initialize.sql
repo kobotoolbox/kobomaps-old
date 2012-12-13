@@ -175,7 +175,7 @@ ALTER TABLE  `maps` ADD  `private_password` CHAR(255) NULL DEFAULT  NULL;
 /** 2012-12-12 Willy Douglas added ignore rows to refernce for saving info for ignored regions **/
 
 /** create ignore map template **/
-INSERT INTO  `kobomaps`.`templates` (
+INSERT INTO  `templates` (
 `id` ,
 `title` ,
 `description` ,
@@ -190,8 +190,10 @@ VALUES (
 '0',  'Ignore_template',  'ignore',  '0',  'null',  '0',  '0',  '0',  '0'
 );
 
+UPDATE  `templates` SET  `id` =  '0' WHERE  `templates`.`title` = 'Ignore_template';
+
 /** Create ignore region **/
-INSERT INTO  `kobomaps`.`template_regions` (
+INSERT INTO  `template_regions` (
 `id` ,
 `template_id` ,
 `title`
@@ -199,4 +201,6 @@ INSERT INTO  `kobomaps`.`template_regions` (
 VALUES (
 '0',  '0',  'ignore_region'
 );
+
+UPDATE  `template_regions` SET  `id` =  '0' WHERE  `template_regions`.`title` = 'ignore_region';
 
