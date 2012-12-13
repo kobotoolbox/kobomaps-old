@@ -118,6 +118,55 @@ class Model_Map extends ORM {
 		$map->delete();
 	}
 
+	
+	public static  $style_default = '[
+	  {
+		featureType: "administrative.province",
+		elementType: "all",
+		stylers: [
+		  { visibility: "off" }
+		]
+	  },{
+		featureType: "poi",
+		elementType: "all",
+		stylers: [
+		  { visibility: "off" }
+		]
+	  },{
+		featureType: "road",
+		elementType: "all",
+		stylers: [
+		  { visibility: "off" }
+		]
+	  },{
+		featureType: "landscape",
+		elementType: "geometry",
+		stylers: [
+		  { lightness: -60 },
+		  { hue: "#91ff00" },
+		  { visibility: "on" },
+		  { saturation: -60 }
+		]
+	  },{
+		featureType: "administrative.locality",
+		elementType: "all",
+		stylers: [
+		  { saturation: -50 },
+		  { invert_lightness: true },
+		  { lightness: 52 }
+		]
+	  }
+	]';
+	
+	
+	
+	/**
+	 * Converts the default map style to a java friendly format
+	 */
+	public static function get_style_default_js()
+	{
+		return str_replace("\"", "\\\"", str_replace("\n", "\\n", self::$style_default));	
+	}
 
 	
 } // End User Model

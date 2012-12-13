@@ -151,46 +151,15 @@ function initialize_map() {
 	};
 
 
-	var mapStyles = 
-		[
-		  {
-			featureType: "administrative.province",
-			elementType: "all",
-			stylers: [
-			  { visibility: "off" }
-			]
-		  },{
-			featureType: "poi",
-			elementType: "all",
-			stylers: [
-			  { visibility: "off" }
-			]
-		  },{
-			featureType: "road",
-			elementType: "all",
-			stylers: [
-			  { visibility: "off" }
-			]
-		  },{
-			featureType: "landscape",
-			elementType: "geometry",
-			stylers: [
-			  { lightness: -60 },
-			  { hue: "#91ff00" },
-			  { visibility: "on" },
-			  { saturation: -60 }
-			]
-		  },{
-			featureType: "administrative.locality",
-			elementType: "all",
-			stylers: [
-			  { saturation: -50 },
-			  { invert_lightness: true },
-			  { lightness: 52 }
-			]
-		  }
-		]; 
-
+	<?php 
+	if(empty($map->map_style))
+	{
+		echo 'var mapStyles = [];';
+	}
+	else
+	{
+		echo "var mapStyles =". $map->map_style; 
+	}?>
 
 
 	//creates the map by looking for the "map_canvas" item in the HTML below. the map will fill in the "map_canvas" div

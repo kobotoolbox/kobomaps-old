@@ -68,7 +68,7 @@
 	
 	echo Form::label('description', __('Should this map be private').": ");
 	echo '</td><td>';
-	echo Form::checkbox('is_private', null, 1==$data['is_private'], array('onchange'=>"toggle('private_password_row')"));
+	echo Form::checkbox('is_private', null, 1==$data['is_private'], array('onchange'=>"toggle_id('private_password_row')"));
 	echo '</td></tr>';
 	
 	if($data['is_private'] != 1)
@@ -86,8 +86,8 @@
 	echo '</td></tr><tr><td>';
 	echo Form::label('filetype', __('Is the data source').": ");
 	echo '</td><td>';
-	echo Form::radio('filetype', 'excel', true, array('onclick'=>"toggle('googledoc');toggle('excelfile')")). ' '.__('Excel File') . ' '.
-		Form::radio('filetype', 'google',false, array('onclick'=>"toggle('googledoc');toggle('excelfile')")). ' '.__('Google Spreadsheet');
+	echo Form::radio('filetype', 'excel', true, array('onclick'=>"toggle_id('googledoc');toggle_id('excelfile')")). ' '.__('Excel File') . ' '.
+		Form::radio('filetype', 'google',false, array('onclick'=>"toggle_id('googledoc');toggle_id('excelfile')")). ' '.__('Google Spreadsheet');
 
 	echo '</td></tr><tr id="excelfile"><td>';
 	
@@ -131,17 +131,32 @@
 	echo '</td><td>';
 	echo Form::select('zoom', array(1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9,10=>10,11=>11,12=>12,13=>13,14=>14,15=>15,16=>16,17=>17,18=>18),$data['zoom'], array('id'=>'zoom', 'style'=>'width:300px;'));
 	
+	
 	echo '</td></tr><tr><td>';
+	echo Form::label('advanced_options', __('Show advanced options').": ");
+	echo '</td><td>';
+	echo Form::input('advanced_options', __('Advanced'), array('type'=>'button', 'id'=>'advanced_options', 'onclick'=>"toggle_class('advanced'); return false;", 'style'=>'width:600px;'));
+	
+	
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
 	echo Form::label('CSS', __('Map CSS').": ");
 	echo '</td><td>';
+	echo Form::label('CSS_description', __('<br/>CSS can be used to edit the style of the map menubar and legend. <br /> To learn more about the use of CSS see: '));
+	echo Form::label('CSS_description','<a href="http://www.w3schools.com/css/">http://www.w3schools.com/css/</a> <br />');
 	echo Form::textarea('CSS', $data['CSS'], array('id'=>'CSS', 'style'=>'width:600px;'));
 	
 	
-	echo '</td></tr><tr><td>';
+	echo '</td></tr><tr class="advanced"  style="display:none"><td>';
 	echo Form::label('map_style', __('Map Style').": ");
 	echo '</td><td>';
+	echo Form::label('map_style_description', __('<br/>The map styles can be used to edit the style of the background map. <br /> To learn more about the use of map styles see: '));
+	echo Form::label('map_style_description', '<br/><a href="https://developers.google.com/maps/documentation/javascript/styling">https://developers.google.com/maps/documentation/javascript/styling</a> <br />');
 	echo Form::textarea('map_style', $data['map_style'], array('id'=>'map_style', 'style'=>'width:600px;'));
 	
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('default_map_style', __('Revert to default map style').": ");
+	echo '</td><td>';
+	echo Form::button('default_map_style', __('Default'), array('type'=>'button', 'id'=>'default_map_button', 'onclick'=>'set_default_map_style("map_style"); return false'));
 	
 	echo '</td></tr><tr><td>';
 	echo Form::submit('edit', __('Continue'), array('id'=>'edit_button'));

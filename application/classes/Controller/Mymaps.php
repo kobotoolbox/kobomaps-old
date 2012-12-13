@@ -94,10 +94,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'lat'=>'0',
 			'lon'=>'0',
 			'zoom'=>'1',
-			'map_style'=>'',
+			'map_style'=>Model_Map::$style_default,
 			'user_id'=>$this->user->id,
 			'is_private'=>0,
-			'private_password'=>null);
+			'private_password'=>null,
+			);
 		
 		$map = null;
 		
@@ -361,11 +362,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$column_types = array('region'=>__('Region'),
 	 			'indicator'=>__('Indicator'),	 			
 	 			'total'=>__('Total'),
+	 			'total_label'=>__('Total Label'),
 	 			'unit'=>__('Unit'),
 	 			'source'=>__('Source'),
 	 			'source link'=>__('Source Link'),
-	 			'ignore'=>__('Ignore'),
-	 			'total_label'=>__('Total Label')
+	 			'ignore'=>__('Ignore')
 	 			);
 	 	$this->template->content->column_types = $column_types;
 	 	
@@ -1013,8 +1014,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				{
 	 					foreach($sheet as $column=>$region_id)
 	 					{
-	 					//	if(intval($region_id) != 0)
-	 					//	{
+	 					
 		 						//blow away all the current mappings
 		 						$mapping = ORM::factory('Regionmapping')
 		 							->where('column_id', '=',$column)
@@ -1022,16 +1022,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 							$mapping->column_id = $column;
 	 							$mapping->template_region_id = $region_id;
 	 							$mapping->save();
-	 					//	}
-	 						/*else 
-	 						{
-	 							$mapping = ORM::factory('Regionmapping')
-	 							->where('column_id', '=',$column)
-	 							->find();
-	 							$mapping->column_id = $column;
-	 							$mapping->template_region_id = 0;
-	 							$mapping->save();	
-	 						}*/
+	 					
 	 					}
 	 				}
 
