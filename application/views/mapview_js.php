@@ -10,6 +10,7 @@
 
 <link href="<?php echo  URL::base() ?>media/css/templatePreview.css" type="text/css" rel="stylesheet">
 <link href="<?php echo  URL::base() ?>media/css/largemap.css" type="text/css" rel="stylesheet">  
+<style> <?php echo $map->CSS?></style>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.min.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.address-1.4.min.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/dragresize.js"> </script>
