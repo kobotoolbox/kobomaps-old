@@ -229,11 +229,15 @@ function parseJsonData(jsonDataUrl)
 			var sheet = mapData.sheets[sheetId];			
 			$("#questionsindicators").append('<li class="sheet"><span class="sheet" >'+sheet.sheetName+'</span><ul id="indicatorId_'+sheetId+'" class="sheet"></ul></li>');
 			depthOfData = parseIndicators(sheetId, sheet.indicators, 1);
+
+			//create html for sheets at bottom of the page 
+			$("#sheetnames").append('<li class="sheet"><span class="sheet" >'+sheet.sheetName+'</span><ul id="indicatorId_'+sheetId+'" class="sheet"></ul></li>');
+			
 		}
+
 		
 		
-		
-		// Controling the click behavior of the sheets
+		// Controlling the click behavior of the sheets
 		$('span.sheet').click(function (){
 			sheetClick($(this));
 		});

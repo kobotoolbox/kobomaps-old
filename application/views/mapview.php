@@ -28,6 +28,14 @@
 	</p>
 </div>
 
+
+<?php
+//Bar at the bottom to select between different sheets
+?>
+<div id="sheetlinks" >
+	<ul id=sheetnames></ul>
+</div>
+
 <?php
 //The background element containing the actual map
 ?>
@@ -80,6 +88,8 @@
 		</div>
 	</div>
 </div>
+
+
 
 </body> 
 </html> 

@@ -70,6 +70,13 @@ div#maplinks p#loadingtext {border: medium none;font-size: 1em;line-height: 2em;
 #maplinks a, a:link, #maplinks a:visited  {text-decoration:none;color:#000;}
 #maplinks  a:hover, #maplinks  a:active, #maplinks  a.active, #maplinks  li.active a {text-decoration:none;background-color:#E59595;color:#fff}
 
+/* Div for selecting different sheets */
+div#sheetlinks {bottom: 0; left: 0; height:60px; width:100%; position:absolute; background:rgba(220, 255, 220, 0.8); z-index: 1002; padding:0;}
+#sheetnames {margin:0; height: 100%;}
+#sheetlinks .sheet {display: block; width: 100px; height: 100%; float: left; text-align:center;}
+#sheetlinks .sheet .hover {background: #cfc;}
+
+
 /* Styling the indicator list */
 span.sheet {color: #000;display: block;margin:0.5em 0;padding: 0.4em 0;border-bottom: 1px solid #bbb;font-size:1.7em;}
 span.indicatorLevel_1  {;color: #000;display: block;margin:0.5em 0;padding: 0.4em 0;border-bottom: 1px solid #bbb;font-size:1.1em;}
