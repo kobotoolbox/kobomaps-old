@@ -223,36 +223,43 @@ function parseJsonData(jsonDataUrl)
 
 		var depthOfData = 0; //how far down till you reach the data
 
-		var i=1;
+		var initialId=1;
+		
 		//loop over the sheets and create HTML for them
 		for(sheetId in mapData.sheets)
 		{
 			var sheet = mapData.sheets[sheetId];			
 			$("#questionsindicators").append('<li class="sheet" id="sheetli_'+sheetId+'"><span id="sheetspan_'+sheetId+'" class="sheet" style="display:none">'+sheet.sheetName+'</span><ul id="indicatorId_'+sheetId+'" class="sheet"></ul></li>');
-			depthOfData = parseIndicators(sheetId, sheet.indicators, 1);
+			depthOfCurrentData = parseIndicators(sheetId, sheet.indicators, 1);
+			
+			if(depthOfCurrentData > depthOfData)
+			{
+				depthOfData = depthOfCurrentData;
+			}
 
 			//create html for sheets at bottom of the page 
 			$("#sheetnames").append('<li class="sheet2"><span class="sheet2" onclick="sheetSelect($(this),$(\'#sheetli_'+sheetId+'\'))">'+sheet.sheetName+'</span></li>');		//"$(\'#sheetspan_'+sheetId+'\').click();"
 
-			if(i==1)
+			
+			if(initialId==1)
 			{
-				//alert('hi');
-				//set default sheet selection
-				//sheetSelect($(".sheet2").first(),$('#sheetli_'+sheetId));
-				
-				i++;
+				//used to open the first sheet as a default when the page loads
+				initialId='#sheetli_'+sheetId;
 			}
 		}
 
-		$(".sheet2").first().click();
 		
 		
 		// Controlling the click behavior of the sheets
+		/* No longer necessary since sheetSelect function is called directly with onclick element listeners
 		$('span.sheet').click(function (){
 			sheetClick($(this));
 		});
+		*/
 		$('li.sheet').hide(); //This hides all ul level1 by default until they are toggled. Can also be defined in css.
 
+		console.log("depthOfData: "+depthOfData);
+		
 		//control the clicking behavior of the indicator levels that lead to the data
 		for(var i = 1; i < depthOfData; i++)
 		{
@@ -261,10 +268,28 @@ function parseJsonData(jsonDataUrl)
 			});
 			$('ul.indicatorLevel_'+i).hide(); //This hides all ul level1 by default until they are toggled. Can also be defined in css.			
 		}
+	
+		//since depthOfData could be different for differet sheets -> go until getting to that class
+	/*	var i = 1;
+		console.log($('span.indicatorLevel_'+i).hasClass('dataLevel'));
+		while(!$('span.indicatorLevel_'+i).hasClass('dataLevel'))	
+		{
+			
+			$('span.indicatorLevel_'+i).click(function (){
+				midIndicatorClick($(this));
+			});
+			$('ul.indicatorLevel_'+i).hide(); //This hides all ul level1 by default until they are toggled. Can also be defined in css.	
+
+			i++;		
+		}
+	*/	
 		//control the clicking behavior of the data level
-		$('span.indicatorLevel_'+depthOfData).click(function (){
+		$('span.dataLevel').click(function (){	//originally was $('span.indicatorLevel_'+depthOfData).click(function (){
 			dataIndicatorClick($(this));
 		});
+
+		//Default selects first sheet 
+		sheetSelect($("span.sheet2").first(),$(initialId));
 		
 		//this should be done in CSS for sure	
 		$("li span").hover(function () {
@@ -283,8 +308,10 @@ function parseJsonData(jsonDataUrl)
 		//hide the temporary loading text once the indicators are visible
 		$('#loadingtext').remove();
 	});		
-}//end parseCSV function
+}//end parseJsonData function
 
+
+/* No longer necessary with sheetSelection function
 function sheetClick(sheetItem, forceOn)
 {
 	if(forceOn != undefined && forceOn == false)
@@ -308,20 +335,22 @@ function sheetClick(sheetItem, forceOn)
 		sheetItem.siblings("ul.sheet").show(); //This shows the child ul level1 element
 	}
 }
+*/
 
-
-function doIndicatorsMatch(prevElem, currentElems)
+function openAppropriateIndicators(prevElem, currentElems)
 {
+	//to see if has already worked --break doesn't work in this case so a flag var is used instead
+	//var flag = 0;
+	
 	currentElems.each(function()
-	{
-		//alert(prevText+" "+$(this).text());
+	{		
 		if(prevElem.text() == $(this).text())
 		{
 			$(this).addClass("active");
 			prevElem.removeClass("active");
 
 			
-			if(!($(this).hasClass("dataLevel")))
+			if(!($(this).hasClass("dataLevel")))	//not at datalevel yet
 			{
 				$(this).siblings("ul").show();
 				prevElem.siblings("ul").hide();
@@ -329,18 +358,20 @@ function doIndicatorsMatch(prevElem, currentElems)
 				var currentElemsNewLevel = $(this).siblings("ul").children('li').children('span');
 							
 				if(prevElem.siblings("ul").children('li').children('span.active').length != 0){
-					prevElem.siblings("ul").children('li').children('span.active').each(function(){doIndicatorsMatch($(this), currentElemsNewLevel)});
+					prevElem.siblings("ul").children('li').children('span.active').each(function(){openAppropriateIndicators($(this), currentElemsNewLevel)});
 				}
 			}
 			else
 			{
-				var id = $(this).attr('id').substring(16); //grab the id for processing
+				//console.log($(this).attr('id')+" "+prevElem.attr('id'));
+				
+				var id = $(this).attr('id').substring(16); //grab the id for processing 
 				//console.log(id);
 				showByIndicator(id);
+				return;
 			}
 		}
 	});
-	
 }
 
 
@@ -362,15 +393,22 @@ function sheetSelect(sheetButton, sheetItem)
 		//$('ul.sheet').not(sheetItem.siblings("ul.sheet")).hide();
 		$('li.sheet').not(sheetItem).hide();
 
+		//get current map selection 
+		var autoLoadIndicatorPrevious = $.address.parameter("indicator");
+		
 		//try to keep the same selection 
-		if($('li.previous').length != 0)
+		if($('li.previous').children('ul').children('li').children('span.active').length != 0)
 		{
-			//var previousElems = $('li.previous').children('ul').children('li').children('span.active');
 			var currentElems = sheetItem.children('ul').children('li').children('span');
-			//openAppropriateIndicators($(previousElems), $(currentElems));
-			$('li.previous').children('ul').children('li').children('span.active').each(function(){doIndicatorsMatch($(this), currentElems)});
+			$('li.previous').children('ul').children('li').children('span.active').each(function(){openAppropriateIndicators($(this), currentElems)});
 			
-
+			//check if the map data shown was updated
+			if(autoLoadIndicatorPrevious == $.address.parameter("indicator"))
+			{
+				//zeroOutMap();
+				UpdateAreaAllData("Please select an indicator to display its data.");
+			}
+			
 			/*
 			$('li.previous').children('ul').children('li').children('span.active').each(function(i){	//go through each open ul child element
 				alert($(this).text());
@@ -476,7 +514,8 @@ function showByIndicator(indicator)
 		level2Click(level2Item, true); //set "forceOn" to true to force it to show, even if it is already showing
 		level3Click(level3Item);
 		*/
-		
+
+
 		//check and see if there is a source to link to
 		if(dataPtr["src"] == "" || dataPtr["src"] == "undefined")
 		{
@@ -487,6 +526,7 @@ function showByIndicator(indicator)
 		{
 			//update the source link and the source title
 			$("#sourcetextspan").show();
+
 			
 			//make sure there's a valid link
 			if(dataPtr["src_link"] == "" || dataPtr["src_link"] == "undefined")
@@ -506,8 +546,6 @@ function showByIndicator(indicator)
 			}
 		}
 		
-		//Show the national average and gradient divs
-		$('#legend_gradient').show();
 	}
 }
 
@@ -1006,6 +1044,13 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 		$("#nationalIndicatorChart").hide();
 	}
 
+	if(title == "Please select an indicator to display its data.")
+	{
+		$('#sourcetextspan').hide()
+		//Show the gradient div
+		//$('#legend_gradient').show();
+	}
+
 }
 
 function calculateMagnitude(num)
@@ -1112,16 +1157,23 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator, to
 //changed this to take another input 
 //TODO -> make sure this doesn't mess anything up
 function updateKey(min, span, title, unit)
-{
-	$("#percentleft").attr("title", addCommas(min)+" "+htmlDecode(unit));
-	$("#percentleft").text(addCommas(min)+" "+htmlDecode(unit));
-	
-	$("#percentright").attr("title", addCommas((min+span))+" "+htmlDecode(unit));
-	$("#percentright").text(addCommas((min+span))+" "+htmlDecode(unit));
-	
-	
-	$("#spanLegendText").html(title);
+{ 
+	if(isNaN(min) || isNaN(span)){
+		console.log("legend gradient range not defined by numbers");
+		$('#legend_gradient').hide();
+	}
+	else
+	{
+		$("#percentleft").attr("title", addCommas(min)+" "+htmlDecode(unit));
+		$("#percentleft").text(addCommas(min)+" "+htmlDecode(unit));
+		
+		$("#percentright").attr("title", addCommas((min+span))+" "+htmlDecode(unit));
+		$("#percentright").text(addCommas((min+span))+" "+htmlDecode(unit));
 
+		$('#legend_gradient').show();
+	}
+
+	$("#spanLegendText").html(title);
 }
 
 /**
