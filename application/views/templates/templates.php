@@ -74,8 +74,10 @@
 		}
 		$i = 0;
 		foreach($maps as $map){
-			$i++;
-			$odd_row = ($i % 2) == 0 ? 'class="odd_row"' : '';
+			if($map->id != 0)	//ignore template
+			{
+				$i++;
+				$odd_row = ($i % 2) == 0 ? 'class="odd_row"' : '';
 		?>
 
 	<tr <?php echo $odd_row; ?> style="height:50px;">
@@ -90,7 +92,10 @@
 			<a href="#" onclick="deleteTemplate(<?php echo $map->id?>);"> <?php echo __('delete');?></a>
 		</td>
 	</tr>
-	<?php }?>
+	<?php 
+			}
+		}
+		?>
 	</tbody>
 </table>
 <?php

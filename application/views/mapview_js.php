@@ -223,25 +223,35 @@ function parseJsonData(jsonDataUrl)
 
 		var depthOfData = 0; //how far down till you reach the data
 
+		var i=1;
 		//loop over the sheets and create HTML for them
 		for(sheetId in mapData.sheets)
 		{
 			var sheet = mapData.sheets[sheetId];			
-			$("#questionsindicators").append('<li class="sheet"><span class="sheet" >'+sheet.sheetName+'</span><ul id="indicatorId_'+sheetId+'" class="sheet"></ul></li>');
+			$("#questionsindicators").append('<li class="sheet" id="sheetli_'+sheetId+'"><span id="sheetspan_'+sheetId+'" class="sheet" style="display:none">'+sheet.sheetName+'</span><ul id="indicatorId_'+sheetId+'" class="sheet"></ul></li>');
 			depthOfData = parseIndicators(sheetId, sheet.indicators, 1);
 
 			//create html for sheets at bottom of the page 
-			$("#sheetnames").append('<li class="sheet"><span class="sheet" >'+sheet.sheetName+'</span><ul id="indicatorId_'+sheetId+'" class="sheet"></ul></li>');
-			
+			$("#sheetnames").append('<li class="sheet2"><span class="sheet2" onclick="sheetSelect($(this),$(\'#sheetli_'+sheetId+'\'))">'+sheet.sheetName+'</span></li>');		//"$(\'#sheetspan_'+sheetId+'\').click();"
+
+			if(i==1)
+			{
+				//alert('hi');
+				//set default sheet selection
+				//sheetSelect($(".sheet2").first(),$('#sheetli_'+sheetId));
+				
+				i++;
+			}
 		}
 
+		$(".sheet2").first().click();
 		
 		
 		// Controlling the click behavior of the sheets
 		$('span.sheet').click(function (){
 			sheetClick($(this));
 		});
-		$('ul.sheet').hide(); //This hides all ul level1 by default until they are toggled. Can also be defined in css.
+		$('li.sheet').hide(); //This hides all ul level1 by default until they are toggled. Can also be defined in css.
 
 		//control the clicking behavior of the indicator levels that lead to the data
 		for(var i = 1; i < depthOfData; i++)
@@ -275,153 +285,231 @@ function parseJsonData(jsonDataUrl)
 	});		
 }//end parseCSV function
 
-	function sheetClick(sheetItem, forceOn)
+function sheetClick(sheetItem, forceOn)
+{
+	if(forceOn != undefined && forceOn == false)
 	{
-		if(forceOn != undefined && forceOn == false)
-		{
-			sheetItem.removeClass("active"); //highlights active span
-			sheetItem.siblings("ul.sheet").hide(); //This shows the child ul level1 element
-		}
-		else if (forceOn != undefined && forceOn == true)
-		{
-			sheetItem.addClass("active"); //highlights active span
-			sheetItem.siblings("ul.sheet").show(); //This shows the child ul level1 element
-		}
-		else if(sheetItem.hasClass("active"))
-		{
-			sheetItem.removeClass("active"); //highlights active span
-			sheetItem.siblings("ul.sheet").hide(); //This shows the child ul level1 element
-		}
-		else 
-		{
-			sheetItem.addClass("active"); //highlights active span
-			sheetItem.siblings("ul.sheet").show(); //This shows the child ul level1 element
-		}
+		sheetItem.removeClass("active"); //highlights active span
+		sheetItem.siblings("ul.sheet").hide(); //This shows the child ul level1 element
 	}
-
-	function midIndicatorClick(indicatorItem, forceOn)
+	else if (forceOn != undefined && forceOn == true)
 	{
-		if(forceOn != undefined && forceOn == false)
-		{
-			indicatorItem.removeClass("active"); //highlights active span
-			indicatorItem.siblings("ul.indicator").hide(); //This shows the child ul level1 element
-		}
-		else if (forceOn != undefined && forceOn == true)
-		{
-			indicatorItem.addClass("active"); //highlights active span
-			indicatorItem.siblings("ul.indicator").show(); //This shows the child ul level1 element
-		}
-		else if(indicatorItem.hasClass("active"))
-		{
-			indicatorItem.removeClass("active"); //highlights active span
-			indicatorItem.siblings("ul.indicator").hide(); //This shows the child ul level1 element
-		}
-		else 
-		{
-			indicatorItem.addClass("active"); //highlights active span
-			indicatorItem.siblings("ul.indicator").show(); //This shows the child ul level1 element
-		}
+		sheetItem.addClass("active"); //highlights active span
+		sheetItem.siblings("ul.sheet").show(); //This shows the child ul level1 element
 	}
-
-	  
-	function dataIndicatorClick(dataItem)
-	{		
-		$('span.dataLevel').removeClass("active"); //removes highlight of any other level3 li element
-		dataItem.addClass("active"); //highlights active span
-		var id = dataItem.attr('id').substring(16); //grab the id for processing
-		showByIndicator(id);
-	}
-
-	/**
-	 * Takes in an indicator string and then renders the map according to the data for that indicator
-	 * If the idicator doesn't exist it'll just exit gracefully
-	 */
-	function showByIndicator(indicator)
+	else if(sheetItem.hasClass("active"))
 	{
-		if(typeof indicator == 'undefined')
+		sheetItem.removeClass("active"); //highlights active span
+		sheetItem.siblings("ul.sheet").hide(); //This shows the child ul level1 element
+	}
+	else 
+	{
+		sheetItem.addClass("active"); //highlights active span
+		sheetItem.siblings("ul.sheet").show(); //This shows the child ul level1 element
+	}
+}
+
+
+function doIndicatorsMatch(prevElem, currentElems)
+{
+	currentElems.each(function()
+	{
+		//alert(prevText+" "+$(this).text());
+		if(prevElem.text() == $(this).text())
 		{
-			return;
-		}
-		
-		var dataPtr = null;
-		var ids = indicator.split("_"); //split up the ids
-		dataPtr = mapData.sheets[ids[0]]; //get the sheet, because it's different
-		//loop over the remaining indicators
-		for(i in ids)
-		{
-			//skip 0
-			if(i!=0)
+			$(this).addClass("active");
+			prevElem.removeClass("active");
+
+			
+			if(!($(this).hasClass("dataLevel")))
 			{
-				var id = ids[i];
-				dataPtr = dataPtr['indicators'][id];
-			}
-			
-		}
-		
-		
-		if(dataPtr != undefined)
-		{				
-			var title = dataPtr["name"];
-			var data =  new Array();
-			//setup data to work with the way things used to be when this was CSV driven
-			for(areaName in dataPtr.data)
-			{
-				data[areaName] = parseFloat(dataPtr.data[areaName].value);
-			}
-			
-			var nationalAverage = dataPtr["total"]; 
-			var unit = dataPtr["unit"];
-			
-			var totalLabel = dataPtr["total_label"];
-			console.log(totalLabel);
-			
-			UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel);
-			
-			$.address.parameter("indicator", indicator);
-			/*
-			var level1Item = $("#bottom_level_"+indicator).parents("li.level1").children("span.level1");
-			var level2Item = $("#bottom_level_"+indicator).parents("li.level2").children("span.level2");
-			var level3Item = $("#bottom_level_"+indicator);
-		
-			
-			level1Click(level1Item, true); //set "forceOn" to true to force it to show, even if it is already showing
-			level2Click(level2Item, true); //set "forceOn" to true to force it to show, even if it is already showing
-			level3Click(level3Item);
-			*/
-			
-			//check and see if there is a source to link to
-			if(dataPtr["src"] == "" || dataPtr["src"] == "undefined")
-			{
-				//if there's no source then hide the source div
-				$("#sourcetextspan").hide();
+				$(this).siblings("ul").show();
+				prevElem.siblings("ul").hide();
+
+				var currentElemsNewLevel = $(this).siblings("ul").children('li').children('span');
+							
+				if(prevElem.siblings("ul").children('li').children('span.active').length != 0){
+					prevElem.siblings("ul").children('li').children('span.active').each(function(){doIndicatorsMatch($(this), currentElemsNewLevel)});
+				}
 			}
 			else
 			{
-				//update the source link and the source title
-				$("#sourcetextspan").show();
-				
-				//make sure there's a valid link
-				if(dataPtr["src_link"] == "" || dataPtr["src_link"] == "undefined")
-				{
-					//not a valid link
-					$("#sourceURL").hide();
-					$("#sourceNoURL").show();
-					$("#sourceNoURL").text(dataPtr["src"]);
-				}
-				else
-				{
-					$("#sourceNoURL").hide();
-					$("#sourceURL").show();
-					$("#sourceURL").text(dataPtr["src"]);
-					$("#sourceURL").attr("title", dataPtr["src"]);
-					$("#sourceURL").attr("href", dataPtr["src_link"] );
-				}
+				var id = $(this).attr('id').substring(16); //grab the id for processing
+				//console.log(id);
+				showByIndicator(id);
 			}
-			
-			//Show the national average and gradient divs
-			$('#legend_gradient').show();
 		}
+	});
+	
+}
+
+
+
+function sheetSelect(sheetButton, sheetItem)
+{
+	if(!sheetButton.hasClass("active"))
+	{
+		$('li.active').addClass("previous");			
+		$('li.active').removeClass("active");
+				
+		sheetButton.addClass("active");
+		sheetItem.addClass("active");
+		sheetItem.show();
+		//$(sheetItem).show();	//shows sheet indicators 
+
+		$('#sheetnames .sheet2').not(sheetButton).removeClass("active"); //makes other sheet selector buttons inactive 
+		
+		//$('ul.sheet').not(sheetItem.siblings("ul.sheet")).hide();
+		$('li.sheet').not(sheetItem).hide();
+
+		//try to keep the same selection 
+		if($('li.previous').length != 0)
+		{
+			//var previousElems = $('li.previous').children('ul').children('li').children('span.active');
+			var currentElems = sheetItem.children('ul').children('li').children('span');
+			//openAppropriateIndicators($(previousElems), $(currentElems));
+			$('li.previous').children('ul').children('li').children('span.active').each(function(){doIndicatorsMatch($(this), currentElems)});
+			
+
+			/*
+			$('li.previous').children('ul').children('li').children('span.active').each(function(i){	//go through each open ul child element
+				alert($(this).text());
+				
+			});	
+*/			
+		}
+
+		$('li.sheet').removeClass("previous");
+	}	
+	
+}
+
+
+
+function midIndicatorClick(indicatorItem, forceOn)
+{
+	if(forceOn != undefined && forceOn == false)
+	{
+		indicatorItem.removeClass("active"); //highlights active span
+		indicatorItem.siblings("ul.indicator").hide(); //This hides the child ul level1 element
 	}
+	else if (forceOn != undefined && forceOn == true)
+	{
+		indicatorItem.addClass("active"); //highlights active span
+		indicatorItem.siblings("ul.indicator").show(); //This shows the child ul level1 element
+	}
+	else if(indicatorItem.hasClass("active"))
+	{
+		indicatorItem.removeClass("active"); //highlights active span
+		indicatorItem.siblings("ul.indicator").hide(); //This hides the child ul level1 element
+	}
+	else 
+	{
+		indicatorItem.addClass("active"); //highlights active span
+		indicatorItem.siblings("ul.indicator").show(); //This shows the child ul level1 element
+	}
+}
+
+  
+function dataIndicatorClick(dataItem)
+{		
+	$('span.dataLevel').removeClass("active"); //removes highlight of any other level3 li element
+	dataItem.addClass("active"); //highlights active span
+	var id = dataItem.attr('id').substring(16); //grab the id for processing
+	showByIndicator(id);
+}
+
+/**
+ * Takes in an indicator string and then renders the map according to the data for that indicator
+ * If the idicator doesn't exist it'll just exit gracefully
+ */
+function showByIndicator(indicator)
+{
+	if(typeof indicator == 'undefined')
+	{
+		return;
+	}
+	
+	var dataPtr = null;
+	var ids = indicator.split("_"); //split up the ids
+	//console.log(ids);
+	dataPtr = mapData.sheets[ids[0]]; //get the sheet, because it's different
+	//loop over the remaining indicators
+	for(i in ids)
+	{
+		//skip 0
+		if(i!=0)
+		{
+			var id = ids[i];
+			dataPtr = dataPtr['indicators'][id];
+		}
+		
+	}
+	
+	
+	if(dataPtr != undefined)
+	{				
+		var title = dataPtr["name"];
+		var data =  new Array();
+		//setup data to work with the way things used to be when this was CSV driven
+		for(areaName in dataPtr.data)
+		{
+			data[areaName] = parseFloat(dataPtr.data[areaName].value);
+		}
+		
+		var nationalAverage = dataPtr["total"]; 
+		var unit = dataPtr["unit"];
+		
+		var totalLabel = dataPtr["total_label"];
+		//console.log(totalLabel);
+		
+		UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel);
+		
+		$.address.parameter("indicator", indicator);
+		/*
+		var level1Item = $("#bottom_level_"+indicator).parents("li.level1").children("span.level1");
+		var level2Item = $("#bottom_level_"+indicator).parents("li.level2").children("span.level2");
+		var level3Item = $("#bottom_level_"+indicator);
+	
+		
+		level1Click(level1Item, true); //set "forceOn" to true to force it to show, even if it is already showing
+		level2Click(level2Item, true); //set "forceOn" to true to force it to show, even if it is already showing
+		level3Click(level3Item);
+		*/
+		
+		//check and see if there is a source to link to
+		if(dataPtr["src"] == "" || dataPtr["src"] == "undefined")
+		{
+			//if there's no source then hide the source div
+			$("#sourcetextspan").hide();
+		}
+		else
+		{
+			//update the source link and the source title
+			$("#sourcetextspan").show();
+			
+			//make sure there's a valid link
+			if(dataPtr["src_link"] == "" || dataPtr["src_link"] == "undefined")
+			{
+				//not a valid link
+				$("#sourceURL").hide();
+				$("#sourceNoURL").show();
+				$("#sourceNoURL").text(dataPtr["src"]);
+			}
+			else
+			{
+				$("#sourceNoURL").hide();
+				$("#sourceURL").show();
+				$("#sourceURL").text(dataPtr["src"]);
+				$("#sourceURL").attr("title", dataPtr["src"]);
+				$("#sourceURL").attr("href", dataPtr["src_link"] );
+			}
+		}
+		
+		//Show the national average and gradient divs
+		$('#legend_gradient').show();
+	}
+}
 
 
   
@@ -887,7 +975,10 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 	//loop over all our data
 	for(areaName in data)
 	{
-		UpdateAreaPercentageTitleData(areaName, data[areaName], min, spread, title, data, indicator, unit);
+		//not sure if this is the best way to do this
+		if(areaName != 'ignore_region'){			
+			UpdateAreaPercentageTitleData(areaName, data[areaName], min, spread, title, data, indicator, unit);
+		}
 	}
 	
 	//update the key
