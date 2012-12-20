@@ -7,6 +7,8 @@
 *************************************************************/
 ?>
 		
+<div id="addmapMenu"><?php echo Helper_AddmapSubmenu::make_addmap_menu(1);?></div>		
+		
 <h2><?php echo __("Add Map - Page 1") ?></h2>
 <p><?php echo __("First we'll grab some basic info about your data");?></p>
 

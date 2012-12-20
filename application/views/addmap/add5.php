@@ -6,6 +6,8 @@
 * Started on 12/06/2011
 *************************************************************/
 ?>
+
+<div id="addmapMenu"><?php echo Helper_AddmapSubmenu::make_addmap_menu(5);?></div>	
 		
 <h2><?php echo __("Add Map - Page 5") ?></h2>
 <ul class="context_menu">
