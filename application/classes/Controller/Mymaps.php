@@ -165,13 +165,29 @@ class Controller_Mymaps extends Controller_Loggedin {
 				if($map == null)
 				{				
 					$map = ORM::factory('Map');
-					$_POST['file'] = $_FILES['file']['name'];
+					//check if they're using Excel files or Google Docs
+					if($_POST['filetype'] == 'excel')
+					{
+						$_POST['file'] = $_FILES['file']['name'];
+					}
+					else
+					{
+						//make sure they did select a google doc
+						if(!isset($_POST['googleid']) OR $_POST['googleid'] == '')
+						{
+							$this->template->content->errors[] = __('You must specify an Excel file or a Google Doc to use as the data source.'); 
+							$data = array_merge($data,$_POST);
+							$this->template->content->data = $data;
+							return;
+						}
+						$_POST['file'] = $_POST['googleid'];
+					}
 					$_POST['template_id'] = 0;
 					$_POST['json_file'] = '0';
 				}
 				else
 				{
-					if($_FILES['file']['name'] == "")
+					if($_FILES['file']['name'] == '' AND $_POST['googleid'] == '')
 					{
 						$_POST['file'] = $map->file; 
 					}
@@ -183,10 +199,19 @@ class Controller_Mymaps extends Controller_Loggedin {
 				$map->update_map($_POST);
 				
 				
-				//handle the xls file, if there's something to save
-				if($_FILES['file']['name'] != "")
-				{
-					$filename = $this->_save_file($_FILES['file'], $map);
+				//handle the xls file, or Google Doc, if there's something to save
+				if(($_FILES['file']['name'] != '' AND $_POST['filetype'] == 'excel')  OR ($_POST['googleid'] != '' AND $_POST['filetype'] == 'google'))
+				{					
+					//now if we need to save a file
+					if($_FILES['file']['name'] != '' AND $_POST['filetype'] == 'excel')
+					{
+						$filename = $this->_save_file($_FILES['file'], $map);
+					}
+					//else we need to save a google doc
+					else 
+					{
+						$filename = $this->_save_google_doc($_POST['googlelink'], $map);
+					}
 					$map->file = $filename;
 					$map->save();
 				
@@ -246,7 +271,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 				}
 				$data = array_merge($data,$_POST);
 				$this->template->content->data = $data;
-			}		
+			}
 		}
 	 }//end action_add1
 	 
@@ -1207,6 +1232,42 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	}
 	 
 	 	return FALSE;
+	 }
+	 
+	 
+	 /**
+	  * Saves the .xls implementation of a google doc
+	  * @param string $link HTTP link to the .xls version of the google doc we're to use as our data source
+	  * @param obj $map Kohana ORM object for a map, this is used in naming the file
+	  */
+	 protected function _save_google_doc($link, $map)
+	 {
+	 	$directory = DOCROOT.'uploads/data/';
+	 	$filename = $map->user_id.'-'.$map->id.'.xlsx';
+	 	
+	 	//we'll need this to get access
+	 	$token = $_POST['googletoken'];
+	 	
+	 	//open up the file streams
+	 	$input = fopen($link,"r");
+	 	
+	 	
+	 	$ch = curl_init($link);
+	 	$output = fopen($directory . $filename, "w");
+	 	
+	 	curl_setopt($ch, CURLOPT_FILE, $output);
+	 	//curl_setopt($ch, CURLOPT_HEADER, 0);
+	 	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+	 			'authorization: Bearer '.$token,
+	 	));
+	 	
+	 	curl_exec($ch);
+	 	curl_close($ch);
+	 	fclose($output);
+	 	
+	 
+	 	
+	 	return $filename;
 	 }
 	 
 	 /**

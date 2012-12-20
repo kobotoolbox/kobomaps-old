@@ -113,8 +113,14 @@ class Model_Map extends ORM {
 		$map = ORM::factory('map',$id);
 		
 		$directory = DOCROOT.'uploads/data/';
-		unlink($directory.$map->file);
-		unlink($directory.$map->json_file);
+		if(file_exists($directory.$map->file))
+		{
+			unlink($directory.$map->file);
+		}
+		if(file_exists($directory.$map->json_file))
+		{
+			unlink($directory.$map->json_file);
+		}
 		$map->delete();
 	}
 

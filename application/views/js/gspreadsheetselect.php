@@ -43,7 +43,7 @@ $client_id = $config['client_id'];
 
 				$("#googleFilesList").append('<tr><td><input type="radio" name="googleFile" value="'+item.id+'" onclick="googleFileSelected(\''+item.id+'\',\''+item.exportLinks["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]+'\');"></td><td>'+item.title+"</td><td>"+item.ownerNames[0]+"</td><td>"+item.modifiedDate+"</td></tr>");
 			}
-			console.log(data.items);
+			//console.log(data.items);
 			$("#googlewaiter").hide();
 		}      
 
@@ -70,6 +70,9 @@ $client_id = $config['client_id'];
 			authButton.style.display = 'none';
 			if (authResult && !authResult.error) 
 			{
+				//store the authorization token
+				$("#googletoken").val(gapi.auth.getToken().access_token);
+				
 				// Access token has been successfully retrieved, requests can be sent to the API.
 				// so ask for a list of files
 				$("#googlewaiter").show();
