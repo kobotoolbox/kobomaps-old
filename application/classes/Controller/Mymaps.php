@@ -227,7 +227,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 					}
 				
 					//now we need to figure out what sheets there are
-					//read the xls file and parse if
+					//read the xls file and parse it
 					$file_path = DOCROOT.'uploads/data/'. $map->file;
 					 
 					//get the PHPExcel classes on stand by:
@@ -327,7 +327,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		
 	 	//get the PHPExcel classes on stand by:
 	 	require_once Kohana::find_file('PHPExcel', 'Classes/PHPExcel');
-	 		
 	 	$excel = PHPExcel_IOFactory::load($file_path);
 	 	$sheet_names = $excel->getSheetNames();
 	 	$sheet_data = array();
