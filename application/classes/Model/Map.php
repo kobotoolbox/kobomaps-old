@@ -96,7 +96,7 @@ class Model_Map extends ORM {
 	{
 	
 		$expected = array('title', 'description', 'user_id', 'file', 'map_style', 'CSS', 'lat', 'lon', 'zoom', 
-				'template_id','json_file', 'is_private', 'private_password');
+				'template_id','json_file', 'is_private', 'private_password', 'map_creation_progress');
 	
 		$this->values($values, $expected);
 		$this->check();

@@ -258,7 +258,7 @@ function parseJsonData(jsonDataUrl)
 		*/
 		$('li.sheet').hide(); //This hides all ul level1 by default until they are toggled. Can also be defined in css.
 
-		console.log("depthOfData: "+depthOfData);
+		//console.log("depthOfData: "+depthOfData);
 		
 		//control the clicking behavior of the indicator levels that lead to the data
 		for(var i = 1; i < depthOfData; i++)
@@ -269,20 +269,6 @@ function parseJsonData(jsonDataUrl)
 			$('ul.indicatorLevel_'+i).hide(); //This hides all ul level1 by default until they are toggled. Can also be defined in css.			
 		}
 	
-		//since depthOfData could be different for differet sheets -> go until getting to that class
-	/*	var i = 1;
-		console.log($('span.indicatorLevel_'+i).hasClass('dataLevel'));
-		while(!$('span.indicatorLevel_'+i).hasClass('dataLevel'))	
-		{
-			
-			$('span.indicatorLevel_'+i).click(function (){
-				midIndicatorClick($(this));
-			});
-			$('ul.indicatorLevel_'+i).hide(); //This hides all ul level1 by default until they are toggled. Can also be defined in css.	
-
-			i++;		
-		}
-	*/	
 		//control the clicking behavior of the data level
 		$('span.dataLevel').click(function (){	//originally was $('span.indicatorLevel_'+depthOfData).click(function (){
 			dataIndicatorClick($(this));

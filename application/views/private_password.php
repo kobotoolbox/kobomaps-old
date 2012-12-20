@@ -5,6 +5,8 @@
 * Writen by Willy Douglas <willy@ethertontech.com>
 * Started on 12/03/2012
 *************************************************************/
+
+//This is no longer used.
 ?>
 
 <h2><?php echo __("You have chosen to make a private map. ");?></h2>

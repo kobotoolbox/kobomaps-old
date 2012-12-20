@@ -98,6 +98,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'user_id'=>$this->user->id,
 			'is_private'=>0,
 			'private_password'=>null,
+			'map_creation_progress'=>1
 			);
 		
 		$map = null;
@@ -180,6 +181,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 				}
 				//this handles is private
 				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;
+				$_POST['map_creation_progress'] = 1;
 				$map->update_map($_POST);
 				
 				
@@ -271,6 +273,13 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
+	 	
+	 	if($map->map_creation_progress < 1)
+	 	{
+	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
+	 		HTTP::redirect('mymaps/add1/?id='.$map_id);
+	 	}
+	 	
 	 	//grab all the sheet objects too
 	 	$sheets = ORM::factory('Mapsheet')
 	 		->where('map_id', '=', $map->id)
@@ -561,6 +570,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				//send to next page if no errors
 	 				if(count($this->template->content->errors) == 0)
 	 				{
+	 					//update map creation progress tracker
+	 					$map_array = $map->as_array();
+	 					$map_array['map_creation_progress'] = 2;
+	 					$map->update_map($map_array);
+	 					
 	 					HTTP::redirect('mymaps/add3?id='.$map->id);
 	 				}
 	 			}
@@ -611,6 +625,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	 
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
+	 	
+	 	if($map->map_creation_progress < 2)
+	 	{
+	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
+	 		HTTP::redirect('mymaps/add2/?id='.$map_id);
+	 	}
 
 	 	//grab all the sheet objects too
 	 	$sheets = ORM::factory('Mapsheet')
@@ -786,6 +806,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	
+	 	if($map->map_creation_progress < 2)
+	 	{
+	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
+	 		HTTP::redirect('mymaps/add2/?id='.$map_id);
+	 	}
+	 	
 	 	$data = array();
 	 	$data['id'] = $map->id;
 	 	$data['template_id'] = $map->template_id;
@@ -843,6 +869,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 					$map_array['lon'] = $_POST['lon'];
 					$map_array['zoom'] = $_POST['zoom'];
 					
+					//update map creation progress tracker
+					$map_array['map_creation_progress'] = 4;
+					
 					$map->update_map($map_array);
 	 				HTTP::redirect('mymaps/add5?id='.$map->id);
 	 			}
@@ -893,6 +922,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
+	 	
+	 	if($map->map_creation_progress < 4)
+	 	{
+	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
+	 		HTTP::redirect('mymaps/add4/?id='.$map_id);
+	 	}
 	 	 
 	 	//grab the sheets
 	 	$sheets = ORM::factory('Mapsheet')
@@ -966,9 +1001,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	
 
 
-	 	
-	 	
-	 	
 	 	
 	 	
 
@@ -1113,6 +1145,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				file_put_contents($file, $json_str);
 	 				$map->json_file = $map_id.'.json';
 	 				$map->save();
+	 				
+	 				//update map creation progress tracker
+	 				$map_array = $map->as_array();
+	 				$map_array['map_creation_progress'] = 5;
+	 				$map->update_map($map_array);
+	 				
 	 				HTTP::redirect('mymaps/view?id='.$map_id);
 	 			}
 	 		}
@@ -1159,6 +1197,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	 
+	 	if($map->map_creation_progress < 5)
+	 	{
+	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
+	 		HTTP::redirect('mymaps/add5/?id='.$map_id);
+	 	}
 	 	
 	 	$map_template = ORM::factory('Template', $map->template_id);
 	 	
