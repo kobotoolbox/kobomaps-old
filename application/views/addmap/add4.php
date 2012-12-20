@@ -95,7 +95,7 @@
 		if($template->id != 0){
 			echo '<tr>';
 			echo '<td>';
-			echo Form::checkbox('template_id', $template->id, $data['template_id'] == $template->id);
+			echo Form::radio('template_id', $template->id, $data['template_id'] == $template->id, array('onchange'=>'renderMap("'.$template->file.'",'.$template->lat.','.$template->lon.','.$template->zoom.'); return false;'));
 			echo '</td>';
 			echo '<td><a href="#" onclick="renderMap(\''.$template->file.'\','.$template->lat.','.$template->lon.','.$template->zoom.'); return false;">'.$template->title.'</a></td>';
 			echo '<td>'.$template->description.'</td>';
