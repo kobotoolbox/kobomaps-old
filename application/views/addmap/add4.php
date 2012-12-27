@@ -121,7 +121,7 @@
 
 
 <?php
-	echo Form::submit('Submit', 'Submit', array('onmouseover'=>'setMapViewSettings()'));	//, array('onmouseover'=>'setMapViewSettings()')
+	echo Form::submit('Submit', 'Submit', array('onsubmit'=>'setMapViewSettings()'));	//, array('onmouseover'=>'setMapViewSettings()')
 	echo Form::close();
 ?>
 

@@ -70,34 +70,38 @@
 	
 	foreach($sheets as $sheet)
 	{
-		echo '<h2>'.__('Sheet').': '.$sheet->name.'</h2>';
-		echo '<table>';
-		foreach($region_columns[$sheet->id] as $column)
+		if($sheet->is_ignored == 0)
 		{
-			$header_row = $header_rows[$sheet->id];
-			$sheet_val = $sheet_data[$sheet->id];
-			$row_data = $sheet_val[$header_row->name];
-			$name = $row_data[$column->name];
-			echo '<tr><td><strong>'.$name. '</strong> '. __('Maps to the templates region'). ': </td><td>';
-			$selected = $data[$sheet->id][$column->id];
-			//now that $selected is initialized, see if we can guess at 
-			if($selected == null) //then guess
+			echo '<h2>'.__('Sheet').': '.$sheet->name.'</h2>';
+			echo '<table>';
+			foreach($region_columns[$sheet->id] as $column)
 			{
-				foreach($map_regions as $key=>$value)
+				$header_row = $header_rows[$sheet->id];
+				$sheet_val = $sheet_data[$sheet->id];
+				$row_data = $sheet_val[$header_row->name];
+				$name = $row_data[$column->name];
+				echo '<tr><td><strong>'.$name. '</strong> '. __('Maps to the templates region'). ': </td><td>';
+				$selected = $data[$sheet->id][$column->id];
+				//now that $selected is initialized, see if we can guess at 
+				if($selected == null) //then guess
 				{
-					if(strcmp(strtolower(trim($value)), strtolower(trim($name))) === 0)
+					foreach($map_regions as $key=>$value)
 					{
-						$selected = $key;
-						break;
+						if(strcmp(strtolower(trim($value)), strtolower(trim($name))) === 0)
+						{
+							$selected = $key;
+							break;
+						}
 					}
 				}
+	
+				echo Form::select('region['.$sheet->id.']['.$column->id.']', $map_regions,$selected, array('id'=>'region['.$sheet->id.']['.$column->id.']', 'style'=>'width:300px;'));
+				echo '</td></tr>';
+				
 			}
-
-			echo Form::select('region['.$sheet->id.']['.$column->id.']', $map_regions,$selected, array('id'=>'region['.$sheet->id.']['.$column->id.']', 'style'=>'width:300px;'));
-			echo '</td></tr>';
+			echo '</table>';
 			
 		}
-		echo '</table>';
 	}
 
 	echo Form::submit('Submit', 'Submit');

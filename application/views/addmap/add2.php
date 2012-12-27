@@ -112,6 +112,10 @@
 	foreach($sheets as $sheet_model)
 	{
 		echo '<h2>'.__('Sheet').': '.$sheet_model->name.'</h2>';
+		echo __('Ignore this sheet?:');
+		echo Form::checkbox('is_ignored['.$sheet_model->id.']', null, 1==$sheet_model->is_ignored, array('class'=>'test', 'value'=>'check'));
+		echo Form::hidden('sheet_id['.$sheet_model->id.']', 'getId');
+		
 		echo '<div class="data_specify_div" id="data_specify_div_'.$sheet_model->id.'">';
 		echo '<table class="data_specify_table" id="data_specify_table_'.$sheet_model->id.'">';
 	
