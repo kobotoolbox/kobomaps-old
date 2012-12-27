@@ -208,5 +208,19 @@ UPDATE  `template_regions` SET  `id` =  '0' WHERE  `template_regions`.`title` = 
 /** 2012-12-19 Willy Douglas added new field to map table so that progress of map creation can be tracked **/
 ALTER TABLE  `maps` ADD  `map_creation_progress` SMALLINT( 6 ) NOT NULL AFTER  `private_password`;
 
+<<<<<<< HEAD
 /** 2012-12-20 Willy Douglas added a new field to mapsheets to track if the sheet is ignored **/
 ALTER TABLE  `mapsheets` ADD  `is_ignored` TINYINT NOT NULL DEFAULT  '0';
+=======
+/**2012-20-21 John Etherton added a new table to track site wide meta data using a key value scheme. This will be where we put things like DB version**/
+CREATE TABLE IF NOT EXISTS `metadata` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `k` varchar(255) NOT NULL,
+  `v` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `uniq_name` (`v`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+INSERT INTO  `metadata` (`id` ,`k` ,`v`)
+VALUES (NULL ,  'Database Version',  '1.0.016');
+>>>>>>> 05c51878dd433902e663e682c9076ab5f77c0cb2

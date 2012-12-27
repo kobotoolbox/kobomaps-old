@@ -149,6 +149,9 @@ var labels = new Array();
 		//now parse the json
 
 		//Calling the boundaries and data files. The variables need to be defined in the container file as they are country-specific
+		<?php if ($template_id != 0) {?>
+		renderMap('<?php echo $template_id?>.json', <?php echo $lat?>, <?php echo $lon?>, <?php echo $zoom?>);
+		<?php }?>
 
 	});
 	//</Initialize things>

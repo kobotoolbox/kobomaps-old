@@ -185,6 +185,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 					}
 					$_POST['template_id'] = 0;
 					$_POST['json_file'] = '0';
+					//if this is the first time the map is created, set the progress to 1
+					$_POST['map_creation_progress'] = 1;
 				}
 				else
 				{
@@ -194,10 +196,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 					}
 					$_POST['template_id'] = $map->template_id;
 					$_POST['json_file'] = $map->json_file;
+					//if the map already exists, keep the same map_creation_progress
+					$_POST['map_creation_progress'] = $map->map_creation_progress;
 				}
 				//this handles is private
-				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;
-				$_POST['map_creation_progress'] = 1;
+				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;				
 				$map->update_map($_POST);
 				
 				
@@ -214,6 +217,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 					{
 						$filename = $this->_save_google_doc($_POST['googlelink'], $map);
 					}
+					//if the user is uploading a new data source reset the map creation progress;
+					$_POST['map_creation_progress'] = 1;
 					$map->file = $filename;
 					$map->save();
 				
@@ -653,6 +658,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				//send to next page if no errors
 	 				if(count($this->template->content->errors) == 0)
 	 				{
+<<<<<<< HEAD
 	 					//update map creation progress tracker
 	 					$map_array = $map->as_array();
 	 					$map_array['map_creation_progress'] = 2;
@@ -662,6 +668,26 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				}
 		 				
 	 				
+=======
+	 					$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs at least one row set as a data row.');
+	 				}
+	 				
+	 				
+	 				//send to next page if no errors
+	 				if(count($this->template->content->errors) == 0)
+	 				{
+	 					//update map creation progress tracker
+	 					$map_array = $map->as_array();
+	 					//don't change the map creation progress if they've already gone past this point
+	 					if($map->map_creation_progress < 2)
+	 					{
+	 						$map_array['map_creation_progress'] = 2;
+	 					}
+	 					$map->update_map($map_array);
+	 					
+	 					HTTP::redirect('mymaps/add3?id='.$map->id);
+	 				}
+>>>>>>> 05c51878dd433902e663e682c9076ab5f77c0cb2
 	 			}
 	 
 	 			
@@ -936,6 +962,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$js->lat = $map->lat;
 	 	$js->lon = $map->lon;
 	 	$js->zoom = $map->zoom;
+	 	$js->template_id = $map->template_id;
 	 	$this->template->html_head->script_views[] = $js;
 	 
 	 	//get the status
@@ -962,7 +989,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 					$map_array['zoom'] = $_POST['zoom'];
 					
 					//update map creation progress tracker
-					$map_array['map_creation_progress'] = 4;
+					//don't change the map creation progress if they've already gone past this point
+					if($map->map_creation_progress < 4)
+					{
+						$map_array['map_creation_progress'] = 4;
+					}
 					
 					$map->update_map($map_array);
 	 				HTTP::redirect('mymaps/add5?id='.$map->id);
@@ -1244,7 +1275,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				
 	 				//update map creation progress tracker
 	 				$map_array = $map->as_array();
-	 				$map_array['map_creation_progress'] = 5;
+	 				//don't change the map creation progress if they've already gone past this point
+	 				if($map->map_creation_progress < 5)
+	 				{
+	 					$map_array['map_creation_progress'] = 5;
+	 				}
 	 				$map->update_map($map_array);
 	 				
 	 				HTTP::redirect('mymaps/view?id='.$map_id);

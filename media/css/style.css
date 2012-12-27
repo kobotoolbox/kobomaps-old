@@ -76,3 +76,8 @@ ul.context_menu{
 	max-height:300px;
 	overflow: scroll;
 }
+
+a, a:visited, a:link{
+	color:blue;
+}
+
