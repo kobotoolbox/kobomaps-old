@@ -658,7 +658,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				//send to next page if no errors
 	 				if(count($this->template->content->errors) == 0)
 	 				{
-<<<<<<< HEAD
+//<<<<<<< HEAD
 	 					//update map creation progress tracker
 	 					$map_array = $map->as_array();
 	 					$map_array['map_creation_progress'] = 2;
@@ -668,27 +668,27 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				}
 		 				
 	 				
-=======
+//=======
 	 					$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs at least one row set as a data row.');
-	 				}
-	 				
-	 				
-	 				//send to next page if no errors
-	 				if(count($this->template->content->errors) == 0)
-	 				{
-	 					//update map creation progress tracker
-	 					$map_array = $map->as_array();
-	 					//don't change the map creation progress if they've already gone past this point
-	 					if($map->map_creation_progress < 2)
-	 					{
-	 						$map_array['map_creation_progress'] = 2;
-	 					}
-	 					$map->update_map($map_array);
-	 					
-	 					HTTP::redirect('mymaps/add3?id='.$map->id);
-	 				}
->>>>>>> 05c51878dd433902e663e682c9076ab5f77c0cb2
 	 			}
+	 				
+	 				
+ 				//send to next page if no errors
+ 				if(count($this->template->content->errors) == 0)
+ 				{
+ 					//update map creation progress tracker
+ 					$map_array = $map->as_array();
+ 					//don't change the map creation progress if they've already gone past this point
+ 					if($map->map_creation_progress < 2)
+ 					{
+ 						$map_array['map_creation_progress'] = 2;
+ 					}
+ 					$map->update_map($map_array);
+ 					
+ 					HTTP::redirect('mymaps/add3?id='.$map->id);
+ 				}
+//>>>>>>> 05c51878dd433902e663e682c9076ab5f77c0cb2
+	 		//}
 	 
 	 			
 	 		}
