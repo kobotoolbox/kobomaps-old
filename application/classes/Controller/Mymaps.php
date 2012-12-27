@@ -84,7 +84,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 */
 	 public function action_add1()
 	 {
-		//initialize data
+	 	//initialize data
 		$data = array(
 			'id'=>'0',
 			'title'=>'',
@@ -105,10 +105,18 @@ class Controller_Mymaps extends Controller_Loggedin {
 		
 		//was an id given?		
 		$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-		//something when wrong, kick them back to add1
+		
+			
 		if($map_id != 0)
 		{
 			$map = ORM::factory('Map', $map_id);
+			
+			//different user
+			if($map->user_id != $this->user->id)
+			{
+				HTTP::redirect('mymaps');
+			}
+				
 			$data['id'] = $map_id;
 			$data['title'] = $map->title;
 			$data['description'] = $map->description;
@@ -292,7 +300,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	  * super exciting
 	  */
 	 public function action_add2()
-	 {
+	 {  	
 	 	//get the id
 	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 	 	//something when wrong, kick them back to add1
@@ -303,6 +311,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
+	 	
+	 	//not the owner of the map
+	 	if($map->user_id != $this->user->id)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
 	 	
 	 	if($map->map_creation_progress < 1)
 	 	{
@@ -737,6 +751,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	
+	 	//not the owner of the map
+	 	if($map->user_id != $this->user->id)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
+	 	
 	 	if($map->map_creation_progress < 2)
 	 	{
 	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
@@ -924,6 +944,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	
+	 	//not the owner of the map
+	 	if($map->user_id != $this->user->id)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
+	 	
 	 	if($map->map_creation_progress < 2)
 	 	{
 	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
@@ -1045,6 +1071,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
+	 	
+	 	//not the owner of the map
+	 	if($map->user_id != $this->user->id)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
 	 	
 	 	if($map->map_creation_progress < 4)
 	 	{
@@ -1328,6 +1360,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	 
+	 	if($map->is_private == 1 && $map->user_id != $this->user->id)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
+	 	
+	 	
 	 	if($map->map_creation_progress < 5)
 	 	{
 	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
