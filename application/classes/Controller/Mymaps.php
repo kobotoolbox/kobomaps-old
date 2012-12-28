@@ -205,7 +205,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 					$_POST['template_id'] = $map->template_id;
 					$_POST['json_file'] = $map->json_file;
 					//if the map already exists, keep the same map_creation_progress
-					$_POST['map_creation_progress'] = $map->map_creation_progress;
+					$_POST['map_creation_progress'] = 1;	//$map->map_creation_progress;
 				}
 				//this handles is private
 				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;				
@@ -410,6 +410,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content->sheet_data = $sheet_data;
 	 	$this->template->content->errors = array();
 	 	$this->template->content->messages = array();	 	
+	 	
+	 	$js = view::factory('addmap/add2_js');
+	 	$this->template->html_head->script_views[] = $js;
+	 	
 	 	//some contstants for the form
 	 	$column_types = array('region'=>__('Region'),
 	 			'indicator'=>__('Indicator'),	 			
@@ -438,6 +442,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		$this->template->content->messages[] = __('changes saved');
 	 	}
 	 
+	 	
 	 	/******* Handle incoming data*****/
 	 	if(!empty($_POST)) // They've submitted the form to update his/her wish
 	 	{
@@ -448,15 +453,46 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 			{
 	 				$sheet_count = 0;
 	 				$ignored_sheet_count = 0;
+	 				
+	 				//for each sheet
 	 				foreach($_POST['sheet_id'] as $sheet_id=>$sheet)
 	 				{
 	 					$mapsheet = ORM::factory('Mapsheet')
 	 					->where('id', '=', $sheet_id)
 	 					->find();
 	 					$mapsheet->is_ignored = 0;
+	 					
+	 					//echo $_POST['sheet_id'][$sheet_id];
+	 					
+	 					
+	 					//sets db value 
+	 					//currently doesn't update excel sheet so reference doesn't match if it is changed
+	 					//$mapsheet->name = $_POST['sheet_id'][$sheet_id];
+	 					
 	 					$mapsheet->save();
 	 					$sheet_count++;
 	 				}
+	 				
+	 				/*
+	 				//for each sheet
+	 				foreach($_POST['sheet_id'] as $sheet_name)
+	 				{
+	 					$mapsheet = ORM::factory('Mapsheet')
+	 					->where('id', '=', $sheet_id)
+	 					->find();
+	 					$mapsheet->is_ignored = 0;
+	 						
+	 					echo $sheet_id;
+	 						
+	 					//$mapsheet->name = $sheet_id;
+	 					
+	 					$mapsheet->save();
+	 					$sheet_count++;
+	 				}
+	 				*/
+	 					 		
+	 					 		
+	 					 		
 	 				
 	 				if(isset($_POST['is_ignored']))
 	 				{
@@ -481,28 +517,14 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				//lets handle the columns first
 	 				foreach($_POST['column'] as $sheet_id=>$sheet) //loop over the column data for each sheet
 	 				{
-	 					//first we blow away any column data associated with this sheet
-	 				/* 	$old_cols = ORM::factory('Column')
-	 						->where('mapsheet_id', '=', $sheet_id)
-	 						->find_all();
-	 					foreach($old_cols as $old_col)
-	 					{
-	 						$old_col->delete();
-	 					} */
 	 					
-	 					//echo ' '.$sheet_id.' ';
-	 					//echo isset($_POST['is_ignored['.$sheet_id.']'])? 1: 0;
-	 					//*
 	 					$mapsheet = ORM::factory('Mapsheet')
 	 					->where('id', '=', $sheet_id)
-	 					//->where('is_ignored', '=', 1)
 	 					->find();
-	 					//*/
-	 					//echo $mapsheet->is_ignored.' ';
+
 	 					
 	 					if($mapsheet->is_ignored == 0)
 	 					{
-	 						//echo $mapsheet->is_ignored.' ';
 	 						
 		 					$indicator_count = 0;
 		 					$region_count = 0;
@@ -523,7 +545,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 		 						$sql .= "(name <> '".$column_name."' AND mapsheet_id <> ".$sheet_id.") ";
 		 						
 		 						
-		 						//$column = ORM::factory('Column');
 		 						$column = ORM::factory('Column')
 		 						->where('mapsheet_id', '=', $sheet_id)
 		 						->where('name', '=', $column_name)
@@ -1359,12 +1380,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
-	 	 
-	 	if($map->is_private == 1 && $map->user_id != $this->user->id)
-	 	{
-	 		HTTP::redirect('mymaps');
-	 	}
-	 	
 	 	
 	 	if($map->map_creation_progress < 5)
 	 	{
@@ -1372,26 +1387,97 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		HTTP::redirect('mymaps/add5/?id='.$map_id);
 	 	}
 	 	
-	 	$map_template = ORM::factory('Template', $map->template_id);
+	 	$show_map = false;
+	 	 
+	 	//private map, not the right user
+	 	if($map->is_private == 1 && $map->user_id != $this->user->id)
+	 	{
+	 		$this->template->content = view::factory("privatemap");
+	 		
+	 		//print_r($_COOKIE);
+	 		//echo $_COOKIE['user'.$this->user->id];
+	 		
+	 		//checks to see if the password is stored in the cookie
+	 		if(isset($_COOKIE['user'.$this->user->id]))
+	 		{
+	 			if($_COOKIE['user'.$this->user->id] == $map->private_password)
+		 		{
+		 			$show_map = true;
+		 			//echo 'cookie';
+		 			
+		 		}
+	 		}
+	 		
+	 			 		
+	 		/********Check if we're supposed to do something ******/
+	 		else if(!empty($_POST)) // They've submitted the form to update his/her wish
+	 		{
+	 			try
+	 			{
+	 				if($_POST['action'] == 'submit')
+	 				{
+	 					if($_POST['private_password'] == $map->private_password)
+	 					{
+	 						//store the password in a cookie for an hour to track that the user was recenty logged in
+	 						//TODO look into doing this in a more secure way
+	 						setcookie('user'.$this->user->id, $_POST['private_password'], time()+3600);
+	 						$show_map = true;
+	 						//HTTP::redirect('mymaps/view?id='.$map_id);
+	 					}
+	 				}
+	 			}
+	 			catch (ORM_Validation_Exception $e)
+	 			{
+	 				//not really sure if this is what we want to catch here
+	 				$errors_temp = $e->errors('register');
+	 				if(isset($errors_temp["_external"]))
+	 				{
+	 					$this->template->content->errors = array_merge($errors_temp["_external"], $this->template->content->errors);
+	 				}
+	 				else
+	 				{
+	 					foreach($errors_temp as $error)
+	 					{
+	 						if(is_string($error))
+	 						{
+	 							$this->template->content->errors[] = $error;
+	 						}
+	 					}
+	 				}
+	 			}
+	 		}
+	 		
+	 	}
 	 	
-	 	$this->template = false;
-	 	$this->auto_render = false;
+	 	else 
+	 	{
+	 		$show_map = true;
+	 	}
 
-	 	$view = view::factory("mapview");
-	 	$view->map_id = $map_id;
-	 	$view->map = $map;	
-	 	$js =  view::factory("mapview_js");
-	 	$js->map = $map;
-	 	$js->template = $map_template;
-	 	$view->html_head = $js;
-	 	
-	 	echo $view;
+	 	if($show_map)
+	 	{
+		 	$map_template = ORM::factory('Template', $map->template_id);
+		 	
+		 	$this->template = false;
+		 	$this->auto_render = false;
+	
+		 	$view = view::factory("mapview");
+		 	$view->map_id = $map_id;
+		 	$view->map = $map;	
+		 	$js =  view::factory("mapview_js");
+		 	$js->map = $map;
+		 	$js->template = $map_template;
+		 	$view->html_head = $js;
+		 	
+		 	echo $view;
+	 	}
 	 	
 	 	 
 	 	 
 	 		 	
 	 }//end action_view()
 	 
+		 
 	 
 	 /**
 	  * Saves a file from the temp upload area to the hard disk

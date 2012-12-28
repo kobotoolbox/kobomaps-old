@@ -224,6 +224,8 @@ function parseJsonData(jsonDataUrl)
 		var depthOfData = 0; //how far down till you reach the data
 
 		var initialId=1;
+
+		var sheetCount = 0;
 		
 		//loop over the sheets and create HTML for them
 		for(sheetId in mapData.sheets)
@@ -246,8 +248,14 @@ function parseJsonData(jsonDataUrl)
 				//used to open the first sheet as a default when the page loads
 				initialId='#sheetli_'+sheetId;
 			}
+
+			sheetCount++;
 		}
 
+		if(sheetCount > 1)
+		{
+			$('#sheetlinks').show();
+		}
 		
 		
 		// Controlling the click behavior of the sheets

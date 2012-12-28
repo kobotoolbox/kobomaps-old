@@ -111,12 +111,24 @@
 	echo Form::hidden('map_id',$map_id, array('id'=>'map_id'));
 	foreach($sheets as $sheet_model)
 	{
-		echo '<h2>'.__('Sheet').': '.$sheet_model->name.'</h2>';
+		echo '<div>';	//sheet holding div
+		echo '<h2>'.__('Sheet').': '.$sheet_model->name;
+		echo Form::input('sheet_id['.$sheet_model->id.']', $sheet_model->name, array('id'=>'sheet_name'));
+		echo '</h2>';
 		echo __('Ignore this sheet?:');
-		echo Form::checkbox('is_ignored['.$sheet_model->id.']', null, 1==$sheet_model->is_ignored, array('class'=>'test', 'value'=>'check'));
-		echo Form::hidden('sheet_id['.$sheet_model->id.']', 'getId');
+		echo Form::checkbox('is_ignored['.$sheet_model->id.']', null, 1==$sheet_model->is_ignored, array('id'=>'ignore_checkbox_'.$sheet_model->id, 'onclick'=>'toggleTable("'.'ignore_checkbox_'.$sheet_model->id.'")'));
+		//echo Form::hidden('sheet_id['.$sheet_model->id.']', 'getId');
 		
-		echo '<div class="data_specify_div" id="data_specify_div_'.$sheet_model->id.'">';
+		if($sheet_model->is_ignored == 1)
+		{
+			$display_style = "display:none";
+		}
+		else 
+		{
+			$display_style = "";
+		}
+		
+		echo '<div class="data_specify_div" id="data_specify_div_'.$sheet_model->id.'" style="'.$display_style.'" >';
 		echo '<table class="data_specify_table" id="data_specify_table_'.$sheet_model->id.'">';
 	
 		$sheet = $sheet_data[$sheet_model->name];
@@ -147,6 +159,7 @@
 		}
 		
 		echo '</table>';
+		echo '</div>';
 		echo '</div>';
 	}
 	echo Form::submit('Submit', 'Submit');

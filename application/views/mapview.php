@@ -32,7 +32,7 @@
 <?php
 //Bar at the bottom to select between different sheets
 ?>
-<div id="sheetlinks" >
+<div id="sheetlinks" style="display:none">
 	<ul id=sheetnames></ul>
 </div>
 
