@@ -228,3 +228,8 @@ VALUES (NULL ,  'Database Version',  '1.0.016');
 /** 2013-01-02 John Etherton added a field to keep track of the orginal KML/KMZ source for the templates**/
 ALTER TABLE  `templates` ADD  `kml_file` CHAR( 255 ) NOT NULL AFTER  `file`;
 ALTER TABLE  `template_regions` ADD  `original_title` CHAR( 255 ) NOT NULL;
+UPDATE `metadata` SET  `v` =  '1.0.017' WHERE  `metadata`.`k` ='Database Version';
+ALTER TABLE `metadata` DROP INDEX `uniq_name`;
+ALTER TABLE  `metadata` ADD UNIQUE  `uniq_key` (  `k` );
+
+
