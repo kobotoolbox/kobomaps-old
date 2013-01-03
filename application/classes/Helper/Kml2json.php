@@ -6,6 +6,27 @@
 * Started on 2012-11-08
 *************************************************************/
 
+/**
+ * Fixes character issues. I have no idea how.
+ * Special thanks to the user that left this on this stack overflow post
+ * http://stackoverflow.com/questions/2507608/error-input-is-not-proper-utf-8-indicate-encoding-using-phps-simplexml-lo
+ * @param string $str String to convert
+ * @return string Converted string coming back at ya.
+ */
+function fix_latin1_mangled_with_utf8_maybe_hopefully_most_of_the_time($str)
+{
+	return preg_replace_callback('#[\\xA1-\\xFF](?![\\x80-\\xBF]{2,})#', 'utf8_encode_callback', $str);
+}
+
+/**
+ * Call back function to fix encoding errors
+ * @param array $m
+ */
+function utf8_encode_callback($m)
+{
+	return utf8_encode($m[0]);
+}
+
 class Helper_Kml2json
 {
 	
@@ -91,9 +112,22 @@ class Helper_Kml2json
 	}//end function convert
 	
 	
+	
+	
 	public static function parseXml($kmlUrl, $template)
 	{
-		$xml = simplexml_load_file($kmlUrl);
+
+		//set the mb_detect_order
+		mb_detect_order('UTF-8, UTF-7, ASCII, EUC-JP,SJIS, eucJP-win, SJIS-win, JIS, ISO-2022-JP');
+		$str = file_get_contents($kmlUrl);
+		if(mb_detect_encoding($str,mb_detect_order(), true) == FALSE)
+		{
+			$str = fix_latin1_mangled_with_utf8_maybe_hopefully_most_of_the_time($str);
+		}
+		
+
+		
+		$xml = simplexml_load_string($str);
 		
 		//get a list of existing regions, if any
 		$regions = ORM::factory('Templateregion')

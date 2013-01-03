@@ -88,6 +88,10 @@ class Model_Template extends ORM {
 		{
 			unlink(DOCROOT.'uploads/templates/'.$template->file);
 		}
+		if(file_exists(DOCROOT.'uploads/templates/'.$template->kml_file) AND strlen($template->kml_file) > 0)
+		{
+			unlink(DOCROOT.'uploads/templates/'.$template->kml_file);
+		}
 		$template->delete();
 	}
 
