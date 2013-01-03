@@ -484,7 +484,11 @@ function showByIndicator(indicator)
 		var nationalAverage = dataPtr["total"]; 
 		var unit = dataPtr["unit"];
 		
-		var totalLabel = dataPtr["total_label"];
+		var totalLabel = "";
+		if (typeof dataPtr["total_label"] != 'undefined')
+		{
+			totalLabel = dataPtr["total_label"];
+		}
 		//console.log(totalLabel);
 		
 		UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel);
