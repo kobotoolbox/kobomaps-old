@@ -98,6 +98,7 @@
 			
 		}
 		echo '</table>';
+			
 	}
 
 	echo Form::submit('Submit', 'Submit');

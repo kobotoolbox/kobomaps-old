@@ -84,7 +84,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 */
 	 public function action_add1()
 	 {
-		//initialize data
+	 	//initialize data
 		$data = array(
 			'id'=>'0',
 			'title'=>'',
@@ -105,10 +105,18 @@ class Controller_Mymaps extends Controller_Loggedin {
 		
 		//was an id given?		
 		$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-		//something when wrong, kick them back to add1
+		
+			
 		if($map_id != 0)
 		{
 			$map = ORM::factory('Map', $map_id);
+			
+			//different user
+			if($map->user_id != $this->user->id)
+			{
+				HTTP::redirect('mymaps');
+			}
+				
 			$data['id'] = $map_id;
 			$data['title'] = $map->title;
 			$data['description'] = $map->description;
@@ -197,7 +205,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 					$_POST['template_id'] = $map->template_id;
 					$_POST['json_file'] = $map->json_file;
 					//if the map already exists, keep the same map_creation_progress
-					$_POST['map_creation_progress'] = $map->map_creation_progress;
+					$_POST['map_creation_progress'] = 1;	//$map->map_creation_progress;
 				}
 				//this handles is private
 				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;				
@@ -292,7 +300,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	  * super exciting
 	  */
 	 public function action_add2()
-	 {
+	 {  	
 	 	//get the id
 	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 	 	//something when wrong, kick them back to add1
@@ -303,6 +311,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
+	 	
+	 	//not the owner of the map
+	 	if($map->user_id != $this->user->id)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
 	 	
 	 	if($map->map_creation_progress < 1)
 	 	{
@@ -396,6 +410,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content->sheet_data = $sheet_data;
 	 	$this->template->content->errors = array();
 	 	$this->template->content->messages = array();	 	
+	 	
+	 	$js = view::factory('addmap/add2_js');
+	 	$this->template->html_head->script_views[] = $js;
+	 	
 	 	//some contstants for the form
 	 	$column_types = array('region'=>__('Region'),
 	 			'indicator'=>__('Indicator'),	 			
@@ -424,6 +442,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		$this->template->content->messages[] = __('changes saved');
 	 	}
 	 
+	 	
 	 	/******* Handle incoming data*****/
 	 	if(!empty($_POST)) // They've submitted the form to update his/her wish
 	 	{
@@ -432,121 +451,184 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 			//if we're editing things
 	 			if($_POST['action'] == 'edit')
 	 			{
-	 
-	 				//lets hanlde the columns first
-	 				foreach($_POST['column'] as $sheet_id=>$sheet) //loop over the column data for each sheet
+	 				$sheet_count = 0;
+	 				$ignored_sheet_count = 0;
+	 				
+	 				//for each sheet
+	 				foreach($_POST['sheet_id'] as $sheet_id=>$sheet)
 	 				{
-	 					//first we blow away any column data associated with this sheet
-	 				/* 	$old_cols = ORM::factory('Column')
-	 						->where('mapsheet_id', '=', $sheet_id)
-	 						->find_all();
-	 					foreach($old_cols as $old_col)
-	 					{
-	 						$old_col->delete();
-	 					} */
+	 					$mapsheet = ORM::factory('Mapsheet')
+	 					->where('id', '=', $sheet_id)
+	 					->find();
+	 					$mapsheet->is_ignored = 0;
 	 					
-	 					$indicator_count = 0;
-	 					$region_count = 0;
-	 					$total_count = 0;
-	 					$total_label_count = 0;
-	 					$unit_count = 0;
-	 					$source_count = 0;
-	 					$source_link_count = 0;
+	 					//echo $_POST['sheet_id'][$sheet_id];
 	 					
-	 					$sql = "";
 	 					
-	 					foreach($sheet as $column_name=>$column_type) //loop over the column data
-	 					{
-	 						
-	 						if(strlen($sql) > 0){
-	 							$sql .= " AND ";
-	 						}
-	 						$sql .= "(name <> '".$column_name."' AND mapsheet_id <> ".$sheet_id.") ";
-	 						
-	 						
-	 						//$column = ORM::factory('Column');
-	 						$column = ORM::factory('Column')
-	 						->where('mapsheet_id', '=', $sheet_id)
-	 						->where('name', '=', $column_name)
-	 						->find();
-	 						
-	 						$column->mapsheet_id = $sheet_id;
-	 						$column->name = $column_name;
-	 						$column->type = $column_type;
-	 						$column->save();
-	 						
-	 						if($column_type == "indicator")
-	 						{
-	 							$indicator_count++;
-	 						}
-	 						if($column_type == "region")
-	 						{
-	 							$region_count++;
-	 						}
-	 						if($column_type == "total")
-	 						{
-	 							$total_count++;
-	 						}
-	 						if($column_type == "total_label")
-	 						{
-	 							$total_label_count++;
-	 						}
-	 						if($column_type == "unit")
-	 						{
-	 							$unit_count++;
-	 						}
-	 						if($column_type == "source")
-	 						{
-	 							$source_count++;
-	 						}
-	 						if($column_type == "source link")
-	 						{
-	 							$source_link_count++;
-	 						}
-	 					}
+	 					//sets db value 
+	 					//currently doesn't update excel sheet so reference doesn't match if it is changed
+	 					//$mapsheet->name = $_POST['sheet_id'][$sheet_id];
 	 					
-	 					$db = Database::instance();
-     				  	$old_columns_to_delete = $db->query(Database::DELETE, 'DELETE FROM columns WHERE '.$sql, TRUE);
-
-     				  	
-	 					//validate sheets by checking column counts
-	 					if($indicator_count < 1)
-	 					{
-	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
-	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs at least one column set as an indicator');
-	 					}
-	 					if($region_count < 1)
-	 					{
-	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
-	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs at least one column set for region.');
-	 					}
-	 					if($total_count > 1)
-	 					{
-	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
-	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one total column.');
-	 					}
-	 					if($total_label_count > 1)
-	 					{
-	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
-	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one total label column.');
-	 					}
-	 					if($unit_count > 1)
-	 					{
-	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
-	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one unit column.');
-	 					}
-	 					if($source_count > 1)
-	 					{
-	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
-	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one source column.');
-	 					}
-	 					if($source_link_count > 1)
-	 					{
-	 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
-	 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one source link column.');
-	 					}
+	 					$mapsheet->save();
+	 					$sheet_count++;
 	 				}
 	 				
+	 				/*
+	 				//for each sheet
+	 				foreach($_POST['sheet_id'] as $sheet_name)
+	 				{
+	 					$mapsheet = ORM::factory('Mapsheet')
+	 					->where('id', '=', $sheet_id)
+	 					->find();
+	 					$mapsheet->is_ignored = 0;
+	 						
+	 					echo $sheet_id;
+	 						
+	 					//$mapsheet->name = $sheet_id;
+	 					
+	 					$mapsheet->save();
+	 					$sheet_count++;
+	 				}
+	 				*/
+	 					 		
+	 					 		
+	 					 		
+	 				
+	 				if(isset($_POST['is_ignored']))
+	 				{
+		 				foreach($_POST['is_ignored'] as $sheet_id=>$sheet)
+		 				{
+		 					//echo ' '.$sheet_id.' ';
+		 					
+		 					$mapsheet = ORM::factory('Mapsheet')
+		 					->where('id', '=', $sheet_id)
+		 					->find();
+		 					$mapsheet->is_ignored = 1;
+		 					$mapsheet->save();
+		 					$ignored_sheet_count++;
+		 				}
+	 				}
+	 				
+	 				if($sheet_count == $ignored_sheet_count)
+	 				{
+	 					$this->template->content->errors[] = __('There needs to be at least one sheet that is not ignored.');
+	 				}
+	 
+	 				//lets handle the columns first
+	 				foreach($_POST['column'] as $sheet_id=>$sheet) //loop over the column data for each sheet
+	 				{
+	 					
+	 					$mapsheet = ORM::factory('Mapsheet')
+	 					->where('id', '=', $sheet_id)
+	 					->find();
+
+	 					
+	 					if($mapsheet->is_ignored == 0)
+	 					{
+	 						
+		 					$indicator_count = 0;
+		 					$region_count = 0;
+		 					$total_count = 0;
+		 					$total_label_count = 0;
+		 					$unit_count = 0;
+		 					$source_count = 0;
+		 					$source_link_count = 0;
+		 					
+		 					$sql = "";
+		 					
+		 					foreach($sheet as $column_name=>$column_type) //loop over the column data
+		 					{
+		 						
+		 						if(strlen($sql) > 0){
+		 							$sql .= " AND ";
+		 						}
+		 						$sql .= "(name <> '".$column_name."' AND mapsheet_id <> ".$sheet_id.") ";
+		 						
+		 						
+		 						$column = ORM::factory('Column')
+		 						->where('mapsheet_id', '=', $sheet_id)
+		 						->where('name', '=', $column_name)
+		 						->find();
+		 						
+		 						$column->mapsheet_id = $sheet_id;
+		 						$column->name = $column_name;
+		 						$column->type = $column_type;
+		 						$column->save();
+		 						
+		 						if($column_type == "indicator")
+		 						{
+		 							$indicator_count++;
+		 						}
+		 						if($column_type == "region")
+		 						{
+		 							$region_count++;
+		 						}
+		 						if($column_type == "total")
+		 						{
+		 							$total_count++;
+		 						}
+		 						if($column_type == "total_label")
+		 						{
+		 							$total_label_count++;
+		 						}
+		 						if($column_type == "unit")
+		 						{
+		 							$unit_count++;
+		 						}
+		 						if($column_type == "source")
+		 						{
+		 							$source_count++;
+		 						}
+		 						if($column_type == "source link")
+		 						{
+		 							$source_link_count++;
+		 						}
+		 					}
+		 					
+		 					$db = Database::instance();
+	     				  	$old_columns_to_delete = $db->query(Database::DELETE, 'DELETE FROM columns WHERE '.$sql, TRUE);
+	
+	     				  	
+		 					//validate sheets by checking column counts
+		 					if($indicator_count < 1)
+		 					{
+		 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+		 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs at least one column set as an indicator');
+		 					}
+		 					if($region_count < 1)
+		 					{
+		 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+		 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs at least one column set for region.');
+		 					}
+		 					if($total_count > 1)
+		 					{
+		 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+		 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one total column.');
+		 					}
+		 					if($total_label_count > 1)
+		 					{
+		 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+		 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one total label column.');
+		 					}
+		 					if($unit_count > 1)
+		 					{
+		 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+		 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one unit column.');
+		 					}
+		 					if($source_count > 1)
+		 					{
+		 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+		 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one source column.');
+		 					}
+		 					if($source_link_count > 1)
+		 					{
+		 						$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+		 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('cannot have more than one source link column.');
+		 					}
+	 					}	//end if not ignored statement
+	 				}
+		
+			 				
 	 				//now handle the rows
 	 				foreach($_POST['row'] as $sheet_id=>$sheet) //loop over the column data for each sheet
 	 				{
@@ -559,58 +641,89 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 						$old_row->delete();
 	 					}
 	 					
-	 					$header_count = 0;
-	 					$data_count = 0;
-	 					
-	 					foreach($sheet as $row_name=>$row_type) //loop over the column data
+	 					$mapsheet = ORM::factory('Mapsheet')
+	 					->where('id', '=', $sheet_id)
+	 					->find();
+	 						
+	 					if($mapsheet->is_ignored == 0)
 	 					{
-	 						$row = ORM::factory('Row');
-	 						$row->mapsheet_id = $sheet_id;
-	 						$row->name = $row_name;
-	 						$row->type = $row_type;
-	 						$row->save();
-	 						
-	 						if($row_type == "header")
-	 						{
-	 							$header_count++;
-	 						}
-	 						if($row_type == "data")
-	 						{
-	 							$data_count++;
-	 						}
-	 						
-	 					}
+		 					
+		 					$header_count = 0;
+		 					$data_count = 0;
+		 					
+		 					foreach($sheet as $row_name=>$row_type) //loop over the column data
+		 					{
+		 						$row = ORM::factory('Row');
+		 						$row->mapsheet_id = $sheet_id;
+		 						$row->name = $row_name;
+		 						$row->type = $row_type;
+		 						$row->save();
+		 						
+		 						if($row_type == "header")
+		 						{
+		 							$header_count++;
+		 						}
+		 						if($row_type == "data")
+		 						{
+		 							$data_count++;
+		 						}
+		 						
+		 					}
+		 					
+		 					$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+		 					
+		 					//validate sheets by checking row counts
+		 					if($header_count != 1)
+		 					{
+		 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs exactly one row set as a header row.');
+		 					}
+		 					
+		 					if($data_count < 1)
+		 					{
+		 						$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs at least one row set as a data row.');
+		 					}
+	 					
+	 					}//end if not ignored statement
 	 				}
-	 				
-	 				$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
-	 				
-	 				//validate sheets by checking row counts
-	 				if($header_count != 1)
-	 				{
-	 					$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs exactly one row set as a header row.');	
-	 				}
-	 				
-	 				if($data_count < 1)
-	 				{
-	 					$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs at least one row set as a data row.');
-	 				}
-	 				
-	 				
+			 				
+			 				
+			 							 				
+		 				//}	//end if statement for ignored
+		 				
 	 				//send to next page if no errors
 	 				if(count($this->template->content->errors) == 0)
 	 				{
+//<<<<<<< HEAD
 	 					//update map creation progress tracker
 	 					$map_array = $map->as_array();
-	 					//don't change the map creation progress if they've already gone past this point
-	 					if($map->map_creation_progress < 2)
-	 					{
-	 						$map_array['map_creation_progress'] = 2;
-	 					}
+	 					$map_array['map_creation_progress'] = 2;
 	 					$map->update_map($map_array);
-	 					
+	 				
 	 					HTTP::redirect('mymaps/add3?id='.$map->id);
 	 				}
+		 				
+	 				
+//=======
+	 					$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs at least one row set as a data row.');
 	 			}
+	 				
+	 				
+ 				//send to next page if no errors
+ 				if(count($this->template->content->errors) == 0)
+ 				{
+ 					//update map creation progress tracker
+ 					$map_array = $map->as_array();
+ 					//don't change the map creation progress if they've already gone past this point
+ 					if($map->map_creation_progress < 2)
+ 					{
+ 						$map_array['map_creation_progress'] = 2;
+ 					}
+ 					$map->update_map($map_array);
+ 					
+ 					HTTP::redirect('mymaps/add3?id='.$map->id);
+ 				}
+//>>>>>>> 05c51878dd433902e663e682c9076ab5f77c0cb2
+	 		//}
 	 
 	 			
 	 		}
@@ -659,6 +772,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	
+	 	//not the owner of the map
+	 	if($map->user_id != $this->user->id)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
+	 	
 	 	if($map->map_creation_progress < 2)
 	 	{
 	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
@@ -668,6 +787,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//grab all the sheet objects too
 	 	$sheets = ORM::factory('Mapsheet')
 		 	->where('map_id', '=', $map->id)
+		 	->where('is_ignored', '=', 0)
 		 	->order_by('position', 'ASC')
 		 	->find_all();
 	 	
@@ -676,60 +796,64 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	
 	 	//now loop over the sheets and grab the column and row data for each 
 	 	//grab all the columns
-	 	foreach($sheets as $sheet)
+	 	foreach($sheets as $sheet_id=>$sheet)
 	 	{
-	 		$columns[$sheet->id] = array();
-	 		
-	 		$columns[$sheet->id]['region'] = ORM::factory('Column')
-	 			->where('mapsheet_id', '=', $sheet->id)
-	 			->where('type', '=', 'region')
-	 			->find_all();
-	 		
-	 		$columns[$sheet->id]['indicator'] = ORM::factory('Column')
-		 		->where('mapsheet_id', '=', $sheet->id)
-		 		->where('type', '=', 'indicator')
-		 		->find_all();
-	 		
-	 		$columns[$sheet->id]['ignore'] = ORM::factory('Column')
-		 		->where('mapsheet_id', '=', $sheet->id)
-		 		->where('type', '=', 'ignore')
-		 		->find_all();
-	 		
-	 		$columns[$sheet->id]['total'] = ORM::factory('Column')
-		 		->where('mapsheet_id', '=', $sheet->id)
-		 		->where('type', '=', 'total')
-		 		->find_all();
-	 		
-	 		$columns[$sheet->id]['unit'] = ORM::factory('Column')
-		 		->where('mapsheet_id', '=', $sheet->id)
-		 		->where('type', '=', 'unit')
-		 		->find_all();
-	 	
-	 		$columns[$sheet->id]['source'] = ORM::factory('Column')
-		 		->where('mapsheet_id', '=', $sheet->id)
-		 		->where('type', '=', 'source')
-		 		->find_all();
-	 		
-	 		$columns[$sheet->id]['source_link'] = ORM::factory('Column')
-		 		->where('mapsheet_id', '=', $sheet->id)
-		 		->where('type', '=', 'source link')
-		 		->find_all();
-	 		
-	 		//now rows
-	 		$rows[$sheet->id]['data'] = ORM::factory('Row')
-		 		->where('mapsheet_id', '=', $sheet->id)
-		 		->where('type', '=', 'data')
-		 		->find_all();
-	 		 
-	 		$rows[$sheet->id]['header'] = ORM::factory('Row')
-		 		->where('mapsheet_id', '=', $sheet->id)
-		 		->where('type', '=', 'header')
-		 		->find_all();
+	 		if($sheet->is_ignored == 0)
+	 		{
+		 		$columns[$sheet->id] = array();
 		 		
-	 		$rows[$sheet->id]['ignore'] = ORM::factory('Row')
-		 		->where('mapsheet_id', '=', $sheet->id)
-		 		->where('type', '=', 'source link')
-		 		->find_all();
+		 		$columns[$sheet->id]['region'] = ORM::factory('Column')
+		 			->where('mapsheet_id', '=', $sheet->id)
+		 			->where('type', '=', 'region')
+		 			->find_all();
+		 		
+		 		$columns[$sheet->id]['indicator'] = ORM::factory('Column')
+			 		->where('mapsheet_id', '=', $sheet->id)
+			 		->where('type', '=', 'indicator')
+			 		->find_all();
+		 		
+		 		$columns[$sheet->id]['ignore'] = ORM::factory('Column')
+			 		->where('mapsheet_id', '=', $sheet->id)
+			 		->where('type', '=', 'ignore')
+			 		->find_all();
+		 		
+		 		$columns[$sheet->id]['total'] = ORM::factory('Column')
+			 		->where('mapsheet_id', '=', $sheet->id)
+			 		->where('type', '=', 'total')
+			 		->find_all();
+		 		
+		 		$columns[$sheet->id]['unit'] = ORM::factory('Column')
+			 		->where('mapsheet_id', '=', $sheet->id)
+			 		->where('type', '=', 'unit')
+			 		->find_all();
+		 	
+		 		$columns[$sheet->id]['source'] = ORM::factory('Column')
+			 		->where('mapsheet_id', '=', $sheet->id)
+			 		->where('type', '=', 'source')
+			 		->find_all();
+		 		
+		 		$columns[$sheet->id]['source_link'] = ORM::factory('Column')
+			 		->where('mapsheet_id', '=', $sheet->id)
+			 		->where('type', '=', 'source link')
+			 		->find_all();
+		 		
+		 		//now rows
+		 		$rows[$sheet->id]['data'] = ORM::factory('Row')
+			 		->where('mapsheet_id', '=', $sheet->id)
+			 		->where('type', '=', 'data')
+			 		->find_all();
+		 		 
+		 		$rows[$sheet->id]['header'] = ORM::factory('Row')
+			 		->where('mapsheet_id', '=', $sheet->id)
+			 		->where('type', '=', 'header')
+			 		->find_all();
+			 		
+		 		$rows[$sheet->id]['ignore'] = ORM::factory('Row')
+			 		->where('mapsheet_id', '=', $sheet->id)
+			 		->where('type', '=', 'source link')
+			 		->find_all();
+	 		}
+	 		
 	 	}
 	 	
 	 	//Now we have all the data we need
@@ -751,40 +875,42 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$warnings = array();
 	 	foreach($sheets as $sheet)
 	 	{
-	 		//get the index of the header
-	 		if(count($rows[$sheet->id]['header']) == 0)
-	 		{
-	 			$errors[] = __('no header is defined for sheet ').$sheet->name;
-	 			continue; 
+	 		if($sheet->is_ignored == 0)
+	 		{	
+	 			//get the index of the header
+		 		if(count($rows[$sheet->id]['header']) == 0)
+		 		{
+		 			$errors[] = __('no header is defined for sheet ').$sheet->name;
+		 			continue; 
+		 		}
+		 		if(count($rows[$sheet->id]['header']) > 1)
+		 		{
+		 			$warnings[] = __('More than one row has been defined as a header in sheet ').$sheet->name;
+		 		}
+		 		//we have a header row
+		 		$header_index = $rows[$sheet->id]['header'][0]->name;
+		 		
+		 		//figure out what the regions are
+		 		if(count($columns[$sheet->id]['region']) == 0)
+		 		{
+		 			$errors[] = __('no regions are defined for sheet ').$sheet->name;
+		 			continue;
+		 		}
+		 		
+		 		//grab the sheet data
+		 		$sheet_data = $excel->getSheetByName($sheet->name)->toArray(null, true, true, true);;
+		 		//setup our array
+		 		$sheet_regions[$sheet->id] = array();
+		 		//loop over the regions
+		 		foreach($columns[$sheet->id]['region'] as $region)
+		 		{
+		 			$sheet_regions[$sheet->id][] = $sheet_data[$header_index][$region->name];
+		 		}
+	
+		 		
+		 		//TODO check indicators, total, units, source, and source link
+		 		$sheet_indicators[$sheet->id] = $this->_build_indicators_html($sheet_data, $header_index, $rows[$sheet->id]['data'], $columns[$sheet->id]['indicator'], $errors, $warnings);
 	 		}
-	 		if(count($rows[$sheet->id]['header']) > 1)
-	 		{
-	 			$warnings[] = __('More than one row has been defined as a header in sheet ').$sheet->name;
-	 		}
-	 		//we have a header row
-	 		$header_index = $rows[$sheet->id]['header'][0]->name;
-	 		
-	 		//figure out what the regions are
-	 		if(count($columns[$sheet->id]['region']) == 0)
-	 		{
-	 			$errors[] = __('no regions are defined for sheet ').$sheet->name;
-	 			continue;
-	 		}
-	 		
-	 		//grab the sheet data
-	 		$sheet_data = $excel->getSheetByName($sheet->name)->toArray(null, true, true, true);;
-	 		//setup our array
-	 		$sheet_regions[$sheet->id] = array();
-	 		//loop over the regions
-	 		foreach($columns[$sheet->id]['region'] as $region)
-	 		{
-	 			$sheet_regions[$sheet->id][] = $sheet_data[$header_index][$region->name];
-	 		}
-
-	 		
-	 		//TODO check indicators, total, units, source, and source link
-	 		$sheet_indicators[$sheet->id] = $this->_build_indicators_html($sheet_data, $header_index, $rows[$sheet->id]['data'], $columns[$sheet->id]['indicator'], $errors, $warnings);
-	 		
 	 	}
 	 	
 	 	
@@ -838,6 +964,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		 
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
+	 	
+	 	//not the owner of the map
+	 	if($map->user_id != $this->user->id)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
 	 	
 	 	if($map->map_creation_progress < 2)
 	 	{
@@ -961,6 +1093,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	
+	 	//not the owner of the map
+	 	if($map->user_id != $this->user->id)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
+	 	
 	 	if($map->map_creation_progress < 4)
 	 	{
 	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
@@ -970,6 +1108,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//grab the sheets
 	 	$sheets = ORM::factory('Mapsheet')
 	 		->where('map_id','=',$map->id)
+	 		->where('is_ignored', '=', 0)
 	 		->find_all();
 
 	 	//now grab the region columns for each sheet
@@ -978,31 +1117,34 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$region_columns_string = array();
 	 	foreach($sheets as $sheet)
 	 	{
-	 		//grab the header row
-	 		$header_rows[$sheet->id] = ORM::factory('Row')
-	 		->where('mapsheet_id', '=', $sheet->id)
-	 		->where('type', '=', 'header')
-	 		->find();
-	 		
-	 		$region_columns[$sheet->id] = ORM::factory('Column')
-	 			->where('mapsheet_id', '=', $sheet->id)
-	 			->where('type', '=', 'region')
-	 			->find_all();
-	 		
-	 		$data[$sheet->id] = array();
-	 		$mappings = ORM::factory('Regionmapping');
-	 		//init data
-	 		foreach($region_columns[$sheet->id] as $column)
+	 		if($sheet->is_ignored == 0)
 	 		{
-	 			$mappings = $mappings->or_where('column_id', '=', $column->id);
-	 			$data[$sheet->id][$column->id] = null;
-	 		}
-	 		
-	 		//see if there's any data that already exists
-	 		$mappings = $mappings->find_all();
-	 		foreach($mappings as $mapping)
-	 		{
-	 			$data[$sheet->id][$mapping->column_id] = $mapping->template_region_id;
+		 		//grab the header row
+		 		$header_rows[$sheet->id] = ORM::factory('Row')
+		 		->where('mapsheet_id', '=', $sheet->id)
+		 		->where('type', '=', 'header')
+		 		->find();
+		 		
+		 		$region_columns[$sheet->id] = ORM::factory('Column')
+		 			->where('mapsheet_id', '=', $sheet->id)
+		 			->where('type', '=', 'region')
+		 			->find_all();
+		 		
+		 		$data[$sheet->id] = array();
+		 		$mappings = ORM::factory('Regionmapping');
+		 		//init data
+		 		foreach($region_columns[$sheet->id] as $column)
+		 		{
+		 			$mappings = $mappings->or_where('column_id', '=', $column->id);
+		 			$data[$sheet->id][$column->id] = null;
+		 		}
+		 		
+		 		//see if there's any data that already exists
+		 		$mappings = $mappings->find_all();
+		 		foreach($mappings as $mapping)
+		 		{
+		 			$data[$sheet->id][$mapping->column_id] = $mapping->template_region_id;
+		 		}
 	 		}
 	 		
 	 	}
@@ -1238,33 +1380,104 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
-	 	 
+	 	
 	 	if($map->map_creation_progress < 5)
 	 	{
 	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
 	 		HTTP::redirect('mymaps/add5/?id='.$map_id);
 	 	}
 	 	
-	 	$map_template = ORM::factory('Template', $map->template_id);
+	 	$show_map = false;
+	 	 
+	 	//private map, not the right user
+	 	if($map->is_private == 1 && $map->user_id != $this->user->id)
+	 	{
+	 		$this->template->content = view::factory("privatemap");
+	 		
+	 		//print_r($_COOKIE);
+	 		//echo $_COOKIE['user'.$this->user->id];
+	 		
+	 		//checks to see if the password is stored in the cookie
+	 		if(isset($_COOKIE['user'.$this->user->id]))
+	 		{
+	 			if($_COOKIE['user'.$this->user->id] == $map->private_password)
+		 		{
+		 			$show_map = true;
+		 			//echo 'cookie';
+		 			
+		 		}
+	 		}
+	 		
+	 			 		
+	 		/********Check if we're supposed to do something ******/
+	 		else if(!empty($_POST)) // They've submitted the form to update his/her wish
+	 		{
+	 			try
+	 			{
+	 				if($_POST['action'] == 'submit')
+	 				{
+	 					if($_POST['private_password'] == $map->private_password)
+	 					{
+	 						//store the password in a cookie for an hour to track that the user was recenty logged in
+	 						//TODO look into doing this in a more secure way
+	 						setcookie('user'.$this->user->id, $_POST['private_password'], time()+3600);
+	 						$show_map = true;
+	 						//HTTP::redirect('mymaps/view?id='.$map_id);
+	 					}
+	 				}
+	 			}
+	 			catch (ORM_Validation_Exception $e)
+	 			{
+	 				//not really sure if this is what we want to catch here
+	 				$errors_temp = $e->errors('register');
+	 				if(isset($errors_temp["_external"]))
+	 				{
+	 					$this->template->content->errors = array_merge($errors_temp["_external"], $this->template->content->errors);
+	 				}
+	 				else
+	 				{
+	 					foreach($errors_temp as $error)
+	 					{
+	 						if(is_string($error))
+	 						{
+	 							$this->template->content->errors[] = $error;
+	 						}
+	 					}
+	 				}
+	 			}
+	 		}
+	 		
+	 	}
 	 	
-	 	$this->template = false;
-	 	$this->auto_render = false;
+	 	else 
+	 	{
+	 		$show_map = true;
+	 	}
 
-	 	$view = view::factory("mapview");
-	 	$view->map_id = $map_id;
-	 	$view->map = $map;	
-	 	$js =  view::factory("mapview_js");
-	 	$js->map = $map;
-	 	$js->template = $map_template;
-	 	$view->html_head = $js;
-	 	
-	 	echo $view;
+	 	if($show_map)
+	 	{
+		 	$map_template = ORM::factory('Template', $map->template_id);
+		 	
+		 	$this->template = false;
+		 	$this->auto_render = false;
+	
+		 	$view = view::factory("mapview");
+		 	$view->map_id = $map_id;
+		 	$view->map = $map;	
+		 	$js =  view::factory("mapview_js");
+		 	$js->map = $map;
+		 	$js->template = $map_template;
+		 	$view->html_head = $js;
+		 	
+		 	echo $view;
+	 	}
 	 	
 	 	 
 	 	 
 	 		 	
 	 }//end action_view()
 	 
+		 
 	 
 	 /**
 	  * Saves a file from the temp upload area to the hard disk

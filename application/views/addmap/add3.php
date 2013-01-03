@@ -103,7 +103,7 @@
 		echo "\n";
 		echo $sheet_indicators[$sheet->id];
 		echo '<p>'. __('If the indicators above are not correct please check the rows that you set as data and the columns you set as denoting indicators.').'</p>';
-		
+ 	
 	}
 
 ?>

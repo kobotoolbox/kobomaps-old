@@ -6,8 +6,8 @@
 * Started on 12/06/2011
 *************************************************************/
 ?>
-		
-<div id="addmapMenu"><?php echo Helper_AddmapSubmenu::make_addmap_menu(1);?></div>		
+
+<div id="addmapMenu"><?php echo Helper_AddmapSubmenu::make_addmap_menu(1);?></div>	
 		
 <h2><?php echo __("Add Map - Page 1") ?></h2>
 <p><?php echo __("First we'll grab some basic info about your data");?></p>
@@ -115,7 +115,6 @@
 	<?php 
 	echo Form::hidden('googleid','',array('id'=>'googleid'));
 	echo Form::hidden('googlelink','',array('id'=>'googlelink'));
-	echo Form::hidden('googletoken','',array('id'=>'googletoken'));
 	echo '</td></tr>';
 	
 	//do we ultimately want to clean this up a bit?
