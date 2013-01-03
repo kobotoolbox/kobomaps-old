@@ -155,7 +155,7 @@ class Controller_Templates extends Controller_Loggedin {
 					{
 						$region = ORM::factory('Templateregion', $r_id);
 						$region->title = $r_title;
-						$region->save();						
+						$region->save();
 					}
 				}
 				
@@ -166,6 +166,10 @@ class Controller_Templates extends Controller_Loggedin {
 					//handle the kml file
 					$filename = $this->_save_file($_FILES['file'], $template);
 					$template->file = $filename;					
+				}
+				else //we're editing an existing template and not changing the base file
+				{
+					$filename = $this->_save_file(null, $template);
 				}
 				$template->save();
 				
@@ -220,26 +224,38 @@ class Controller_Templates extends Controller_Loggedin {
 
 	 protected function _save_file($upload_file, $template)
 	 {
-	 	if (
-	 			! Upload::valid($upload_file) OR
-	 			! Upload::not_empty($upload_file) OR
-	 			! Upload::type($upload_file, array('kml', 'kmz')))
+	 	//if we're working with a file that's already been uploaded.
+	 	//Happens when a user is editing an existing template
+	 	if($upload_file == null AND $template->kml_file != null)
 	 	{
-	 		return FALSE;
-	 	}
-	 
-	 	$directory = DOCROOT.'uploads/templates/';
-	 
-	 	$extention = $this->get_file_extension($upload_file['name']);
-	 	$filename = $template->id.'.'.$extention;
-	 	
-	 	if ($file = Upload::save($upload_file, $filename, $directory))
-	 	{	 			 
+	 		$filename = $template->kml_file;
 	 		$json_file = Helper_Kml2json::convert($filename, $template);
 	 		return $json_file;
 	 	}
-	 
-	 	return FALSE;
+	 	//Now deal with the case whe we're creating a new templae and just uploaded a file
+	 	else
+	 	{	 		
+		 	if (
+		 			! Upload::valid($upload_file) OR
+		 			! Upload::not_empty($upload_file) OR
+		 			! Upload::type($upload_file, array('kml', 'kmz')))
+		 	{
+		 		return FALSE;
+		 	}
+		 
+		 	$directory = DOCROOT.'uploads/templates/';
+		 
+		 	$extention = $this->get_file_extension($upload_file['name']);
+		 	$filename = $template->id.'.'.$extention;
+		 	$template->kml_file = $filename;
+		 	if ($file = Upload::save($upload_file, $filename, $directory))
+		 	{	 			 
+		 		$json_file = Helper_Kml2json::convert($filename, $template);
+		 		return $json_file;
+		 	}
+		 
+		 	return FALSE;
+	 	}
 	 }
 	 
 	 function get_file_extension($file_name) {

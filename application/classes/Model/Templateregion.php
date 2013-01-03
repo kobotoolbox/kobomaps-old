@@ -64,6 +64,14 @@ class Model_Templateregion extends ORM {
 
 	
 	
-
+	/**
+	 * Delete a region
+	 */
+	public static function delete_region($id)
+	{
+		//get the template in question
+		$region = ORM::factory('Templateregion', $id);
+		$region->delete();
+	}
 	
 } // End User Model

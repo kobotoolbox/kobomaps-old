@@ -17,15 +17,7 @@ class Helper_Kml2json
 	 */
 	public static function convert($file_path, $template)
 	{
-		//blow away any template regions that exists for this template
-		$regions = ORM::factory('Templateregion')
-			->where('template_id', '=', $template->id)
-			->find_all();
-		foreach($regions as $r)
-		{
-			$r->delete();
-		}
-	
+		
 		// Where the file is going to be placed
 		$target_paths = array();
 	
@@ -61,7 +53,7 @@ class Helper_Kml2json
 					$i++;
 				}
 				zip_close($zip);
-				unlink($target_paths[0]);
+				//unlink($target_paths[0]);
 				$target_paths = $newTarget;
 			}
 		}
@@ -81,7 +73,11 @@ class Helper_Kml2json
 		foreach($target_paths as $target_path)
 		{
 			self::parseXml($target_path, $template);
-			unlink($target_path);
+			//only delete the file if we're working with the components of a KMZ. Don't delete the orignal KML/KMZ
+			if($target_path != $directory.$file_path)
+			{
+				unlink($target_path);
+			}
 		}
 		//close the "areas"
 		echo "]}";
@@ -98,25 +94,52 @@ class Helper_Kml2json
 	public static function parseXml($kmlUrl, $template)
 	{
 		$xml = simplexml_load_file($kmlUrl);
-	
+		
+		//get a list of existing regions, if any
+		$regions = ORM::factory('Templateregion')
+			->where('template_id', '=', $template->id)
+			->find_all();
+		//now make this an array keyed by orginal_title
+		$regions_array = array();
+		foreach($regions as $region)
+		{
+			$regions_array[$region->original_title] = $region;
+		}
+
 		//go straight to the placemarks
 		$placemarks = $xml->Document->Placemark;
 		$areasCount = 0;
 		//loop over each area
 		foreach($placemarks as $placemark)
 		{
-			//create a template region 
-			$region = ORM::factory('Templateregion');
-			$region->title = $placemark->name[0];
-			$region->template_id = $template->id;
-			$region->save();
+			$name = trim(strval($placemark->name[0]));
+			//see if there's already a region for this template
+			if(isset($regions_array[$name]))
+			{
+				$region = $regions_array[$name];
+				unset($regions_array[$name]);
+			}
+			else
+			{
+				$region = ORM::factory('Templateregion');
+				$region->title = $name;
+				$region->original_title = $name;
+				$region->template_id = $template->id;
+				$region->save();
+			}
 			
 			$areasCount++;
 			if($areasCount > 1)
 			{
 				echo ",";
 			}
-			self::parsePlacemark($placemark);
+			self::parsePlacemark($placemark, $region);
+		}
+		
+		//delete regions that weren't used
+		foreach($regions_array as $region)
+		{
+			Model_Templateregion::delete_region($region->id);
 		}
 	
 	}
@@ -125,14 +148,15 @@ class Helper_Kml2json
 	/**
 	 * Handles one specific area
 	 */
-	public static function parsePlacemark ($placemark)
+	public static function parsePlacemark ($placemark, $region)
 	{
 		$cumaltive_lat = 0;
 		$cumaltive_lon = 0;
 		$count = 0;
 	
 		//startup the area, it's name and points
-		echo '{"area":"'.strval($placemark->name[0]).'","points":[';
+		$name = $region->title;
+		echo '{"area":"'.strval($name).'","points":[';
 	
 	
 	
