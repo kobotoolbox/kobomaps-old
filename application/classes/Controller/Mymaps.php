@@ -492,11 +492,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 		 				}
 	 				}
 	 				
-	 				if($sheet_count == $ignored_sheet_count)
-	 				{
-	 					$this->template->content->errors[] = __('There needs to be at least one sheet that is not ignored.');
-	 				}
-	 
+
 	 				//lets handle the columns first
 	 				foreach($_POST['column'] as $sheet_id=>$sheet) //loop over the column data for each sheet
 	 				{
@@ -690,6 +686,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					//else move no to add3
 	 					else
 	 					{		 					
+	 						//TODO: We need a way to know if they hide all their sheets, and tell them not to do that.
+	 						
 		 					//don't change the map creation progress if they've already gone past this point
 		 					if($map->map_creation_progress < 2)
 		 					{
@@ -1312,7 +1310,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				}
 	 				$map->update_map($map_array);
 	 				
-	 				HTTP::redirect('mymaps/view?id='.$map_id);
+	 				HTTP::redirect('public/view?id='.$map_id);
 	 			}
 	 		}
 	 		catch (ORM_Validation_Exception $e)
@@ -1341,120 +1339,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 
 	 
 	 
-	 
-	 /**
-	  * Called to view a map
-	  */
-	 public function action_view()
-	 {
-	 	//get the id
-	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-	 	//something when wrong, kick them back to add1
-	 	if($map_id == 0)
-	 	{
-	 		HTTP::redirect('mymaps');
-	 	}
-	 		
-	 	//pull the map object from the DB
-	 	$map = ORM::factory('Map', $map_id);
-	 	
-	 	if($map->map_creation_progress < 5)
-	 	{
-	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
-	 		HTTP::redirect('mymaps/add5/?id='.$map_id);
-	 	}
-	 	
-	 	$show_map = false;
 	 	 
-	 	//private map, not the right user
-	 	if($map->is_private == 1 && $map->user_id != $this->user->id)
-	 	{
-	 		$this->template->content = view::factory("privatemap");
-	 		
-	 		//print_r($_COOKIE);
-	 		//echo $_COOKIE['user'.$this->user->id];
-	 		
-	 		//checks to see if the password is stored in the cookie
-	 		if(isset($_COOKIE['user'.$this->user->id]))
-	 		{
-	 			if($_COOKIE['user'.$this->user->id] == $map->private_password)
-		 		{
-		 			$show_map = true;
-		 			//echo 'cookie';
-		 			
-		 		}
-	 		}
-	 		
-	 			 		
-	 		/********Check if we're supposed to do something ******/
-	 		else if(!empty($_POST)) // They've submitted the form to update his/her wish
-	 		{
-	 			try
-	 			{
-	 				if($_POST['action'] == 'submit')
-	 				{
-	 					if($_POST['private_password'] == $map->private_password)
-	 					{
-	 						//store the password in a cookie for an hour to track that the user was recenty logged in
-	 						//TODO look into doing this in a more secure way
-	 						setcookie('user'.$this->user->id, $_POST['private_password'], time()+3600);
-	 						$show_map = true;
-	 						//HTTP::redirect('mymaps/view?id='.$map_id);
-	 					}
-	 				}
-	 			}
-	 			catch (ORM_Validation_Exception $e)
-	 			{
-	 				//not really sure if this is what we want to catch here
-	 				$errors_temp = $e->errors('register');
-	 				if(isset($errors_temp["_external"]))
-	 				{
-	 					$this->template->content->errors = array_merge($errors_temp["_external"], $this->template->content->errors);
-	 				}
-	 				else
-	 				{
-	 					foreach($errors_temp as $error)
-	 					{
-	 						if(is_string($error))
-	 						{
-	 							$this->template->content->errors[] = $error;
-	 						}
-	 					}
-	 				}
-	 			}
-	 		}
-	 		
-	 	}
-	 	
-	 	else 
-	 	{
-	 		$show_map = true;
-	 	}
-
-	 	if($show_map)
-	 	{
-		 	$map_template = ORM::factory('Template', $map->template_id);
-		 	
-		 	$this->template = false;
-		 	$this->auto_render = false;
-	
-		 	$view = view::factory("mapview");
-		 	$view->map_id = $map_id;
-		 	$view->map = $map;	
-		 	$js =  view::factory("mapview_js");
-		 	$js->map = $map;
-		 	$js->template = $map_template;
-		 	$view->html_head = $js;
-		 	
-		 	echo $view;
-	 	}
-	 	
-	 	 
-	 	 
-	 		 	
-	 }//end action_view()
-	 
-		 
 	 
 	 /**
 	  * Saves a file from the temp upload area to the hard disk

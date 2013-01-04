@@ -39,6 +39,7 @@ class Helper_Kml2json
 	public static function convert($file_path, $template)
 	{
 		
+		
 		try 
 		{
 			// Where the file is going to be placed

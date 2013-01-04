@@ -79,7 +79,7 @@ class Helper_AddmapSubmenu
 		echo '<li id="page_view">';
 		if($map_progress >= 5)
 		{
-			echo '<a href="'.url::base().'mymaps/view/?id='.$map_id.'">'.__("View Map").'</a>';
+			echo '<a href="'.url::base().'public/view/?id='.$map_id.'">'.__("View Map").'</a>';
 		}
 		else
 		{
