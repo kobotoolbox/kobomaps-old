@@ -109,6 +109,7 @@
 	echo Form::open(NULL, array('id'=>'add_map_form', 'enctype'=>'multipart/form-data')); 
 	echo Form::hidden('action','edit', array('id'=>'action'));
 	echo Form::hidden('map_id',$map_id, array('id'=>'map_id'));
+	echo Form::hidden('sheet_position',$sheet_position, array('id'=>'sheet_position'));
 	foreach($sheets as $sheet_model)
 	{
 		echo '<div>';	//sheet holding div
@@ -141,15 +142,46 @@
 				echo '<tr><th></th>';
 				foreach($row as $column_index=>$column)
 				{
+					//set a default for each drop down
+					$column_default = $data['column'][$sheet_model->id][$column_index];
+					if($column_default == null OR $column_default == "")
+					{
+						if(trim(strtolower($column)) == "unit")
+						{
+							$column_default = 'unit';
+						}						
+						else if(trim(strtolower($column)) == "source")
+						{
+							$column_default = 'source';
+						}
+						else if(trim(strtolower($column)) == "source link")
+						{
+							$column_default = 'source link';
+						}
+						else if(trim(strtolower($column)) == "total")
+						{
+							$column_default = 'total';
+						}
+						else if(trim(strtolower($column)) == "total label")
+						{
+							$column_default = 'total label';
+						}
+					}
 					echo '<th class="header">';
 					echo $column_index . '<br/>';
-					echo Form::select('column['.$sheet_model->id.']['.$column_index.']', $column_types, $data['column'][$sheet_model->id][$column_index], array('id'=>'column_'.$sheet_model->id.'_'.$column_index));
+					echo Form::select('column['.$sheet_model->id.']['.$column_index.']', $column_types, $column_default, array('id'=>'column_'.$sheet_model->id.'_'.$column_index));
 					echo '</th>';
 				}
 				echo '</tr>';
 			}
 			echo '<tr><td class="header">'.$row_index. ' ';
-			echo Form::select('row['.$sheet_model->id.']['.$row_index.']', $row_types, $data['row'][$sheet_model->id][$row_index], array('id'=>'row_'.$sheet_model->id.'_'.$row_index));
+			//set a default for each drop down
+			$row_default = trim($data['row'][$sheet_model->id][$row_index]);			
+			if($row_index == 1 AND ($row_default == null OR $row_default == ""))
+			{
+				$row_default = 'header';
+			}
+			echo Form::select('row['.$sheet_model->id.']['.$row_index.']', $row_types, $row_default, array('id'=>'row_'.$sheet_model->id.'_'.$row_index));
 			echo '</td>';
 			foreach($row as $column_index=>$column)
 			{

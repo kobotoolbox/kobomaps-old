@@ -309,6 +309,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		HTTP::redirect('mymaps/add1');
 	 	}
 	 	
+	 	//get the sheet position
+	 	$sheet_position = isset($_GET['sheet']) ? intval($_GET['sheet']) : 0;
+	 	
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	
@@ -327,6 +330,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//grab all the sheet objects too
 	 	$sheets = ORM::factory('Mapsheet')
 	 		->where('map_id', '=', $map->id)
+	 		->where('position', '=', $sheet_position)
 	 		->order_by('position', 'ASC')
 	 		->find_all();
 	 	
@@ -352,6 +356,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//now all of this is to init the $data array for the form.
 	 	foreach($sheet_names as $sheet_name)
 	 	{
+	 		//make sure that we're only looking at the sheet we care about
+	 		if(!isset($sheet_name_to_db_id[$sheet_name]))
+	 		{
+	 			continue;
+	 		}
 	 		$sheet = $excel->getSheetByName($sheet_name);
 	 		$sheet_data[$sheet_name] = $sheet->toArray(null, true, true, true);
 	 		//now use that look-up table to get the DB id of this sheet
@@ -410,6 +419,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content->sheet_data = $sheet_data;
 	 	$this->template->content->errors = array();
 	 	$this->template->content->messages = array();	 	
+	 	$this->template->content->sheet_position = $sheet_position;
 	 	
 	 	$js = view::factory('addmap/add2_js');
 	 	$this->template->html_head->script_views[] = $js;
@@ -462,47 +472,20 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					->find();
 	 					$mapsheet->is_ignored = 0;
 	 					
-	 					//echo $_POST['sheet_id'][$sheet_id];
-	 					
-	 					
-	 					//sets db value 
-	 					//currently doesn't update excel sheet so reference doesn't match if it is changed
-	 					//$mapsheet->name = $_POST['sheet_id'][$sheet_id];
 	 					
 	 					$mapsheet->save();
 	 					$sheet_count++;
 	 				}
+
 	 				
-	 				/*
-	 				//for each sheet
-	 				foreach($_POST['sheet_id'] as $sheet_name)
-	 				{
-	 					$mapsheet = ORM::factory('Mapsheet')
-	 					->where('id', '=', $sheet_id)
-	 					->find();
-	 					$mapsheet->is_ignored = 0;
-	 						
-	 					echo $sheet_id;
-	 						
-	 					//$mapsheet->name = $sheet_id;
-	 					
-	 					$mapsheet->save();
-	 					$sheet_count++;
-	 				}
-	 				*/
-	 					 		
-	 					 		
-	 					 		
-	 				
+
 	 				if(isset($_POST['is_ignored']))
 	 				{
 		 				foreach($_POST['is_ignored'] as $sheet_id=>$sheet)
 		 				{
-		 					//echo ' '.$sheet_id.' ';
-		 					
 		 					$mapsheet = ORM::factory('Mapsheet')
-		 					->where('id', '=', $sheet_id)
-		 					->find();
+		 						->where('id', '=', $sheet_id)
+		 						->find();
 		 					$mapsheet->is_ignored = 1;
 		 					$mapsheet->save();
 		 					$ignored_sheet_count++;
@@ -686,47 +669,42 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					}//end if not ignored statement
 	 				}
 			 				
-			 				
-			 							 				
-		 				//}	//end if statement for ignored
-		 				
 	 				//send to next page if no errors
 	 				if(count($this->template->content->errors) == 0)
 	 				{
-//<<<<<<< HEAD
-	 					//update map creation progress tracker
-	 					$map_array = $map->as_array();
-	 					$map_array['map_creation_progress'] = 2;
-	 					$map->update_map($map_array);
-	 				
-	 					HTTP::redirect('mymaps/add3?id='.$map->id);
-	 				}
+	 					//get the highest postion for a sheet of this map
+	 					$max_sheet = ORM::factory('Mapsheet')
+								 		->where('map_id', '=', $map->id)
+								 		->order_by('position', 'DESC')
+								 		->limit(0,1)
+								 		->find()
+								 		->position;
+								 	
+	 					
+	 					//if we have more sheet to fiddle with then move on to that sheet
+	 					if($sheet_position < $max_sheet)
+	 					{
+	 						$next_sheet = $sheet_position + 1;
+	 						HTTP::redirect('mymaps/add2?id='.$map->id.'&sheet='.$next_sheet);
+	 					}
+	 					//else move no to add3
+	 					else
+	 					{		 					
+		 					//don't change the map creation progress if they've already gone past this point
+		 					if($map->map_creation_progress < 2)
+		 					{
+		 						$map->map_creation_progress = 2;
+		 					}
+		 					$map->save();
 		 				
-	 				
-//=======
-	 					$this->template->content->errors[] = __('Sheet').' '.$sheet_name. ' '. __('needs at least one row set as a data row.');
-	 			}
-	 				
-	 				
- 				//send to next page if no errors
- 				if(count($this->template->content->errors) == 0)
- 				{
- 					//update map creation progress tracker
- 					$map_array = $map->as_array();
- 					//don't change the map creation progress if they've already gone past this point
- 					if($map->map_creation_progress < 2)
- 					{
- 						$map_array['map_creation_progress'] = 2;
- 					}
- 					$map->update_map($map_array);
- 					
- 					HTTP::redirect('mymaps/add3?id='.$map->id);
- 				}
-//>>>>>>> 05c51878dd433902e663e682c9076ab5f77c0cb2
-	 		//}
-	 
+		 					HTTP::redirect('mymaps/add3?id='.$map->id);
+	 					}
+	 				}	 						
+		 					 				
+	 			}//end if $_POST['action']==edit
+	 	
 	 			
-	 		}
+	 		}//end try
 	 		catch (ORM_Validation_Exception $e)
 	 		{
 	 			$errors_temp = $e->errors('register');
@@ -907,7 +885,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 		 			$sheet_regions[$sheet->id][] = $sheet_data[$header_index][$region->name];
 		 		}
 	
-		 		
 		 		//TODO check indicators, total, units, source, and source link
 		 		$sheet_indicators[$sheet->id] = $this->_build_indicators_html($sheet_data, $header_index, $rows[$sheet->id]['data'], $columns[$sheet->id]['indicator'], $errors, $warnings);
 	 		}

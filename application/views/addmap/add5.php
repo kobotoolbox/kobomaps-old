@@ -18,7 +18,7 @@
 
 <h3><?php echo $map->title;?></h3>
 <p><?php echo $map->description;?></p>
-<p><?php echo __("Select how the regions specified in your data match up to the regions in the template you have chosen");?></p>
+<p><?php echo __('Select how the regions specified in your data match up to the regions in the template you have chosen. A drop down box surrouned in <strong><span style="color:#ff9900;">orange</span></strong> need to be set since no match was deteced for them.');?></p>
 
 
 
@@ -92,8 +92,18 @@
 					}
 				}
 			}
+			//define the things like style and ID that are needed for our drop downs
+			$extras_array = array('id'=>'region['.$sheet->id.']['.$column->id.']', 'style'=>'width:300px;');
+			
+			//if after all that we're still not selected
+			if($selected == null)
+			{
 
-			echo Form::select('region['.$sheet->id.']['.$column->id.']', $map_regions,$selected, array('id'=>'region['.$sheet->id.']['.$column->id.']', 'style'=>'width:300px;'));
+				$selected = 0;
+				$extras_array['class'] = 'needstobemapped';
+			}
+
+			echo Form::select('region['.$sheet->id.']['.$column->id.']', $map_regions,$selected, $extras_array);
 			echo '</td></tr>';
 			
 		}

@@ -91,7 +91,7 @@
 	foreach($sheets as $sheet)
 	{
 		echo '<h2>'.$sheet->name.'</h2>';
-		echo '<h3>'.__('Regions in sheet ').$sheet->name.'</h2>';
+		echo '<h3><a href="'.URL::base().'mymaps/add2?id='.$sheet->map_id.'&sheet='.$sheet->position.'">'.__('Regions in sheet ').$sheet->name.'</a></h2>';
 		echo '<ul>';
 		foreach($sheet_regions[$sheet->id] as $region)
 		{
@@ -99,7 +99,7 @@
 		}
 		echo '</ul>';
 		echo '<p>'. __('If the regions above are not correct please check the row that you set as the header and the columns you set as denoting regions.').'</p>';
-		echo '<h3>'.__('Indicators in sheet ').$sheet->name.'</h2>';
+		echo '<h3><a href="'.URL::base().'mymaps/add2?id='.$sheet->map_id.'&sheet='.$sheet->position.'">'.__('Indicators in sheet ').$sheet->name.'</a></h3>';
 		echo "\n";
 		echo $sheet_indicators[$sheet->id];
 		echo '<p>'. __('If the indicators above are not correct please check the rows that you set as data and the columns you set as denoting indicators.').'</p>';

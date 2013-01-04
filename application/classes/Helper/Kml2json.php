@@ -118,6 +118,7 @@ class Helper_Kml2json
 	{
 
 		//set the mb_detect_order
+		/*
 		mb_detect_order('UTF-8, UTF-7, ASCII, EUC-JP,SJIS, eucJP-win, SJIS-win, JIS, ISO-2022-JP');
 		$str = file_get_contents($kmlUrl);
 		if(mb_detect_encoding($str,mb_detect_order(), true) == FALSE)
@@ -125,9 +126,11 @@ class Helper_Kml2json
 			$str = fix_latin1_mangled_with_utf8_maybe_hopefully_most_of_the_time($str);
 		}
 		
-
-		
 		$xml = simplexml_load_string($str);
+		*/
+	
+		
+		$xml = simplexml_load_file($kmlUrl);
 		
 		//get a list of existing regions, if any
 		$regions = ORM::factory('Templateregion')

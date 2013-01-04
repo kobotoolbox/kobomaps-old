@@ -132,6 +132,7 @@ class Controller_Templates extends Controller_Loggedin {
 		/******* Handle incoming data*****/
 		if(!empty($_POST)) // They've submitted the form to update his/her wish
 		{
+		
 			try
 			{
 				//Should we use the old file
@@ -161,8 +162,10 @@ class Controller_Templates extends Controller_Loggedin {
 				
 				$template->update_template($_POST);
 				
+			
 				if($_FILES['file']['size'] != '0')
 				{
+					
 					//handle the kml file
 					$filename = $this->_save_file($_FILES['file'], $template);
 					$template->file = $filename;					
@@ -242,6 +245,7 @@ class Controller_Templates extends Controller_Loggedin {
 		 	{
 		 		return FALSE;
 		 	}
+		 
 		 
 		 	$directory = DOCROOT.'uploads/templates/';
 		 
