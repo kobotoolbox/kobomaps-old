@@ -240,13 +240,13 @@ function parseJsonData(jsonDataUrl)
 			}
 
 			//create html for sheets at bottom of the page 
-			$("#sheetnames").append('<li class="sheet2"><span class="sheet2" onclick="sheetSelect($(this),$(\'#sheetli_'+sheetId+'\'))">'+sheet.sheetName+'</span></li>');		//"$(\'#sheetspan_'+sheetId+'\').click();"
+			$("#sheetnames").append('<li class="sheet2"><span class="sheet2" id="sheetSelector_'+sheetId+'" onclick="sheetSelect('+sheetId+');">'+sheet.sheetName+'</span></li>');		
 
 			
 			if(initialId==1)
 			{
 				//used to open the first sheet as a default when the page loads
-				initialId='#sheetli_'+sheetId;
+				initialId=sheetId;
 			}
 
 			sheetCount++;
@@ -258,15 +258,8 @@ function parseJsonData(jsonDataUrl)
 		}
 		
 		
-		// Controlling the click behavior of the sheets
-		/* No longer necessary since sheetSelect function is called directly with onclick element listeners
-		$('span.sheet').click(function (){
-			sheetClick($(this));
-		});
-		*/
 		$('li.sheet').hide(); //This hides all ul level1 by default until they are toggled. Can also be defined in css.
 
-		//console.log("depthOfData: "+depthOfData);
 		
 		//control the clicking behavior of the indicator levels that lead to the data
 		for(var i = 1; i < depthOfData; i++)
@@ -283,18 +276,13 @@ function parseJsonData(jsonDataUrl)
 		});
 
 		//Default selects first sheet 
-		sheetSelect($("span.sheet2").first(),$(initialId));
+		sheetSelect(initialId);
 		
-		//this should be done in CSS for sure	
-		$("li span").hover(function () {
-			$(this).addClass("hover");
-		}, function () {
-			$(this).removeClass("hover");
-		});
+		
 		
 		//check if we're supposed to auto load the data for a particular indicator?
 		var autoLoadIndicator = $.address.parameter("indicator");
-		if( autoLoadIndicator != "")
+		if( autoLoadIndicator != "" && typeof autoLoadIndicator !== "undefined" )
 		{
 			showByIndicator(autoLoadIndicator);
 		}
@@ -305,31 +293,6 @@ function parseJsonData(jsonDataUrl)
 }//end parseJsonData function
 
 
-/* No longer necessary with sheetSelection function
-function sheetClick(sheetItem, forceOn)
-{
-	if(forceOn != undefined && forceOn == false)
-	{
-		sheetItem.removeClass("active"); //highlights active span
-		sheetItem.siblings("ul.sheet").hide(); //This shows the child ul level1 element
-	}
-	else if (forceOn != undefined && forceOn == true)
-	{
-		sheetItem.addClass("active"); //highlights active span
-		sheetItem.siblings("ul.sheet").show(); //This shows the child ul level1 element
-	}
-	else if(sheetItem.hasClass("active"))
-	{
-		sheetItem.removeClass("active"); //highlights active span
-		sheetItem.siblings("ul.sheet").hide(); //This shows the child ul level1 element
-	}
-	else 
-	{
-		sheetItem.addClass("active"); //highlights active span
-		sheetItem.siblings("ul.sheet").show(); //This shows the child ul level1 element
-	}
-}
-*/
 
 function openAppropriateIndicators(prevElem, currentElems)
 {
@@ -370,22 +333,27 @@ function openAppropriateIndicators(prevElem, currentElems)
 
 
 
-function sheetSelect(sheetButton, sheetItem)
+function sheetSelect(sheetId)
 {
+
+ 	var sheetButton = $("#sheetSelector_"+sheetId);
+ 	var sheetItem =  $("#sheetli_"+sheetId);
+
 	if(!sheetButton.hasClass("active"))
 	{
+		
 		$('li.active').addClass("previous");			
 		$('li.active').removeClass("active");
-				
-		sheetButton.addClass("active");
+
+		$('li.sheet').hide();
 		sheetItem.addClass("active");
 		sheetItem.show();
-		//$(sheetItem).show();	//shows sheet indicators 
-
-		$('#sheetnames .sheet2').not(sheetButton).removeClass("active"); //makes other sheet selector buttons inactive 
 		
-		//$('ul.sheet').not(sheetItem.siblings("ul.sheet")).hide();
-		$('li.sheet').not(sheetItem).hide();
+		$('#sheetnames li.sheet2 span').removeClass("active");		
+		sheetButton.addClass("active");
+
+		
+		
 
 		//get current map selection 
 		var autoLoadIndicatorPrevious = $.address.parameter("indicator");
@@ -399,22 +367,15 @@ function sheetSelect(sheetButton, sheetItem)
 			//check if the map data shown was updated
 			if(autoLoadIndicatorPrevious == $.address.parameter("indicator"))
 			{
-				//zeroOutMap();
 				UpdateAreaAllData("Please select an indicator to display its data.");
 			}
 			
-			/*
-			$('li.previous').children('ul').children('li').children('span.active').each(function(i){	//go through each open ul child element
-				alert($(this).text());
-				
-			});	
-*/			
 		}
 
 		$('li.sheet').removeClass("previous");
-	}	
+	}//end 	if(!sheetButton.hasClass("active"))
 	
-}
+}//end function
 
 
 
@@ -464,8 +425,21 @@ function showByIndicator(indicator)
 	
 	var dataPtr = null;
 	var ids = indicator.split("_"); //split up the ids
-	//console.log(ids);
-	dataPtr = mapData.sheets[ids[0]]; //get the sheet, because it's different
+	var sheetId = ids[0];
+
+	//make sure the appropriate sheet tab is highlighted
+	//first remove the active class from all sheet tabs
+	$("ul#sheetnames li.sheet2 span").removeClass("active");
+	//now add active to the one sheet that needs it
+	$("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).addClass("active");
+	//now make sure the correct list of indicators is showing
+	$("li.sheet").hide();
+	$("li.sheet").removeClass("active");
+	$("li.sheet#sheetli_"+sheetId).show();
+	$("li.sheet#sheetli_"+sheetId).addClass("active");
+	
+	dataPtr = mapData.sheets[sheetId]; //get the sheet, because it's different
+	var currentIndicator = sheetId; // stores the current indicator key as we built it up
 	//loop over the remaining indicators
 	for(i in ids)
 	{
@@ -473,10 +447,21 @@ function showByIndicator(indicator)
 		if(i!=0)
 		{
 			var id = ids[i];
+			currentIndicator = currentIndicator + "_" + id;
 			dataPtr = dataPtr['indicators'][id];
+
+			//now make sure the indicators are shown
+			$("span.indicatorLevel_"+i).removeClass("active");
+			$("span.indicatorLevel_"+i+"#indicatorSpanId_"+currentIndicator).addClass("active");
+			$("ul.indicatorLevel_"+i).hide();
+			$("ul.indicatorLevel_"+i+"#indicatorId_"+currentIndicator).show();
 		}
 		
 	}
+
+	
+
+	//now make sure
 	
 	
 	if(dataPtr != undefined)
@@ -497,23 +482,11 @@ function showByIndicator(indicator)
 		{
 			totalLabel = dataPtr["total_label"];
 		}
-		//console.log(totalLabel);
 		
 		UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel);
 		
 		$.address.parameter("indicator", indicator);
-		/*
-		var level1Item = $("#bottom_level_"+indicator).parents("li.level1").children("span.level1");
-		var level2Item = $("#bottom_level_"+indicator).parents("li.level2").children("span.level2");
-		var level3Item = $("#bottom_level_"+indicator);
 	
-		
-		level1Click(level1Item, true); //set "forceOn" to true to force it to show, even if it is already showing
-		level2Click(level2Item, true); //set "forceOn" to true to force it to show, even if it is already showing
-		level3Click(level3Item);
-		*/
-
-
 		//check and see if there is a source to link to
 		if(dataPtr["src"] == "" || dataPtr["src"] == "undefined")
 		{
@@ -862,7 +835,7 @@ function createChart(title, data, highLightName, id, unit, min, spread)
 	}
 	else
 	{
-		console.log("shouldn't be here: Min: "+min+ " Spread: "+spread + " UNIT: "+unit);
+		//not sure what's supposed to go here
 	}
 	
 	var kmapInfochart_temp = kmapInfochart_temp.replace("<RANGE_LABELS>", kampInfoChartRangeLabels);
@@ -1228,9 +1201,9 @@ function htmlDecode(value){
 		j(function() {
 			$.address.externalChange(function(event) {  
 				var indicator = $.address.parameter("indicator");
-				if(indicator != undefined)
+				if(indicator != undefined && typeof mapData !== "undefined" && typeof mapData.sheets !== "undefined")
 				{
-					showByIndicator(indicator);
+					showByIndicator(indicator);					
 				}
 
 			});  

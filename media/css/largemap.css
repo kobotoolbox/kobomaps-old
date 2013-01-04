@@ -73,9 +73,9 @@ div#maplinks p#loadingtext {border: medium none;font-size: 1em;line-height: 2em;
 /* Div at the bottom for selecting different sheets */
 div#sheetlinks {bottom: 0; left: 0; height:60px; width:100%; position:absolute; background:rgba(220, 255, 220, 0.9); z-index: 1002; padding:0;}
 #sheetnames {margin:0; height: 100%;}
-#sheetlinks .sheet2 {display: block; width: 100px; height: 100%; float: left; text-align:center;}
-#sheetlinks .sheet2 .hover, #sheetlinks .sheet2 .active {background: #A2ffA2;}
-#sheetlinks .sheet2 .hover {background: #82ffC2;}
+div#sheetlinks li.sheet2 {display: block; width: 100px; height: 100%; float: left; text-align:center;}
+div#sheetlinks li.sheet2 span.active {background: #A2ffA2;}
+div#sheetlinks li.sheet2 span:hover {background: #82ffC2;}
 
 
 /* Styling the indicator list */
