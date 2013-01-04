@@ -135,6 +135,7 @@ class Controller_Templates extends Controller_Loggedin {
 		
 			try
 			{
+				$first_time = false; //used to know if we should blow away everything if there's an error
 				//Should we use the old file
 				if($_FILES['file']['size'] == '0' AND $template != null)
 				{
@@ -148,6 +149,7 @@ class Controller_Templates extends Controller_Loggedin {
 				if($template == null)
 				{				
 					$template = ORM::factory('Template');
+					$first_time = true;
 				}
 				else
 				{
@@ -168,6 +170,14 @@ class Controller_Templates extends Controller_Loggedin {
 					
 					//handle the kml file
 					$filename = $this->_save_file($_FILES['file'], $template);
+					if(is_array($filename))
+					{						
+						if($first_time)
+						{
+							Model_Template::delete_template($template->id);
+						}
+						throw new Exception($filename['error']);
+					}
 					$template->file = $filename;					
 				}
 				else //we're editing an existing template and not changing the base file
@@ -196,6 +206,10 @@ class Controller_Templates extends Controller_Loggedin {
 						}
 					}
 				}
+			}
+			catch (Exception $e)
+			{
+				$this->template->content->errors[] = $e->getMessage();
 			}	
 		}
 		if(isset($_GET['id']) AND intval($_GET['id']) != 0)
@@ -238,12 +252,13 @@ class Controller_Templates extends Controller_Loggedin {
 	 	//Now deal with the case whe we're creating a new templae and just uploaded a file
 	 	else
 	 	{	 		
-		 	if (
-		 			! Upload::valid($upload_file) OR
-		 			! Upload::not_empty($upload_file) OR
-		 			! Upload::type($upload_file, array('kml', 'kmz')))
+		 	if (! Upload::valid($upload_file) OR ! Upload::not_empty($upload_file))
 		 	{
-		 		return FALSE;
+		 		return array('error'=>__('uploaded file is not valid'));
+		 	}
+		 	if(! Upload::type($upload_file, array('kml', 'kmz')))
+		 	{
+		 		return array('error'=>__('This is not a .kml or .kmz file'));
 		 	}
 		 
 		 
@@ -258,7 +273,7 @@ class Controller_Templates extends Controller_Loggedin {
 		 		return $json_file;
 		 	}
 		 
-		 	return FALSE;
+		 	return array('error'=>__('Something has gone wrong processing your template map file'));
 	 	}
 	 }
 	 

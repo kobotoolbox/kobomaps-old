@@ -39,76 +39,99 @@ class Helper_Kml2json
 	public static function convert($file_path, $template)
 	{
 		
-		// Where the file is going to be placed
-		$target_paths = array();
-	
-		$directory = DOCROOT.'uploads/templates/';
-		
-		//Add the original filename to our target path.  Result is "uploads/filename.extension"
-		$target_paths[0]  = $directory.$file_path;
-	
-		//get the name of the file, minus extention
-		$info = pathinfo($file_path);
-		$fileName =  basename($file_path,'.'.$info['extension']);
-	
-	
-		//now we need to see if this is a KMZ file
-		if(strtolower($info['extension']) == "kmz")
+		try 
 		{
-			$zip = zip_open($target_paths[0]);
-			if ($zip)
-			{
-				$newTarget = array();
-				$i = 0;
-				while ($zip_entry = zip_read($zip))
-				{
-					$newTarget[$i] = $directory.zip_entry_name($zip_entry);
-					$fp = fopen($newTarget[$i], "w");
-					if (zip_entry_open($zip, $zip_entry, "r"))
-					{
-						$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
-						fwrite($fp,"$buf");
-						zip_entry_close($zip_entry);
-						fclose($fp);
-					}
-					$i++;
-				}
-				zip_close($zip);
-				//unlink($target_paths[0]);
-				$target_paths = $newTarget;
-			}
-		}
-	
+			// Where the file is going to be placed
+			$target_paths = array();
+		
+			$directory = DOCROOT.'uploads/templates/';
 			
-	
-	
-	
-	
-	
-	
-		//buffer out echo statements
-		ob_start();
-		//start up the output json
-		echo '{"areas":[';
-	
-		foreach($target_paths as $target_path)
-		{
-			self::parseXml($target_path, $template);
-			//only delete the file if we're working with the components of a KMZ. Don't delete the orignal KML/KMZ
-			if($target_path != $directory.$file_path)
+			//Add the original filename to our target path.  Result is "uploads/filename.extension"
+			$target_paths[0]  = $directory.$file_path;
+		
+			//get the name of the file, minus extention
+			$info = pathinfo($file_path);
+			$fileName =  basename($file_path,'.'.$info['extension']);
+		
+		
+			//now we need to see if this is a KMZ file
+			if(strtolower($info['extension']) == "kmz")
 			{
-				unlink($target_path);
+				$zip = zip_open($target_paths[0]);
+				if ($zip)
+				{
+					$newTarget = array();
+					$i = 0;
+					while ($zip_entry = zip_read($zip))
+					{
+						$newTarget[$i] = $directory.zip_entry_name($zip_entry);
+						$fp = fopen($newTarget[$i], "w");
+						if (zip_entry_open($zip, $zip_entry, "r"))
+						{
+							$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+							fwrite($fp,"$buf");
+							zip_entry_close($zip_entry);
+							fclose($fp);
+						}
+						$i++;
+					}
+					zip_close($zip);
+					//unlink($target_paths[0]);
+					$target_paths = $newTarget;
+				}
 			}
+		
+				
+		
+		
+		
+		
+		
+		
+			//buffer out echo statements
+			ob_start();
+			//start up the output json
+			echo '{"areas":[';
+		
+			foreach($target_paths as $target_path)
+			{
+				self::parseXml($target_path, $template);
+				//only delete the file if we're working with the components of a KMZ. Don't delete the orignal KML/KMZ
+				if($target_path != $directory.$file_path)
+				{
+					unlink($target_path);
+				}
+			}
+			//close the "areas"
+			echo "]}";
+			
+			$contents = ob_get_flush();
+			$fp = fopen($directory.$fileName.".json", "w");
+			fwrite($fp,$contents);
+			fclose($fp);
+			
+			return $fileName.".json";
 		}
-		//close the "areas"
-		echo "]}";
-		
-		$contents = ob_get_flush();
-		$fp = fopen($directory.$fileName.".json", "w");
-		fwrite($fp,$contents);
-		fclose($fp);
-		
-		return $fileName.".json";
+		catch(Exception $e)
+		{
+			ob_end_clean();
+			if(strpos($e->getMessage(), ' Input is not proper UTF-8') !== false)
+			{
+				$directory = DOCROOT.'uploads/templates/';
+				
+				//get the line number
+				$line_number = mb_substr($e->getMessage(), 0, mb_strpos($e->getMessage(),': parser error'));
+				$line_number = mb_substr($line_number, mb_strrpos($line_number, ':')+1);
+				//get the file name
+				$file_name = mb_substr($e->getMessage(), mb_strpos($e->getMessage(),$directory) + mb_strlen($directory));
+				$file_name = mb_substr($file_name, 0, mb_strpos($file_name, ':'));
+				
+				$message = __('Incorrect UTF-8 characters on line').' ' . $line_number . ' '. __('of file'). ' '. $file_name;
+				$message .= '<br/>'.__('All KML files must be encoded correctly as UTF-8');
+				return array('error'=>$message);
+			}
+			return array('error'=>$e->getMessage());
+		}
 	}//end function convert
 	
 	
