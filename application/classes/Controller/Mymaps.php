@@ -1601,10 +1601,17 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					}
 	 					$region_name_kml = trim($region_name_kml);
 	 					$value = $sheet[$data_row->name][$region_column->name];
+	 					$value = str_replace("%", "",$value);
+	 					$value = str_replace("$", "",$value);
+	 					$value = str_replace("#", "",$value);
+	 					$value = trim($value);
+	 					
+	 					if($value == null OR strlen($value) == 0)
+	 					{
+	 						$value = 0;
+	 					}
 	 					$data[$region_name_kml] = array('name'=>$region_name_xls, 'value'=>$value);
-	 					$data[$region_name_kml] = str_replace("%", "",$data[$region_name_kml]);
-	 					$data[$region_name_kml] = str_replace("$", "",$data[$region_name_kml]);
-	 					$data[$region_name_kml] = str_replace("#", "",$data[$region_name_kml]);
+	 					
 	 					
 	 					//todo need a better way to know what's been ignored, both for the purpose
 	 					//of showing ignored things in the UI to the user, and so we don't have to check for empty.
