@@ -171,13 +171,14 @@ class Controller_Templates extends Controller_Loggedin {
 					//handle the kml file
 					$filename = $this->_save_file($_FILES['file'], $template);
 					if(is_array($filename))
-					{						
+					{					
 						if($first_time)
 						{
 							Model_Template::delete_template($template->id);
 						}
 						throw new Exception($filename['error']);
 					}
+					
 					$template->file = $filename;					
 				}
 				else //we're editing an existing template and not changing the base file
@@ -185,7 +186,6 @@ class Controller_Templates extends Controller_Loggedin {
 					$filename = $this->_save_file(null, $template);
 				}
 				$template->save();
-				
 				HTTP::redirect('/templates?status=saved');				
 				
 			}
@@ -207,7 +207,7 @@ class Controller_Templates extends Controller_Loggedin {
 					}
 				}
 			}
-			catch (Exception $e)
+			catch (UTF_Character_Exception $e)
 			{
 				$this->template->content->errors[] = $e->getMessage();
 			}	
@@ -246,7 +246,7 @@ class Controller_Templates extends Controller_Loggedin {
 	 	if($upload_file == null AND $template->kml_file != null)
 	 	{
 	 		$filename = $template->kml_file;
-	 		$json_file = Helper_Kml2json::convert($filename, $template);
+	 		$json_file = Helper_Kml2json::convert($filename, $template);	 		
 	 		return $json_file;
 	 	}
 	 	//Now deal with the case whe we're creating a new templae and just uploaded a file
@@ -283,3 +283,11 @@ class Controller_Templates extends Controller_Loggedin {
 	
 	
 }//end of class
+
+
+
+class UTF_Character_Exception extends Exception
+{
+	
+
+}
