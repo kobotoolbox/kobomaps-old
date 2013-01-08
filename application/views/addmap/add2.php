@@ -8,7 +8,7 @@
 ?>
 
 <div id="addmapMenu"><?php echo Helper_AddmapSubmenu::make_addmap_menu(2);?></div>	
-<?php // echo "Memory used: ". number_format(memory_get_peak_usage(),0,'.',',');?>
+<?php  echo "Final - Memory used: ". number_format(memory_get_peak_usage(),0,'.',',');?>
 <h2><?php echo __("Add Map - Page 2") ?></h2>
 <ul class="context_menu">
 	<li>
@@ -114,7 +114,8 @@
 	{
 		echo '<div>';	//sheet holding div
 		echo '<h2>'.__('Sheet').': '.$sheet_model->name;
-		echo Form::input('sheet_id['.$sheet_model->id.']', $sheet_model->name, array('id'=>'sheet_name'));
+		//this doesn't work right now, so turning it off
+		//echo Form::input('sheet_id['.$sheet_model->id.']', $sheet_model->name, array('id'=>'sheet_name'));
 		echo '</h2>';
 		echo __('Ignore this sheet?:');
 		echo Form::checkbox('is_ignored['.$sheet_model->id.']', null, 1==$sheet_model->is_ignored, array('id'=>'ignore_checkbox_'.$sheet_model->id, 'onclick'=>'toggleTable("'.'ignore_checkbox_'.$sheet_model->id.'")'));
@@ -194,6 +195,12 @@
 		echo '</div>';
 		echo '</div>';
 	}
+	
+	echo "<br/>";
+	echo __("All following sheets have the same data structure?");
+	echo Form::checkbox('same_structure', null, false, array('id'=>'same_structure' ));
+	echo "<br/>";
+	echo "<br/>";
 	echo Form::submit('Submit', 'Submit');
 	echo Form::close();
 ?>
