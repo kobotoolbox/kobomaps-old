@@ -1606,10 +1606,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$value = str_replace("#", "",$value);
 	 					$value = trim($value);
 	 					
-	 					if($value == null OR strlen($value) == 0)
-	 					{
-	 						$value = 0;
-	 					}
+}
 	 					$data[$region_name_kml] = array('name'=>$region_name_xls, 'value'=>$value);
 	 					
 	 					
