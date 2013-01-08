@@ -8,7 +8,7 @@
 ?>
 
 <div id="addmapMenu"><?php echo Helper_AddmapSubmenu::make_addmap_menu(2);?></div>	
-<?php // echo number_format(memory_get_peak_usage(),0,'.',',');?>
+<?php // echo "Memory used: ". number_format(memory_get_peak_usage(),0,'.',',');?>
 <h2><?php echo __("Add Map - Page 2") ?></h2>
 <ul class="context_menu">
 	<li>
@@ -162,11 +162,10 @@
 						{
 							$column_default = 'total';
 						}
-						else if(trim(strtolower($column)) == "total_label")
+						else if(trim(strtolower($column)) == "total label")
 						{
-							$column_default = 'total label';
+							$column_default = 'total_label';
 						}
-						echo trim(strtolower($column))." -- ".$column_default."<br/>";
 					}
 					echo '<th class="header">';
 					echo $column_index . '<br/>';
