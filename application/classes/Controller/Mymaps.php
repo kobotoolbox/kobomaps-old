@@ -302,6 +302,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 	  */
 	 public function action_add2()
 	 {  	
+
+	 	
+
+ 	
 	 	
 	 	//for memory usage debuging
 	 	//echo "Just started - Memory used: ". number_format(memory_get_peak_usage(),0,'.',',')."<br/>";
@@ -528,10 +532,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 								 		->find_all();
 	 					
 						foreach($sheets as $sheet)
-						{
-							set_time_limit(30);//because this could take a long freaking time.
+						{							
 							$this->_process_column_data_structure($sheet->id,$sheet_column_data);
 							$this->_process_row_data_structure($sheet->id, $sheet_row_data);
+							set_time_limit(30);//because this could take a long freaking time.
 						}
 	 				}
 			 				
@@ -542,7 +546,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$max_sheet = ORM::factory('Mapsheet')
 								 		->where('map_id', '=', $map->id)
 								 		->order_by('position', 'DESC')
-								 		->limit(0,1)
+								 		->limit(1)
 								 		->find()
 								 		->position;
 								 	
@@ -605,14 +609,27 @@ class Controller_Mymaps extends Controller_Loggedin {
 	  */
 	 private function _process_row_data_structure($sheet_id, $sheet)
 	 {
+	 	$sheet_id = intval($sheet_id); //make sure we're only getting intergers
+	 	
+	 	//for the sake of speed we're going to interact directly with the database here
+	 	//so go ahead and set that up
+	 	
+	 	$server = Kohana::$config->load('database.default.connection.hostname');
+	 	$user_name = Kohana::$config->load('database.default.connection.username');
+	 	$password = Kohana::$config->load('database.default.connection.password');
+	 	$database = Kohana::$config->load('database.default.connection.database');
+	 	
+	 	$database = new mysqli($server, $user_name, $password, $database);
+	 	
+	 	
+	 	if(mysqli_connect_errno())
+	 	{
+	 		return "Error - Couldn't connect to the database";
+	 	}
+	 	
  		//first we blow away any column data associated with this sheet
- 		$old_rows = ORM::factory('Row')
- 		->where('mapsheet_id', '=', $sheet_id)
- 		->find_all();
- 		foreach($old_rows as $old_row)
- 		{
- 			$old_row->delete();
- 		}
+ 		$sql = "DELETE FROM `rowss` WHERE `rowss`.`mapsheet_id` = ".$sheet_id;
+ 		$database->query($sql); 		
  			
  		$mapsheet = ORM::factory('Mapsheet')
  		->where('id', '=', $sheet_id)
@@ -623,15 +640,22 @@ class Controller_Mymaps extends Controller_Loggedin {
  	
  			$header_count = 0;
  			$data_count = 0;
- 	
+ 			
+	
+ 			//create a bunch of insert statements
+ 			$sql = "INSERT INTO  `rowss` (`id` ,`mapsheet_id` ,`name` ,`type`) VALUES ";
+
+ 			
+ 			$i = 0;
  			foreach($sheet as $row_name=>$row_type) //loop over the column data
  			{
- 				$row = ORM::factory('Row');
- 				$row->mapsheet_id = $sheet_id;
- 				$row->name = $row_name;
- 				$row->type = $row_type;
- 				$row->save();
- 					
+ 				//hanlde commas
+ 				$i++;
+ 				if($i > 1){$sql .= ',';}
+ 				
+ 				//make the sql
+ 				$sql .= "(NULL ,  '".$sheet_id."',  '".$database->real_escape_string($row_name)."',  '".$database->real_escape_string($row_type)."')"; 
+ 				 					
  				if($row_type == "header")
  				{
  					$header_count++;
@@ -642,8 +666,14 @@ class Controller_Mymaps extends Controller_Loggedin {
  				}
  					
  			}
+ 			
+ 			//dont' forget the semi-colon
+ 			$sql .= ";";
  	
- 			$sheet_name = ORM::factory('Mapsheet', $sheet_id)->name;
+ 			$database->query($sql);
+ 			$database->close();
+ 			
+ 			$sheet_name = $mapsheet->name;
  	
  			//validate sheets by checking row counts
  			if($header_count != 1)
@@ -667,6 +697,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 private function _process_column_data_structure($sheet_id, $sheet)
 	 {
 			
+	 	$sheet_id = intval($sheet_id);
+	 	
  		$mapsheet = ORM::factory('Mapsheet')
  		->where('id', '=', $sheet_id)
  		->find();
@@ -682,27 +714,51 @@ class Controller_Mymaps extends Controller_Loggedin {
  			$unit_count = 0;
  			$source_count = 0;
  			$source_link_count = 0;
+ 			
+ 			$server = Kohana::$config->load('database.default.connection.hostname');
+ 			$user_name = Kohana::$config->load('database.default.connection.username');
+ 			$password = Kohana::$config->load('database.default.connection.password');
+ 			$database = Kohana::$config->load('database.default.connection.database');
+ 			 
+ 			$database = new mysqli($server, $user_name, $password, $database);
  	
- 			$sql = "";
+ 			$delete_sql = "DELETE FROM columns WHERE mapsheet_id = ". $sheet_id. " AND NOT IN (";
+ 			
+ 			//so before doing anything get a list of the columns that already exist
+ 			$existing_columns_sql = "SELECT * FROM  `columns` WHERE  `mapsheet_id` = ".$sheet_id;
+ 			$existing_columns_result = $database->query($existing_columns_sql);
+ 			$existing_columns_name_to_id = array();
+ 			
+ 			for ($row_no = $existing_columns_result->num_rows - 1; $row_no >= 0; $row_no--)
+ 			{
+	 			$existing_columns_result->data_seek($row_no);
+	 			$row = $existing_columns_result->fetch_assoc();
+	 			$existing_columns_name_to_id[$row['name']] = $row['id'];
+ 			}
+ 			$existing_columns_result->close();
+ 			
+ 			
+ 			$insert_sql = "";
  	
  			foreach($sheet as $column_name=>$column_type) //loop over the column data
  			{
  					
- 				if(strlen($sql) > 0){
- 					$sql .= " AND ";
+ 				$column_name = $database->real_escape_string($column_name);
+ 				$column_type = $database->real_escape_string($column_type);
+ 				
+ 				//update the list of things NOT to delete
+ 				if(strlen($delete_sql) > 0){
+ 					$delete_sql .= ",";
  				}
- 				$sql .= "(name <> '".$column_name."' AND mapsheet_id <> ".$sheet_id.") ";
- 					
- 					
- 				$column = ORM::factory('Column')
- 				->where('mapsheet_id', '=', $sheet_id)
- 				->where('name', '=', $column_name)
- 				->find();
- 					
- 				$column->mapsheet_id = $sheet_id;
- 				$column->name = $column_name;
- 				$column->type = $column_type;
- 				$column->save();
+ 				$delete_sql .= "'".$column_name."'";
+ 				//if it's known get the column ID, else it's null
+ 				$column_id = isset($existing_columns_name_to_id[$column_name]) ? $existing_columns_name_to_id[$column_name] : "NULL";
+ 				//handle commas
+ 				if(strlen($insert_sql) > 0){$insert_sql .= ',';}
+ 				
+ 				$insert_sql .= "(".$column_id.",".$sheet_id.",'".$column_name."','".$column_type."')";
+ 				
+ 				//now keep track of how many types we have
  					
  				if($column_type == "indicator")
  				{
@@ -733,10 +789,14 @@ class Controller_Mymaps extends Controller_Loggedin {
  					$source_link_count++;
  				}
  			}
- 	
- 			$db = Database::instance();
- 			$old_columns_to_delete = $db->query(Database::DELETE, 'DELETE FROM columns WHERE '.$sql, TRUE);
- 	
+ 			//run the insert/update query
+ 			$database->query("INSERT INTO `columns` (id, mapsheet_id, name, type) VALUES ".$insert_sql. " ON DUPLICATE KEY UPDATE type=VALUES(type)");
+			
+			
+			//delete what's left over
+			$result = $database->query($delete_sql.');');
+			$database->close();
+ 	 			
  				
  			//validate sheets by checking column counts
  			if($indicator_count < 1)
@@ -1110,6 +1170,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	{
 	 		HTTP::redirect('mymaps/add1');
 	 	}
+	 	
+	 	//get the sheet position
+	 	$sheet_position = isset($_GET['sheet']) ? intval($_GET['sheet']) : 0;
 
 	 	$data = array();
 	 	
@@ -1124,7 +1187,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	
 	 	if($map->map_creation_progress < 4)
 	 	{
-	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
 	 		HTTP::redirect('mymaps/add4/?id='.$map_id);
 	 	}
 	 	 
@@ -1132,6 +1194,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$sheets = ORM::factory('Mapsheet')
 	 		->where('map_id','=',$map->id)
 	 		->where('is_ignored', '=', 0)
+	 		->where('position', '>=', $sheet_position)
+	 		->order_by('position', 'ASC')
+	 		->limit(1)
 	 		->find_all();
 
 	 	//now grab the region columns for each sheet
@@ -1142,6 +1207,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	{
 	 		if($sheet->is_ignored == 0)
 	 		{
+	 			//in case we landed on a hidden sheet, update to the next non-hidden sheet
+	 			$sheet_position = $sheet->position;
+	 			
 		 		//grab the header row
 		 		$header_rows[$sheet->id] = ORM::factory('Row')
 		 		->where('mapsheet_id', '=', $sheet->id)
@@ -1154,20 +1222,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 		 			->find_all();
 		 		
 		 		$data[$sheet->id] = array();
-		 		$mappings = ORM::factory('Regionmapping');
-		 		//init data
+
+
 		 		foreach($region_columns[$sheet->id] as $column)
 		 		{
-		 			$mappings = $mappings->or_where('column_id', '=', $column->id);
-		 			$data[$sheet->id][$column->id] = null;
-		 		}
-		 		
-		 		//see if there's any data that already exists
-		 		$mappings = $mappings->find_all();
-		 		foreach($mappings as $mapping)
-		 		{
-		 			$data[$sheet->id][$mapping->column_id] = $mapping->template_region_id;
-		 		}
+		 			$data[$sheet->id][$column->id] = $column->template_region_id;
+		 		}		 		
 	 		}
 	 		
 	 	}
@@ -1223,6 +1283,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content->map_regions = $map_regions;	 	
 	 	$this->template->content->sheet_data = $sheet_data;
 	 	$this->template->content->data = $data;
+	 	$this->template->content->sheet_position = $sheet_position;
 	 	$this->template->content->messages = array();
 	 	$this->template->content->errors = array();
 	 	$this->template->html_head->script_views[] = view::factory('js/messages');
@@ -1243,21 +1304,60 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 			//if we're editing things
 	 			if($_POST['action'] == 'edit')
 	 			{	 	
+	 				
+	 				$in_str = "";
 	 				foreach($_POST['region'] as $sheet)
 	 				{
 	 					foreach($sheet as $column=>$region_id)
 	 					{
 	 					
-		 						//blow away all the current mappings
-		 						$mapping = ORM::factory('Regionmapping')
-		 							->where('column_id', '=',$column)
-		 							->find();
-		 							$mapping->column_id = $column;
-		 							$mapping->template_region_id = $region_id;
-		 							$mapping->save();
+	 						//blow away all the current mappings
+	 						$mapping = ORM::factory('Column')
+	 							->where('id', '=',$column)
+	 							->find();
+	 							$mapping->template_region_id = $region_id;
+	 							$mapping->save();
+	 							
+	 						//this is in case we need to duplicate the settings of this sheet
+	 						//on other sheets
+	 						if(strlen($in_str) > 0)
+	 						{
+	 							$in_str .= ',';
+	 						}
+	 						$in_str .= $column;
 		 							 					
 	 					}
 	 				}
+	 				
+	 				//if the settings we just set are to be repeated on all the other sheets
+	 				if(isset($_POST['same_settings']))
+	 				{
+	 					//first we need to know the column names and the values they were given
+	 				}
+	 				
+	 				//figure out the last sheet that's visible
+ 					$max_sheet = ORM::factory('Mapsheet')
+							 		->where('map_id', '=', $map->id)
+							 		->where('is_ignored', '=', 0)
+							 		->order_by('position', 'DESC')
+							 		->limit(1)
+							 		->find()
+							 		->position;
+ 					
+ 					if($sheet_position < $max_sheet)
+ 					{
+ 						//get the next sheet
+ 						$next_sheet = ORM::factory('Mapsheet')
+ 						->where('map_id', '=', $map->id)
+ 						->where('is_ignored', '=', 0)
+ 						->where('position', '>', $sheet_position)
+ 						->order_by('position', 'DESC')
+ 						->limit(1)
+ 						->find()
+ 						->position;
+ 						
+ 						HTTP::redirect('mymaps/add5?id='.$map->id.'&sheet='.$next_sheet);
+ 					}
 
 	 				//now create the json
 	 				//it'll be a multi demnsion array done by sheet, indicator and region
@@ -1636,12 +1736,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				foreach($region_columns as $region_column)
 	 				{
 	 					$region_name_xls = trim($sheet[$header_row->name][$region_column->name]);
-	 					$region_name_kml = ORM::factory('Templateregion')
-	 						->join('regionmapping')
-	 						->on('regionmapping.template_region_id', '=', 'templateregion.id')
-	 						->where('regionmapping.column_id', '=', $region_column->id)
-	 						->find()
-	 						->title;
+	 					$region_name_kml = ORM::factory('Templateregion', $region_column->template_region_id)->title;
 	 					if($region_name_kml == null OR $region_name_kml == '')
 	 					{
 	 						continue;

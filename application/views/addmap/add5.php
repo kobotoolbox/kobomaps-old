@@ -67,6 +67,7 @@
 	echo Form::open(NULL, array('id'=>'add_map_form', 'enctype'=>'multipart/form-data')); 
 	echo Form::hidden('action','edit', array('id'=>'action'));
 	echo Form::hidden('map_id',$map_id, array('id'=>'map_id'));
+	echo Form::hidden('sheet_position',$sheet_position, array('id'=>'sheet_position'));
 	//keep track of how many sheets
 
 	foreach($sheets as $sheet)
@@ -117,7 +118,11 @@
 		echo '</table>';
 			
 	}
-
+	echo "<br/>";
+	echo __("All following sheets have the region settings?");
+	echo Form::checkbox('same_settings', null, false, array('id'=>'same_settings' ));
+	echo "<br/>";
+	echo "<br/>";
 	echo Form::submit('Submit', 'Submit');
 	echo Form::close();
 ?>

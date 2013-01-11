@@ -88,6 +88,7 @@ select.needstobemapped{
 div#mainMenu
 {
 	background:rgb(120,31,2);
+	height:32px;
 }
 #mainMenu ul
 {
