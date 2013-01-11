@@ -1162,7 +1162,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 public function action_add5()
 	 {
 	 	 
-	 	 
+	 	//echo "Starting: ". microtime(true). "<br/>";
+	 	//$time = microtime(true);
+	 	
 	 	//get the id
 	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 	 	//something when wrong, kick them back to add1
@@ -1249,6 +1251,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//read the xls file and parse if
 	 	$file_path = DOCROOT.'uploads/data/'. $map->file;
 	 	
+	 	
+	 	//echo "Set up the database stuff: ". (microtime(true) - $time) . "<br/>";
+	 	//$time = microtime(true);
+	 	
 	 	$excel = Helper_Excel::open_for_reading_data($file_path);
 	 	
 	 	$sheet_data = array();
@@ -1263,6 +1269,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 
 
 	 	
+	 	//echo "Finished loading the excel file into arrays: ". (microtime(true) - $time) . "<br/>";
+	 	//$time = microtime(true);
 	 	
 
 	 	 
@@ -1294,13 +1302,18 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	{
 	 		$this->template->content->messages[] = __('changes saved');
 	 	}
-	 	 
-	 	 
+	 	
+	 	
+	 	//echo "Just finished the default stuff: ". (microtime(true) - $time) . "<br/>";
+	 	//$time = microtime(true);
+	 	
+	 		 	 
 	 	/******* Handle incoming data*****/
 	 	if(!empty($_POST)) // They've submitted the form to update his/her wish
 	 	{
 	 		try
 	 		{
+	 			$time = microtime(true);
 	 			//if we're editing things
 	 			if($_POST['action'] == 'edit')
 	 			{	 	
@@ -1308,21 +1321,32 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				$server = Kohana::$config->load('database.default.connection.hostname');
 	 				$user_name = Kohana::$config->load('database.default.connection.username');
 	 				$password = Kohana::$config->load('database.default.connection.password');
-	 				$database = Kohana::$config->load('database.default.connection.database');
+	 				$database_name = Kohana::$config->load('database.default.connection.database');
 	 				 
-	 				$database = new mysqli($server, $user_name, $password, $database);
+	 				$database = new mysqli($server, $user_name, $password, $database_name);
 	 				$column_name_to_region = array();
 	 				
 	 				foreach($_POST['region'] as $sheet_id=>$sheet)
 	 				{
+	 					
 	 					$sheet_id = intval($sheet_id);
+	 					$update_sql = "";
 	 					foreach($sheet as $column=>$region_id)
 	 					{
 							$region_id = intval($region_id);
 							$column = intval($column);
-	 						$update_sql = "UPDATE  `columns` SET  `template_region_id` =  '".$region_id."' WHERE  `columns`.`id` = ".$column;
-	 						$database->query($update_sql);	 										 				
+	 						$update_sql .= "UPDATE  `columns` SET  `template_region_id` =  '".$region_id."' WHERE  `columns`.`id` = ".$column.";";
 	 					}
+	
+	 					$database->multi_query($update_sql);
+	 					
+						//not sure why I have to do this, but it seems necessary
+						$database->close();
+						$database = new mysqli($server, $user_name, $password, $database_name);
+	 					
+	 					//echo "Handled the sheet on screen: ". (microtime(true) - $time) . "<br/>";
+	 					//$time = microtime(true);
+	 					
 	 					//only do this if we need to
 	 					if(isset($_POST['same_settings']))
 	 					{
@@ -1337,7 +1361,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 		 					$result->close();
 	 					}
 	 					
+	 					//echo "Just created the name to region mapping: ". (microtime(true) - $time) . "<br/>";
+	 					//$time = microtime(true);
+	 					
 	 				}
+	 				
 	 				
 	 				//if the settings we just set are to be repeated on all the other sheets
 	 				if(isset($_POST['same_settings']))
@@ -1352,15 +1380,23 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					{
 	 						$sheet_id = $next_sheet->id;
 	 						$sheet_position = $next_sheet->position; // update this because now we're on this sheet position
+	 						$update_sql = "";
 	 						foreach($column_name_to_region as $name=>$region_id)
 	 						{		 								 						
-		 						$update_sql = "UPDATE  `columns` SET  `template_region_id` =  '".$region_id."' WHERE  `columns`.`mapsheet_id` = ".$sheet_id." AND `columns`.`name` = '".$name."'";
+		 						$update_sql .= "UPDATE  `columns` SET  `template_region_id` =  '".$region_id."' WHERE  `columns`.`mapsheet_id` = ".$sheet_id." AND `columns`.`name` = '".$name."';";
 		 						$database->query($update_sql);
 	 						}
+	 						
+	 						$database->multi_query($update_sql);
+	 						$database->close();
+	 						$database = new mysqli($server, $user_name, $password, $database_name);
 	 					}
 	 					
 	 					//first we need to know the column names and the values they were given
 	 				}
+	 				
+	 				//echo "Handled all the other sheets: ". (microtime(true) - $time) . "<br/>";
+	 				//$time = microtime(true);
 	 				
 	 				//figure out the last sheet that's visible
  					$max_sheet = ORM::factory('Mapsheet')
@@ -1486,13 +1522,17 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$sheet_excel = $excel->getSheetByName($sheet->name);
 	 					$sheet_array = $sheet_excel->toArray(null, true, true, true);
 	 					$indicators = array();
+	 					//echo "Prep work to call build indcators array: ". (microtime(true) - $time) . "<br/>";	 					
+	 					//$time = microtime(true);
 	 					//get a helper function in here
 	 					$indicators = $this->_build_indicators_array($sheet_array, $indicator_columns, $data_rows, $region_columns, $header_row, $indicators,
 	 							 $unit_column, $src_column, $src_link_column, $total_column, $total_label_column, $region_id_to_name);
 	 					
 	 					$json['sheets'][$sheet->id] = array('sheetName'=>$sheet->name, 'indicators'=>$indicators);
 	 					
-	 					
+	 					//echo "Just got back from build indicators array: ". (microtime(true) - $time) . "<br/>";
+	 					//$time = microtime(true);
+	 						 					
 	 				}
 	 				$database->close();
 	 				//convert to a string
@@ -1516,7 +1556,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$map_array['map_creation_progress'] = 5;
 	 				}
 	 				$map->update_map($map_array);
-	 				
+	 			
 	 				HTTP::redirect('public/view?id='.$map_id);
 	 			}
 	 		}
