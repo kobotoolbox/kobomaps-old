@@ -794,7 +794,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			
 			
 			//delete what's left over
-			$result = $database->query($delete_sql.');');
+			$database->query($delete_sql.');');
 			$database->close();
  	 			
  				
@@ -1304,34 +1304,61 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 			//if we're editing things
 	 			if($_POST['action'] == 'edit')
 	 			{	 	
+	 				//that's right we're accessing the database in the raw. Woot.
+	 				$server = Kohana::$config->load('database.default.connection.hostname');
+	 				$user_name = Kohana::$config->load('database.default.connection.username');
+	 				$password = Kohana::$config->load('database.default.connection.password');
+	 				$database = Kohana::$config->load('database.default.connection.database');
+	 				 
+	 				$database = new mysqli($server, $user_name, $password, $database);
+	 				$column_name_to_region = array();
 	 				
-	 				$in_str = "";
-	 				foreach($_POST['region'] as $sheet)
+	 				foreach($_POST['region'] as $sheet_id=>$sheet)
 	 				{
+	 					$sheet_id = intval($sheet_id);
 	 					foreach($sheet as $column=>$region_id)
 	 					{
-	 					
-	 						//blow away all the current mappings
-	 						$mapping = ORM::factory('Column')
-	 							->where('id', '=',$column)
-	 							->find();
-	 							$mapping->template_region_id = $region_id;
-	 							$mapping->save();
-	 							
-	 						//this is in case we need to duplicate the settings of this sheet
-	 						//on other sheets
-	 						if(strlen($in_str) > 0)
-	 						{
-	 							$in_str .= ',';
-	 						}
-	 						$in_str .= $column;
-		 							 					
+							$region_id = intval($region_id);
+							$column = intval($column);
+	 						$update_sql = "UPDATE  `columns` SET  `template_region_id` =  '".$region_id."' WHERE  `columns`.`id` = ".$column;
+	 						$database->query($update_sql);	 										 				
 	 					}
+	 					//only do this if we need to
+	 					if(isset($_POST['same_settings']))
+	 					{
+		 					$select_sql = "SELECT name, template_region_id FROM columns WHERE mapsheet_id = $sheet_id AND type = 'region'";
+		 					$result = $database->query($select_sql);
+		 					for ($row_no = $result->num_rows - 1; $row_no >= 0; $row_no--)
+		 					{
+			 					$result->data_seek($row_no);
+			 					$row = $result->fetch_assoc();
+			 					$column_name_to_region[$row['name']] = $row['template_region_id'];
+		 					}
+		 					$result->close();
+	 					}
+	 					
 	 				}
 	 				
 	 				//if the settings we just set are to be repeated on all the other sheets
 	 				if(isset($_POST['same_settings']))
 	 				{
+	 					//get the next sheets
+	 					$next_sheets = ORM::factory('Mapsheet')
+		 					->where('map_id', '=', $map->id)
+		 					->where('is_ignored', '=', 0)
+		 					->where('position', '>', $sheet_position)
+		 					->find_all();
+	 					foreach($next_sheets as $next_sheet)
+	 					{
+	 						$sheet_id = $next_sheet->id;
+	 						$sheet_position = $next_sheet->position; // update this because now we're on this sheet position
+	 						foreach($column_name_to_region as $name=>$region_id)
+	 						{		 								 						
+		 						$update_sql = "UPDATE  `columns` SET  `template_region_id` =  '".$region_id."' WHERE  `columns`.`mapsheet_id` = ".$sheet_id." AND `columns`.`name` = '".$name."'";
+		 						$database->query($update_sql);
+	 						}
+	 					}
+	 					
 	 					//first we need to know the column names and the values they were given
 	 				}
 	 				
@@ -1356,8 +1383,40 @@ class Controller_Mymaps extends Controller_Loggedin {
  						->find()
  						->position;
  						
+ 						$database->close();
  						HTTP::redirect('mymaps/add5?id='.$map->id.'&sheet='.$next_sheet);
  					}
+ 					
+ 					
+ 					
+ 					//now do the heavy lifting of creating the JSON.
+ 					
+ 					//pre-load the region names
+ 					$regions = ORM::factory('Templateregion')
+ 						->where('template_id', '=', $map->template_id)
+ 						->find_all();
+ 					$region_id_to_name = array();
+ 					foreach($regions as $region)
+ 					{
+ 						$region_id_to_name[$region->id] = $region->title;
+ 					}
+ 					unset($regions);
+ 					$regions = ORM::factory('Templateregion')
+ 					->where('template_id', '=', $map->template_id)
+ 					->find_all();
+ 					$region_id_to_name = array();
+ 					foreach($regions as $region)
+ 					{
+ 						$region_id_to_name[$region->id] = $region->title;
+ 					}
+ 					unset($regions);
+ 					
+ 					//grab ALL the sheets
+ 					$sheets = ORM::factory('Mapsheet')
+ 					->where('map_id','=',$map->id)
+ 					->where('is_ignored', '=', 0)
+ 					->order_by('position', 'ASC')
+ 					->find_all();
 
 	 				//now create the json
 	 				//it'll be a multi demnsion array done by sheet, indicator and region
@@ -1429,12 +1488,13 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$indicators = array();
 	 					//get a helper function in here
 	 					$indicators = $this->_build_indicators_array($sheet_array, $indicator_columns, $data_rows, $region_columns, $header_row, $indicators,
-	 							 $unit_column, $src_column, $src_link_column, $total_column, $total_label_column);
+	 							 $unit_column, $src_column, $src_link_column, $total_column, $total_label_column, $region_id_to_name);
 	 					
 	 					$json['sheets'][$sheet->id] = array('sheetName'=>$sheet->name, 'indicators'=>$indicators);
 	 					
 	 					
 	 				}
+	 				$database->close();
 	 				//convert to a string
 	 				$json_str = json_encode($json);
 	 				//save the json to file
@@ -1648,10 +1708,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 	  * @param dbOject $src_link_column Database object representing the source link column in the excel data
 	  * @param dbOject $total_column Database object representing the total column in the excel data
 	  * @param dbObject $total_label_column Database object representing the total label column in the data
+	  * @param array $region_id_to_name Mapping of region IDs to their names. Speeds up writing out the names
 	  * @return array Array of indicators that will be turned into JSON
 	  */
 	 protected function _build_indicators_array($sheet, $indicator_columns, $data_rows, $region_columns, $header_row, $indicators, 
-	 		$unit_column, $src_column, $src_link_column, $total_column, $total_label_column)
+	 		$unit_column, $src_column, $src_link_column, $total_column, $total_label_column, $region_id_to_name)
 	 {
 	 		//$_GET['debug'] = true;
 	 	$max_execution_time = intval(ini_get('max_execution_time')) - 5;
@@ -1735,8 +1796,13 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				$data = array();
 	 				foreach($region_columns as $region_column)
 	 				{
+	 					if($region_column->template_region_id == 0)
+	 					{
+	 						continue;
+	 					}
+	 						
 	 					$region_name_xls = trim($sheet[$header_row->name][$region_column->name]);
-	 					$region_name_kml = ORM::factory('Templateregion', $region_column->template_region_id)->title;
+	 					$region_name_kml = $region_id_to_name[$region_column->template_region_id];
 	 					if($region_name_kml == null OR $region_name_kml == '')
 	 					{
 	 						continue;
