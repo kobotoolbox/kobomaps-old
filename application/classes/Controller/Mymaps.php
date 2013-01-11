@@ -8,6 +8,8 @@
 
 class Controller_Mymaps extends Controller_Loggedin {
 
+	
+	
 
 
 	/**
@@ -243,12 +245,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 					//read the xls file and parse it
 					$file_path = DOCROOT.'uploads/data/'. $map->file;
 					 
-					//get the PHPExcel classes on stand by:
-					require_once Kohana::find_file('PHPExcel', 'Classes/PHPExcel');					 
-					PHPExcel_CachedObjectStorageFactory::initialize(PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp); //reduce memory usage
-					$reader = PHPExcel_IOFactory::createReaderForFile($file_path);
-					$reader->setReadDataOnly(true); //supposed to reduce memory usage
-					$excel = $reader->load($file_path);
+					//read in the excel file
+					$excel = Helper_Excel::open_for_reading_data($file_path);
 					
 					$sheet_names = $excel->getSheetNames();
 					$i = 0;
@@ -355,12 +353,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//read the xls file and parse if
 	 	$file_path = DOCROOT.'uploads/data/'. $map->file;
 	 		
-	 	//get the PHPExcel classes on stand by:
-	 	require_once Kohana::find_file('PHPExcel', 'Classes/PHPExcel');
-	 	PHPExcel_CachedObjectStorageFactory::initialize(PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp); //reduce memory usage
-	 	$reader = PHPExcel_IOFactory::createReaderForFile($file_path);
-	 	$reader->setReadDataOnly(true); //supposed to reduce memory usage
-	 	$excel = $reader->load($file_path);
+	 	$excel = Helper_Excel::open_for_reading_data($file_path);
 	 	
 	 	$sheet_names = $excel->getSheetNames();
 	 	$sheet_data = array();
@@ -533,8 +526,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 								 		->where('map_id', '=', $map->id)
 								 		->where('position', '>', $_POST['sheet_position'])
 								 		->find_all();
+	 					
 						foreach($sheets as $sheet)
 						{
+							set_time_limit(30);//because this could take a long freaking time.
 							$this->_process_column_data_structure($sheet->id,$sheet_column_data);
 							$this->_process_row_data_structure($sheet->id, $sheet_row_data);
 						}
@@ -894,12 +889,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//read the xls file and parse if
 	 	$file_path = DOCROOT.'uploads/data/'. $map->file;
 	 	
-	 	//get the PHPExcel classes on stand by:
-	 	require_once Kohana::find_file('PHPExcel', 'Classes/PHPExcel');	 	
-	 	PHPExcel_CachedObjectStorageFactory::initialize(PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp); //reduce memory usage
-	 	$reader = PHPExcel_IOFactory::createReaderForFile($file_path);
-	 	$reader->setReadDataOnly(true); //supposed to reduce memory usage
-	 	$excel = $reader->load($file_path);
+	 	$excel = Helper_Excel::open_for_reading_data($file_path);
 	 	
 	 	
 	 	//so now lets figure out the names of all the regions  and indicators at play for each sheet
@@ -1199,12 +1189,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//read the xls file and parse if
 	 	$file_path = DOCROOT.'uploads/data/'. $map->file;
 	 	
-	 	//get the PHPExcel classes on stand by:
-	 	require_once Kohana::find_file('PHPExcel', 'Classes/PHPExcel');	 	
-	 	PHPExcel_CachedObjectStorageFactory::initialize(PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp); //reduce memory usage
-	 	$reader = PHPExcel_IOFactory::createReaderForFile($file_path);
-	 	$reader->setReadDataOnly(true); //supposed to reduce memory usage
-	 	$excel = $reader->load($file_path);
+	 	$excel = Helper_Excel::open_for_reading_data($file_path);
 	 	
 	 	$sheet_data = array();
 	 	//now all of this is to init the $data array for the form.
@@ -1347,6 +1332,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 							 $unit_column, $src_column, $src_link_column, $total_column, $total_label_column);
 	 					
 	 					$json['sheets'][$sheet->id] = array('sheetName'=>$sheet->name, 'indicators'=>$indicators);
+	 					
 	 					
 	 				}
 	 				//convert to a string
@@ -1568,7 +1554,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		$unit_column, $src_column, $src_link_column, $total_column, $total_label_column)
 	 {
 	 		//$_GET['debug'] = true;
-	 	
+	 	$max_execution_time = intval(ini_get('max_execution_time')) - 5;
 	 	
 	 	$current_indicators = array(); //used to track what the current indicators are	 	
 	 	foreach($data_rows as $data_row)
@@ -1673,6 +1659,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					
 	 					//todo need a better way to know what's been ignored, both for the purpose
 	 					//of showing ignored things in the UI to the user, and so we don't have to check for empty.
+	 					
+	 					
 	 				}
 	 				
 	 				//TODO respond appropriately if data is not a number
@@ -1722,11 +1710,16 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				}
 	 				
 	 			}
+	 			
+	 			
+	 			set_time_limit(30);
 	 		}
 	 	}
 	 	return $indicators;
 	 	
 	 }//end function
 	
+
+	 
 	
 }//end of class

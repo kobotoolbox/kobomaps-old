@@ -67,7 +67,8 @@
 	echo Form::open(NULL, array('id'=>'add_map_form', 'enctype'=>'multipart/form-data')); 
 	echo Form::hidden('action','edit', array('id'=>'action'));
 	echo Form::hidden('map_id',$map_id, array('id'=>'map_id'));
-	
+	//keep track of how many sheets
+
 	foreach($sheets as $sheet)
 	{
 		echo '<h2>'.__('Sheet').': '.$sheet->name.'</h2>';
@@ -106,6 +107,12 @@
 			echo Form::select('region['.$sheet->id.']['.$column->id.']', $map_regions,$selected, $extras_array);
 			echo '</td></tr>';
 			
+		}
+		
+		//extend the run time if need be
+		if(count($region_columns[$sheet->id]) > 51)
+		{
+			set_time_limit(30);
 		}
 		echo '</table>';
 			
