@@ -233,3 +233,12 @@ ALTER TABLE `metadata` DROP INDEX `uniq_name`;
 ALTER TABLE  `metadata` ADD UNIQUE  `uniq_key` (  `k` );
 
 
+/** Moving the region mapping to the columns table. Dropping the regionmapping table**/
+/** First create the new column in the columns table**/
+ALTER TABLE  `columns` ADD  `template_region_id` INT( 11 ) UNSIGNED NULL DEFAULT NULL , ADD INDEX (  `template_region_id` );
+/** Now move the mappings from regionmapping to columns **/
+UPDATE `columns`, `regionmapping` SET `columns`.`template_region_id` = `regionmapping`.`template_region_id` WHERE `columns`.`id` = `regionmapping`.`column_id`;
+/** Now drop region mapping **/
+DROP TABLE regionmapping
+/** now update the DB version **/
+UPDATE `metadata` SET  `v` =  '1.0.018' WHERE  `metadata`.`k` ='Database Version';
