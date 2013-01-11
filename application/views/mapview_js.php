@@ -860,6 +860,8 @@ function showTooltip(x, y, contents) {
 */
 function UpdateAreaPercentageTitleData(name, percentage, min, spread, title, data, indicator, unit)
 {
+	var num
+	
 	var message = '<div class="chartHolder" style="height:'+kmapInfodivHeight+'px">' + createChart(title, data, name, indicator+"_by_area_chart",unit, min, spread);
 		
 	//create the chart by for all the indicators of the given question, assuming there's more than one
@@ -1143,8 +1145,8 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 	//loop over all our data
 	for(areaName in data)
 	{
-		//not sure if this is the best way to do this
-		if(areaName != 'ignore_region'){			
+		if(!isNaN(data[areaName]))
+		{
 			UpdateAreaPercentageTitleData(areaName, data[areaName], min, spread, title, data, indicator, unit);
 		}
 	}
