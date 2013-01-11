@@ -17,6 +17,8 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/label.js"> </script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.js"> </script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.navigate.js"> </script>
 <script type="text/javascript">
 
 
@@ -414,7 +416,7 @@ function dataIndicatorClick(dataItem)
 
 /**
  * Takes in an indicator string and then renders the map according to the data for that indicator
- * If the idicator doesn't exist it'll just exit gracefully
+ * If the indicator doesn't exist it'll just exit gracefully
  */
 function showByIndicator(indicator)
 {
@@ -645,8 +647,6 @@ function UpdateAreaPercentage(name, percentage, min, spread, unit)
 	//calculate the color
 	var color = calculateColor(percentage, min, spread);
 	
-	
-	
 	//update the polygon with this new color
 	formatAreaOpacityColor(name, 0.6, color);
 	
@@ -661,7 +661,7 @@ function UpdateAreaPercentage(name, percentage, min, spread, unit)
 /**
 Used to update the color and info window of an area
 */
-function UpdateAreaPercentageMessage(name, percentage, min, spread, message, unit)
+function UpdateAreaPercentageMessage(name, percentage, min, spread, message, unit, id)
 {
 	//first update the polygon and the marker
 	UpdateAreaPercentage(name, percentage, min, spread, unit);
@@ -676,6 +676,7 @@ function UpdateAreaPercentageMessage(name, percentage, min, spread, message, uni
 	var infoWindow = new google.maps.InfoWindow({content: message});
 	infoWindows[name] = infoWindow;
 	
+	
 	//remove any old listeners
 	google.maps.event.clearListeners(areaGPolygons[name], 'click');
 	// Add a listener for the click event
@@ -687,8 +688,166 @@ function UpdateAreaPercentageMessage(name, percentage, min, spread, message, uni
 		}
 		//set up the new info window and open it.
 		infoWindow.setPosition(event.latLng);
-		infoWindow.open(map);		
+		infoWindow.open(map);
+		DrawDataGraph(id, name);		
+	});	
+		
+}
+/**
+Draws graph of data from javascript.flot when user clicks on a location
+*/
+function DrawDataGraph(id, name){
+	//string that contains the spliced id
+	var sliceId = new String(id);
+	sliceId = sliceId.slice(0,5);
+	
+	var idArray = sliceId.split("_");
+
+
+	var dataPtr = mapData.sheets[+idArray[0]];
+	for(var i=1; i < idArray.length; i++){
+		//that little plus down there converts the strings into actual integers to access data array
+		dataPtr = dataPtr.indicators[+idArray[i]];
+	}
+	
+	//contains the path given by the id to access the data
+	var dataPath = dataPtr.data;
+
+	//console.log(dataPath);
+
+	var yAxisNames = new Array(); //array that will contain names to go on yAxis
+	var graphData = new Array(); // array that will contain variables to go with graph
+	var selectedArea = new Array(); //Array to hold changes colors for selected area
+ 
+	//loop dataPath to get yAxisNames
+	for(i in dataPath){
+		yAxisNames.push(i);
+	}
+
+	for(i in dataPath){
+		graphData.push(+dataPath[i].value);
+	}
+
+	//variables for javascript graph, ynames and xdata
+	var graphYAxis = new Array();
+	var graphXData = new Array();
+	var selecY;
+	var selecX;
+	
+	//adds the names to the graphYAxis variable, i indicates location on graph
+	for(i=0; i < yAxisNames.length; i++){
+		graphYAxis.push([i + 1, yAxisNames[i]]);
+		if(name == yAxisNames[i]){
+			selecY = i + 1;
+		}
+	}
+
+	//add data to graphXData, i indicates location on graph
+	for(i=0; i < graphData.length; i++){
+		graphXData.push([graphData[i], i + 1]);
+
+		if(graphXData[i][1] == selecY){
+			selecX = graphXData[i][0];
+		}
+	}
+
+	//possible dark blue color is '223953'
+	//red color is 'D71818'
+	//var d2/graphXData = [[13,1], [28,2], [75,3]];
+	//var ticks/graphYAxis = [[1,'Florida'], [2,'Georgia'], [3,'Seafree'], [4,'Freemont'], [5,'Monaco']];
+
+	selectedArea = [[selecX, selecY]];
+	 var bothData = [
+	        	  {
+		        	data: graphXData,
+		          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: '223953'} ,
+		          	color: '223953'
+	        	  },
+	        	  {
+		        	data: selectedArea,
+		        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: 'D71818'} ,
+	        		color: 'D71818'
+	        	  }
+	  ];
+	  $.plot($("#iChart"+id), bothData,  {
+	            bars: {show: true, horizontal: true, fill: true},
+	            grid: {hoverable: true},
+	            yaxis:{ticks: graphYAxis, zoomRange: [1, 100], panRange: [-10, 10]},
+	            xaxis:{zoomRange: [1, 100], panRange: [-10, 10]},
+	            zoom: {interactive: true, amount: 1.25},
+	            pan:  {interactive: true, cursor: 'move', frameRate: 20}
+	        }
+      );
+
+      /*
+      * Size of the chart is controlled by the div tag where iChart is created
+      */
+
+
+      
+
+      /*
+      * Calls the tooltip function and makes sure none are already selected.
+      */
+	$("#iChart"+id).bind("plothover", function (event, pos, item) {
+	  if (item) { 
+            $("#tooltip").remove(); 
+            
+            var getNameNum = 0, getName = "";
+
+            //loops through graphXData and graphYAxis to determine the name of the bar that is being hovered over
+    		for(i=0; i < graphXData.length; i++){
+    			if(item.datapoint[0] == graphXData[i][0]){
+    				getNameNum = graphXData[i][1];
+    			}
+    		}
+    		for(i=0; i < graphYAxis.length; i++){
+    			if(getNameNum == graphYAxis[i][0]){
+    				getName = graphYAxis[i][1];
+    			}
+    		}
+            
+            showTooltip(pos.pageX, pos.pageY, 'The value of ' + getName + ' is ' + item.datapoint[0] + '.');
+					//showTooltip(item.pageX, item.pageY, "The value of " + columnName + 
+					//" is " + item.datapoint[0] + ".");
+	   }
+	    else { 
+             $("#tooltip").remove(); 
+           } 
 	});
+
+	$("iChart"+id).bind("plotpan", function(event, plot){
+		
+	});
+	$("iChart"+id).bind("plotzoom", function(event, plot){
+		
+	});
+		
+}
+
+/* Default setting for tooltips: not showing */
+//var toolTipShow = false;
+
+/*
+ * Controls the information that appears when clicking on a bar within the pop-up graph
+ */
+function showTooltip(x, y, contents) {
+  	//if(!toolTipShow){
+          $('<div id="tooltip">' + contents + '</div>').css( {
+              position: 'absolute',
+              display: 'none',
+              top: y - 27,
+              left: x,
+              border: '1px solid #000',
+              padding: '2px',
+              'background-color': '#FFF',
+              opacity: 1
+          }).appendTo("body").fadeIn(200);
+  	//}
+  	//else{
+  	//	$("#tooltip").remove();
+  	//}
+  	//toolTipShow = !toolTipShow;
 }
 
 /**
@@ -709,7 +868,7 @@ function UpdateAreaPercentageTitleData(name, percentage, min, spread, title, dat
 	message += "</div>";
 	
 	//now call the next method that does work
-	UpdateAreaPercentageMessage(name, percentage, min, spread, message, unit);
+	UpdateAreaPercentageMessage(name, percentage, min, spread, message, unit, indicator+"_by_area_chart");
 	
 }
 
@@ -841,7 +1000,7 @@ function createChart(title, data, highLightName, id, unit, min, spread)
 	var kmapInfochart_temp = kmapInfochart_temp.replace("<RANGE_LABELS>", kampInfoChartRangeLabels);
 	
 	var chartStr = '<div id="'+id+'" class="infowindow"><p class="bubbleheader">'+title
-		+'</p><img src="'+kmapInfochart_temp; //This is the base of the Google Chart API graph (without the data part). Needs to be defined in the container file.
+		+'</p><div id="iChart' + id + '"  style=" width:300px; height:75px"></div><img src="'+kmapInfochart_temp; //This is the base of the Google Chart API graph (without the data part). Needs to be defined in the container file.
 	
 	//now put all of that together
 	chartStr += names + '&chd=t:' + blues + nameDelim + reds + '" height="' + kmapInfochartHeight + '" width="' + kmapInfochartWidth + '" /></div>';
