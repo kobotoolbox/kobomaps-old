@@ -239,6 +239,6 @@ ALTER TABLE  `columns` ADD  `template_region_id` INT( 11 ) UNSIGNED NULL DEFAULT
 /** Now move the mappings from regionmapping to columns **/
 UPDATE `columns`, `regionmapping` SET `columns`.`template_region_id` = `regionmapping`.`template_region_id` WHERE `columns`.`id` = `regionmapping`.`column_id`;
 /** Now drop region mapping **/
-DROP TABLE regionmapping
+DROP TABLE regionmapping;
 /** now update the DB version **/
 UPDATE `metadata` SET  `v` =  '1.0.018' WHERE  `metadata`.`k` ='Database Version';
