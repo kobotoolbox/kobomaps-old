@@ -1447,46 +1447,74 @@ class Controller_Mymaps extends Controller_Loggedin {
  					}
  					unset($regions);
  					
+ 					
+ 					//save the json to file
+ 					$file = DOCROOT.'uploads/data/'.$map_id.'.json';
+ 					//if the file exists delete it
+ 					if(file_exists($file))
+ 					{
+ 						unlink($file);
+ 					}
+ 					
+ 					$file_resource = fopen($file,"w");
+ 					
  					//grab ALL the sheets
  					$sheets = ORM::factory('Mapsheet')
  					->where('map_id','=',$map->id)
  					->where('is_ignored', '=', 0)
  					->order_by('position', 'ASC')
  					->find_all();
+ 					
+ 					
 
-	 				//now create the json
-	 				//it'll be a multi demnsion array done by sheet, indicator and region
-	 				$json = array('title'=>$map->title, 
-	 						'description'=>$map->description,
-	 						'centerLat'=>$map->lat,
-	 						'centerLon'=>$map->lon,
-	 						'zoom'=>$map->zoom,
-	 						'sheets'=>array());
+	 				//now create the json	 				 				
+	 				$json_header =  '{"title":'.json_encode($map->title).','.
+		 				'"description":'.json_encode($map->description).','.
+		 				'"centerLat":'.json_encode($map->lat).','.
+		 				'"centerLon":'.json_encode($map->lon).','.
+		 				'"zoom":'.json_encode($map->zoom).','.
+		 				'"sheets":{';
+	 				
+	 				fwrite($file_resource, $json_header);
+	 				
+	 				$i = 0;
 	 				//now loop over the sheets
 	 				foreach($sheets as $sheet)
 	 				{
 	 					
+	 					$i++;
 	 					
 	 					//get a list of indcators
 	 					$indicator_columns = ORM::factory('Column')
 	 						->where('mapsheet_id', '=', $sheet->id)
 	 						->where('type','=','indicator')
 	 						->find_all();
+	 					
+	 					
+	 					
 	 					//get the list of data rows
 	 					$data_rows = ORM::factory('Row')
 	 						->where('mapsheet_id', '=', $sheet->id)
 	 						->where('type','=','data')
 	 						->find_all();	 					
+	 					
+	 					
 	 					//get a list of regions
 	 					$region_columns = ORM::factory('Column')
 	 						->where('mapsheet_id', '=', $sheet->id)
 	 						->where('type','=','region')
 	 						->find_all();
+	 					
+	 					
+	 					
 	 					//get the list of data rows
 	 					$header_row = ORM::factory('Row')
 	 					->where('mapsheet_id', '=', $sheet->id)
 	 					->where('type','=','header')
 	 					->find();
+	 					
+	 						
+	 					
 	 					//get unit column
 	 					$unit_column = ORM::factory('Column')
 	 					->where('mapsheet_id', '=', $sheet->id)
@@ -1510,41 +1538,59 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					->where('mapsheet_id', '=', $sheet->id)
 	 					->where('type','=','total')
 	 					->find();
-	 						
+
 	 					//get total label column
 	 					$total_label_column = ORM::factory('Column')
 	 					->where('mapsheet_id', '=', $sheet->id)
 	 					->where('type','=','total_label')
 	 					->find();
-	 					
-	 					
+	 						 					
 	 					//get the sheet in array form
-	 					$sheet_excel = $excel->getSheetByName($sheet->name);
+	 					$excel->garbageCollect();
+	 					$sheet_excel = $excel->getSheetByName($sheet->name);	 					
 	 					$sheet_array = $sheet_excel->toArray(null, true, true, true);
+	 					
 	 					$indicators = array();
 	 					//echo "Prep work to call build indcators array: ". (microtime(true) - $time) . "<br/>";	 					
 	 					//$time = microtime(true);
 	 					//get a helper function in here
 	 					$indicators = $this->_build_indicators_array($sheet_array, $indicator_columns, $data_rows, $region_columns, $header_row, $indicators,
 	 							 $unit_column, $src_column, $src_link_column, $total_column, $total_label_column, $region_id_to_name);
+	 						 						 					
+	 					if($i > 1)
+	 					{
+	 						fwrite($file_resource, ',');
+	 					}
 	 					
-	 					$json['sheets'][$sheet->id] = array('sheetName'=>$sheet->name, 'indicators'=>$indicators);
+	 					fwrite($file_resource, '"'.$sheet->id.'":'.json_encode(array('sheetName'=>$sheet->name, 'indicators'=>$indicators)));
 	 					
+	 	
 	 					//echo "Just got back from build indicators array: ". (microtime(true) - $time) . "<br/>";
 	 					//$time = microtime(true);
-	 						 					
+	 					
+	 					//hopefully this'll reduce memory usage
+	 					unset($indicator_columns);
+	 					unset($data_rows);
+	 					unset($region_columns);
+	 					unset($indicator_columns);
+	 					unset($header_row);
+	 					unset($unit_column);
+	 					unset($src_column);
+	 					unset($src_link_column);
+	 					unset($total_column);
+	 					unset($indicators);
+	 					unset($sheet_array);
+	 					gc_collect_cycles();
+	 					
 	 				}
 	 				$database->close();
 	 				//convert to a string
-	 				$json_str = json_encode($json);
-	 				//save the json to file
-	 				$file = DOCROOT.'uploads/data/'.$map_id.'.json';
-	 				//if the file exists delete it
-	 				if(file_exists($file))
-	 				{
-	 					unlink($file);
-	 				}
-	 				file_put_contents($file, $json_str);
+
+	 				fwrite($file_resource, '}}');
+	 				fclose($file_resource);
+	 					
+	 				
+	 				
 	 				$map->json_file = $map_id.'.json';
 	 				$map->save();
 	 				
@@ -1556,7 +1602,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$map_array['map_creation_progress'] = 5;
 	 				}
 	 				$map->update_map($map_array);
-	 			
+	 	
 	 				HTTP::redirect('public/view?id='.$map_id);
 	 			}
 	 		}
