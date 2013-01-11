@@ -84,3 +84,28 @@ a, a:visited, a:link{
 select.needstobemapped{
 	border: 3px solid #FF9900;
 }
+
+div#mainMenu
+{
+	background:rgb(120,31,2);
+}
+#mainMenu ul
+{
+	list-style:none;
+}
+#mainMenu li{
+	
+	float:left;
+	margin: 5px;
+}
+
+#mainMenu li a
+{
+	font-size: 12pt;
+	color: white;
+
+}
+
+.selected{
+	font-weight:bold;
+}
