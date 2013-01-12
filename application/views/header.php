@@ -43,3 +43,5 @@
 	-->
 </div>
 <div id="mainMenu"><?php echo Helper_Mainmenu::make_menu($menu_page, $user);?></div>
+<div id="subMenu"><?php echo Helper_Mainmenu::make_submenu($menu_page, $user);?></div>
+

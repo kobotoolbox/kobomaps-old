@@ -1,5 +1,186 @@
 @CHARSET "UTF-8";
 
+body
+{
+	background-color: white;
+	background-image: url('../img/background.png');
+	background-repeat:repeat-x;
+	background-position:left top;
+	font-family:Arial,sans-serif;
+}
+
+div#page
+{
+	width: 900px;
+	margin: 0px auto;
+}
+
+div#header{
+	height:170px;
+}
+
+div#login_logout{
+	float:right;
+}
+
+div#mainMenu
+{
+	top: 68px;
+	position: absolute;
+	height:32px;
+}
+#mainMenu ul
+{
+	list-style:none;
+	margin:0px;
+	padding:0px;
+}
+#mainMenu li{
+	
+	float:left;
+	margin-right: 20px;
+}
+
+#mainMenu li a
+{
+	font-size: 18px;
+	color: white;
+	background: #6e6e6e;
+	padding:10px;
+	text-decoration:none;
+	
+	
+	border-top-right-radius:7px;
+	border-top-left-radius:7px;
+	box-shadow: 2px 2px 5px #888888;
+}
+
+#mainMenu li.selected a{	
+	background: #9a9a9a;
+	color:black;
+}
+
+#mainMenu li a:hover
+{
+		
+	box-shadow: none;
+	top:2px;
+	right:-2px;
+	position:relative;
+}
+
+
+div#subMenu
+{
+	top: 120px;
+	position: absolute;
+	height:32px;
+}
+#subMenu ul
+{
+	list-style:none;
+	margin:0px;
+	padding:0px;
+}
+#subMenu li{
+	
+	float:left;
+	margin-right: 20px;
+}
+
+#subMenu li a
+{
+	font-size: 14pt;
+	color: black;
+	background: none;
+	padding:10px;
+	text-decoration:none;
+
+}
+
+
+#subMenu li a:hover
+{
+	color: #666;
+	text-decoration:none;
+
+}
+
+
+table{
+	border-collapse:collapse;
+}
+
+
+table.list_table
+{
+	width:900px;
+	border: solid 1px #848484; 
+}
+
+table.list_table tbody
+{
+	display: block;
+	height: 500px;
+	overflow-y: scroll;
+	width: 100%;	
+}
+table.list_table thead{
+	
+}
+
+table.list_table tr td, table.list_table tr th{
+	border: solid 1px #848484;
+	padding-left:10px;
+	text-align: left;
+	
+}
+
+table.list_table thead tr{
+	display:block;
+	position:relative;
+}
+
+table.list_table tbody tr{
+	height:50px;
+}
+
+table.list_table tr th{
+	background:#d6d7d6;
+	padding-top:10px;
+	padding-bottom:10px;
+	height:20px;
+}
+
+table.list_table tr td.selectColumn, table tr th.selectColumn
+{
+	width:60px;
+	text-align:center;
+}
+table.list_table tr th.lastColumn
+{
+	width:60px
+	text-align:center;
+}
+table.list_table tr td.lastColumn{
+	width:33px;
+	text-align:center;
+}
+table.list_table tr td.mapName, table tr th.mapName
+{
+	width:445px;
+}
+table.list_table tr td.mapTasks, table tr th.mapTasks
+{
+	width:300px;
+}
+
+table.list_table tr.odd_row td{
+	background: #ececec;
+}
+
+
+
 div.data_specify_div
 {
 	width:980px;
@@ -85,28 +266,3 @@ select.needstobemapped{
 	border: 3px solid #FF9900;
 }
 
-div#mainMenu
-{
-	background:rgb(120,31,2);
-	height:32px;
-}
-#mainMenu ul
-{
-	list-style:none;
-}
-#mainMenu li{
-	
-	float:left;
-	margin: 5px;
-}
-
-#mainMenu li a
-{
-	font-size: 12pt;
-	color: white;
-
-}
-
-.selected{
-	font-weight:bold;
-}

@@ -149,6 +149,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 		$this->template->content->errors = array();
 		$this->template->content->messages = array();
 		$this->template->content->header = $header;
+		$this->template->header->menu_page = "createmap";
 		//set the JS
 		
 		//$js = view::factory('add1_js/form_edit_js');
@@ -437,6 +438,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content->errors = array();
 	 	$this->template->content->messages = array();	 	
 	 	$this->template->content->sheet_position = $sheet_position;
+	 	$this->template->header->menu_page = "createmap";
 	 	
 	 	$js = view::factory('addmap/add2_js');
 	 	$this->template->html_head->script_views[] = $js;
@@ -1016,6 +1018,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content->sheet_indicators = $sheet_indicators;
 	 	$this->template->content->messages = array();
 	 	$this->template->html_head->script_views[] = view::factory('js/messages');
+	 	$this->template->header->menu_page = "createmap";
 	 
 	 	//get the status
 	 	$status = isset($_GET['status']) ? $_GET['status'] : null;
@@ -1087,6 +1090,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content->data = $data;	
 	 	$this->template->content->messages = array();
 	 	$this->template->content->errors = array();
+	 	$this->template->header->menu_page = "createmap";
 	 	$this->template->html_head->script_views[] = view::factory('js/messages');
 	 	$js =  view::factory("addmap/add4_js");
 	 	$js->lat = $map->lat;
@@ -1295,6 +1299,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content->messages = array();
 	 	$this->template->content->errors = array();
 	 	$this->template->html_head->script_views[] = view::factory('js/messages');
+	 	$this->template->header->menu_page = "createmap";
 	 		 
 	 	//get the status
 	 	$status = isset($_GET['status']) ? $_GET['status'] : null;

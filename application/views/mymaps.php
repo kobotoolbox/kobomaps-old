@@ -7,8 +7,7 @@
 *************************************************************/
 ?>
 		
-<h2><?php echo __("My Maps"); ?></h2>
-<p><?php echo __("These are the maps you have created");?></p>
+<p><?php echo __("Select a map to edit or create a new one");?></p>
 
 
 <?php if(count($errors) > 0 )
@@ -50,23 +49,27 @@
 }
 ?>
 <p>
-<a class="button" id="add_map_button" href="<?php echo URL::base();?>mymaps/add1"><?php echo __('add map');?></a>
+
 </p>
+<div class="scroll_table">
 <table class="list_table" >
 	<thead>
 		<tr class="header">
-			<th style="width:200px;">
+			<th class="selectColumn">
+				<?php echo __('Select');?>
+			</th>
+			<th class="mapName">
 				<?php echo __('Map');?>
 			</th>
-			<th style="width:400px;">
-				<?php echo __('Description');?>
+			<th class="mapTasks">
+				<?php echo __('Tasks');?>
 			</th>
-			<th style="width:200px;">
-				<?php echo __('actions');?>
+			<th class="lastColumn">
+				<?php echo __('Public');?>
 			</th>
 		</tr>
 	</thead>
-	<tbody style="height:700px;">
+	<tbody>
 	<?php
 		if(count($maps) == 0)
 		{
@@ -78,23 +81,27 @@
 			$odd_row = ($i % 2) == 0 ? 'class="odd_row"' : '';
 		?>
 
-	<tr <?php echo $odd_row; ?> style="height:50px;">
-		<td style="width:200px;">
+	<tr <?php echo $odd_row; ?>>
+		<td class="selectColumn">
+			X
+		</td>
+		<td class="mapName">
 			<a href="<?php echo url::base(); ?>public/view/?id=<?php echo $map->id;?>" >
 				<?php echo substr($map->title, 0, 40); echo strlen($map->title) > 40 ? '...' : ''; ?>
 			</a>
 		</td>
-		<td style="width:400px;">
-			<?php echo substr($map->description, 0, 50); echo strlen($map->description) > 50 ? '...' : ''; ?>
-		</td>
-		<td style="width:200px;">
+		<td class="mapTasks">
 			<a href="<?php echo url::base(); ?>mymaps/add1/?id=<?php echo $map->id;?>" > <?php echo __('edit');?></a>
 			<a href="#" onclick="deleteMap(<?php echo $map->id?>);"> <?php echo __('delete');?></a>
+		</td>
+		<td class="lastColumn">
+			X
 		</td>
 	</tr>
 	<?php }?>
 	</tbody>
 </table>
+</div>
 <?php
 echo Form::open(NULL, array('id'=>'edit_map_form')); 
 echo Form::hidden('action','edit', array('id'=>'action'));

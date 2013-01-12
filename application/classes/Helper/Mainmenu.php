@@ -47,6 +47,46 @@ class Helper_Mainmenu
 				}
 				echo '<a href="'.url::base().'mymaps">'.__("My Maps").'</a></li>';
 				
+				// Create a map
+				if($page == "createmap")
+				{
+					echo '<li class="selected">';
+				}
+				else
+				{
+					echo '<li>';
+				}
+				echo '<a href="'.url::base().'mymaps/add1">'.__("Create Map").'</a></li>';
+				
+				// View map
+				if($page == "viewmap")
+				{
+					echo '<li class="selected">';
+					echo '<a href="'.url::base().'mymaps/add1">'.__("View Map").'</a></li>';
+				}
+				
+				//share
+				if($page == "share")
+				{
+					echo '<li class="selected">';
+				}
+				else
+				{
+					echo '<li>';
+				}
+				echo '<a href="'.url::base().'mymaps/share">'.__("Share").'</a></li>';
+				
+				//statistics
+				if($page == "statistics")
+				{
+					echo '<li class="selected">';
+				}
+				else
+				{
+					echo '<li>';
+				}
+				echo '<a href="'.url::base().'mymaps/statistics">'.__("Statistics").'</a></li>';
+				
 			
 				
 			}
@@ -79,5 +119,27 @@ class Helper_Mainmenu
 		
 		
 		
+	}//end function
+	
+	
+	public static function make_submenu($page, $user)
+	{
+		
+		echo '<ul>';
+
+		switch($page)
+		{
+			case "mymaps":
+				echo '<li><a href="'.URL::base().'mymaps/add1">'.__('Create New Map').'</a></li>';
+				echo '<li><a href="'.URL::base().'mymaps/share">'.__('Share').'</a></li>';
+				echo '<li><a href="'.URL::base().'mymaps/messages">'.__('Message Center').'</a></li>';
+				break;
+		}		
+		
+		echo '</ul>';
+		echo '<p style="clear:both;"></p>';
+	
+	
+	
 	}//end function
 }//end class
