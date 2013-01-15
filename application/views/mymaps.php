@@ -91,8 +91,33 @@
 			</a>
 		</td>
 		<td class="mapTasks">
-			<a href="<?php echo url::base(); ?>mymaps/add1/?id=<?php echo $map->id;?>" > <?php echo __('edit');?></a>
-			<a href="#" onclick="deleteMap(<?php echo $map->id?>);"> <?php echo __('delete');?></a>
+			<ul>
+			<li>
+				<a href="<?php echo url::base(); ?>mymaps/add1/?id=<?php echo $map->id;?>" > 
+					<img class="edit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('edit');?>
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo url::base(); ?>mymaps/copy/?id=<?php echo $map->id;?>" > 
+					<img class="copy" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('copy');?>
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo url::base(); ?>public/view/?id=<?php echo $map->id;?>" >
+					<img class="view" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('view');?>
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo url::base(); ?>mymaps/share/?id=<?php echo $map->id;?>" >
+					<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('share');?>
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="deleteMap(<?php echo $map->id?>);">
+					<img class="delete" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('delete');?>
+				</a>
+			</li>			
+			</ul>
 		</td>
 		<td class="lastColumn">
 			X
