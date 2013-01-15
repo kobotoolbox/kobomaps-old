@@ -16,16 +16,89 @@ div#page
 }
 
 div#header{
-	height:170px;
+	height:240px;
+	background-image: url('../img/kobo_logo.jpg');
+	background-repeat:no-repeat;
+	background-position:left top;
 }
 
-div#login_logout{
+/************************************************************
+						User Menu
+*************************************************************/
+div#userMenu{
 	float:right;
 }
 
+div#userMenu ul {
+	list-style:none;
+}
+
+div#userMenu ul li{
+	float: left;
+	padding: 4px 6px;
+	border-right: solid 1px black;
+	position:relative;
+}
+
+div#userMenu ul li a, div#userMenu ul li a:visited{
+	color: black;
+	text-decoration: none;
+}
+
+div#userMenu ul li a:hover{
+	text-decoration: underline;
+}
+
+div#userMenu ul li a.helplink{
+	background:#00bb17;
+	color:white;
+	padding: 3px;	
+	box-shadow: 2px 2px 5px #888888;
+}
+
+div#userMenu ul li.loginMenu a
+{
+	background:#64add8;
+	background-image: url('../img/userDropDown.png');
+	background-repeat:no-repeat;
+	background-position: right center;
+	padding: 3px;
+	padding-right:25px;
+	color:white;	
+	box-shadow: 2px 2px 5px #888888;
+}
+div#userMenu ul li.loginMenu
+{
+	border:none;
+}
+
+div#userMenu ul li ul{
+	list-style:none;
+    position:absolute;
+    left:-9999px;    
+}
+
+div#userMenu ul li ul li{
+	float:none;
+	background:#64add8;
+	border: none;
+	}
+div#userMenu ul li.loginMenu ul li a{
+	background: #64add8;
+	box-shadow: none;	
+	}
+	
+div#userMenu ul li:hover ul{ 
+    left:6px; 
+}
+
+
+/************************************************************
+							Main Menu
+*************************************************************/
 div#mainMenu
 {
-	top: 68px;
+	top: 138px;
 	position: absolute;
 	height:32px;
 }
@@ -70,17 +143,24 @@ div#mainMenu
 }
 
 
+/************************************************************
+							Sub Menu
+*************************************************************/
+
+
 div#subMenu
 {
-	top: 120px;
+	width:900px;
+	top: 168px;
 	position: absolute;
-	height:32px;
+	height:80px;
+	background-image: url('../img/submenu_background')
 }
 #subMenu ul
 {
 	list-style:none;
 	margin:0px;
-	padding:0px;
+	padding:25px 0px 0px 0px;
 }
 #subMenu li{
 	
@@ -106,7 +186,9 @@ div#subMenu
 
 }
 
-
+/************************************************************
+							Tables
+*************************************************************/
 table{
 	border-collapse:collapse;
 }
@@ -181,6 +263,9 @@ table.list_table tr.odd_row td{
 
 
 
+/************************************************************
+						Specify data table
+*************************************************************/
 div.data_specify_div
 {
 	width:980px;
@@ -265,4 +350,72 @@ a, a:visited, a:link{
 select.needstobemapped{
 	border: 3px solid #FF9900;
 }
+
+
+/************************************************************
+							inputs
+*************************************************************/
+input[type="text"], input[type="password"]{
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	border-radius: 7px;
+	padding:5px;
+	border: solid 2px #9a9a9a;
+	outline:none;
+    transition: all 0.25s ease-in-out;
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out;
+}
+
+input[type="text"]:focus, input[type="password"]:focus{
+	
+    box-shadow: 0 0 5px rgba(0, 0, 255, 1);
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 255, 1); 
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 255, 1); 
+}
+
+
+/************************************************************
+							Apple layer
+*************************************************************/
+	/* the overlayed element */
+.apple_overlay {
+	
+	/* initially overlay is hidden */
+	display:none;
+	
+	/* growing background image */
+	background-image:url(../img/white.png);
+	
+	/* 
+		width after the growing animation finishes
+		height is automatically calculated
+	*/
+	width:640px;		
+	
+	/* some padding to layout nested elements nicely  */
+	padding:35px;
+
+}
+
+/* default close button positioned on upper right corner */
+.apple_overlay .close {
+	background-image:url(../img/close.png);
+	position:absolute; right:5px; top:5px;
+	cursor:pointer;
+	height:35px;
+	width:35px;
+}
+
+	#overlay {
+		background-image:url(../img/transparent.png);
+		color:#efefef;
+		height:450px;
+	}
+	
+	/* container for external content. uses vertical scrollbar, if needed */
+	div.contentWrap {
+		height:441px;
+		overflow-y:auto;
+	}
 

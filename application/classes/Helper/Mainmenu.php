@@ -142,4 +142,46 @@ class Helper_Mainmenu
 	
 	
 	}//end function
+	
+	
+	/**
+	 * Creates the user menu, login, log out, profile, that sort of thing.
+	 * @param string $page name of the page that we are currently rendering
+	 * @param db_object $user user object for the user that is currenlty logged in
+	 */
+	public static function make_user_menu($page, $user)
+	{
+		echo '<ul>';
+		echo '<li><a href="'.URL::base().'about">'.__('About KoboMap').'</a></li>';
+		echo '<li><a href="'.URL::base().'support">'.__('Support & Feedback').'</a></li>';
+		echo '<li><a class="helplink" href="'.URL::base().'help">'.__('Help').'</a></li>';
+		
+		$auth = Auth::instance();
+		$logged_in = $auth->logged_in() OR $auth->auto_login();
+		if($logged_in)
+		{
+			$user = ORM::factory('user',$auth->get_user());
+			$user_name = $user->first_name. ' ' . $user->last_name;
+			echo ' <li class="loginMenu">';
+			echo '<a href="'.url::base().'mymaps">'.$user_name .'</a>';
+			echo '<ul>';
+			echo ' <li><a href="'.url::base().'home/profile">'.__('profile') .'</a></li>';
+			echo ' <li><a href="'.url::base().'logout">'.__('logout').'</a></li>';
+			echo '</ul>';
+			echo '</li>';
+			
+		}
+		else
+		{
+
+			echo ' <li class="loginMenu">';
+			echo '<a href="'.url::base().'home">'.__('Login, Signup') .'</a>';
+			echo '<ul>';
+			echo '<li><a href="'.url::base().'login">'.__('login').'</a></li>';
+			echo '<li><a href="'.url::base().'signup">'.__('signup').'</a></li>';
+			echo '</ul>';
+			echo '</li>';
+		}
+		echo '</ul>';
+	}
 }//end class

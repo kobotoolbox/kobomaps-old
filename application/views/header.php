@@ -7,40 +7,14 @@
 *************************************************************/ 
 ?>
 <div id="header">
-	<div id="login_logout">
+	<div id="userMenu">
 		<?php
-			$auth = Auth::instance();
-			$logged_in = $auth->logged_in() OR $auth->auto_login();
-			if($logged_in)
-			{
-				$user = ORM::factory('user',$auth->get_user());
-				$user_name = $user->first_name. ' ' . $user->last_name;
-				echo ' <span class="user_info"><a href="'.url::base().'home">'.__('welcome')." ".$user_name .'</a></span> &gt;&gt;';
-				echo ' <span class="user_info"><a href="'.url::base().'home/profile">'.__('profile') .'</a></span>';
-				echo ' <span class="user_action"><a href="'.url::base().'logout">'.__('logout').'</a></span>';
-			}
-			else
-			{
-				echo '<span class="user_action">';
-				echo '<a href="'.url::base().'login">'.__('login').'</a>';
-				echo ' '.__("or"). ' ';
-				echo '<a href="'.url::base().'signup">'.__('signup').'</a>';
-				echo '</span>';
-			}
+			echo Helper_Mainmenu::make_user_menu($menu_page, $user);
 		?>
 	</div>
-	<!--
-	<h1>
-		<a href="<?php //echo url::base(); ?>">
-			<?php //echo __('site name'); ?>
-		</a>
-	</h1>
-	<p>
-		<a href="<?php //echo url::base(); ?>">
-			<?php //echo __('tagline'); ?>
-		</a>
-	</p>
-	-->
+	<a href="<?php echo URL::base();if(isset($user) AND $user != null){echo 'mymaps';}?>">
+		<img src="<?php echo URL::base();?>media/img/kobo_logo.jpg"/>
+	</a>
 </div>
 <div id="mainMenu"><?php echo Helper_Mainmenu::make_menu($menu_page, $user);?></div>
 <div id="subMenu"><?php echo Helper_Mainmenu::make_submenu($menu_page, $user);?></div>
