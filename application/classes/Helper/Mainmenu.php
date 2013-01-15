@@ -130,9 +130,23 @@ class Helper_Mainmenu
 		switch($page)
 		{
 			case "mymaps":
-				echo '<li><a href="'.URL::base().'mymaps/add1">'.__('Create New Map').'</a></li>';
-				echo '<li><a href="'.URL::base().'mymaps/share">'.__('Share').'</a></li>';
-				echo '<li><a href="'.URL::base().'mymaps/messages">'.__('Message Center').'</a></li>';
+				?>
+				<li>
+					<a href="<?php echo URL::base();?>mymaps/add1">
+						<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create New Map');?>
+					</a>
+				</li>
+				<li>
+					<a href="<?php echo URL::base();?>mymaps/share">
+						<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Share'); ?>
+					</a>
+				</li>
+				<li>
+					<a href="<?php echo URL::base();?>mymaps/messages">
+						<img class="message" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Message Center'); ?>
+					</a>
+				</li>
+				<?php 
 				break;
 		}		
 		

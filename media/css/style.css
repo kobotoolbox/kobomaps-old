@@ -166,6 +166,9 @@ div#subMenu
 	list-style:none;
 	margin:0px;
 	padding:25px 0px 0px 0px;
+	top: -20px;
+	position: absolute;
+	
 }
 #subMenu li{
 	
@@ -175,7 +178,7 @@ div#subMenu
 
 #subMenu li a
 {
-	font-size: 14pt;
+	font-size: 16px;
 	color: black;
 	background: none;
 	padding:10px;
@@ -188,8 +191,30 @@ div#subMenu
 {
 	color: #666;
 	text-decoration:none;
-
 }
+
+
+#subMenu li a img{
+	height: 40px;
+}
+
+#subMenu img.createNewMap{
+	background: url('../img/submenuSprite.png') -0px 0px;	
+	width:42px;	
+}
+
+#subMenu img.share{
+	background: url('../img/submenuSprite.png') -48px 0px;	
+	width:42px;	
+}
+
+#subMenu img.message{
+	background: url('../img/submenuSprite.png') -90px 0px;	
+	width:42px;	
+}
+
+
+
 
 /************************************************************
 							Tables
