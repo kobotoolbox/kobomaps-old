@@ -165,7 +165,7 @@ class Helper_Mainmenu
 			echo ' <li class="loginMenu">';
 			echo '<a href="'.url::base().'mymaps">'.$user_name .'</a>';
 			echo '<ul>';
-			echo ' <li><a href="'.url::base().'home/profile">'.__('profile') .'</a></li>';
+			echo ' <li><a href="'.url::base().'profile">'.__('profile') .'</a></li>';
 			echo ' <li><a href="'.url::base().'logout">'.__('logout').'</a></li>';
 			echo '</ul>';
 			echo '</li>';
@@ -175,7 +175,7 @@ class Helper_Mainmenu
 		{
 
 			echo ' <li class="loginMenu">';
-			echo '<a href="'.url::base().'home">'.__('Login, Signup') .'</a>';
+			echo '<a href="'.url::base().'login">'.__('Login, Signup') .'</a>';
 			echo '<ul>';
 			echo '<li><a href="'.url::base().'login">'.__('login').'</a></li>';
 			echo '<li><a href="'.url::base().'signup">'.__('signup').'</a></li>';

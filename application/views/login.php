@@ -5,7 +5,7 @@
 {
 ?>
 	<div class="errors">
-	<?php echo __("error"); ?>
+	<?php echo __("Error"); ?>
 		<ul>
 <?php 
 	foreach($errors as $error)

@@ -10,6 +10,7 @@ return array
 	'n/a explain' => 'Does not appy, and thus intentionally left blank',
 	'his'=>'his',
 	'her'=>'her',
+	'Error'=>'Error:',
 
 	//Header
 	'site name'=>'KoBo Maps',

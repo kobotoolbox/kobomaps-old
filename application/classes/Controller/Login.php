@@ -20,7 +20,7 @@ class Controller_Login extends Controller_Main {
 		$auth = Auth::instance();
 		if( $auth->logged_in() OR $auth->auto_login())
 		{
-			HTTP::redirect(Session::instance()->get_once('returnUrl',''));
+			HTTP::redirect(Session::instance()->get_once('returnUrl','mymaps'));
 		}
 		 
 		$this->template->html_head->title = __("login");
@@ -39,7 +39,7 @@ class Controller_Login extends Controller_Main {
 			$auth->login($_POST['username'], $_POST['password'], true);
 			if($auth->logged_in())
 			{
-				HTTP::redirect(Session::instance()->get_once('returnUrl',''));	
+				HTTP::redirect(Session::instance()->get_once('returnUrl','mymaps'));	
 			}
 			else
 			{

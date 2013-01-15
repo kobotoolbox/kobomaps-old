@@ -15,6 +15,14 @@ class Controller_Signup extends Controller_Main {
 	*/
 	public function action_index()
 	{
+		$data = array(
+				'email'=>'',
+				'username'=>'',
+				'first_name'=>'',
+				'last_name'=>'',
+				'password'=>'',
+				'password_confirm'=>''
+				);
 		//turn set focus to first UI form element
 		$this->template->html_head->script_views[] = '<script type="text/javascript">$(document).ready(function() {$("input:text:visible:first").focus();});</script>';
 		
@@ -26,17 +34,19 @@ class Controller_Signup extends Controller_Main {
 		$auth = Auth::instance();		
 		if( $auth->logged_in())
 		{
-			HTTP::redirect(Session::instance()->get_once('returnUrl','home'));
+			HTTP::redirect(Session::instance()->get_once('returnUrl','mymaps'));
 		}
 		$this->template->header->menu_page = "signup";
 		$this->template->html_head->title = __("Sign Up");
 		$this->template->content = View::factory('signup');
 		$this->template->content->errors = array();
+		$this->template->content->data = $data;
 		
 		if(!empty($_POST)) // They've submitted their registration form
 		{
 			try 
 			{
+				$this->template->content->data = $_POST;
 				if(!isset($_POST['terms']))
 				{
 					$this->template->content->errors[] = __('must agree to terms of use');

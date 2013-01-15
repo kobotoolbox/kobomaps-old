@@ -1,5 +1,5 @@
-<h2><?php echo __("Signup"); ?></h2>
-<p><?php echo __("Fill out this form to sign up for Kobo Maps");?></p>
+<h2><?php echo __("Profile"); ?></h2>
+<p><?php echo __("Set your profile as needed");?></p>
 
 
 <?php if(count($errors) > 0 )
@@ -13,6 +13,25 @@
 	{
 ?>
 		<li> <?php echo $error; ?></li>
+<?php
+	} 
+	?>
+		</ul>
+	</div>
+<?php 
+}
+?>
+
+<?php if(count($messages) > 0 )
+{
+?>
+	<div class="messages">
+		<ul>
+<?php 
+	foreach($messages as $message)
+	{
+?>
+		<li> <?php echo $message; ?></li>
 <?php
 	} 
 	?>
@@ -61,23 +80,21 @@
 				<?php echo Form::label('password', __("password"));  ?>
 			</td>
 			<td>
-				<?php echo Form::password('password', $data['password']);?>
+				<?php echo Form::password('password');?>
 			</td>
 			
 			<td>
 				<?php echo Form::label('password_again', __("password again"));  ?>
 			</td>
 			<td>
-				<?php echo Form::password('password_confirm', $data['password_confirm']);?>
+				<?php echo Form::password('password_confirm');?>
 			</td>
 			
 		</tr>
 		
 	</table>
+
 	<br/>
-	<?php  echo Form::checkbox('terms'); echo Form::label('read_terms_of_use', __("read terms of use"));  ?>
-	<br/>
-	<br/>
-	<?php echo Form::submit("registration_form",  __("register")); ?>
+	<?php echo Form::submit("registration_form",  __("Submit")); ?>
 			
 <?php echo Kohana_Form::close(); ?>

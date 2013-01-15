@@ -7,14 +7,16 @@
 *************************************************************/ 
 ?>
 <div id="header">
+
 	<div id="userMenu">
 		<?php
 			echo Helper_Mainmenu::make_user_menu($menu_page, $user);
 		?>
 	</div>
-	<a href="<?php echo URL::base();if(isset($user) AND $user != null){echo 'mymaps';}?>">
-		<img src="<?php echo URL::base();?>media/img/kobo_logo.jpg"/>
+	<a id="headerImage" href="<?php echo URL::base();if(isset($user) AND $user != null){echo 'mymaps';}?>">
+		<img  src="<?php echo URL::base();?>media/img/kobo_logo.jpg"/>
 	</a>
+	
 </div>
 <div id="mainMenu"><?php echo Helper_Mainmenu::make_menu($menu_page, $user);?></div>
 <div id="subMenu"><?php echo Helper_Mainmenu::make_submenu($menu_page, $user);?></div>
