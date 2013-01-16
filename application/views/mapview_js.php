@@ -10,6 +10,7 @@
 
 <link href="<?php echo  URL::base() ?>media/css/templatePreview.css" type="text/css" rel="stylesheet">
 <link href="<?php echo  URL::base() ?>media/css/largemap.css" type="text/css" rel="stylesheet">  
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
 <style> <?php echo $map->CSS?></style>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.min.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.address-1.4.min.js"> </script>
@@ -19,6 +20,7 @@
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/label.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.navigate.js"> </script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery-ui.min.js"> </script>
 <script type="text/javascript">
 
 
@@ -28,20 +30,7 @@ var kmapInfodivHeight = 300;
 //modify the base setting for the Google chart here (if necessary)
 var kmapInfochartWidth = 315; //if this number is changed, the legend div (which contains the national graph) also needs to be adjusted 
 var kmapInfochartBarHeight = 16; //these are numbers, not strings
-var kmapInfochartBarHeightMargin = 2;
-var kmapInfochartchxsFont = 10;
-var kmapInfochart = 'http://chart.apis.google.com/chart?'
-+ 'chxs=0,676767,'+kmapInfochartchxsFont+',2,l,676767|1,393939,'+kmapInfochartchxsFont+',1,l,676767'
-+ '&chxt=x,y'
-+ '&chbh='+kmapInfochartBarHeight+','+kmapInfochartBarHeightMargin+',0'
-+ '&chs='+kmapInfochartWidth+'x<HEIGHT>'
-+ '&cht=bhs'
-+ '&chco=3E4E6E,CC0000'
-+ '&chds=<RANGE>'
-+ '&chts=000000,13'
-+ '&chxl=0:|<RANGE_LABELS>|1:';
-
-
+var kmapInfochartXAxisMargin = 35;
 
 
 
@@ -703,12 +692,15 @@ function DrawDataGraph(id, name){
 	id = id.substring(0,lengthToCut);
 	
 	var idArray = id.split("_");
-
+	var regionData = null;
 
 	var dataPtr = mapData.sheets[+idArray[0]];
 	for(var i=1; i < idArray.length; i++){
 		//that little plus down there converts the strings into actual integers to access data array
 		dataPtr = dataPtr.indicators[+idArray[i]];
+		if(i == idArray.length - 2){
+			regionData = dataPtr;
+		}
 	}
 	
 	//contains the path given by the id to access the data
@@ -716,13 +708,152 @@ function DrawDataGraph(id, name){
 
 	//console.log(dataPath);
 
+    $("#iChartTabs").tabs();
+	
+	//draw the general chart
+	drawGeneralChart(fullId, dataPath, name);
+
+	//draw the region's response chart
+	if(regionData != null){
+  		drawRegionChart(regionData, name, idArray[idArray.length - 1]);
+	}
+}
+
+/* Default setting for tooltips: not showing */
+//var toolTipShow = false;
+
+/*
+ * Controls the information that appears when clicking on a bar within the pop-up graph
+ */
+function showTooltip(x, y, contents) {
+          $('<div id="tooltip">' + contents + '</div>').css( {
+              position: 'absolute',
+              display: 'none',
+              top: y - 27,
+              left: x,
+              border: '1px solid #000',
+              padding: '2px',
+              'background-color': '#FFF',
+              opacity: 1
+          }).appendTo("body").fadeIn(200);
+}
+
+//regionData should be the second to last indicator
+function drawRegionChart(regionData, name, indicatorIdNum){
 	var graphYAxis = new Array();
-	var graphData = new Array(); // array that will contain variables to go with graph
+	var selectedArea = new Array(); //Array to hold changes colors for selected area
+	var selecY;
+	var graphXData = new Array();	
+	var tempXData = new Array();
+	var tempYAxis = new Array();
+	var selecX;
+	var count = 1;
+	var largest = 0;
+
+	//last indicator level
+	for(i in regionData.indicators){
+		//data level
+		for(j in regionData.indicators[i].data){
+			if(j == name){
+				var value = parseFloat(regionData.indicators[i].data[j].value);
+				if(!isNaN(value)){
+					if(value > largest){
+						largest = value;
+					}	
+					tempYAxis.push(regionData.indicators[i].name);
+					tempXData.push(value);
+				}
+				break;
+			}
+		}
+		
+	}
+	count = tempYAxis.length;
+
+	for(i = 0; i < tempYAxis.length; i++){
+		graphYAxis.push([count, tempYAxis[i]]);
+		graphXData.push([tempXData[i], count]);
+		if(i == indicatorIdNum){
+			selecY = count;
+			selecX = tempXData[i];
+		}	
+		
+		count --;
+	}
+			
+
+	for(i=0; i < graphXData.length; i++){
+		if(graphXData[i][1] == selecY){
+			selecX = graphXData[i][0];
+		}
+	}
+
+
+	var kmapInfochartHeight = (graphYAxis.length * (parseInt(kmapInfochartBarHeight) )) + Math.round(parseInt(kmapInfochartXAxisMargin) * 1.7);
+
+	//possible dark blue color is '223953'
+	//red color is 'D71818'
+	//var d2/graphXData = [[13,1], [28,2], [75,3]];
+	//var ticks/graphYAxis = [[1,'Florida'], [2,'Georgia'], [3,'Seafree'], [4,'Freemont'], [5,'Monaco']];
+
+	var dimen = " height: " + kmapInfochartHeight + "px; ";
+	var oldStyle = $("#iChartLocal").attr("style");
+
+	$("#iChartLocal").attr("style", dimen + oldStyle);
+	selectedArea = [[selecX, selecY]];
+	 var bothData = [
+	        	  {
+		        	data: graphXData,
+		          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: '223953'} ,
+		          	color: '223953'
+	        	  },
+	        	  {
+		        	data: selectedArea,
+		        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: 'D71818'} ,
+	        		color: 'D71818'
+	        	  }
+	  ];
+	  
+      /*
+      * Size of the chart is controlled by the div tag where iChartFull is created
+      */
+
+     //check to see if the region has any data, if not, don't draw the graph
+     var data = false;
+     for(i in graphXData){
+         if(graphXData[i][0] != 0){
+             data = true;
+             break;
+         }
+     }
+     if(data){
+		 $.plot($("#iChartLocal"), bothData,  {
+		    	bars: {show: true, horizontal: true, fill: true},
+		    	grid: {hoverable: true},
+		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 75, labelHeight: 20, panRange: [0.5, tempYAxis.length+1]},
+		    	xaxes:[{panRange: [0, largest]}, {position:"top", reserveSpace:true}],
+		    	pan:  {interactive: true, cursor: 'move', frameRate: 20}
+			}
+		);
+     }
+     else{
+		document.getElementById('iChartLocal').innerHTML = "No regional data to display.";
+     }
+	bindHoverTip("#iChartLocal", graphXData, graphYAxis);
+
+	
+	
+}
+
+function drawGeneralChart(fullId, dataPath, name){
+	
+	var graphYAxis = new Array();
 	var selectedArea = new Array(); //Array to hold changes colors for selected area
 	var selecY;
 	var graphXData = new Array();	
 	var selecX;
 	var count = 1;
+	var largest = 0;
 
 	//create the graph data array and the array of yAxis Names
 	for(i in dataPath){
@@ -735,18 +866,16 @@ function DrawDataGraph(id, name){
 				selecY = count;
 				selecX = value;
 			}
+			if(value > largest){
+				largest = value;
+			}
 			count++; //increment that counter
 		}
 	}
 
 	//variables for javascript graph, ynames and xdata
-	
-
-	
 	//add data to graphXData, i indicates location on graph
-	for(i=0; i < graphData.length; i++){
-		
-
+	for(i=0; i < graphXData.length; i++){
 		if(graphXData[i][1] == selecY){
 			selecX = graphXData[i][0];
 		}
@@ -770,89 +899,53 @@ function DrawDataGraph(id, name){
 	        		color: 'D71818'
 	        	  }
 	  ];
-	  $.plot($("#iChart"+fullId), bothData,  {
-	            bars: {show: true, horizontal: true, fill: true},
-	            grid: {hoverable: true},
-	            yaxis:{ticks: graphYAxis, zoomRange: [1, 100], panRange: [-10, 10]},
-	            //xaxis:{zoomRange: [1, 100], panRange: [-10, 10]},
-	            zoom: {interactive: true, amount: 1.25},
-	            pan:  {interactive: true, cursor: 'move', frameRate: 20}
-	        }
-      );
-
+	  
       /*
-      * Size of the chart is controlled by the div tag where iChart is created
+      * Size of the chart is controlled by the div tag where iChartFull is created
       */
 
-
-      
-
-      /*
-      * Calls the tooltip function and makes sure none are already selected.
-      */
-	$("#iChart"+fullId).bind("plothover", function (event, pos, item) {
-	  if (item) { 
-            $("#tooltip").remove(); 
-            
-            var getNameNum = 0, getName = "";
-
-            //loops through graphXData and graphYAxis to determine the name of the bar that is being hovered over
-    		for(i=0; i < graphXData.length; i++){
-    			if(item.datapoint[0] == graphXData[i][0]){
-    				getNameNum = graphXData[i][1];
-    				break;
-    			}
-    		}
-    		for(i=0; i < graphYAxis.length; i++){
-    			if(getNameNum == graphYAxis[i][0]){
-    				getName = graphYAxis[i][1];
-    				break;
-    			}
-    		}
-            
-            showTooltip(pos.pageX, pos.pageY, 'The value of ' + getName + ' is ' + item.datapoint[0] + '.');
-					//showTooltip(item.pageX, item.pageY, "The value of " + columnName + 
-					//" is " + item.datapoint[0] + ".");
-	   }
-	    else { 
-             $("#tooltip").remove(); 
-           } 
-	});
-
-	$("iChart"+id).bind("plotpan", function(event, plot){
-		
-	});
-	$("iChart"+id).bind("plotzoom", function(event, plot){
-		
-	});
-		
+	 $.plot($("#iChartFull"+fullId), bothData,  {
+	    	bars: {show: true, horizontal: true, fill: true},
+	    	grid: {hoverable: true},
+	    	yaxis:{ticks: graphYAxis, panRange: [0.5, count]},
+	    	xaxis:{panRange: [0, largest]},
+	    	pan:  {interactive: true, cursor: 'move', frameRate: 20}
+		}
+	);
+	bindHoverTip("#iChartFull" + fullId, graphXData, graphYAxis);
 }
 
-/* Default setting for tooltips: not showing */
-//var toolTipShow = false;
+//used by both charts to create the hover tooltip that finds the bar that is being hovered over
+function bindHoverTip(id, graphXData, graphYAxis){
+	$(id).bind("plothover", function (event, pos, item) {
+		  if (item) { 
+	            $("#tooltip").remove(); 
+	            
+	            var getNameNum = 0, getName = "";
 
-/*
- * Controls the information that appears when clicking on a bar within the pop-up graph
- */
-function showTooltip(x, y, contents) {
-  	//if(!toolTipShow){
-          $('<div id="tooltip">' + contents + '</div>').css( {
-              position: 'absolute',
-              display: 'none',
-              top: y - 27,
-              left: x,
-              border: '1px solid #000',
-              padding: '2px',
-              'background-color': '#FFF',
-              opacity: 1
-          }).appendTo("body").fadeIn(200);
-  	//}
-  	//else{
-  	//	$("#tooltip").remove();
-  	//}
-  	//toolTipShow = !toolTipShow;
+	            //loops through graphXData and graphYAxis to determine the name of the bar that is being hovered over
+	    		for(i=0; i < graphXData.length; i++){
+	    			if(item.datapoint[0] == graphXData[i][0]){
+	    				getNameNum = graphXData[i][1];
+	    				break;
+	    			}
+	    		}
+	    		for(i=0; i < graphYAxis.length; i++){
+	    			if(getNameNum == graphYAxis[i][0]){
+	    				getName = graphYAxis[i][1];
+	    				break;
+	    			}
+	    		}
+	            
+	            showTooltip(pos.pageX, pos.pageY, 'The value of ' + getName + ' is ' + item.datapoint[0] + '.');
+						//showTooltip(item.pageX, item.pageY, "The value of " + columnName + 
+						//" is " + item.datapoint[0] + ".");
+		   }
+		    else { 
+	             $("#tooltip").remove(); 
+	           } 
+		});
 }
-
 /**
 * Name: Area's name as defined in the JSON that defines areas and their bounds
 * Percentage: percentage of X in the given area
@@ -865,10 +958,10 @@ function UpdateAreaPercentageTitleData(name, percentage, min, spread, title, dat
 {
 	var num
 	
-	var message = '<div class="chartHolder" style="height:'+kmapInfodivHeight+'px">' + createChart(title, data, name, indicator+"_by_area_chart",unit, min, spread);
+	var message = '<div class="chartHolder" style="height:'+kmapInfodivHeight+'px">' + createHTMLChart(title, data, indicator+"_by_area_chart");
 		
 	//create the chart by for all the indicators of the given question, assuming there's more than one
-	message = createChartByIndicators(message, indicator, name, unit);
+	createChartByIndicators(title, data);
 	
 	message += "</div>";
 	
@@ -922,26 +1015,67 @@ function createChartByIndicators(message, indicator, name, unit)
 	//build the freaking chart this is not that much fun. I should write a JS library that does this for me.
 	//that's a really good idea. I should find someone to pay me to do that. You know it's probably already been done.
 	//it's been done in like every language but javasript, so I just made the below function.
-	message += createChart(name + ": " + questionText, dataForArea, mainIndicatorText, indicator+"_by_indicator_area_chart", unit, min, spread);
+	//message += createHTMLChart(name + ": " + questionText, dataForArea, indicator+"_by_indicator_area_chart");
 	
 	
 	return message;
 }
 
-
-function createChart(title, data, highLightName, id, unit, min, spread)
+function createHTMLChart(title, data, id)
 {
 	
 	//now loop through the data and build the rest of the URL
 	var names = "";
+	var nameDelim = "|";
+	var count = 0; 
+	for(areaName in data)
+	{
+		//handle non-numbers
+		var t = data[areaName]; 
+		if(isNaN(t) || typeof t == "undefined" || t == Number.NEGATIVE_INFINITY || t == Number.POSITIVE_INFINITY)
+		{
+			continue;
+		}
+		
+		count++;
+		areaName = encodeURIComponent(areaName).replace(/ /g, "+");
+		names = nameDelim + areaName + names;
+	}
+
+	var kmapInfochartHeight = (count * (parseInt(kmapInfochartBarHeight) )) + Math.round(parseInt(kmapInfochartXAxisMargin) * 1.7);
+
+	//creates the tab html that contains the chart ids
+	var chartStr = '<div id="'+id+'" class="infowindow"><p class="bubbleheader">'+title
+	+'</p>' +
+	'<div id = "iChartTabs" style= "width: 350px; height:'+ (kmapInfochartHeight + 55) + 'px">' +
+	  		'<ul>' +
+	  			'<li> <a href="#iChartFull">' + "Indicator" + ' </a> </li>' + 
+				'<li> <a href="#iChartLocal">' + "Regional Responses" + '</a> </li>' +
+	  		'</ul>' +
+	  		'<div id= "iChartFull" style= "overflow: auto;">'+
+	  			'<div id="iChartFull' + id + '"  style=" width:300px; height:'+kmapInfochartHeight+'px">' + 
+	  				'</div>' +
+	  			'</div>' +
+	  		'<div id="iChartLocal" style = " width : 320px; position: relative; padding: 0px">' +
+	  			'</div>' + 
+	  	'</div> ';
+		
+
+	//now put all of that together
+	chartStr += '</div>';
+	//console.log(chartStr);
+	return chartStr;
+	
+}
+/*function createChart(title, data, highLightName, id, unit, min, spread){
 	var blues = "";
 	var reds = "";
-	var nameDelim = "|";
 	var numberDelim = ",";
+	 
+	var nameDelim = "|";
 	var count = 0;
 	for(areaName in data)
 	{
-		
 		//handle non-numbers
 		var t = data[areaName]; 
 		if(isNaN(t) || typeof t == "undefined" || t == Number.NEGATIVE_INFINITY || t == Number.POSITIVE_INFINITY)
@@ -951,6 +1085,8 @@ function createChart(title, data, highLightName, id, unit, min, spread)
 
 		
 		count++;
+
+		
 		if(count > 1) //if we're doing this more than once
 		{
 			blues += numberDelim;
@@ -967,16 +1103,18 @@ function createChart(title, data, highLightName, id, unit, min, spread)
 			blues += data[areaName];
 			reds += "0";
 		}
+		
 		//for whatever reason the data names and the data values are in reverse order
 		areaName = encodeURIComponent(areaName).replace(/ /g, "+");
 		
 		names = nameDelim + areaName + names;
 	}
+		
 	//setup the height
 	var kmapInfochartHeight = (count * (parseInt(kmapInfochartBarHeight) + parseInt(kmapInfochartBarHeightMargin))) + Math.round(parseInt(kmapInfochartchxsFont) * 1.7);
-	var kmapInfochart_temp = kmapInfochart.replace("<HEIGHT>", kmapInfochartHeight);
 
-	
+
+	var kmapInfochart_temp = kmapInfochart.replace("<HEIGHT>", kmapInfochartHeight);
 	//setup the range
 	var kmapInfoChartRange = "0,100,0,100";
 	if(unit != "%" || (unit == "%" && min < 0))
@@ -1003,6 +1141,7 @@ function createChart(title, data, highLightName, id, unit, min, spread)
 	}
 	
 	var kmapInfochart_temp = kmapInfochart_temp.replace("<RANGE_LABELS>", kampInfoChartRangeLabels);
+
 	
 	var chartStr = '<div id="'+id+'" class="infowindow"><p class="bubbleheader">'+title
 		+'</p><div id="iChart' + id + '"  style=" width:300px; height:'+kmapInfochartHeight+'px"></div>';
@@ -1012,13 +1151,14 @@ function createChart(title, data, highLightName, id, unit, min, spread)
 		//chartStr += '<img src="'+kmapInfochart_temp; //This is the base of the Google Chart API graph (without the data part). Needs to be defined in the container file.
 		//chartStr += names + '&chd=t:' + blues + nameDelim + reds + '" height="' + kmapInfochartHeight + '" width="' + kmapInfochartWidth + '" />
 		*****************************************************/
-		
+/*
 	//now put all of that together
 	chartStr += '</div>';
 	//console.log(chartStr);
 	return chartStr;
 	
 }
+*/
 
 /**
 * This takes in a set of data and finds the min and max,
@@ -1290,7 +1430,8 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator, to
 	var spreadMin = calculateMinSpread(dataForNational);
 	var min = spreadMin["min"];
 	var spread = spreadMin["spread"];
-	var nationalChart = createChart(questionText + ' ('+kmapAllAdminAreas+')', dataForNational, mainIndicatorText, indicator+"_by_indicator_national_chart", unit, min, spread);
+	var nationalChart = createHTMLChart(questionText + ' ('+kmapAllAdminAreas+')', dataForNational, indicator+"_by_indicator_national_chart");
+	
 	//TODO: fix the national chart
 	//$("#nationalIndicatorChart").html(nationalChart);
 	
