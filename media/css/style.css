@@ -436,6 +436,7 @@ table.data_specify_table{
 table.data_specify_table tr td{
 	border: solid 1px #888;
 	width:100px;
+	vertical-align: text-top;
 	}
 	
 table.data_specify_table tr th.header{
