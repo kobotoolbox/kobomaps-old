@@ -7,14 +7,9 @@
 *************************************************************/
 ?>
 
-<div id="addmapMenu"><?php echo Helper_AddmapSubmenu::make_addmap_menu(2);?></div>	
-<?php  echo "Final - Memory used: ". number_format(memory_get_peak_usage(),0,'.',',');?>
+
 <h2><?php echo __("Add Map - Page 2") ?></h2>
-<ul class="context_menu">
-	<li>
-		<a class="button" id="back_to_maps" href="<?php echo url::base(); ?>mymaps"><?php echo __('Back to My Maps');?></a>
-	</li>
-</ul>
+
 
 <h3><?php echo $map->title;?></h3>
 <p><?php echo $map->description;?></p>
@@ -112,14 +107,16 @@
 	echo Form::hidden('sheet_position',$sheet_position, array('id'=>'sheet_position'));
 	foreach($sheets as $sheet_model)
 	{
-		echo '<div>';	//sheet holding div
+		echo '<div class="data_specify">';	//sheet holding div
+		echo '<p>';
 		echo '<h2>'.__('Sheet').': '.$sheet_model->name;
 		//this doesn't work right now, so turning it off
 		//echo Form::input('sheet_id['.$sheet_model->id.']', $sheet_model->name, array('id'=>'sheet_name'));
 		echo '</h2>';
 		echo __('Ignore this sheet?:');
 		echo Form::checkbox('is_ignored['.$sheet_model->id.']', null, 1==$sheet_model->is_ignored, array('id'=>'ignore_checkbox_'.$sheet_model->id, 'onclick'=>'toggleTable("'.'ignore_checkbox_'.$sheet_model->id.'")'));
-		//echo Form::hidden('sheet_id['.$sheet_model->id.']', 'getId');
+
+		echo '</p>';
 		
 		if($sheet_model->is_ignored == 1)
 		{
@@ -130,7 +127,18 @@
 			$display_style = "";
 		}
 		
-		echo '<div class="data_specify_div" id="data_specify_div_'.$sheet_model->id.'" style="'.$display_style.'" >';
+		echo '<div style="'.$display_style.'" >';
+		
+		$sheet = $sheet_data[$sheet_model->name];
+		
+		echo '<div class="q1"></div>';
+		echo '<div class="q2"></div>';
+		echo '<div class="q3"></div>';
+		
+		
+		
+		echo '<div class="q4" id="data_specify_div_'.$sheet_model->id.'" >';
+		
 		echo '<table class="data_specify_table" id="data_specify_table_'.$sheet_model->id.'">';
 	
 		$sheet = $sheet_data[$sheet_model->name];
@@ -140,7 +148,8 @@
 			//do this if it's the first row
 			if($row_index == 1)
 			{
-				echo '<tr><th></th>';
+				$i = 0;
+				echo '<thead><tr><th class="header firstCol"></th>';
 				foreach($row as $column_index=>$column)
 				{
 					//set a default for each drop down
@@ -168,14 +177,14 @@
 							$column_default = 'total_label';
 						}
 					}
-					echo '<th class="header">';
+					echo '<th class="header"><div class="width"></div><div class="height"></div>';
 					echo $column_index . '<br/>';
 					echo Form::select('column['.$sheet_model->id.']['.$column_index.']', $column_types, $column_default, array('id'=>'column_'.$sheet_model->id.'_'.$column_index));
 					echo '</th>';
 				}
-				echo '</tr>';
+				echo '</tr></thead>';
 			}
-			echo '<tr><td class="header">'.$row_index. ' ';
+			echo '<tr><td class="header"><div class="width"></div><div class="height"></div>'.$row_index. '<br/>';
 			//set a default for each drop down
 			$row_default = trim($data['row'][$sheet_model->id][$row_index]);			
 			if($row_index == 1 AND ($row_default == null OR $row_default == ""))
@@ -186,7 +195,8 @@
 			echo '</td>';
 			foreach($row as $column_index=>$column)
 			{
-				echo '<td class="sheet_'.$sheet_model->id.' row_'.$row_index.' column_'.$column_index.'">'.$column.'</td>';
+				echo '<td class="sheet_'.$sheet_model->id.' row_'.$row_index.' column_'.$column_index.'"><div class="width"></div>'.$column;				
+				echo '<div class="height"></div></td>';
 			}
 			echo '</tr>';
 		}
@@ -194,6 +204,8 @@
 		echo '</table>';
 		echo '</div>';
 		echo '</div>';
+		echo '</div>';
+		
 	}
 	
 	echo "<br/>";

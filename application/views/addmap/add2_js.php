@@ -15,4 +15,17 @@ function toggleTable(elem_id)
 }
 
 
+$(document).ready(function(){
+	   $('.q4').bind('scroll', fnscroll);
+	   $('.q2').html($('.q4').html());
+	   $('.q3').html($('.q4').html());
+	   $('.q2 .firstCol, .q2 td.header, .q3 thead, .q4 thead, .q4 tr td.header, .q4 tr th.header').remove();
+	});
+
+function fnscroll(){
+	$('.q2').scrollLeft($('.q4').scrollLeft());
+	$('.q3').scrollTop($('.q4').scrollTop());
+}
+
+
 </script>

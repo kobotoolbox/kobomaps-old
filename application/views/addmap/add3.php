@@ -7,14 +7,9 @@
 *************************************************************/
 ?>
 
-<div id="addmapMenu"><?php echo Helper_AddmapSubmenu::make_addmap_menu(3);?></div>	
+
 		
 <h2><?php echo __("Add Map - Page 3") ?></h2>
-<ul class="context_menu">
-	<li>
-		<a class="button" id="back_to_maps" href="<?php echo url::base(); ?>mymaps/add2?id=<?php echo $map->id?>"><?php echo __('Back to page 2');?></a>
-	</li>
-</ul>
 
 <h3><?php echo $map->title;?></h3>
 <p><?php echo $map->description;?></p>
@@ -61,8 +56,9 @@
 }
 ?>
 
+<?php if(count($errors) > 0){?>
 <div class="errors">
-	<?php if(count($errors) > 0){ echo '<h2>'.__('Errors').'</h2>';}?>
+	 <?php echo '<h2>'.__('Errors').'</h2>';?>
 	<ul>
 	<?php
 		foreach($errors as $error)
@@ -72,6 +68,7 @@
 	?>
 	</ul>
 </div>
+<?php }?>
 
 <div class="warnings">
 	<?php if(count($warnings) > 0){ echo '<h2>'.__('Warnings').'</h2>';}?>
@@ -106,14 +103,16 @@
  	
 	}
 
+	echo Form::open(NULL, array('id'=>'add_map_form', 'enctype'=>'multipart/form-data'));
+	echo Form::hidden('action','edit', array('id'=>'action'));
+	echo Form::hidden('map_id',$map_id, array('id'=>'map_id'));
+	echo Form::submit('Submit', 'Submit');
+	echo Form::close();
+	
 ?>
 
 </div>
-<div id="bottom nav">
-<h3 class="navback"><a href="<?php echo URL::base();?>mymaps/add2?id=<?php echo $map_id;?>"><?php echo __('Back to Page 2')?></a></h3> 
-<h3 class="navforward"><a href="<?php echo URL::base();?>mymaps/add4?id=<?php echo $map_id;?>"><?php echo __('Forward to Page 4')?></a>
-<div style="clear:both;"></div>
-</div>
+
 
 
 

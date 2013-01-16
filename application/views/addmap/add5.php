@@ -7,14 +7,9 @@
 *************************************************************/
 ?>
 
-<div id="addmapMenu"><?php echo Helper_AddmapSubmenu::make_addmap_menu(5);?></div>	
 		
 <h2><?php echo __("Add Map - Page 5") ?></h2>
-<ul class="context_menu">
-	<li>
-		<a class="button" id="back_to_maps" href="<?php echo url::base(); ?>mymaps/add4?id=<?php echo $map->id?>"><?php echo __('Back to page 4');?></a>
-	</li>
-</ul>
+
 
 <h3><?php echo $map->title;?></h3>
 <p><?php echo $map->description;?></p>

@@ -143,7 +143,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 		//make messages roll up when done
 		$this->template->html_head->messages_roll_up = true;
 		//the name in the menu
-		$this->template->header->menu_page = "mymaps";
 		$this->template->content = view::factory("addmap/add1");
 		$this->template->content->data = $data;
 		$this->template->content->errors = array();
@@ -871,6 +870,24 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
 	 		HTTP::redirect('mymaps/add2/?id='.$map_id);
 	 	}
+	 	
+	 	//check if they've submitted this
+	 	if(!empty($_POST)) // They've submitted the form to update his/her wish
+	 	{
+	 		
+ 			//if we're editing things
+ 			if($_POST['action'] == 'edit')
+ 			{
+ 				//don't change the map creation progress if they've already gone past this point
+ 				if($map->map_creation_progress < 3)
+ 				{
+ 					$map->map_creation_progress = 3;
+ 				}
+ 				$map->save();
+ 				HTTP::redirect('mymaps/add4?id='.$map->id);
+ 			}
+	 	}
+	 			
 
 	 	//grab all the sheet objects too
 	 	$sheets = ORM::factory('Mapsheet')

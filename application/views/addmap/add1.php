@@ -7,12 +7,10 @@
 *************************************************************/
 ?>
 
-<div id="addmapMenu"><?php echo Helper_AddmapSubmenu::make_addmap_menu(1);?></div>	
 		
 <h2><?php echo __("Add Map - Page 1") ?></h2>
 <p><?php echo __("First we'll grab some basic info about your data");?></p>
 
-<a class="button" id="add_back_to_forms" href="<?php echo url::base(); ?>mymaps"><?php echo __('back to My Maps');?></a>
 
 <?php if(count($errors) > 0 )
 {

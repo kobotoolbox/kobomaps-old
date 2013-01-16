@@ -166,19 +166,20 @@ div#subMenu
 	list-style:none;
 	margin:0px;
 	padding:25px 0px 0px 0px;
-	top: -20px;
+	top: -16px;
 	position: absolute;
 	
 }
 #subMenu li{
 	
 	float:left;
-	margin-right: 20px;
+	margin-right: 30px;
+	text-align:center;
 }
 
-#subMenu li a
+#subMenu li a, #subMenu li span 
 {
-	font-size: 16px;
+	font-size: 12px;	
 	color: black;
 	background: none;
 	padding:10px;
@@ -194,24 +195,69 @@ div#subMenu
 }
 
 
-#subMenu li a img{
-	height: 40px;
+#subMenu li img{
+	height: 43px;
+	margin: 0px;
+	padding: 0px;
 }
+
+#subMenu li.greyedout div{
+	opacity : 0.4;
+    filter: alpha(opacity=40);
+}
+
+#subMenu li.active span div{
+	text-shadow: 2px 1px 1px #666;
+}
+
 
 #subMenu img.createNewMap{
 	background: url('../img/submenuSprite.png') -0px 0px;	
-	width:42px;	
+	width:38px;	
 }
 
 #subMenu img.share{
-	background: url('../img/submenuSprite.png') -48px 0px;	
-	width:42px;	
+	background: url('../img/submenuSprite.png') -40px 0px;	
+	width:41px;	
 }
 
 #subMenu img.message{
-	background: url('../img/submenuSprite.png') -90px 0px;	
-	width:42px;	
+	background: url('../img/submenuSprite.png') -88px 0px;	
+	width:38px;	
 }
+
+#subMenu img.basicSetup{
+	background: url('../img/submenuSprite.png') -129px 0px;	
+	width:44px;
+}
+
+#subMenu img.dataStruct{
+	background: url('../img/submenuSprite.png') -177px 0px;	
+	width:38px;
+}
+
+#subMenu img.validation{
+	background: url('../img/submenuSprite.png') -221px 0px;	
+	width:42px;
+}
+
+#subMenu img.geoSetup{
+	background: url('../img/submenuSprite.png') -268px 0px;	
+	width:71px;
+}
+
+#subMenu img.geoMatch{
+	background: url('../img/submenuSprite.png') -345px 0px;	
+	width:69px;
+}
+
+#subMenu img.genMap{
+	background: url('../img/submenuSprite.png') -0px 0px;	
+	width:38px;	
+}
+
+
+
 
 
 
@@ -353,14 +399,35 @@ table.list_table tr td a:hover
 /************************************************************
 						Specify data table
 *************************************************************/
-div.data_specify_div
-{
-	width:980px;
-	height:200px;
-	overflow:scroll;
-	border: solid 3px black;
-	padding:10px;
+
+div.data_specify{
+	width:900px;
 }
+
+.q1, .q2, .q3, .q4 {
+	overflow:hidden; 
+	display:block; 
+	float:left;
+	border: solid 1px gray;
+	}
+
+.q1 {width:96px; height: 50px; border-top:solid 1px white; border-left:solid 1px white;}
+.q2 {width:785px; height: 50px;margin-right:15px;}
+.q3 {width:96px; height: 385px;margin-bottom:15px;}
+.q4 {width:800px; height: 400px; overflow:auto;}
+
+.q2 .firstCol, .q2 td.header, .q3 thead, .q4 thead, .q4 tr td.header, .q4 tr th.header {display:none;}
+
+table.data_specify_table tr th div.width, table.data_specify_table tr td div.width{
+	width:100px;
+	height:1px;
+}
+table.data_specify_table tr th div.height, table.data_specify_table tr td div.height{
+	width:1px;
+	height:50px;
+	float:left;
+}
+
 
 table.data_specify_table{
 	border-collapse:collapse;	
@@ -368,15 +435,16 @@ table.data_specify_table{
 
 table.data_specify_table tr td{
 	border: solid 1px #888;
+	width:100px;
 	}
 	
 table.data_specify_table tr th.header{
-	border: solid 1px #888;
+	border: solid 1px #888;	
 	}
 
 table.data_specify_table tr td.header{
 	text-align:center;
-	font-weight:bold;	
+	font-weight:bold;
 	}
 	
 ul.context_menu{
