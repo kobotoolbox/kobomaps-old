@@ -159,15 +159,14 @@ div#subMenu
 	top: 168px;
 	position: absolute;
 	height:80px;
-	background-image: url('../img/submenu_background')
+	background-image: url('../img/submenu_background');
 }
 #subMenu ul
 {
 	list-style:none;
+	position: relative;	
 	margin:0px;
-	padding:25px 0px 0px 0px;
-	top: -16px;
-	position: absolute;
+	padding:10px 0px 0px 20px;
 	
 }
 #subMenu li{
@@ -182,7 +181,7 @@ div#subMenu
 	font-size: 12px;	
 	color: black;
 	background: none;
-	padding:10px;
+	padding:10px 0px;
 	text-decoration:none;
 
 }
@@ -207,7 +206,7 @@ div#subMenu
 }
 
 #subMenu li.active span div{
-	text-shadow: 2px 1px 1px #666;
+	text-shadow: 0px 0px 4px #ff6602;
 }
 
 
@@ -310,7 +309,7 @@ table.list_table tr th{
 	height:20px;
 }
 
-table.list_table tr td.selectColumn, table tr th.selectColumn
+table tr td.selectColumn, table tr th.selectColumn
 {
 	width:60px;
 	text-align:center;
@@ -324,7 +323,7 @@ table.list_table tr td.lastColumn{
 	width:33px;
 	text-align:center;
 }
-table.list_table tr td.mapName, table tr th.mapName
+table tr td.mapName, table tr th.mapName
 {
 	width:445px;
 }
@@ -411,22 +410,20 @@ div.data_specify{
 	border: solid 1px gray;
 	}
 
-.q1 {width:96px; height: 50px; border-top:solid 1px white; border-left:solid 1px white;}
-.q2 {width:785px; height: 50px;margin-right:15px;}
-.q3 {width:96px; height: 385px;margin-bottom:15px;}
-.q4 {width:800px; height: 400px; overflow:auto;}
+.q1 {width:121px; height: 60px; border-top:solid 1px white; border-left:solid 1px white;}
+.q2 {width:760px; height: 60px;margin-right:15px; background:#aaa;}
+.q3 {width:121px; height: 385px;margin-bottom:15px; background:#aaa;}
+.q4 {width:775px; height: 400px; overflow:auto;}
 
 .q2 .firstCol, .q2 td.header, .q3 thead, .q4 thead, .q4 tr td.header, .q4 tr th.header {display:none;}
 
 table.data_specify_table tr th div.width, table.data_specify_table tr td div.width{
-	width:100px;
-	height:1px;
+	min-width:120px;
+	min-height:50px;
+	padding:5px 0px 0px 5px;
+	vertical-align: top;
 }
-table.data_specify_table tr th div.height, table.data_specify_table tr td div.height{
-	width:1px;
-	height:50px;
-	float:left;
-}
+
 
 
 table.data_specify_table{
@@ -435,18 +432,54 @@ table.data_specify_table{
 
 table.data_specify_table tr td{
 	border: solid 1px #888;
-	width:100px;
-	vertical-align: text-top;
+	vertical-align: top;
 	}
 	
-table.data_specify_table tr th.header{
-	border: solid 1px #888;	
+table.data_specify_table tr th{
+	border: solid 1px #888;
+	vertical-align: top;	
 	}
 
 table.data_specify_table tr td.header{
 	text-align:center;
 	font-weight:bold;
 	}
+	
+	
+/********************************/
+/*		Template select stuff
+/********************************/
+	
+div.template_select table{
+	width: 900px;
+}
+
+div.template_select .q2, div.template_select .q4
+{
+	float:none;
+	width:900px;
+}
+
+div.template_select .q4{
+	height: 400px;
+	overflow:scroll;
+	overflow-x:hidden;
+	overflow-y:scroll;
+}
+
+div.template_select .q2{
+	height: 40px;
+	overflow:hidden;	
+}
+div.template_select .q2 table tr th{	
+	vertical-align:middle;
+	height:40px;
+}
+
+div.template_select .q4 table tr th{
+	max-height:1px;
+}
+
 	
 ul.context_menu{
 	float:right;
@@ -463,13 +496,13 @@ ul.context_menu{
 
 .mapWLoading{
 	position:relative;
-	width:1000px; 
+	width:900px; 
 	height:400px;	
 }
 
 .mapWLoading div#map_div{
 	position:absolute;
-	width:1000px; 
+	width:900px; 
 	height:400px;
 	top:0px;
 	left:0px	
@@ -559,6 +592,10 @@ a, a:visited, a:link{
 
 select.needstobemapped{
 	border: 3px solid #FF9900;
+}
+span#notAutoMatchedCount{
+	color:#FF9900;
+	font-weight:bold;
 }
 
 

@@ -64,11 +64,14 @@
 	echo Form::hidden('map_id',$map_id, array('id'=>'map_id'));
 	echo Form::hidden('sheet_position',$sheet_position, array('id'=>'sheet_position'));
 	//keep track of how many sheets
+	
+	echo '<p>'.__('Number of regions that couldn\'t be automatically matched:'). ' <span id="notAutoMatchedCount"></span></p>';
 
 	foreach($sheets as $sheet)
 	{
 		echo '<h2>'.__('Sheet').': '.$sheet->name.'</h2>';
 		echo '<table>';
+		$not_matched_count = 0;
 		foreach($region_columns[$sheet->id] as $column)
 		{
 			$header_row = $header_rows[$sheet->id];
@@ -98,6 +101,7 @@
 
 				$selected = 0;
 				$extras_array['class'] = 'needstobemapped';
+				$not_matched_count++;
 			}
 
 			echo Form::select('region['.$sheet->id.']['.$column->id.']', $map_regions,$selected, $extras_array);
@@ -120,5 +124,10 @@
 	echo "<br/>";
 	echo Form::submit('Submit', 'Submit');
 	echo Form::close();
+	if($not_matched_count > 0)
+	{
+		echo '<script type="text/javascript">$(document).ready(function(){
+	   		$("#notAutoMatchedCount").text("'.$not_matched_count.'");});</script>';
+	}
 ?>
 

@@ -68,45 +68,53 @@
 ?>
 
 
-<div class="data_specify_div">
-	<table >
-		<tr>
-			<th><?php echo __('Select')?></th>
-			<th><?php echo __('Title')?></th>
-			<th><?php echo __('Description')?></th>
-			<th><?php echo __('Admin Level')?></th>
-			<th><?php echo __('Decimals')?></th>
-		</tr>	
-	
-<?php 	
-	
-	if(count($templates) == 0)
-	{
-		echo '<tr><td colspan="4">'.__('There are no templates').'</td></tr>';
-	}
-	foreach($templates as $template)
-	{
-		if($template->id != 0){
-			echo '<tr>';
-			echo '<td>';
-			echo Form::radio('template_id', $template->id, $data['template_id'] == $template->id, array('onchange'=>'renderMap("'.$template->file.'",'.$template->lat.','.$template->lon.','.$template->zoom.'); return false;'));
-			echo '</td>';
-			echo '<td><a href="#" onclick="renderMap(\''.$template->file.'\','.$template->lat.','.$template->lon.','.$template->zoom.'); return false;">'.$template->title.'</a></td>';
-			echo '<td>'.$template->description.'</td>';
-			echo '<td>'.$template->admin_level.'</td>';
-			echo '<td>'.($template->decimals == -1 ? 'No Rounding':$template->decimals).'</td>';
-			echo '</tr>';
-		}
-	}
+<div class="data_specify template_select">
 
-?>
-	</table>
+	<div class="q2">
+		<table class="data_specify_table">
+			<thead>
+				<tr>
+					<th class="selectColumn"><div><?php echo __('Select')?></div></th>
+					<th style="width:300px;"><div><?php echo __('Title')?></div></th>
+					<th style="width:300px;"><div><?php echo __('Description')?></div></th>
+					<th style="width:100px;"><div><?php echo __('Admin Level')?></div></th>
+					<th><div><?php echo __('Decimals')?></div></th>
+				</tr>	
+			</thead>
+		</table>
+	</div>
+	<div class="q4">
+		<table class="data_specify_table">
+	<?php 	
+		
+		if(count($templates) == 0)
+		{
+			echo '<tr><td colspan="4">'.__('There are no templates').'</td></tr>';
+		}
+		foreach($templates as $template)
+		{
+			if($template->id != 0){
+				echo '<tr>';
+				echo '<td class="selectColumn">';
+				echo Form::radio('template_id', $template->id, $data['template_id'] == $template->id, array('onchange'=>'renderMap("'.$template->file.'",'.$template->lat.','.$template->lon.','.$template->zoom.'); return false;'));
+				echo '</td>';
+				echo '<td style="width:300px;"><a href="#" onclick="renderMap(\''.$template->file.'\','.$template->lat.','.$template->lon.','.$template->zoom.'); return false;">'.$template->title.'</a></td>';
+				echo '<td style="width:300px;">'.$template->description.'</td>';
+				echo '<td style="width:100px;">'.$template->admin_level.'</td>';
+				echo '<td>'.($template->decimals == -1 ? 'No Rounding':$template->decimals).'</td>';
+				echo '</tr>';
+			}
+		}
+	
+	?>
+		</table>
+	</div>
 </div>
 
 
 <!-- map display -->
 <br />
-<p> Adjust the default view of the map</p>
+<p> <?php echo __('Pan and zoom the map to adjust what the default view will be for the map')?></p>
 <div class="mapWLoading">
 	<div id="map_div"></div>	
 	<div id="map_loading"></div>

@@ -177,14 +177,14 @@
 							$column_default = 'total_label';
 						}
 					}
-					echo '<th class="header"><div class="width"></div><div class="height"></div>';
+					echo '<th class="header"><div class="width">';
 					echo $column_index . '<br/>';
 					echo Form::select('column['.$sheet_model->id.']['.$column_index.']', $column_types, $column_default, array('id'=>'column_'.$sheet_model->id.'_'.$column_index));
-					echo '</th>';
+					echo '</div></th>';
 				}
 				echo '</tr></thead>';
 			}
-			echo '<tr><td class="header"><div class="width"></div><div class="height"></div>'.$row_index. '<br/>';
+			echo '<tr><td class="header"><div class="width">'.$row_index. '<br/>';
 			//set a default for each drop down
 			$row_default = trim($data['row'][$sheet_model->id][$row_index]);			
 			if($row_index == 1 AND ($row_default == null OR $row_default == ""))
@@ -192,11 +192,11 @@
 				$row_default = 'header';
 			}
 			echo Form::select('row['.$sheet_model->id.']['.$row_index.']', $row_types, $row_default, array('id'=>'row_'.$sheet_model->id.'_'.$row_index));
-			echo '</td>';
+			echo '</div></td>';
 			foreach($row as $column_index=>$column)
 			{
-				echo '<td class="sheet_'.$sheet_model->id.' row_'.$row_index.' column_'.$column_index.'"><div class="width"></div>'.$column;				
-				echo '<div class="height"></div></td>';
+				echo '<td class="sheet_'.$sheet_model->id.' row_'.$row_index.' column_'.$column_index.'"><div class="width">'.$column;				
+				echo '</div></td>';
 			}
 			echo '</tr>';
 		}
