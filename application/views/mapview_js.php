@@ -702,6 +702,8 @@ function DrawDataGraph(id, name){
 			regionData = dataPtr;
 		}
 	}
+
+	console.log(regionData);
 	
 	//contains the path given by the id to access the data
 	var dataPath = dataPtr.data;
@@ -820,8 +822,9 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 
      //check to see if the region has any data, if not, don't draw the graph
      var data = false;
+     console.log(graphXData);
      for(i in graphXData){
-         if(graphXData[i][0] != 0){
+         if(!isNaN(graphXData[i][0])){
              data = true;
              break;
          }
@@ -1146,12 +1149,10 @@ function createHTMLChart(title, data, id)
 	var chartStr = '<div id="'+id+'" class="infowindow"><p class="bubbleheader">'+title
 		+'</p><div id="iChart' + id + '"  style=" width:300px; height:'+kmapInfochartHeight+'px"></div>';
 
-		/*************************************************
-		//the code below is the code that's needed to create the image based charts
-		//chartStr += '<img src="'+kmapInfochart_temp; //This is the base of the Google Chart API graph (without the data part). Needs to be defined in the container file.
-		//chartStr += names + '&chd=t:' + blues + nameDelim + reds + '" height="' + kmapInfochartHeight + '" width="' + kmapInfochartWidth + '" />
-		*****************************************************/
-/*
+		the code below is the code that's needed to create the image based charts
+		chartStr += '<img src="'+kmapInfochart_temp; //This is the base of the Google Chart API graph (without the data part). Needs to be defined in the container file.
+		chartStr += names + '&chd=t:' + blues + nameDelim + reds + '" height="' + kmapInfochartHeight + '" width="' + kmapInfochartWidth + '" />
+		
 	//now put all of that together
 	chartStr += '</div>';
 	//console.log(chartStr);
