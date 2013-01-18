@@ -217,7 +217,8 @@ function parseJsonData(jsonDataUrl)
 		var initialId=1;
 
 		var sheetCount = 0;
-		
+
+		var lastSheetId = null;
 		//loop over the sheets and create HTML for them
 		for(sheetId in mapData.sheets)
 		{
@@ -240,8 +241,13 @@ function parseJsonData(jsonDataUrl)
 				initialId=sheetId;
 			}
 
+			lastSheetId = sheetId;
+
 			sheetCount++;
 		}
+
+		//mark the last sheet so we use it in measurement later on
+		$("#sheetSelector_"+lastSheetId).addClass('lastSheetSelector');
 
 		
 
@@ -1560,14 +1566,16 @@ function addCommas(nStr)
  * Also setup these two global variables for storing how far down we've scrolled
  */
  var sheetsScrollOffset = 0;
+ var currentHeight = 0;
 function setup_scrolling()
 {
+
+	
 	$("#sheetnamesRightControl a").click(scrollSheetsDown);
 	$("#sheetnamesLeftControl a").click(scrollSheetsUp);
 	
-	///////////////////////////////////////////////////////////////////////////////////////
-	//TODO: figure out how to scroll to the selected sheet
-	///////////////////////////////////////////////////////////////////////////////////////
+	//we want to scroll from the top, not the bottom, so lop off the pixels from the top of the last row to it's bottom
+	currentHeight = -($(".lastSheetSelector").offset().top);
 	
 	
 	scrollSheets(0); //initialize things
@@ -1595,9 +1603,6 @@ function scrollSheetsDown()
  */
 function scrollSheets(delta)
 {
-	
-	//we want to scroll from the top, not the bottom, so lop off the pixels from the top of the last row to it's bottom
-	var currentHeight = -($("#sheetnames")[0].scrollHeight - $("#sheetnames").height());
 
 	if(delta > 0 && (sheetsScrollOffset + delta) <= 0 ) //scrolling up
 	{
