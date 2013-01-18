@@ -1570,32 +1570,20 @@ function addCommas(nStr)
 function setup_scrolling()
 {
 
-	
-	$("#sheetnamesRightControl a").click(scrollSheetsDown);
-	$("#sheetnamesLeftControl a").click(scrollSheetsUp);
-	
-	//we want to scroll from the top, not the bottom, so lop off the pixels from the top of the last row to it's bottom
 	currentHeight = -($(".lastSheetSelector").offset().top);
+	
+	$("#sheetnamesRightControl a").click(function(){scrollSheets(-$("#sheetnames").height());});
+	$("#sheetnamesLeftControl a").click(function(){scrollSheets($("#sheetnames").height());});
+
+	$("#sheetnamesStartControl a").click(function(){scrollSheets(-sheetsScrollOffset);});
+	$("#sheetnamesEndControl a").click(function(){scrollSheets(currentHeight-sheetsScrollOffset);});
+	
+	
 	
 	
 	scrollSheets(0); //initialize things
 }
 
-/**
- * Handle scrolling the list of longitudenal data, or sheets, up.
- */
-function scrollSheetsUp()
-{
-	scrollSheets($("#sheetnames").height());
-}
-
-/**
- * Handle scrolling the list of longitudenal data, or sheets, down.
- */
-function scrollSheetsDown()
-{
-	scrollSheets(-$("#sheetnames").height());
-}
 
 /**
  * Handle scrolling the list of longitudenal data, or sheets, down.
@@ -1619,18 +1607,22 @@ function scrollSheets(delta)
 	if(sheetsScrollOffset == 0)
 	{
 		$("#sheetnamesLeftControl a").addClass('inactive');
+		$("#sheetnamesStartControl a").addClass('inactive');
 	}
 	else
 	{
 		$("#sheetnamesLeftControl a").removeClass('inactive');
+		$("#sheetnamesStartControl a").removeClass('inactive');
 	}
 	if(sheetsScrollOffset == currentHeight)
 	{
 		$("#sheetnamesRightControl a").addClass('inactive');
+		$("#sheetnamesEndControl a").addClass('inactive');
 	}
 	else
 	{
 		$("#sheetnamesRightControl a").removeClass('inactive');
+		$("#sheetnamesEndControl a").removeClass('inactive');
 	}
 
 }

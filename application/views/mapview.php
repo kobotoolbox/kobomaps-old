@@ -34,11 +34,13 @@
 ?>
 <div id="sheetlinks">
 	<div id="mapName"><?php echo $map->title;?></div>
+	<div id="sheetnamesStartControl" class="sheetScrollerControll"><a href="#">&lt;&lt;</a></div>
 	<div id="sheetnamesLeftControl" class="sheetScrollerControll"><a href="#">&lt;</a></div>
 	<div id="sheetnamesWrapper">		
 		<ul id=sheetnames></ul>		
 	</div>
 	<div id="sheetnamesRightControl" class="sheetScrollerControll"><a href="#">&gt;</a></div>
+	<div id="sheetnamesEndControl" class="sheetScrollerControll"><a href="#">&gt;&gt;</a></div>
 	<div id="mapSocialShare">
 		<a href="#">
 		<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('share');?>
