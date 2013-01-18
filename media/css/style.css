@@ -10,6 +10,10 @@ body
 	font-size:16px;
 }
 
+img {
+	border:none;
+}
+
 div#page
 {
 	width: 900px;
@@ -26,6 +30,12 @@ div#header{
 
 a#headerImage{
 	position:absolute;
+	text-decoration:none;
+	border:none;
+}
+
+a#headerImage img{
+	border: none;
 }
 
 /************************************************************
