@@ -93,6 +93,7 @@ var round = true;
 	   $("#kmapTitle").html('<?php echo $map->title;?>');
 	   
 	   initialize_map();
+	   initialize_buttons();
 	});
 
 
@@ -119,8 +120,8 @@ function initialize_map() {
 	  //we can't use bottom when dragging. We can only use top
 	  var height = $("#topbar").height();
 	  var screenHeight = $(window).height();
-	  // var top = screenHeight - (height + 48); 
-	  // $("#topbar").css("top", top+"px");
+	   var top = screenHeight - (height + 48); 
+	   $("#topbar").css("top", top+"px");
 	  
 	  
 	//creates the options for defining the zoom level, map type, and center of the google map
@@ -434,7 +435,9 @@ function showByIndicator(indicator)
 	//now add active to the one sheet that needs it
 	$("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).addClass("active");
 	//scroll to the just highlighted sheet
-	scrollSheets(-($("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).offset().top));
+	currentListTop = $("#sheetnames").offset().top;
+	currentTopOfSelectedItem = $("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).offset().top
+	scrollSheets(-(currentTopOfSelectedItem-currentListTop));
 	$("li.sheet").hide();
 	$("li.sheet").removeClass("active");
 	$("li.sheet#sheetli_"+sheetId).show();
@@ -486,7 +489,6 @@ function showByIndicator(indicator)
 		}
 		
 		UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel);
-		
 		$.address.parameter("indicator", indicator);
 	
 		//check and see if there is a source to link to
@@ -714,7 +716,7 @@ function DrawDataGraph(id, name){
 		}
 	}
 
-	console.log(regionData);
+	
 	
 	//contains the path given by the id to access the data
 	var dataPath = dataPtr.data;
@@ -1565,23 +1567,48 @@ function addCommas(nStr)
  * 
  * Also setup these two global variables for storing how far down we've scrolled
  */
- var sheetsScrollOffset = 0;
- var currentHeight = 0;
+ 
+ var sheetsHeight = 0;
 function setup_scrolling()
 {
 
-	currentHeight = -($(".lastSheetSelector").offset().top);
 	
-	$("#sheetnamesRightControl a").click(function(){scrollSheets(-$("#sheetnames").height());});
-	$("#sheetnamesLeftControl a").click(function(){scrollSheets($("#sheetnames").height());});
+	
 
-	$("#sheetnamesStartControl a").click(function(){scrollSheets(-sheetsScrollOffset);});
-	$("#sheetnamesEndControl a").click(function(){scrollSheets(currentHeight-sheetsScrollOffset);});
+	sheetsHeight = ($("#sheetnames").offset().top)-($(".lastSheetSelector").offset().top);
+	if(sheetsHeight < 0) //only show all of this if there's somewhere to scroll to
+	{
+	$("#sheetnamesRightControl a").click(function(){scrollSheets(-$("#sheetnames").height()); return false;});
+	$("#sheetnamesLeftControl a").click(function(){scrollSheets($("#sheetnames").height()); return false;});
+
+	$("#sheetnamesStartControl a").click(function(){
+		var currentTopOfDispaly = $("#sheetlinks").offset().top;
+		var currentListTop = $("#sheetnames").offset().top;
+		var actualOffset = currentListTop - currentTopOfDispaly;
+		var newOffset = -actualOffset;
+		scrollSheets(newOffset);
+		 return false;
+	});
+
 	
-	
-	
-	
+	$("#sheetnamesEndControl a").click(function(){
+		var currentTopOfDispaly = $("#sheetlinks").offset().top;
+		var currentListTop = $("#sheetnames").offset().top;
+		var actualOffset = currentListTop - currentTopOfDispaly;
+		var newOffset = sheetsHeight - actualOffset;
+		scrollSheets(newOffset);
+		return false;
+	});
+		
 	scrollSheets(0); //initialize things
+	}
+	else
+	{
+		$("#sheetnamesRightControl a").hide();
+		$("#sheetnamesLeftControl a").hide();
+		$("#sheetnamesStartControl a").hide();
+		$("#sheetnamesEndControl a").hide();
+	}
 }
 
 
@@ -1591,20 +1618,32 @@ function setup_scrolling()
  */
 function scrollSheets(delta)
 {
-
-	if(delta > 0 && (sheetsScrollOffset + delta) <= 0 ) //scrolling up
+	//Get some base lines
+	var increment = $("#sheetnames").height();
+	var currentTopOfDispaly = $("#sheetlinks").offset().top;
+	var currentListTop = $("#sheetnames").offset().top;
+	var actualOffset = currentListTop - currentTopOfDispaly;
+	
+	//make sure actualOffset is a multiple of increment
+	if(actualOffset % increment != 0)
 	{
-		sheetsScrollOffset += delta;
-		$("#sheetnames").animate({top:sheetsScrollOffset, left:0},300);
-	}
-	else if (delta < 0 && (sheetsScrollOffset + delta) >= currentHeight)
-	{
-		sheetsScrollOffset += delta;
-		$("#sheetnames").animate({top:sheetsScrollOffset, left:0},300);
+		actualOffset = (actualOffset/increment).round();
 	}
 
+	if(delta > 0 && (actualOffset + delta) <= 0 ) //scrolling up
+	{
+		actualOffset += delta;
+		$("#sheetnames").animate({top:actualOffset},300);
+	}
+	else if (delta < 0 && (actualOffset + delta) >= sheetsHeight) //scrolling down
+	{
+		actualOffset += delta;
+		$("#sheetnames").animate({top:actualOffset},300);
+	}
+
+	
 	//make the scroll up, button inactive if need be
-	if(sheetsScrollOffset == 0)
+	if(actualOffset == 0)
 	{
 		$("#sheetnamesLeftControl a").addClass('inactive');
 		$("#sheetnamesStartControl a").addClass('inactive');
@@ -1614,7 +1653,7 @@ function scrollSheets(delta)
 		$("#sheetnamesLeftControl a").removeClass('inactive');
 		$("#sheetnamesStartControl a").removeClass('inactive');
 	}
-	if(sheetsScrollOffset == currentHeight)
+	if(actualOffset == sheetsHeight)
 	{
 		$("#sheetnamesRightControl a").addClass('inactive');
 		$("#sheetnamesEndControl a").addClass('inactive');
@@ -1624,7 +1663,19 @@ function scrollSheets(delta)
 		$("#sheetnamesRightControl a").removeClass('inactive');
 		$("#sheetnamesEndControl a").removeClass('inactive');
 	}
+	
 
+}
+
+
+/**
+ * This function is called to initialize the event handlers for the buttons on this page,
+ * like the share button and the fullscreen button
+ */
+ var headerOffset = 0;
+function initialize_buttons()
+{
+	$("#fullScreenButton").click(function(){$("#siteHeader").toggle(); return false;});
 }
 
 </script>

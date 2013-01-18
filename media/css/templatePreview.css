@@ -58,28 +58,6 @@
 
 
 
-/* Info div at the bottom */
-#bottombar {position:absolute;bottom:90px;left:355px;z-index:999;}
-#bottombar a {display:inline;}
-
-/* Div holding the indicator list */
-div#maplinks {top:0;left:0;height:100%;width:350px;overflow-y:auto;overflow-x:hidden;position:absolute;z-index:1001;background:url(../img/w75b.png) repeat scroll;text-align:left;}
-div#maplinks h3 {margin: 50px 5px 0;font-family: Helvetica,Arial,sans-serif;}
-div#maplinks p {padding:10px 5px 10px;margin:0px;font-size:10px;line-height:14px;font-weight:bold;border-bottom:1px solid white;}
-div#maplinks p#loadingtext {border: medium none;font-size: 1em;line-height: 2em;padding:15px 5px;margin:25% 10px 0;border:1px solid #777777;color:#777777;text-align:center;background:url(../img/loading.gif) no-repeat scroll 50% 39px #ffffff;}
-#maplinks a, a:link, #maplinks a:visited  {text-decoration:none;color:#000;}
-#maplinks  a:hover, #maplinks  a:active, #maplinks  a.active, #maplinks  li.active a {text-decoration:none;background-color:#E59595;color:#fff}
-
-/* Styling the indicator list */
-span.level1 {;color: #000;display: block;margin:0.5em 0;padding: 0.4em 0;border-bottom: 1px solid #bbb;font-size:1.1em;}
-span.level1.active, span.hover {border-bottom: 1px solid #E59595;}
-ul.questionsindicators {font:normal 0.8em/1.4 Verdana, sans-serif;margin:1.5em 0 0;padding:0;}
-li.level1 {margin: 0.15em 0 0.15em 0.5em;padding: 0;font:bold 1em/1 Verdana,sans-serif;color:#919191;list-style:none;cursor:pointer;}
-ul.level1 {margin: 0.3em 0 1em;padding: 0;cursor:default;} /* hidden by default using the js file */
-li.level2 {margin: 0.15em 0 0.8em 1.2em;list-style: none outside none;color:#000000;font-weight:bold;text-transform:none}
-ul.level2 {margin: 0.5em 0 0.3em;padding: 0;list-style:none;}
-li.level3 {margin:0 0 0 2em; padding:0;font: 0.9em/1.4 Verdana,sans-serif;text-transform:none;}
-
 /* Pop up bubbles created through Gmaps */
 .bubbleheader {font-weight:bold;}
 div.infowindow {border:1px solid #a1a1a1;padding:10px 0 0 5px}

@@ -210,7 +210,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 					$_POST['map_creation_progress'] = 1;	//$map->map_creation_progress;
 				}
 				//this handles is private
-				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;				
+				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;		
+				//hanlde the status
+				if($map->map_creation_progress != null)
+				{
+					$_POST['map_creation_progress'] = $map->map_creation_progress; 
+				}		
 				$map->update_map($_POST);
 				
 				

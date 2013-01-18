@@ -11,15 +11,27 @@
 <html> 
 <head> 
 	
+	<link href="<?php echo URL::base();?>media/css/style.css" type="text/css" rel="stylesheet">
 	<?php echo $html_head;?>
+	
 	
 <title>Kobomap::<?php echo $map->title;?></title>
 </head> 
 		
-<body>		
+<body>
+<?php 
+	echo '<div id="siteHeader" ';
+	if(isset($_GET['fullscreen'])){ echo 'style="display:none;"';}
+	echo '>';
+	$header = new View('header');
+	$header->menu_page = $menu_page;
+	$header->user = $user;
+	echo $header;
+	echo '</div>';
+ 
+?>		
 <div id="maplinks"	>
 	<div style="height:60px;width:10px;"></div>
-	<span><a href="<?php echo URL::base();?>mymaps"><?php echo __('Back to My Maps')?></a></span>
 	<p id="mapHelpText">Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.</p>
 	<p id="descriptionText"><?php echo $map->description;?></p>
 		<ul id="questionsindicators" class="questionsindicators" >	</ul>
@@ -34,16 +46,19 @@
 ?>
 <div id="sheetlinks">
 	<div id="mapName"><?php echo $map->title;?></div>
-	<div id="sheetnamesStartControl" class="sheetScrollerControll"><a href="#">&lt;&lt;</a></div>
-	<div id="sheetnamesLeftControl" class="sheetScrollerControll"><a href="#">&lt;</a></div>
+	<div id="sheetnamesStartControl" class="sheetScrollerControll"><a href="">&lt;&lt;</a></div>
+	<div id="sheetnamesLeftControl" class="sheetScrollerControll"><a href="">&lt;</a></div>
 	<div id="sheetnamesWrapper">		
 		<ul id=sheetnames></ul>		
 	</div>
-	<div id="sheetnamesRightControl" class="sheetScrollerControll"><a href="#">&gt;</a></div>
-	<div id="sheetnamesEndControl" class="sheetScrollerControll"><a href="#">&gt;&gt;</a></div>
+	<div id="sheetnamesRightControl" class="sheetScrollerControll"><a href="">&gt;</a></div>
+	<div id="sheetnamesEndControl" class="sheetScrollerControll"><a href="">&gt;&gt;</a></div>
 	<div id="mapSocialShare">
-		<a href="#">
-		<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('share');?>
+		<a id="shareButton" href="">
+		<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
+		</a>
+		<a id="fullScreenButton" href="">
+		<img class="fullscreen" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
 		</a>
 	</div>
 	
@@ -57,7 +72,7 @@
 <?php
 //The legend
 ?>
-<div id="topbar" class="drsElement drsMoveHandle" style="left:355px; top: 60px;">
+<div id="topbar" class="drsElement drsMoveHandle" style="left:355px; top: 400px;">
 	 
 	<div id="legend">
 

@@ -1,11 +1,12 @@
 html {height: 100%; overflow:hidden;}
 body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;color: #404040;}
+#siteHeader{width:900px;margin:0px auto;padding:0px}
 #waiting{background:url(../img/loading.gif) no-repeat scroll;width:20px;height:20px;margin:0 auto;}
 #map_canvas {width: 100%; height: 100%; min-height: 555px; min-width: 500px; position: relative;} /* Fills the entire page */
 
 /* Legend */
 #topbar, #bottombar {background: url("../img/b40.png") repeat scroll 0 0 transparent;padding:5px}
-#topbar {left: 355px;position: absolute;/*bottom: 48px;*/z-index: 999;width:325px;}
+#topbar {left: 355px;position: absolute; /*top:448px*/; z-index: 999;width:325px;}
 #legend {float:left;background:url(../img/w75b.png) repeat scroll;padding:3px; border:1px solid #ffffff;width:317px;text-align:left;}
 #legendtext {margin:0 0 4px;}
 #legendtext span {}
@@ -63,7 +64,7 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 #bottombar a {display:inline;}
 
 /* Div holding the indicator list */
-div#maplinks {top:0;left:0;height:100%;width:350px;overflow-y:auto;overflow-x:hidden;position:absolute;z-index:1001;background:white;text-align:left;}
+div#maplinks {left:0;height:100%;width:350px;overflow-y:auto;overflow-x:hidden;position:absolute;z-index:1001;background:white;text-align:left;}
 div#maplinks h3 {margin: 50px 5px 0;font-family: Helvetica,Arial,sans-serif;}
 div#maplinks p {padding:10px 5px 10px;margin:0px;font-size:10px;line-height:14px;font-weight:bold;border-bottom:1px solid white;}
 div#maplinks p#loadingtext {border: medium none;font-size: 1em;line-height: 2em;padding:15px 5px;margin:25% 10px 0;border:1px solid #777777;color:#777777;text-align:center;background:url(../img/loading.gif) no-repeat scroll 50% 39px #ffffff;}
@@ -71,7 +72,7 @@ div#maplinks p#loadingtext {border: medium none;font-size: 1em;line-height: 2em;
 #maplinks  a:hover, #maplinks  a:active, #maplinks  a.active, #maplinks  li.active a {text-decoration:none;background-color:#E59595;color:#fff}
 
 /* Div at the bottom for selecting different sheets */
-div#sheetlinks {top: 0; left: 0; height:40px; width:100%; position:absolute; background:#6e6e6e; z-index: 1002; padding:0;overflow:hidden;}
+div#sheetlinks {left: 0; height:40px; width:100%; position:absolute; background:#6e6e6e; z-index: 1002; padding:0;overflow:hidden;}
 #sheetnames {float:left; width:100%; height:40px; padding:0; margin:0; color:white;position:relative;}
 div#sheetlinks li.sheet2 {display: block; width: 100px; height: 40px; float: left; text-align:center; margin:0px;vertical-align:middle;}
 div#sheetlinks li.sheet2 span {margin:0px; padding:0px 0px;padding-top:10px;height:30px;vertical-align:middle;color:white;font-size:14px;}
@@ -81,7 +82,7 @@ div#sheetlinks a {color:white;}
 div#sheetlinks div#mapName {float:left;padding:10px 30px 10px 30px;font-weight:bold;font-size:20px;color:white;width:280px;}
 div#sheetlinks div.sheetScrollerControll{float:left;font-size:40px;font-weight:bold;padding:10px 10px;color:white;width:auto;margin-left:auto;}
 div#sheetlinks div.sheetScrollerControll a.inactive{color:gray;cursor:default}
-div#sheetlinks div#mapSocialShare{float:right;width:50px;}
+div#sheetlinks div#mapSocialShare{float:right;width:60px;}
 div#sheetlinks div#sheetnamesWrapper{float:left;width:400px;height:40px;overflow:hidden;}
 div#sheetlinks div#mapSocialShare img.share{
 	background: url('../img/tasksSprite.png') -110px 0px;	
@@ -90,7 +91,13 @@ div#sheetlinks div#mapSocialShare img.share{
 	background-repeat: no-repeat;
 	margin: 5px 0px
 	}			
-
+div#sheetlinks div#mapSocialShare img.fullscreen{
+	background: url('../img/tasksSprite.png') -192px 0px;	
+	width:27px;
+	height:27px;
+	background-repeat: no-repeat;
+	margin: 5px 0px
+	}	
 
 /* Styling the indicator list */
 span.sheet2 {color: #000;display: block;margin:0.5em 0;padding: 0.4em 0;font-size:1.7em;}

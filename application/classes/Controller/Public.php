@@ -25,6 +25,8 @@ class Controller_Public extends Controller_Main {
 	 		HTTP::redirect('mymaps');
 	 	}
 	 		
+	 	$user = null;
+	 	
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	 
@@ -71,6 +73,9 @@ class Controller_Public extends Controller_Main {
 	 	$js->map = $map;
 	 	$js->template = $map_template;
 	 	$view->html_head = $js;
+	 	
+	 	$view->menu_page = 'mapview';
+	 	$view->user = $user;
 	 	
 	 	echo $view;
 	 	
