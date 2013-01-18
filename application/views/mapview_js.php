@@ -243,11 +243,12 @@ function parseJsonData(jsonDataUrl)
 			sheetCount++;
 		}
 
-		setup_scrolling();
+		
 
 		if(sheetCount > 1)
 		{
 			$('#sheetlinks').show();
+			setup_scrolling();
 		}
 		
 		
@@ -270,6 +271,7 @@ function parseJsonData(jsonDataUrl)
 
 		//Default selects first sheet 
 		sheetSelect(initialId);
+		
 		
 		
 		
@@ -425,7 +427,8 @@ function showByIndicator(indicator)
 	$("ul#sheetnames li.sheet2 span").removeClass("active");
 	//now add active to the one sheet that needs it
 	$("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).addClass("active");
-	//now make sure the correct list of indicators is showing
+	//scroll to the just highlighted sheet
+	scrollSheets(-($("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).offset().top));
 	$("li.sheet").hide();
 	$("li.sheet").removeClass("active");
 	$("li.sheet#sheetli_"+sheetId).show();
