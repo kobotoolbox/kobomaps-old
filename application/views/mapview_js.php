@@ -243,6 +243,8 @@ function parseJsonData(jsonDataUrl)
 			sheetCount++;
 		}
 
+		setup_scrolling();
+
 		if(sheetCount > 1)
 		{
 			$('#sheetlinks').show();
@@ -1549,6 +1551,80 @@ function addCommas(nStr)
 }
 
 
+/**
+ * Sets up scrolling of the longitudenal data, AKA sheets
+ * 
+ * Also setup these two global variables for storing how far down we've scrolled
+ */
+ var sheetsScrollOffset = 0;
+function setup_scrolling()
+{
+	$("#sheetnamesRightControl a").click(scrollSheetsDown);
+	$("#sheetnamesLeftControl a").click(scrollSheetsUp);
+	
+	///////////////////////////////////////////////////////////////////////////////////////
+	//TODO: figure out how to scroll to the selected sheet
+	///////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	scrollSheets(0); //initialize things
+}
 
+/**
+ * Handle scrolling the list of longitudenal data, or sheets, up.
+ */
+function scrollSheetsUp()
+{
+	scrollSheets($("#sheetnames").height());
+}
+
+/**
+ * Handle scrolling the list of longitudenal data, or sheets, down.
+ */
+function scrollSheetsDown()
+{
+	scrollSheets(-$("#sheetnames").height());
+}
+
+/**
+ * Handle scrolling the list of longitudenal data, or sheets, down.
+ * @param delta int - How far up or down to scroll
+ */
+function scrollSheets(delta)
+{
+	
+	//we want to scroll from the top, not the bottom, so lop off the pixels from the top of the last row to it's bottom
+	var currentHeight = -($("#sheetnames")[0].scrollHeight - $("#sheetnames").height());
+
+	if(delta > 0 && (sheetsScrollOffset + delta) <= 0 ) //scrolling up
+	{
+		sheetsScrollOffset += delta;
+		$("#sheetnames").animate({top:sheetsScrollOffset, left:0},300);
+	}
+	else if (delta < 0 && (sheetsScrollOffset + delta) >= currentHeight)
+	{
+		sheetsScrollOffset += delta;
+		$("#sheetnames").animate({top:sheetsScrollOffset, left:0},300);
+	}
+
+	//make the scroll up, button inactive if need be
+	if(sheetsScrollOffset == 0)
+	{
+		$("#sheetnamesLeftControl a").addClass('inactive');
+	}
+	else
+	{
+		$("#sheetnamesLeftControl a").removeClass('inactive');
+	}
+	if(sheetsScrollOffset == currentHeight)
+	{
+		$("#sheetnamesRightControl a").addClass('inactive');
+	}
+	else
+	{
+		$("#sheetnamesRightControl a").removeClass('inactive');
+	}
+
+}
 
 </script>

@@ -71,11 +71,25 @@ div#maplinks p#loadingtext {border: medium none;font-size: 1em;line-height: 2em;
 #maplinks  a:hover, #maplinks  a:active, #maplinks  a.active, #maplinks  li.active a {text-decoration:none;background-color:#E59595;color:#fff}
 
 /* Div at the bottom for selecting different sheets */
-div#sheetlinks {bottom: 0; left: 0; height:60px; width:100%; position:absolute; background:rgba(220, 255, 220, 0.9); z-index: 1002; padding:0;}
-#sheetnames {margin:0; height: 100%;}
-div#sheetlinks li.sheet2 {display: block; width: 100px; height: 100%; float: left; text-align:center;}
-div#sheetlinks li.sheet2 span.active {background: #A2ffA2;}
-div#sheetlinks li.sheet2 span:hover {background: #82ffC2;}
+div#sheetlinks {top: 0; left: 0; height:40px; width:100%; position:absolute; background:#6e6e6e; z-index: 1002; padding:0;overflow:hidden;}
+#sheetnames {float:left; width:100%; height:40px; padding:0; margin:0; color:white;position:relative;}
+div#sheetlinks li.sheet2 {display: block; width: 100px; height: 40px; float: left; text-align:center; margin:0px;vertical-align:middle;}
+div#sheetlinks li.sheet2 span {margin:0px; padding:0px 0px;padding-top:10px;height:30px;vertical-align:middle;color:white;font-size:14px;}
+div#sheetlinks li.sheet2 span.active {background: #444444;}
+div#sheetlinks li.sheet2 span:hover {background: #555555;}
+div#sheetlinks a {color:white;}
+div#sheetlinks div#mapName {float:left;padding:10px 30px 10px 30px;font-weight:bold;font-size:20px;color:white;width:300px;}
+div#sheetlinks div.sheetScrollerControll{float:left;font-size:40px;font-weight:bold;padding:10px 10px;color:white;width:50px;margin-left:auto;}
+div#sheetlinks div.sheetScrollerControll a.inactive{color:gray;}
+div#sheetlinks div#mapSocialShare{float:right;width:50px;}
+div#sheetlinks div#sheetnamesWrapper{float:left;width:400px;height:40px;overflow:hidden;}
+div#sheetlinks div#mapSocialShare img.share{
+	background: url('../img/tasksSprite.png') -110px 0px;	
+	width:27px;
+	height:27px;
+	background-repeat: no-repeat;
+	margin: 5px 0px
+	}			
 
 
 /* Styling the indicator list */

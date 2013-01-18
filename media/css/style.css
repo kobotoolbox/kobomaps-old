@@ -87,6 +87,7 @@ div#userMenu ul li ul li{
 	float:none;
 	background:#64add8;
 	border: none;
+	box-shadow: 2px 2px 5px #888888;
 	}
 div#userMenu ul li.loginMenu ul li a{
 	background: #64add8;
@@ -373,24 +374,24 @@ table.list_table tr td a:hover
 	background-repeat: no-repeat;
 }
 .mapTasks img.edit{
-	background: url('../img/tasksSprite.png') 0px -1px;	
+	background: url('../img/tasksSprite.png') 0px 0px;	
 	width:23px;
 	}
 
 .mapTasks img.copy{
-	background: url('../img/tasksSprite.png') -38px -2px;	
+	background: url('../img/tasksSprite.png') -24px -2px;	
 	width:22px;
 	}
 .mapTasks img.view{
-	background: url('../img/tasksSprite.png') -76px 0px;	
+	background: url('../img/tasksSprite.png') -63px 0px;	
 	width:27px;
 	}
 .mapTasks img.share{
-	background: url('../img/tasksSprite.png') -121px 0px;	
+	background: url('../img/tasksSprite.png') -110px 0px;	
 	width:27px;
 	}			
 .mapTasks img.delete{
-	background: url('../img/tasksSprite.png') -153px 0px;	
+	background: url('../img/tasksSprite.png') -139px 0px;	
 	width:27px;
 	}	
 

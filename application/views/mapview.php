@@ -18,10 +18,10 @@
 		
 <body>		
 <div id="maplinks"	>
+	<div style="height:60px;width:10px;"></div>
 	<span><a href="<?php echo URL::base();?>mymaps"><?php echo __('Back to My Maps')?></a></span>
-	<h3 id="kmapTitle">&nbsp;</h3>	
-	<p>Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.</p>
-	<p><?php echo $map->description;?></p>
+	<p id="mapHelpText">Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.</p>
+	<p id="descriptionText"><?php echo $map->description;?></p>
 		<ul id="questionsindicators" class="questionsindicators" >	</ul>
 	<p id="loadingtext">
 	Please be patient while the map is loading.  
@@ -32,8 +32,19 @@
 <?php
 //Bar at the bottom to select between different sheets
 ?>
-<div id="sheetlinks" style="display:none">
-	<ul id=sheetnames></ul>
+<div id="sheetlinks">
+	<div id="mapName"><?php echo $map->title;?></div>
+	<div id="sheetnamesLeftControl" class="sheetScrollerControll"><a href="#">&lt;</a></div>
+	<div id="sheetnamesWrapper">		
+		<ul id=sheetnames></ul>		
+	</div>
+	<div id="sheetnamesRightControl" class="sheetScrollerControll"><a href="#">&gt;</a></div>
+	<div id="mapSocialShare">
+		<a href="#">
+		<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('share');?>
+		</a>
+	</div>
+	
 </div>
 
 <?php
