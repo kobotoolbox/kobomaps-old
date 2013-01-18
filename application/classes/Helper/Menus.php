@@ -25,7 +25,18 @@ class Helper_Menus
 			{
 				echo '<li>';
 			}
-			echo '<a href="'.url::base().'signup">'.__("signup").'</a></li>';
+			echo '<a href="'.url::base().'signup">'.__("Sign Up").'</a></li>';
+			
+			//register page
+			if($page == "login")
+			{
+				echo '<li class="selected">';
+			}
+			else
+			{
+				echo '<li>';
+			}
+			echo '<a href="'.url::base().'login">'.__("Log In").'</a></li>';
 		}
 		
 		//if the user is logged in

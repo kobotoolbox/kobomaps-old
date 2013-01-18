@@ -25,6 +25,7 @@ class Controller_Login extends Controller_Main {
 		 
 		$this->template->html_head->title = __("login");
 		$this->template->content = View::factory('login');
+		$this->template->header->menu_page = 'login';
 		$this->template->content->errors = array();
 		
 		//set the focus on the username input box
