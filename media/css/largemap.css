@@ -80,7 +80,7 @@ div#sheetlinks li.sheet2 span:hover {background: #555555;}
 div#sheetlinks a {color:white;}
 div#sheetlinks div#mapName {float:left;padding:10px 30px 10px 30px;font-weight:bold;font-size:20px;color:white;width:300px;}
 div#sheetlinks div.sheetScrollerControll{float:left;font-size:40px;font-weight:bold;padding:10px 10px;color:white;width:50px;margin-left:auto;}
-div#sheetlinks div.sheetScrollerControll a.inactive{color:gray;}
+div#sheetlinks div.sheetScrollerControll a.inactive{color:gray;cursor:default}
 div#sheetlinks div#mapSocialShare{float:right;width:50px;}
 div#sheetlinks div#sheetnamesWrapper{float:left;width:400px;height:40px;overflow:hidden;}
 div#sheetlinks div#mapSocialShare img.share{
