@@ -167,15 +167,23 @@ class Helper_Menus
 				break;
 				
 				case "createmap":
+					
+				case "mapview":
 
-					$page = Request::initial()->action();
-					$page = intval(str_replace('add', '', $page));
+					$pageNumber = Request::initial()->action();
+					$pageNumber = intval(str_replace('add', '', $pageNumber));
+
 					//$end_div = false;
 					$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 					if($map_id != 0)
 					{
 						$map = ORM::factory('Map', $map_id);
 						$map_progress = $map->map_creation_progress;
+						//make sure the user is the owner, otherwise don't show the edit stuff
+						if($user==null OR $map->user_id != $user->id)
+						{
+							return;
+						}
 					}
 					else
 					{
@@ -183,59 +191,59 @@ class Helper_Menus
 					}
 					?>
 					
-					<li class="<?php echo ($page == 1)? 'active':''; echo ($map_progress < 1 AND $page != 1)? 'greyedout':'';?>">
+					<li class="<?php echo ($pageNumber == 1)? 'active':''; echo ($map_progress < 1 AND $pageNumber != 1)? 'greyedout':'';?>">
 					
-						<?php if($map_progress >= 1 AND $page != 1){?><a href="<?php echo URL::base();?>mymaps/add1?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
+						<?php if($map_progress >= 1 AND $pageNumber != 1){?><a href="<?php echo URL::base();?>mymaps/add1?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
 							<div>
 								<img class="basicSetup" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Basic Set-up');?>
 							</div>
-						<?php if($map_progress >= 1 AND $page != 1){?></a><?php } else {?></span><?php }?>
+						<?php if($map_progress >= 1 AND $pageNumber != 1){?></a><?php } else {?></span><?php }?>
 					</li>
 										
 					
-					<li class="<?php echo ($page == 2)? 'active':''; echo ($map_progress < 2 AND $page != 2)? 'greyedout':'';?>">
+					<li class="<?php echo ($pageNumber == 2)? 'active':''; echo ($map_progress < 2 AND $pageNumber != 2)? 'greyedout':'';?>">
 					
-						<?php if($map_progress >= 1 AND $page != 2){?><a href="<?php echo URL::base();?>mymaps/add2?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
+						<?php if($map_progress >= 1 AND $pageNumber != 2){?><a href="<?php echo URL::base();?>mymaps/add2?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
 							<div>
 								<img class="dataStruct" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Data Structure');?>
 							</div>
-						<?php if($map_progress >= 1 AND $page != 2){?></a><?php } else {?></span><?php }?>
+						<?php if($map_progress >= 1 AND $pageNumber != 2){?></a><?php } else {?></span><?php }?>
 					</li>
 
-					<li class="<?php echo ($page == 3)? 'active':''; echo ($map_progress < 3 AND $page != 3)? 'greyedout':'';?>">
+					<li class="<?php echo ($pageNumber == 3)? 'active':''; echo ($map_progress < 3 AND $pageNumber != 3)? 'greyedout':'';?>">
 					
-						<?php if($map_progress >= 2 AND $page != 3){?><a href="<?php echo URL::base();?>mymaps/add3?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
+						<?php if($map_progress >= 2 AND $pageNumber != 3){?><a href="<?php echo URL::base();?>mymaps/add3?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
 							<div>
 								<img class="validation" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Validation');?>
 							</div>
-						<?php if($map_progress >= 2 AND $page != 3){?></a><?php } else {?></span><?php }?>
+						<?php if($map_progress >= 2 AND $pageNumber != 3){?></a><?php } else {?></span><?php }?>
 					</li>
 					
-					<li class="<?php echo ($page == 4)? 'active':''; echo ($map_progress < 4 AND $page != 4)? 'greyedout':'';?>">
+					<li class="<?php echo ($pageNumber == 4)? 'active':''; echo ($map_progress < 4 AND $pageNumber != 4)? 'greyedout':'';?>">
 					
-						<?php if($map_progress >= 3 AND $page != 4){?><a href="<?php echo URL::base();?>mymaps/add4?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
+						<?php if($map_progress >= 3 AND $pageNumber != 4){?><a href="<?php echo URL::base();?>mymaps/add4?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
 							<div>
 								<img class="geoSetup" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Geo Set-up');?>
 							</div>
-						<?php if($map_progress >= 3 AND $page != 4){?></a><?php } else {?></span><?php }?>
+						<?php if($map_progress >= 3 AND $pageNumber != 4){?></a><?php } else {?></span><?php }?>
 					</li>
 					
-					<li class="<?php echo ($page == 5)? 'active':''; echo ($map_progress < 5 AND $page != 5)? 'greyedout':'';?>">
+					<li class="<?php echo ($pageNumber == 5)? 'active':''; echo ($map_progress < 5 AND $pageNumber != 5)? 'greyedout':'';?>">
 					
-						<?php if($map_progress >= 4 AND $page != 5){?><a href="<?php echo URL::base();?>mymaps/add5?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
+						<?php if($map_progress >= 4 AND $pageNumber != 5){?><a href="<?php echo URL::base();?>mymaps/add5?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
 							<div>
 								<img class="geoMatch" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Geo Matching');?>
 							</div>
-						<?php if($map_progress >= 4 AND $page != 5){?></a><?php } else {?></span><?php }?>
+						<?php if($map_progress >= 4 AND $pageNumber != 5){?></a><?php } else {?></span><?php }?>
 					</li>
 					
-					<li class="<?php echo ($page == 0)? 'active':''; echo ($map_progress < 5 AND $page != 0)? 'greyedout':'';?>">
+					<li class="<?php echo ($pageNumber == 0)? 'active':''; echo ($map_progress < 5 AND $pageNumber != 0)? 'greyedout':'';?>">
 					
-						<?php if($map_progress >= 5){?><a href="<?php echo URL::base();?>public/view?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
+						<?php if($map_progress >= 5 AND $pageNumber != 0){?><a href="<?php echo URL::base();?>public/view?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
 							<div>
 								<img class="genMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View Map');?>
 							</div>
-						<?php if($map_progress >= 5){?></a><?php } else {?></span><?php }?>
+						<?php if($map_progress >= 5 AND $pageNumber != 0){?></a><?php } else {?></span><?php }?>
 					</li>					
 					<?php 
 

@@ -195,6 +195,7 @@ div#subMenu
 #subMenu li a, #subMenu li span 
 {
 	font-size: 12px;	
+	line-height:12px;
 	color: black;
 	background: none;
 	padding:10px 0px;

@@ -344,8 +344,8 @@ function sheetSelect(sheetId)
 	if(!sheetButton.hasClass("active"))
 	{
 		
-		$('li.active').addClass("previous");			
-		$('li.active').removeClass("active");
+		$('#sheetnames li.active').addClass("previous");			
+		$('#sheetnames li.active').removeClass("active");
 
 		$('li.sheet').hide();
 		sheetItem.addClass("active");
