@@ -70,10 +70,10 @@ class Helper_Menus
 				echo '<a href="'.url::base().'mymaps/add1">'.__("Create Map").'</a></li>';
 				
 				// View map
-				if($page == "viewmap")
+				if($page == "mapview")
 				{
 					echo '<li class="selected">';
-					echo '<a href="'.url::base().'mymaps/add1">'.__("View Map").'</a></li>';
+					echo '<a href="" onclick="return false;">'.__("View Map").'</a></li>';
 				}
 				
 				//share
@@ -167,7 +167,7 @@ class Helper_Menus
 				break;
 				
 				case "createmap":
-					
+
 					$page = Request::initial()->action();
 					$page = intval(str_replace('add', '', $page));
 					//$end_div = false;

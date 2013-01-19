@@ -54,6 +54,14 @@ class Controller_Main extends Controller_Template {
 	
 	public function action_index()
 	{
+		//if they're logged in redirect them home:
+		$auth = Auth::instance();
+		$logged_in = $auth->logged_in() OR $auth->auto_login();
+		if($logged_in)
+		{
+		
+			HTTP::redirect('mymaps'); //send them to their maps page if they're logged in		
+		}
 		$this->template->content = View::factory('main_content');
 	}
 	
