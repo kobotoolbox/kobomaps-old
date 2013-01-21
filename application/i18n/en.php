@@ -15,7 +15,11 @@ return array
 	//Header
 	'site name'=>'KoBo Maps',
 	'tagline'=>'Visualize your data spatially',
-	'Should this map be private'=>'Should this map be hidden from public view?'
+	'Should this map be private'=>'Should this map be hidden from public view?',
+		
+		
+	//sharing
+	'Sharing Settings:'=>'Sharing Settings:xxxx',
 
 );
 

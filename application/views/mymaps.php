@@ -108,7 +108,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="<?php echo url::base(); ?>mymaps/share/?id=<?php echo $map->id;?>" >
+				<a rel="#overlay" href="<?php echo url::base(); ?>share/window?id=<?php echo $map->id;?>" >
 					<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('share');?>
 				</a>
 			</li>
@@ -133,5 +133,12 @@ echo Form::hidden('action','edit', array('id'=>'action'));
 echo Form::hidden('map_id','0', array('id'=>'map_id'));
 echo Form::close();
 ?>
+
+
+	<div class="apple_overlay" id="overlay">
+		<div class="contentWrap">
+			<img class="contentWrapWaiter" src="<?php echo URL::base();?>media/img/waiter_barber.gif"/>
+		</div>
+	</div>
 
 

@@ -18,4 +18,23 @@
 			$("#edit_map_form").submit();
 		}
 	}
+
+
+	$(document).ready(function() 
+			{
+				
+				$("a[rel]").overlay({
+					mask: 'grey',
+					effect: 'apple',
+					onBeforeLoad: function() {
+						 
+			            // grab wrapper element inside content
+			            var wrap = this.getOverlay().find(".contentWrap");
+			 
+			            // load the page specified in the trigger
+			            wrap.load(this.getTrigger().attr("href"));
+			        }
+				});
+				
+		    });
 </script>
