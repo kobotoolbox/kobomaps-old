@@ -276,17 +276,17 @@ function parseJsonData(jsonDataUrl)
 			dataIndicatorClick($(this));
 		});
 
-		//Default selects first sheet 
-		sheetSelect(initialId);
-		
-		
-		
-		
 		//check if we're supposed to auto load the data for a particular indicator?
 		var autoLoadIndicator = $.address.parameter("indicator");
 		if( autoLoadIndicator != "" && typeof autoLoadIndicator !== "undefined" )
 		{
+			console.log('autoLoadIndicator',autoLoadIndicator);
 			showByIndicator(autoLoadIndicator);
+		}
+		else
+		{
+			//Default selects first sheet 
+			sheetSelect(initialId);
 		}
 		
 		//hide the temporary loading text once the indicators are visible
@@ -294,44 +294,6 @@ function parseJsonData(jsonDataUrl)
 	});		
 }//end parseJsonData function
 
-
-
-function openAppropriateIndicators(prevElem, currentElems)
-{
-	//to see if has already worked --break doesn't work in this case so a flag var is used instead
-	//var flag = 0;
-	
-	currentElems.each(function()
-	{		
-		if(prevElem.text() == $(this).text())
-		{
-			$(this).addClass("active");
-			prevElem.removeClass("active");
-
-			
-			if(!($(this).hasClass("dataLevel")))	//not at datalevel yet
-			{
-				$(this).siblings("ul").show();
-				prevElem.siblings("ul").hide();
-
-				var currentElemsNewLevel = $(this).siblings("ul").children('li').children('span');
-							
-				if(prevElem.siblings("ul").children('li').children('span.active').length != 0){
-					prevElem.siblings("ul").children('li').children('span.active').each(function(){openAppropriateIndicators($(this), currentElemsNewLevel)});
-				}
-			}
-			else
-			{
-				//console.log($(this).attr('id')+" "+prevElem.attr('id'));
-				
-				var id = $(this).attr('id').substring(16); //grab the id for processing 
-				//console.log(id);
-				showByIndicator(id);
-				return;
-			}
-		}
-	});
-}
 
 
 
@@ -343,38 +305,79 @@ function sheetSelect(sheetId)
 
 	if(!sheetButton.hasClass("active"))
 	{
-		
-		$('#sheetnames li.active').addClass("previous");			
+
+
+		//////////////////////////////////////////////
+		//This hides, shows removes active, adds active
+		//to all the necessary HTML elements
+		////////////////////////////////////////////////
+		//turn off active on all elements
 		$('#sheetnames li.active').removeClass("active");
 
-		$('li.sheet').hide();
+		$('#questionsindicators li.sheet').hide();
 		sheetItem.addClass("active");
 		sheetItem.show();
 		
 		$('#sheetnames li.sheet2 span').removeClass("active");		
 		sheetButton.addClass("active");
 
-		
+
+		///////////////////////////////////////////////////////
+		//This next part tries to figure out if there is a
+		//matching indicator on the new sheet
+		//that should be switched on
 		
 
 		//get current map selection 
-		var autoLoadIndicatorPrevious = $.address.parameter("indicator");
-		
-		//try to keep the same selection 
-		if($('li.previous').children('ul').children('li').children('span.active').length != 0)
+		var autoLoadIndicatorCurrent = $.address.parameter("indicator");
+		//if nothing was previously selcted then bounce.
+		if(autoLoadIndicatorCurrent == null || autoLoadIndicatorCurrent.length == 0)
 		{
-			var currentElems = sheetItem.children('ul').children('li').children('span');
-			$('li.previous').children('ul').children('li').children('span.active').each(function(){openAppropriateIndicators($(this), currentElems)});
-			
-			//check if the map data shown was updated
-			if(autoLoadIndicatorPrevious == $.address.parameter("indicator"))
-			{
-				UpdateAreaAllData("Please select an indicator to display its data.");
-			}
-			
+			return;
 		}
+		
+		//grab the sheet ID of the current indicator
+		var indicatorIndexesArray = autoLoadIndicatorCurrent.split('_');
+		//make sure they didn't click on the same sheet
+		if(indicatorIndexesArray[0] != sheetId)
+		{
+			//grab the data for the previously selected and newly selected sheets
+			var newSheet = mapData.sheets[sheetId];
+			var currentSheet = mapData.sheets[indicatorIndexesArray[0]];
+			var newPtr = newSheet;
+			var currentPtr = currentSheet;
+			var newIndicatorIdString = sheetId + "_";
 
-		$('li.sheet').removeClass("previous");
+			//loop over the indicator indexes, until you get to the next to last
+			for(var i = 1; i < indicatorIndexesArray.length - 1; i++)
+			{
+				//advance the ptrs
+				newPtr = newPtr.indicators[indicatorIndexesArray[i]];
+				currentPtr = currentPtr.indicators[indicatorIndexesArray[i]];
+
+				newIndicatorIdString += indicatorIndexesArray[i] + "_";
+
+				//make sure the indicators at this level match, if not, bounce.
+				if(newPtr.name != currentPtr.name)
+				{
+					return;
+				}
+			}
+			//now grab the name of the current indicator
+			var currentIndicatorName = $("#indicatorSpanId_"+autoLoadIndicatorCurrent).text();
+			//loop over the new indicator and see if any of the indicators match the name of the current indicator
+			for(i in newPtr.indicators)
+			{
+				var name = newPtr.indicators[i].name;
+				if(name == currentIndicatorName)
+				{
+					//we have a match show this indicator
+					newIndicatorIdString += i;
+					showByIndicator(newIndicatorIdString);
+					return;
+				}
+			}			
+		}//end if the two sheets don't match
 	}//end 	if(!sheetButton.hasClass("active"))
 	
 }//end function
