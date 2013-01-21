@@ -690,15 +690,31 @@ textarea:focus{
 	width:35px;
 }
 
-	#overlay {
-		background-image:url(../img/transparent.png);
-		color:#efefef;
-		height:450px;
-	}
-	
-	/* container for external content. uses vertical scrollbar, if needed */
-	div.contentWrap {
-		height:441px;
-		overflow-y:auto;
-	}
+#overlay {
+	background-image:url(../img/transparent.png);
+	color:#333;
+	height:450px;
+}
 
+/* container for external content. uses vertical scrollbar, if needed */
+div.contentWrap {
+	height:500px;
+	overflow-y:auto;
+}
+
+img.contentWrapWaiter{
+	position: relative;
+	top: 240px;
+	left: 210px;
+}
+
+
+/************************************************************
+							Sharing Stuff
+*************************************************************/
+div.shareWindow{
+	margin:30px;
+}
+div.shareWindow input{
+	width:540px;
+}

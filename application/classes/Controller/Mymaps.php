@@ -27,6 +27,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 		$this->template->content = view::factory("mymaps");
 		$this->template->content->errors = array();
 		$this->template->content->messages = array();
+		$this->template->html_head->script_files[] = 'media/js/jquery.tools.min.js';
 		//set the JS
 		$js = view::factory('mymaps_js');
 		$this->template->html_head->script_views[] = $js;
@@ -1362,10 +1363,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					{
 							$region_id = intval($region_id);
 							$column = intval($column);
-	 						$update_sql .= "UPDATE  `columns` SET  `template_region_id` =  '".$region_id."' WHERE  `columns`.`id` = ".$column.";";
+	 						$update_sql = "UPDATE  `columns` SET  `template_region_id` =  '".$region_id."' WHERE  `columns`.`id` = ".$column.";";
+	 						$database->query($update_sql);
 	 					}
-	
-	 					$database->multi_query($update_sql);
+						
+						
+	 					
 	 					
 						//not sure why I have to do this, but it seems necessary
 						$database->close();
@@ -1414,7 +1417,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 		 						$database->query($update_sql);
 	 						}
 	 						
-	 						$database->multi_query($update_sql);
 	 						$database->close();
 	 						$database = new mysqli($server, $user_name, $password, $database_name);
 	 					}
@@ -1464,15 +1466,7 @@ class Controller_Mymaps extends Controller_Loggedin {
  						$region_id_to_name[$region->id] = $region->title;
  					}
  					unset($regions);
- 					$regions = ORM::factory('Templateregion')
- 					->where('template_id', '=', $map->template_id)
- 					->find_all();
- 					$region_id_to_name = array();
- 					foreach($regions as $region)
- 					{
- 						$region_id_to_name[$region->id] = $region->title;
- 					}
- 					unset($regions);
+ 					
  					
  					
  					//save the json to file
@@ -1533,7 +1527,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 						->find_all();
 	 					
 	 					
-	 					
 	 					//get the list of data rows
 	 					$header_row = ORM::factory('Row')
 	 					->where('mapsheet_id', '=', $sheet->id)
@@ -1588,7 +1581,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					{
 	 						fwrite($file_resource, ',');
 	 					}
-	 					
 	 					fwrite($file_resource, '"'.$sheet->id.'":'.json_encode(array('sheetName'=>$sheet->name, 'indicators'=>$indicators)));
 	 					
 	 	
@@ -1629,7 +1621,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$map_array['map_creation_progress'] = 5;
 	 				}
 	 				$map->update_map($map_array);
-	 	
 	 				HTTP::redirect('public/view?id='.$map_id);
 	 			}
 	 		}
@@ -1909,11 +1900,13 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				$data = array();
 	 				foreach($region_columns as $region_column)
 	 				{
+	 					
 	 					if($region_column->template_region_id == 0)
 	 					{
 	 						continue;
 	 					}
-	 						
+	 					
+ 						
 	 					$region_name_xls = trim($sheet[$header_row->name][$region_column->name]);
 	 					$region_name_kml = $region_id_to_name[$region_column->template_region_id];
 	 					if($region_name_kml == null OR $region_name_kml == '')
@@ -1932,10 +1925,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					
 	 					
 	 					//todo need a better way to know what's been ignored, both for the purpose
-	 					//of showing ignored things in the UI to the user, and so we don't have to check for empty.
-	 					
+	 					//of showing ignored things in the UI to the user, and so we don't have to check for empty.	 					
 	 					
 	 				}
+	 				
 	 				
 	 				//TODO respond appropriately if data is not a number
 	 				$indicator_array_ptr['data'] = $data;

@@ -65,7 +65,7 @@
 	echo Form::hidden('sheet_position',$sheet_position, array('id'=>'sheet_position'));
 	//keep track of how many sheets
 	
-	echo '<p>'.__('Number of regions that couldn\'t be automatically matched:'). ' <span id="notAutoMatchedCount"></span></p>';
+	echo '<p id="notAutoMatchedCount"></p>';
 
 	foreach($sheets as $sheet)
 	{
@@ -127,7 +127,7 @@
 	if($not_matched_count > 0)
 	{
 		echo '<script type="text/javascript">$(document).ready(function(){
-	   		$("#notAutoMatchedCount").text("'.$not_matched_count.'");});</script>';
+	   		$("#notAutoMatchedCount").text("'.__('Number of regions that couldn\'t be automatically matched:').' '.$not_matched_count.'");});</script>';
 	}
 ?>
 
