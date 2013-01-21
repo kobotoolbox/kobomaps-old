@@ -805,10 +805,19 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 			selecX = graphXData[i][0];
 		}
 	}
+	//fixes an issue with hovertips being reversed, doesn't affect drawing of charts 
+	graphXData.reverse();
+	graphYAxis.reverse();
 
+	//add extra padding to regional chart if only one data response
+	if(graphYAxis.length == 1){
+		graphYAxis.push([2, ""]);
+		graphYAxis.push([3, ""]);
+	}
 
 	var kmapInfochartHeight = (graphYAxis.length * (parseInt(kmapInfochartBarHeight) )) + Math.round(parseInt(kmapInfochartXAxisMargin) * 1.7);
 
+	
 	//possible dark blue color is '223953'
 	//red color is 'D71818'
 	//var d2/graphXData = [[13,1], [28,2], [75,3]];
@@ -838,7 +847,6 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 
      //check to see if the region has any data, if not, don't draw the graph
      var data = false;
-     console.log(graphXData);
      for(i in graphXData){
          if(!isNaN(graphXData[i][0])){
              data = true;
@@ -858,6 +866,7 @@ function drawRegionChart(regionData, name, indicatorIdNum){
      else{
 		document.getElementById('iChartLocal').innerHTML = "No regional data to display.";
      }
+
 	bindHoverTip("#iChartLocal", graphXData, graphYAxis);
 
 	
@@ -904,7 +913,6 @@ function drawGeneralChart(fullId, dataPath, name){
 	//red color is 'D71818'
 	//var d2/graphXData = [[13,1], [28,2], [75,3]];
 	//var ticks/graphYAxis = [[1,'Florida'], [2,'Georgia'], [3,'Seafree'], [4,'Freemont'], [5,'Monaco']];
-
 	selectedArea = [[selecX, selecY]];
 	var bothData = [
 		        	  {
@@ -936,29 +944,15 @@ function drawGeneralChart(fullId, dataPath, name){
 
 //used by both charts to create the hover tooltip that finds the bar that is being hovered over
 function bindHoverTip(id, graphXData, graphYAxis){
+	
 	$(id).bind("plothover", function (event, pos, item) {
 		  if (item) { 
 	            $("#tooltip").remove(); 
-	            
-	            var getNameNum = 0, getName = "";
 
-	            //loops through graphXData and graphYAxis to determine the name of the bar that is being hovered over
-	    		for(i=0; i < graphXData.length; i++){
-	    			if(item.datapoint[0] == graphXData[i][0]){
-	    				getNameNum = graphXData[i][1];
-	    				break;
-	    			}
-	    		}
-	    		for(i=0; i < graphYAxis.length; i++){
-	    			if(getNameNum == graphYAxis[i][0]){
-	    				getName = graphYAxis[i][1];
-	    				break;
-	    			}
-	    		}
+	            //datapoint is minus 1 as graphYAxis is 0 indexed and datapoint is 1 indexed
+	            var hoverName = graphYAxis[item.datapoint[1] - 1][1];
 	            
-	            showTooltip(pos.pageX, pos.pageY, 'The value of ' + getName + ' is ' + item.datapoint[0] + '.');
-						//showTooltip(item.pageX, item.pageY, "The value of " + columnName + 
-						//" is " + item.datapoint[0] + ".");
+	            showTooltip(pos.pageX, pos.pageY, 'The value of ' + hoverName + ' is ' + item.datapoint[0] + '.');
 		   }
 		    else { 
 	             $("#tooltip").remove(); 
@@ -975,9 +969,9 @@ function bindHoverTip(id, graphXData, graphYAxis){
 */
 function UpdateAreaPercentageTitleData(name, percentage, min, spread, title, data, indicator, unit)
 {
-	var num
+	//var num
 	
-	var message = '<div class="chartHolder" style="height:'+kmapInfodivHeight+'px">' + createHTMLChart(title, data, indicator+"_by_area_chart");
+	var message = '<div class="chartHolder" style="height:'+kmapInfodivHeight+'px">' + createHTMLChart(name, title, data, indicator+"_by_area_chart");
 		
 	//create the chart by for all the indicators of the given question, assuming there's more than one
 	createChartByIndicators(title, data);
@@ -1040,12 +1034,10 @@ function createChartByIndicators(message, indicator, name, unit)
 	return message;
 }
 
-function createHTMLChart(title, data, id)
+function createHTMLChart(name,title, data, id)
 {
 	
 	//now loop through the data and build the rest of the URL
-	var names = "";
-	var nameDelim = "|";
 	var count = 0; 
 	for(areaName in data)
 	{
@@ -1055,21 +1047,19 @@ function createHTMLChart(title, data, id)
 		{
 			continue;
 		}
-		
 		count++;
-		areaName = encodeURIComponent(areaName).replace(/ /g, "+");
-		names = nameDelim + areaName + names;
+		//areaName = encodeURIComponent(areaName).replace(/ /g, "+");
 	}
 
 	var kmapInfochartHeight = (count * (parseInt(kmapInfochartBarHeight) )) + Math.round(parseInt(kmapInfochartXAxisMargin) * 1.7);
 
 	//creates the tab html that contains the chart ids
-	var chartStr = '<div id="'+id+'" class="infowindow"><p class="bubbleheader">'+title
+	var chartStr = '<div id="'+ id + '" class="infowindow"><p class="bubbleheader">' + name + "; " + title
 	+'</p>' +
 	'<div id = "iChartTabs" style= "width: 350px; height:'+ (kmapInfochartHeight + 55) + 'px">' +
 	  		'<ul>' +
-	  			'<li> <a href="#iChartFull">' + "Indicator" + ' </a> </li>' + 
-				'<li> <a href="#iChartLocal">' + "Regional Responses" + '</a> </li>' +
+	  			'<li> <a href="#iChartFull">' + title + ' </a> </li>' + 
+				'<li> <a href="#iChartLocal">' + name + '</a> </li>' +
 	  		'</ul>' +
 	  		'<div id= "iChartFull" style= "overflow: auto;">'+
 	  			'<div id="iChartFull' + id + '"  style=" width:300px; height:'+kmapInfochartHeight+'px">' + 
@@ -1327,6 +1317,8 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 		$("#nationalaveragediv").show();
 		$("#nationalIndicatorChart").show();
 
+		//drawNationalIndicatorChart(data
+
 		//total label -- defaults to "Total"
 		if(typeof totalLabel == "undefined")
 		{
@@ -1447,7 +1439,7 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator, to
 	var spreadMin = calculateMinSpread(dataForNational);
 	var min = spreadMin["min"];
 	var spread = spreadMin["spread"];
-	var nationalChart = createHTMLChart(questionText + ' ('+kmapAllAdminAreas+')', dataForNational, indicator+"_by_indicator_national_chart");
+	//var nationalChart = createHTMLChart(questionText + ' ('+kmapAllAdminAreas+')', dataForNational, indicator+"_by_indicator_national_chart");
 	
 	//TODO: fix the national chart
 	//$("#nationalIndicatorChart").html(nationalChart);
