@@ -822,13 +822,13 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 	 var bothData = [
 	        	  {
 		        	data: graphXData,
-		          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: '223953'} ,
-		          	color: '223953'
+		          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(34,57,83)"} ,
+		          	color: "rgb(34,57,83)"
 	        	  },
 	        	  {
 		        	data: selectedArea,
-		        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: 'D71818'} ,
-	        		color: 'D71818'
+		        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(215, 24, 24)"} ,
+	        		color: "rgb(215, 24, 24)"
 	        	  }
 	  ];
 	  
@@ -906,18 +906,18 @@ function drawGeneralChart(fullId, dataPath, name){
 	//var ticks/graphYAxis = [[1,'Florida'], [2,'Georgia'], [3,'Seafree'], [4,'Freemont'], [5,'Monaco']];
 
 	selectedArea = [[selecX, selecY]];
-	 var bothData = [
-	        	  {
-		        	data: graphXData,
-		          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: '223953'} ,
-		          	color: '223953'
-	        	  },
-	        	  {
-		        	data: selectedArea,
-		        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: 'D71818'} ,
-	        		color: 'D71818'
-	        	  }
-	  ];
+	var bothData = [
+		        	  {
+			        	data: graphXData,
+			          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(34,57,83)"} ,
+			          	color: "rgb(34,57,83)"
+		        	  },
+		        	  {
+			        	data: selectedArea,
+			        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(215, 24, 24)"} ,
+		        		color: "rgb(215, 24, 24)"
+		        	  }
+		  ];
 	  
       /*
       * Size of the chart is controlled by the div tag where iChartFull is created
