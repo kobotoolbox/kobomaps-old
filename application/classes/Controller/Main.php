@@ -38,7 +38,7 @@ class Controller_Main extends Controller_Template {
 			$this->template->footer = View::factory('footer');
 			
 			//add basic css and JS
-			$this->template->html_head->styles['media/css/style.css'] = 'screen';
+			$this->template->html_head->styles['screen'] = 'media/css/style.css';
 			if(isset($_GET['debug']))
 			{
 				$this->template->html_head->script_files[] = 'media/js/jquery.debug.min.js';

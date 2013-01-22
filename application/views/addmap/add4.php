@@ -8,11 +8,8 @@
 ?>
 
 		
-<h2><?php echo __("Add Map - Page 4") ?></h2>
-
-<h3><?php echo $map->title;?></h3>
-<p><?php echo $map->description;?></p>
-<p><?php echo __("Select which map template you want to use for your map");?></p>
+<h2><?php echo __('Add Map - Geo Set-up') . ' - '.$map->title ?></h2>
+<h3><?php echo __('Select which map template you want to use for your map');?></h3>
 
 
 
@@ -89,19 +86,22 @@
 		
 		if(count($templates) == 0)
 		{
-			echo '<tr><td colspan="4">'.__('There are no templates').'</td></tr>';
+			echo '<tr><td colspan="5">'.__('There are no templates').'</td></tr>';
 		}
 		foreach($templates as $template)
 		{
+			
 			if($template->id != 0){
+				//handle truncating long descriptions
+				$description = strlen($template->description) < 50 ? $template->description : substr($template->description,0,50) . '...';
 				echo '<tr>';
 				echo '<td class="selectColumn">';
 				echo Form::radio('template_id', $template->id, $data['template_id'] == $template->id, array('onchange'=>'renderMap("'.$template->file.'",'.$template->lat.','.$template->lon.','.$template->zoom.'); return false;'));
 				echo '</td>';
 				echo '<td style="width:300px;"><a href="#" onclick="renderMap(\''.$template->file.'\','.$template->lat.','.$template->lon.','.$template->zoom.'); return false;">'.$template->title.'</a></td>';
-				echo '<td style="width:300px;">'.$template->description.'</td>';
+				echo '<td style="width:300px;"><span title="'.$template->description.'">'.$description.'</span></td>';
 				echo '<td style="width:100px;">'.$template->admin_level.'</td>';
-				echo '<td>'.($template->decimals == -1 ? 'No Rounding':$template->decimals).'</td>';
+				echo '<td>'.($template->decimals == -1 ? __('No Rounding'):$template->decimals).'</td>';
 				echo '</tr>';
 			}
 		}
@@ -114,7 +114,7 @@
 
 <!-- map display -->
 <br />
-<p> <?php echo __('Pan and zoom the map to adjust what the default view will be for the map')?></p>
+<h3> <?php echo __('Pan and zoom the map to adjust what the default view will be for the map')?></h3>
 <div class="mapWLoading">
 	<div id="map_div"></div>	
 	<div id="map_loading"></div>
@@ -123,7 +123,7 @@
 
 
 <?php
-	echo Form::submit('Submit', 'Submit', array('onsubmit'=>'setMapViewSettings()'));	//, array('onmouseover'=>'setMapViewSettings()')
+	echo Form::submit('Submit', __('Continue'), array('onsubmit'=>'setMapViewSettings()'));	//, array('onmouseover'=>'setMapViewSettings()')
 	echo Form::close();
 ?>
 

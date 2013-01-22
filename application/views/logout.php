@@ -1,5 +1,5 @@
-<h2><?php echo __("logout"); ?></h2>
-<p><?php echo __("logout explanation");?></p>
+<h2><?php echo __('Log Out'); ?></h2>
+<p><?php echo __('log out explanation');?></p>
 
 <?php if(count($errors) > 0 )
 {
@@ -18,5 +18,5 @@
 }
 ?>
 
-<?php echo __("come on back now");?>
+
 

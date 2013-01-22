@@ -291,8 +291,8 @@ class Helper_Menus
 			echo ' <li class="loginMenu">';
 			echo '<a href="'.url::base().'login">'.__('Login, Signup') .'</a>';
 			echo '<ul>';
-			echo '<li><a href="'.url::base().'login">'.__('login').'</a></li>';
-			echo '<li><a href="'.url::base().'signup">'.__('signup').'</a></li>';
+			echo '<li><a href="'.url::base().'login">'.__('Log In').'</a></li>';
+			echo '<li><a href="'.url::base().'signup">'.__('Sign Up').'</a></li>';
 			echo '</ul>';
 			echo '</li>';
 		}

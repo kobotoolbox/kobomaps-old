@@ -478,7 +478,7 @@ div.template_select .q2, div.template_select .q4
 }
 
 div.template_select .q4{
-	height: 400px;
+	height: 150px;
 	overflow:scroll;
 	overflow-x:hidden;
 	overflow-y:scroll;
@@ -511,6 +511,7 @@ ul.context_menu{
 	float:right;
 }
 
+
 .mapWLoading{
 	position:relative;
 	width:900px; 
@@ -533,7 +534,7 @@ ul.context_menu{
 	background-position:center; 
 	background-repeat:no-repeat;
 	position:absolute;
-	width:1000px; 
+	width:900px; 
 	height:400px;
 	top:0px;
 	left:0px	
@@ -718,3 +719,4 @@ div.shareWindow{
 div.shareWindow input{
 	width:540px;
 }
+

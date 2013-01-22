@@ -139,7 +139,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 		
 		/***Now that we have the form, lets initialize the UI***/
 		//The title to show on the browser
-		$header =  __("Add Map - Page 1") ;
+		$header =  __('Add Map - Basic Setup') ;
 		$this->template->html_head->title = $header;		
 		//make messages roll up when done
 		$this->template->html_head->messages_roll_up = true;
@@ -338,7 +338,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	
 	 	if($map->map_creation_progress < 1)
 	 	{
-	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
 	 		HTTP::redirect('mymaps/add1/?id='.$map_id);
 	 	}
 	 	
@@ -429,7 +428,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 
 	 	/***Now that we have the form, lets initialize the UI***/
 	 	//The title to show on the browser
-	 	$this->template->html_head->title = __('Add Map - Page 2');
+	 	$this->template->html_head->title = __('Add Map - Data Structure');
 	 	//make messages roll up when done
 	 	$this->template->html_head->messages_roll_up = true;
 	 	//the name in the menu
@@ -1114,6 +1113,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content->messages = array();
 	 	$this->template->content->errors = array();
 	 	$this->template->header->menu_page = "createmap";
+	 	$this->template->html_head->styles['all'] = 'media/css/jquery-ui.css';
+	 	$this->template->html_head->script_files[] = 'media/js/jquery-ui.min.js';
 	 	$this->template->html_head->script_views[] = view::factory('js/messages');
 	 	$js =  view::factory("addmap/add4_js");
 	 	$js->lat = $map->lat;

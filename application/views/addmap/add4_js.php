@@ -133,6 +133,8 @@ var labels = new Array();
 
 	//<Initialize things>
 	$(document).ready(function() {
+		//turn tooltips on
+	    $(document).tooltip();
 		//creates the map by looking for the "map_canvas" item in the HTML below. the map will fill in the "map_canvas" div
 		map = new google.maps.Map(document.getElementById("map_div"), myOptions);
 

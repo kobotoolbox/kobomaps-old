@@ -8,8 +8,8 @@
 ?>
 
 		
-<h2><?php echo __("Add Map - Page 1") ?></h2>
-<p><?php echo __("First we'll grab some basic info about your data");?></p>
+<h2><?php echo __('Add Map - Basic Setup'); echo  $data['title'] == '' ? '' : ' - '.$data['title']?></h2>
+<h3><?php echo __('First we will need some basic information for your map');?></h3>
 
 
 <?php if(count($errors) > 0 )

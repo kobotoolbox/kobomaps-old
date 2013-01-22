@@ -20,7 +20,7 @@ class Controller_Logout extends Controller_Main {
 		$auth = Auth::instance();
 		if( !($auth->logged_in() OR $auth->auto_login()))
 		{
-			$this->request->redirect('main');
+			HTTP::redirect('main');
 		}
 		
 		$auth->logout();

@@ -8,12 +8,9 @@
 ?>
 
 		
-<h2><?php echo __("Add Map - Page 5") ?></h2>
+<h2><?php echo __('Add Map - Geo Matching'). ' - '.$map->title ?></h2>
 
-
-<h3><?php echo $map->title;?></h3>
-<p><?php echo $map->description;?></p>
-<p><?php echo __('Select how the regions specified in your data match up to the regions in the template you have chosen. A drop down box surrouned in <strong><span style="color:#ff9900;">orange</span></strong> need to be set since no match was deteced for them.');?></p>
+<h3><?php echo __('Select how the regions specified in your data match up to the regions in the template you have chosen. A drop down box surrouned in <strong><span style="color:#ff9900;">orange</span></strong> need to be set since no match was deteced for them.');?></h3>
 
 
 
@@ -78,7 +75,7 @@
 			$sheet_val = $sheet_data[$sheet->id];
 			$row_data = $sheet_val[$header_row->name];
 			$name = $row_data[$column->name];
-			echo '<tr><td><strong>'.$name. '</strong> '. __('Maps to the templates region'). ': </td><td>';
+			echo '<tr><td><strong>'.$name. '</strong> '. __('Matches template region'). ': </td><td>';
 			$selected = $data[$sheet->id][$column->id];
 			//now that $selected is initialized, see if we can guess at 
 			if($selected == null) //then guess
@@ -118,11 +115,11 @@
 			
 	}
 	echo "<br/>";
-	echo __("All following sheets have the region settings?");
+	echo __('All following sheets have the same region settings?');
 	echo Form::checkbox('same_settings', null, false, array('id'=>'same_settings' ));
 	echo "<br/>";
 	echo "<br/>";
-	echo Form::submit('Submit', 'Submit');
+	echo Form::submit('Submit', __('Continue'));
 	echo Form::close();
 	if($not_matched_count > 0)
 	{

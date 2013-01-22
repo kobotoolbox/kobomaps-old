@@ -1,4 +1,4 @@
-<h1>Welcome to Kobo Maps</h1>
+<h1><?php echo __('Welcome to Kobo Maps');?></h1>
 <p>
 	KoBoMap is the latest KoBo product and is currently in development. The idea of KoBoMap is to facilitate the 
 	geospatial presentation of survey data. Survey data are typically available at national or sub-national levels. 

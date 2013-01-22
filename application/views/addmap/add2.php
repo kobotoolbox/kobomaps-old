@@ -8,51 +8,38 @@
 ?>
 
 
-<h2><?php echo __("Add Map - Page 2") ?></h2>
-
-
-<h3><?php echo $map->title;?></h3>
-<p><?php echo $map->description;?></p>
-<p><?php echo __("Now tell us about the structure of you data");?></p>
+<h2><?php echo __('Add Map - Data Structure'). ' - '.$map->title; ?></h2>
+<h3><?php echo __('Now tell us about the structure of your data');?></h3>
 <ul>
 	<li>
-		<strong><?php echo __('Header Rows');?></strong> - <?php echo __('Tell us which row is used as the header. This is the row that denotes the geographic areas. 
-				You can only specify one row as a header.')?>
+		<strong><?php echo __('Header Rows');?></strong> - <?php echo __('Tell us which row is used as the header. This is the row that denotes the geographic areas. You can only specify one row as a header.')?>
 	</li>
 	<li>
-		<strong><?php echo __('Data Rows');?></strong> - <?php echo __('Tell us which rows are used to store data for an indicator. 
-				You can specify as many data rows as needed, but there must be at least one.')?>
+		<strong><?php echo __('Data Rows');?></strong> - <?php echo __('Tell us which rows are used to store data for an indicator. You can specify as many data rows as needed, but there must be at least one.')?>
 	</li>
 	<li>
-		<strong><?php echo __('Indicator Columns');?></strong> - <?php echo __('Tell us which columns are used to specify the indicators or questions that the data in the rest 
-				of the spreadsheet shows. You can have mutliple columns that represent mulitple levels. You can specify multiple indicator columns')?>
+		<strong><?php echo __('Indicator Columns');?></strong> - <?php echo __('Tell us which columns are used to specify the indicators or questions that the data in the rest of the spreadsheet shows. You can have mutliple columns that represent mulitple levels. You can specify multiple indicator columns')?>
 	</li>
 	<li>
-		<strong><?php echo __('Region Columns');?></strong> - <?php echo __('Tell us which columns are used to hold the information that pertains to a specific geographic region.
-				You can speicfy mulitple region columns.')?>
+		<strong><?php echo __('Region Columns');?></strong> - <?php echo __('Tell us which columns are used to hold the information that pertains to a specific geographic region. You can speicfy mulitple region columns.')?>
 	</li>
 	<li>
-		<strong><?php echo __('Total Column - Optional');?></strong> - <?php echo __('Which column represents the total for all geographic regions.
-				You can only specify one total column')?>
+		<strong><?php echo __('Total Column - Optional');?></strong> - <?php echo __('Which column represents the total for all geographic regions. You can only specify one total column')?>
 	</li>
 	<li>
 		<strong><?php echo __('Total Label Column - Optional');?></strong> - <?php echo __('Which column presents the lable for the total column for each indicator (for example, this would not have to be labeled "total"). ')?>
 	</li>
 	<li>
-		<strong><?php echo __('Unit Column - Optional');?></strong> - <?php echo __('Which column stores the units for each indicator. You can only specify
-				one unit column.')?>
+		<strong><?php echo __('Unit Column - Optional');?></strong> - <?php echo __('Which column stores the units for each indicator. You can only specify one unit column.')?>
 	</li>
 	<li>
-		<strong><?php echo __('Source Column - Optional');?></strong> - <?php echo __('Which column stores the name of the source for each indicator.
-				You can only specify one source column.')?>
+		<strong><?php echo __('Source Column - Optional');?></strong> - <?php echo __('Which column stores the name of the source for each indicator. You can only specify one source column.')?>
 	</li>
 	<li>
-		<strong><?php echo __('Source Link Column - Optional');?></strong> - <?php echo __('Which column stores the link to the source for each indicator.
-				You can only specify one source link column.')?>
+		<strong><?php echo __('Source Link Column - Optional');?></strong> - <?php echo __('Which column stores the link to the source for each indicator. You can only specify one source link column.')?>
 	</li>
 	<li>
-		<strong><?php echo __('Ignore - Optional');?></strong> - <?php echo __('Set any column or row to ignore if it should not be taken into consideration when 
-				rendering the map. You can set multiple columns and rows to ignore.')?>
+		<strong><?php echo __('Ignore - Optional');?></strong> - <?php echo __('Set any column or row to ignore if it should not be taken into consideration when rendering the map. You can set multiple columns and rows to ignore.')?>
 	</li>
 </ul>
 
@@ -209,7 +196,7 @@
 	}
 	
 	echo "<br/>";
-	echo __("All following sheets have the same data structure?");
+	echo __('All following sheets have the same data structure?');
 	echo Form::checkbox('same_structure', null, false, array('id'=>'same_structure' ));
 	echo "<br/>";
 	echo "<br/>";

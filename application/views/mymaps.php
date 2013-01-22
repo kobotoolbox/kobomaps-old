@@ -7,14 +7,14 @@
 *************************************************************/
 ?>
 		
-<p><?php echo __("Select a map to edit or create a new one");?></p>
+<p><?php echo __('Select a map to edit or create a new one');?></p>
 
 
 <?php if(count($errors) > 0 )
 {
 ?>
 	<div class="errors">
-	<?php echo __("error"); ?>
+	<?php echo __('error'); ?>
 		<ul>
 <?php 
 	foreach($errors as $error)
@@ -73,7 +73,7 @@
 	<?php
 		if(count($maps) == 0)
 		{
-			echo '<tr><td colspan="3">'.__('you have no maps').'</td></tr>';
+			echo '<tr><td colspan="3">'.__('You have no maps').'</td></tr>';
 		}
 		$i = 0;
 		foreach($maps as $map){
@@ -94,27 +94,27 @@
 			<ul>
 			<li>
 				<a href="<?php echo url::base(); ?>mymaps/add1/?id=<?php echo $map->id;?>" > 
-					<img class="edit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('edit');?>
+					<img class="edit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Edit');?>
 				</a>
 			</li>
 			<li>
 				<a href="<?php echo url::base(); ?>mymaps/copy/?id=<?php echo $map->id;?>" > 
-					<img class="copy" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('copy');?>
+					<img class="copy" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Copy');?>
 				</a>
 			</li>
 			<li>
 				<a href="<?php echo url::base(); ?>public/view/?id=<?php echo $map->id;?>" >
-					<img class="view" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('view');?>
+					<img class="view" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View');?>
 				</a>
 			</li>
 			<li>
 				<a rel="#overlay" href="<?php echo url::base(); ?>share/window?id=<?php echo $map->id;?>" >
-					<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('share');?>
+					<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Share');?>
 				</a>
 			</li>
 			<li>
 				<a href="#" onclick="deleteMap(<?php echo $map->id?>);">
-					<img class="delete" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('delete');?>
+					<img class="delete" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Delete');?>
 				</a>
 			</li>			
 			</ul>

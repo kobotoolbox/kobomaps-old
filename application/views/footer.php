@@ -1,1 +1,1 @@
-<h3>Copyright KoBo <?php echo date('Y');?></h3>
+<h3><?php echo __('Copyright KoBo');?> <?php echo date('Y');?></h3>
