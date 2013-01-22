@@ -13,15 +13,19 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
 <style> <?php echo $map->CSS?></style>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.min.js"> </script>
-<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.address-1.4.min.js"> </script>
+
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/dragresize.js"> </script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/label.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.navigate.js"> </script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.tools.min.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery-ui.min.js"> </script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.address-1.4.min.js"> </script>
+<script src='http://connect.facebook.net/en_US/all.js'></script>
 <script type="text/javascript">
+
 
 
 
@@ -1671,6 +1675,23 @@ function scrollSheets(delta)
 function initialize_buttons()
 {
 	$("#fullScreenButton").click(function(){$("#siteHeader").toggle(); return false;});
+
+
+	//initialize the apple overlay effect
+	$("a[rel]").overlay({
+		mask: 'grey',
+		effect: 'apple',
+		onBeforeLoad: function() {
+			 
+            // grab wrapper element inside content
+            var wrap = this.getOverlay().find(".contentWrap");
+ 
+            // load the page specified in the trigger
+            wrap.load(this.getTrigger().attr("href"));
+        }
+	});
 }
+
+
 
 </script>

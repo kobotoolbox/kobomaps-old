@@ -29,6 +29,15 @@ div#header{
 	height:240px;
 }
 
+div#footer{
+	background-image: url('../img/submenu_background');
+	margin:0px;
+	margin-top:30px;
+	height:70px;
+	padding-left:50px;
+	padding-top:10px;
+}
+
 a#headerImage{
 	position:absolute;
 	top:10px;
@@ -147,6 +156,19 @@ div#mainMenu
 	border-top-right-radius:7px;
 	border-top-left-radius:7px;
 	box-shadow: 2px 2px 5px #888888;
+}
+#mainMenu li.adminmenu a
+{
+	font-size: 18px;
+	color: white;
+	background: #6e2e2e;
+	padding:10px;
+	text-decoration:none;
+	
+	
+	border-top-right-radius:7px;
+	border-top-left-radius:7px;
+	box-shadow: 2px 2px 5px #884444;
 }
 
 #mainMenu li.selected a{	
@@ -608,13 +630,7 @@ a, a:visited, a:link{
 	color:blue;
 }
 
-select.needstobemapped{
-	border: 3px solid #FF9900;
-}
-span#notAutoMatchedCount{
-	color:#FF9900;
-	font-weight:bold;
-}
+
 
 
 /************************************************************
@@ -720,3 +736,35 @@ div.shareWindow input{
 	width:540px;
 }
 
+ul.sharingTasks{
+	list-style-type: none;
+	margin-top:0px;
+}
+ul.sharingTasks li{
+	float:left;
+}
+.sharingTasks img{
+	height:32px;
+	background-repeat: no-repeat;
+}
+.sharingTasks img.emailShare{
+	background: url('../img/shareSprite.png') 0px 0px;	
+	width:32px;
+	}
+
+/************************************************************
+							add5 page stuff
+*************************************************************/
+#notAutoMatchedCount{
+	background: #ff9900;
+	padding:20px;
+	border-radius:7px;
+	color:white;
+	margin:20px auto;
+	font-weight:bold;
+	width:500px;
+}
+
+select.needstobemapped{
+	border: 3px solid #FF9900;
+}

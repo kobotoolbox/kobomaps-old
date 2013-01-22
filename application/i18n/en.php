@@ -160,6 +160,12 @@ return array
 		'Number of regions that couldn\'t be automatically matched:'=>'Number of regions that couldn\'t be automatically matched:',
 		
 		
+		//map view page
+		'Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.'=>'Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.',
+		'Please be patient while the map is loading.'=>'Please be patient while the map is loading.',
+		'powered by KoboToolbox'=>'powered by KoboToolbox',
+		'Please select an indicator to display its data.',
+		
 		
 		//footer
 		'Copyright KoBo'=>'Copyright KoBo',
@@ -188,6 +194,8 @@ return array
 		'I want to share this map with you:'=>'I want to share this map with you:',
 		'Sharing'=>'Sharing',
 		'map'=>'map',
+		'Link to share this indicator'=>'Link to share this indicator',
+		'Code to embed map'=>'Code to embed map',
 
 );
 

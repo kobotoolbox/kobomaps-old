@@ -32,11 +32,13 @@
 ?>		
 <div id="maplinks"	>
 	<div style="height:60px;width:10px;"></div>
-	<p id="mapHelpText">Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.</p>
+	<p id="mapHelpText"><?php echo __('Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.')?></p>
+	<?php if(strlen($map->description) > 0){?>
 	<p id="descriptionText"><?php echo $map->description;?></p>
+	<?php }?>
 		<ul id="questionsindicators" class="questionsindicators" >	</ul>
 	<p id="loadingtext">
-	Please be patient while the map is loading.  
+	<?php echo __('Please be patient while the map is loading.')?>  
 	</p>
 </div>
 
@@ -54,11 +56,11 @@
 	<div id="sheetnamesRightControl" class="sheetScrollerControll"><a href="">&gt;</a></div>
 	<div id="sheetnamesEndControl" class="sheetScrollerControll"><a href="">&gt;&gt;</a></div>
 	<div id="mapSocialShare">
-		<a id="shareButton" href="">
-		<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
+		<a id="shareButton" rel="#overlay" href="<?php echo url::base(); ?>share/window?id=<?php echo $map->id;?>" >
+			<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
 		</a>
 		<a id="fullScreenButton" href="">
-		<img class="fullscreen" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
+			<img class="fullscreen" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
 		</a>
 	</div>
 	
@@ -77,7 +79,7 @@
 	<div id="legend">
 
 		<div id="legendtext">
-			<span id="spanLegendText">Please select an indicator to display its data.</span>
+			<span id="spanLegendText"><?php echo __('Please select an indicator to display its data.')?></span>
 		</div>
 		<div id="legend_gradient">
 			<div id="percentleft">
@@ -112,12 +114,18 @@
 //Powered by KoBoToolbox - Please be kind and leave a reference with a link to our website.
 ?>
 		<div id="poweredby">
-		<a href="http://www.kobotoolbox.org" title="KoBoToolbox.org">powered by KoboToolbox</a>
+		<a href="http://www.kobotoolbox.org" title="KoBoToolbox.org"><?php echo __('powered by KoboToolbox')?></a>
 		</div>
 	</div>
 </div>
 
 
+<div class="apple_overlay" id="overlay">
+	<div class="contentWrap">
+		<img class="contentWrapWaiter" src="<?php echo URL::base();?>media/img/waiter_barber.gif"/>
+	</div>
+</div>
+<div id='fb-root'></div>
 
 </body> 
 </html> 
