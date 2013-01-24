@@ -62,6 +62,9 @@
 		<a id="fullScreenButton" href="">
 			<img class="fullscreen" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
 		</a>
+		<a id="turnOffLabelsButton" href="">
+			<img class="toggleLabels" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
+		</a>
 	</div>
 	
 </div>
@@ -100,16 +103,7 @@
 				<span id="sourceNoURL"></span>
 			</span>
         </div>
-		<div id="addthiswrappertop">
-			<div class="addthis_toolbox addthis_default_style ">
-				<a class="addthis_button_preferred_1"></a>
-				<a class="addthis_button_preferred_2"></a>
-				<a class="addthis_button_google_plusone" g:plusone:count="false"></a>
-				<a class="addthis_button_preferred_3"></a>
-				<a class="addthis_button_compact"></a>
-				<a class="addthis_counter addthis_bubble_style"></a>
-			</div>
-		</div>
+	
 <?php
 //Powered by KoBoToolbox - Please be kind and leave a reference with a link to our website.
 ?>
@@ -125,6 +119,10 @@
 		<img class="contentWrapWaiter" src="<?php echo URL::base();?>media/img/waiter_barber.gif"/>
 	</div>
 </div>
+
+
+
+
 <div id='fb-root'></div>
 
 </body> 

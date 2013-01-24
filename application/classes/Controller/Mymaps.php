@@ -32,6 +32,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 		$js = view::factory('mymaps_js');
 		$this->template->html_head->script_views[] = $js;
 		$this->template->html_head->script_views[] = view::factory('js/messages');
+		$this->template->html_head->script_views[] = view::factory('js/facebook');
 		
 		
 		/********Check if we're supposed to do something ******/
@@ -1988,6 +1989,15 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 }//end function
 	
 
+	 /**
+	  * Creates a copy of a given map
+	  * $_GET['id'] int - ID of the map to copy
+	  */
+	 public function action_copy()
+	 {
+	 	$this->template->header->menu_page = "mymaps";
+	 	$this->template->content = "<h1> Work in Progress</h1>";
+	 }
 	 
 	
 }//end of class

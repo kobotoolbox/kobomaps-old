@@ -742,6 +742,7 @@ ul.sharingTasks{
 }
 ul.sharingTasks li{
 	float:left;
+	margin-right:20px;
 }
 .sharingTasks img{
 	height:32px;
@@ -749,6 +750,10 @@ ul.sharingTasks li{
 }
 .sharingTasks img.emailShare{
 	background: url('../img/shareSprite.png') 0px 0px;	
+	width:32px;
+	}
+.sharingTasks img.fbShare{
+	background: url('../img/shareSprite.png') 32px 0px;	
 	width:32px;
 	}
 

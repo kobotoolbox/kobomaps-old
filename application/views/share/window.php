@@ -27,11 +27,13 @@
 	<ul class="sharingTasks">
 		<li>
 			<a href="mailto:?subject=<?php echo $subject;?>&body=<?php echo $body;?>">
-				<img class="emailShare" src="/kobomaps/media/img/img_trans.gif" width="1" height="1">
+				<img class="emailShare" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1">
 			</a>
 		</li>
 		<li>
-			<a href="https://www.facebook.com/dialog/feed?app_id=230846520384211&amp;link=https://developers.facebook.com/docs/reference/dialogs/&amp;picture=http://fbrell.com/f8.jpg&amp;name=Facebook%20Dialogs&amp;caption=Reference%20Documentation&amp;description=Using%20Dialogs%20to%20interact%20with%20users.&amp;redirect_uri=https://mighty-lowlands-6381.herokuapp.com/">here</a>
+			<a href="" onclick="postMapLinkToFacebookFeed(); return false;">
+				<img class="fbShare" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1">
+			</a>
 		</li>
 	</ul>
 	
@@ -41,21 +43,30 @@
 		<?php echo __('Link to share this indicator')?><br/>
 		<input readonly="readonly" type="text" value="<?php echo URL::site(NULL, TRUE)?>public/view?id=<?php echo $map->id?>#/?indicator="/>
 		<ul class="sharingTasks">
-		<li>
-		<a href="" id="indicatorEmail">
-			<img class="emailShare" src="/kobomaps/media/img/img_trans.gif" width="1" height="1">
-		</a>
-		</li>
+			<li>
+				<a href="" id="indicatorEmail">
+					<img class="emailShare" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1">
+				</a>
+			</li>
+			<li>
+				<a href="" onclick="postIndicatorLinkToFacebookFeed(); return false;">
+					<img class="fbShare" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1">
+				</a>
+			</li>
 		</ul>
 	</div>
 	
 	<script type="text/javascript">
+		//make this global
+		var mapShareIndicatorURL = null;
 		if( typeof $.address != 'undefined')
 		{
-			var indicator = $.address.parameter("indicator");
+			var mapShareIndicator = $.address.parameter("indicator");
 			if(typeof indicator != 'undefined')
 			{
-				var indicatorLink = $("#indicatorLink input").val() + indicator;
+
+				var indicatorLink = $("#indicatorLink input").val() + mapShareIndicator;
+				mapShareIndicatorURL = indicatorLink;
 				$("#indicatorLink input").val(indicatorLink);
 				$("#indicatorLink").show();
 				var body = encodeURIComponent("<?php echo __('I want to share this map with you:');?> " + indicatorLink);
@@ -64,6 +75,28 @@
 			}
 			
 		}
+
+		function postMapLinkToFacebookFeed()
+		{
+			postToFacebookFeed($("#indicatorLink input").val(),
+					'<?php echo str_replace("'", "\'", $map->title);?>',
+					'<?php echo __('By KoboMaps');?>',
+					'<?php echo str_replace("'", "\'", $map->description);?>',
+					null);
+			return false;
+		}
+
+		function postIndicatorLinkToFacebookFeed()
+		{
+			postToFacebookFeed(mapShareIndicatorURL,
+					'<?php echo str_replace("'", "\'", $map->title);?> - ' + $("#indicatorSpanId_"+indicator).text(),
+					'<?php echo __('By KoboMaps');?>',
+					'<?php echo str_replace("'", "\'", $map->description);?>',
+					null);
+			return false;
+		}
+			
+		
 	</script> 
 
 </div>

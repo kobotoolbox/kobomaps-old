@@ -81,7 +81,7 @@ div#sheetlinks a {color:white;}
 div#sheetlinks div#mapName {float:left;padding:10px 30px 10px 30px;font-weight:bold;font-size:20px;color:white;width:280px;}
 div#sheetlinks div.sheetScrollerControll{float:left;font-size:40px;font-weight:bold;padding:10px 10px;color:white;width:auto;margin-left:auto;}
 div#sheetlinks div.sheetScrollerControll a.inactive{color:gray;cursor:default}
-div#sheetlinks div#mapSocialShare{float:right;width:60px;}
+div#sheetlinks div#mapSocialShare{float:right;width:90px;}
 div#sheetlinks div#sheetnamesWrapper{float:left;width:400px;height:40px;overflow:hidden;}
 div#sheetlinks div#mapSocialShare img.share{
 	background: url('../img/tasksSprite.png') -110px 0px;	
@@ -92,11 +92,18 @@ div#sheetlinks div#mapSocialShare img.share{
 	}			
 div#sheetlinks div#mapSocialShare img.fullscreen{
 	background: url('../img/tasksSprite.png') -192px 0px;	
+	width:22px;
+	height:27px;
+	background-repeat: no-repeat;
+	margin: 5px 0px
+	}
+div#sheetlinks div#mapSocialShare img.toggleLabels{
+	background: url('../img/tasksSprite.png') -214px 0px;	
 	width:27px;
 	height:27px;
 	background-repeat: no-repeat;
 	margin: 5px 0px
-	}	
+	}			
 
 /* Styling the indicator list */
 span.sheet2 {color: #000;display: block;margin:0.5em 0;padding: 0.4em 0;font-size:1.7em;}

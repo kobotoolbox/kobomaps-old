@@ -23,7 +23,6 @@
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.tools.min.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery-ui.min.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.address-1.4.min.js"> </script>
-<script src='http://connect.facebook.net/en_US/all.js'></script>
 <script type="text/javascript">
 
 
@@ -261,6 +260,14 @@ function parseJsonData(jsonDataUrl)
 			$('#sheetlinks').show();
 			setup_scrolling();
 		}
+		else
+		{
+			$('#sheetnamesStartControl').hide();
+			$('#sheetnamesLeftControl').hide();
+			$('#sheetnamesWrapper').hide();
+			$('#sheetnamesRightControl').hide();
+			$('#sheetnamesEndControl').hide();
+		}
 		
 		
 		$('li.sheet').hide(); //This hides all ul level1 by default until they are toggled. Can also be defined in css.
@@ -284,7 +291,6 @@ function parseJsonData(jsonDataUrl)
 		var autoLoadIndicator = $.address.parameter("indicator");
 		if( autoLoadIndicator != "" && typeof autoLoadIndicator !== "undefined" )
 		{
-			console.log('autoLoadIndicator',autoLoadIndicator);
 			showByIndicator(autoLoadIndicator);
 		}
 		else
@@ -1455,7 +1461,6 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator, to
 function updateKey(min, span, title, unit)
 { 
 	if(isNaN(min) || isNaN(span)){
-		console.log("legend gradient range not defined by numbers");
 		$('#legend_gradient').hide();
 	}
 	else
@@ -1570,10 +1575,6 @@ function addCommas(nStr)
  var sheetsHeight = 0;
 function setup_scrolling()
 {
-
-	
-	
-
 	sheetsHeight = ($("#sheetnames").offset().top)-($(".lastSheetSelector").offset().top);
 	if(sheetsHeight < 0) //only show all of this if there's somewhere to scroll to
 	{
@@ -1640,6 +1641,7 @@ function scrollSheets(delta)
 		$("#sheetnames").animate({top:actualOffset},300);
 	}
 
+
 	
 	//make the scroll up, button inactive if need be
 	if(actualOffset == 0)
@@ -1676,6 +1678,8 @@ function initialize_buttons()
 {
 	$("#fullScreenButton").click(function(){$("#siteHeader").toggle(); return false;});
 
+	$("#turnOffLabelsButton").click(function(){$(".countylabel").toggle(); return false;});
+
 
 	//initialize the apple overlay effect
 	$("a[rel]").overlay({
@@ -1695,3 +1699,8 @@ function initialize_buttons()
 
 
 </script>
+	
+<?php 
+	$facebook_js = new View('js/facebook');
+	echo $facebook_js; 
+?>

@@ -77,6 +77,7 @@ class Helper_Menus
 				}
 				
 				//share
+				/*
 				if($page == "share")
 				{
 					echo '<li class="selected">';
@@ -86,7 +87,7 @@ class Helper_Menus
 					echo '<li>';
 				}
 				echo '<a href="'.url::base().'mymaps/share">'.__("Share").'</a></li>';
-				
+				*/
 				//statistics
 				if($page == "statistics")
 				{
@@ -96,7 +97,7 @@ class Helper_Menus
 				{
 					echo '<li>';
 				}
-				echo '<a href="'.url::base().'mymaps/statistics">'.__("Statistics").'</a></li>';
+				echo '<a href="'.url::base().'statistics">'.__("Statistics").'</a></li>';
 				
 			
 				

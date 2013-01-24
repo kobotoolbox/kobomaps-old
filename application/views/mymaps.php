@@ -140,5 +140,7 @@ echo Form::close();
 			<img class="contentWrapWaiter" src="<?php echo URL::base();?>media/img/waiter_barber.gif"/>
 		</div>
 	</div>
+	
+	<div id="fb-root"></div>
 
 
