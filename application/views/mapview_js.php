@@ -10,6 +10,7 @@
 
 <link href="<?php echo  URL::base() ?>media/css/templatePreview.css" type="text/css" rel="stylesheet">
 <link href="<?php echo  URL::base() ?>media/css/largemap.css" type="text/css" rel="stylesheet">  
+
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
 <style> <?php echo $map->CSS?></style>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.min.js"> </script>
@@ -26,7 +27,9 @@
 <script type="text/javascript">
 
 
-
+/* link to the stylesheet for the tabs used in chart windows *
+ <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+ */
 
 /*Todo: Make all these setings on the website:*/
 var kmapInfodivHeight = 300;
@@ -457,6 +460,7 @@ function showByIndicator(indicator)
 	$("li.sheet#sheetli_"+sheetId).addClass("active");
 	
 	dataPtr = mapData.sheets[sheetId]; //get the sheet, because it's different
+
 	var currentIndicator = sheetId; // stores the current indicator key as we built it up
 	//loop over the remaining indicators
 	for(i in ids)
@@ -477,7 +481,6 @@ function showByIndicator(indicator)
 		
 	}
 
-	
 
 	//now make sure
 	
@@ -500,7 +503,7 @@ function showByIndicator(indicator)
 		{
 			totalLabel = dataPtr["total_label"];
 		}
-		
+
 		UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel);
 		$.address.parameter("indicator", indicator);
 	
@@ -759,6 +762,7 @@ function showTooltip(x, y, contents) {
               display: 'none',
               top: y - 27,
               left: x,
+              'z-index': 1000,
               border: '1px solid #000',
               padding: '2px',
               'background-color': '#FFF',
@@ -821,7 +825,7 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 
 	//add extra padding to regional chart if only one data response
 	if(graphYAxis.length == 1){
-		graphYAxis.push([2, ""]);
+		graphYAxis.push([2, "No other data."]);
 		graphYAxis.push([3, ""]);
 	}
 
@@ -869,12 +873,12 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 		    	grid: {hoverable: true},
 		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 75, labelHeight: 20, panRange: [0.5, tempYAxis.length+1]},
 		    	xaxes:[{panRange: [0, largest]}, {position:"top", reserveSpace:true}],
-		    	pan:  {interactive: true, cursor: 'move', frameRate: 20}
+		    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
 			}
 		);
      }
      else{
-		document.getElementById('iChartLocal').innerHTML = "No regional data to display.";
+		$('iChartLocal').text("No regional data to display.");
      }
 
 	bindHoverTip("#iChartLocal", graphXData, graphYAxis);
@@ -952,13 +956,95 @@ function drawGeneralChart(fullId, dataPath, name){
 	bindHoverTip("#iChartFull" + fullId, graphXData, graphYAxis);
 }
 
+
+//used to draw the national total data chart
+function drawTotalChart(indicator){
+	var id = indicator.split("_");
+	var totalData = new Array();
+	var selecY;
+	var selecX;
+	var tempYAxis = new Array();
+	var tempXData = new Array();
+	var graphXData = new Array();
+	var graphYAxis = new Array();
+	var selectedArea = new Array();
+
+	var dataPtr = mapData.sheets[+id[0]];
+	for(var i=1; i < id.length; i++){
+		//that little plus down there converts the strings into actual integers to access data array
+		dataPtr = dataPtr.indicators[+id[i]];
+		if(i == id.length - 2){
+			totalData = dataPtr;
+		}
+	}
+//fill temp arrays with data
+	for(i in totalData.indicators){
+		var total = parseFloat(totalData.indicators[i].total);
+		if(!isNaN(total)){
+			tempYAxis.push(totalData.indicators[i].name);
+			tempXData.push(total);
+		}
+	}
+
+	count = tempYAxis.length;
+//fill in full arrays so that the chart is as large as it needs to be
+	for(i = 0; i < tempYAxis.length; i++){
+		graphYAxis.push([count, tempYAxis[i]]);
+		graphXData.push([tempXData[i], count]);
+		if(i == id[id.length - 1]){
+			selecY = count;
+			selecX = tempXData[i];
+		}	
+		
+		count --;
+	}
+
+	//fixes tooltip issue
+	graphXData.reverse();
+	graphYAxis.reverse();
+
+	//attempt to change height and width of nationalIndicatorChart div
+	var kmapInfochartHeight = (graphYAxis.length * (parseInt(kmapInfochartBarHeight) )) + Math.round(parseInt(kmapInfochartXAxisMargin) * 1.7);
+	var dimen = " height: " + (kmapInfochartHeight)+ "px; ";
+	var oldStyle = $("#nationalIndicatorChart").attr("style");
+
+	$("#nationalIndicatorChart").attr("style", oldStyle + dimen);
+	
+	selectedArea = [[selecX, selecY]];
+	var bothData = [
+		        	  {
+			        	data: graphXData,
+			          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(34,57,83)"} ,
+			          	color: "rgb(34,57,83)"
+		        	  },
+		        	  {
+			        	data: selectedArea,
+			        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(215, 24, 24)"} ,
+		        		color: "rgb(215, 24, 24)"
+		        	  }
+		  ];
+
+	$.plot($("#nationalIndicatorChart"), bothData,  {
+    	bars: {show: true, horizontal: true, fill: true},
+    	grid: {hoverable: true},
+    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 50, labelHeight: 20, panRange: [0.5, tempYAxis.length+1]},
+    	xaxes:[{}, {position:"top", reserveSpace:true}],
+    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
+		}
+	);
+
+	bindHoverTip("#nationalIndicatorChart", graphXData, graphYAxis);
+}
+
+
+
 //used by both charts to create the hover tooltip that finds the bar that is being hovered over
 function bindHoverTip(id, graphXData, graphYAxis){
 	
 	$(id).bind("plothover", function (event, pos, item) {
 		  if (item) { 
 	            $("#tooltip").remove(); 
-
+				console.log(graphYAxis.length);
 	            //datapoint is minus 1 as graphYAxis is 0 indexed and datapoint is 1 indexed
 	            var hoverName = graphYAxis[item.datapoint[1] - 1][1];
 	            
@@ -969,6 +1055,8 @@ function bindHoverTip(id, graphXData, graphYAxis){
 	           } 
 		});
 }
+
+
 /**
 * Name: Area's name as defined in the JSON that defines areas and their bounds
 * Percentage: percentage of X in the given area
@@ -984,7 +1072,7 @@ function UpdateAreaPercentageTitleData(name, percentage, min, spread, title, dat
 	var message = '<div class="chartHolder" style="height:'+kmapInfodivHeight+'px">' + createHTMLChart(name, title, data, indicator+"_by_area_chart");
 		
 	//create the chart by for all the indicators of the given question, assuming there's more than one
-	createChartByIndicators(title, data);
+	//createChartByIndicators(title, data);
 	
 	message += "</div>";
 	
@@ -1001,7 +1089,7 @@ function UpdateAreaPercentageTitleData(name, percentage, min, spread, title, dat
 * message: the message string as it currently stands
 * indicator: the indicator we're looking at
 * name: the name of the current geographical area
-*/
+*
 function createChartByIndicators(message, indicator, name, unit)
 {
 	//first check if there's more than one answer to the given question
@@ -1043,6 +1131,7 @@ function createChartByIndicators(message, indicator, name, unit)
 	
 	return message;
 }
+*/
 
 function createHTMLChart(name,title, data, id)
 {
@@ -1327,8 +1416,6 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 		$("#nationalaveragediv").show();
 		$("#nationalIndicatorChart").show();
 
-		//drawNationalIndicatorChart(data
-
 		//total label -- defaults to "Total"
 		if(typeof totalLabel == "undefined")
 		{
@@ -1344,12 +1431,17 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 		$("#nationalIndicatorChart").hide();
 	}
 
+	//draw the javascript graph of the totals of the selected indicator stack
+	drawTotalChart(indicator);
+	
 	if(title == "Please select an indicator to display its data.")
 	{
 		$('#sourcetextspan').hide()
 		//Show the gradient div
 		//$('#legend_gradient').show();
 	}
+
+	
 
 }
 
@@ -1411,7 +1503,7 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator, to
 	$("#nationalaverageimg").text(addCommas(nationalAverage)+" "+htmlDecode(unit));
 
 	$("#nationalaveragelabel").html(totalLabel);
-	
+/*
 	////////////////////////////////////////////////////////////////
 	//updates the national average chart
 	////////////////////////////////////////////////////////////////
@@ -1453,7 +1545,7 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator, to
 	
 	//TODO: fix the national chart
 	//$("#nationalIndicatorChart").html(nationalChart);
-	
+*/
 }
 
 //changed this to take another input 
@@ -1540,17 +1632,18 @@ function htmlDecode(value){
 		});
 })(jQuery);
 
-
+/*
 function stripString(str) 
 {
   return str.replace(/^\s+|\s+$/g, '');
 };
 
+
 function is_array(input)
 {
 	return typeof(input)=='object'&&(input instanceof Array);
 }
-
+*/
 
 function addCommas(nStr)
 {

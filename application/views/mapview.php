@@ -96,7 +96,7 @@
 			<span id="nationalaveragelabel"></span>
 			<span id="nationalaverageimg" ></span>
 		</div>
-        <div id="nationalIndicatorChart"></div>		
+        <div id="nationalIndicatorChart" style="width: 300px; height: 1px"></div>		
         <div id="sourcetext">
 			<span id="sourcetextspan" style="display:none;"> Data Source:  
 				<a id="sourceURL" href="" title=""></a>
