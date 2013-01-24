@@ -1005,10 +1005,11 @@ function drawTotalChart(indicator){
 
 	//attempt to change height and width of nationalIndicatorChart div
 	var kmapInfochartHeight = (graphYAxis.length * (parseInt(kmapInfochartBarHeight) )) + Math.round(parseInt(kmapInfochartXAxisMargin) * 1.7);
-	var dimen = " height: " + (kmapInfochartHeight)+ "px; ";
-	var oldStyle = $("#nationalIndicatorChart").attr("style");
+	//add in a new chart
+	$("#nationalIndicatorChart").empty();
+	$("#nationalIndicatorChart").height(kmapInfochartHeight);
 
-	$("#nationalIndicatorChart").attr("style", oldStyle + dimen);
+
 	
 	selectedArea = [[selecX, selecY]];
 	var bothData = [
@@ -1024,6 +1025,7 @@ function drawTotalChart(indicator){
 		        	  }
 		  ];
 
+	$("#nationalIndicatorChart").empty();
 	$.plot($("#nationalIndicatorChart"), bothData,  {
     	bars: {show: true, horizontal: true, fill: true},
     	grid: {hoverable: true},
@@ -1033,6 +1035,8 @@ function drawTotalChart(indicator){
 		}
 	);
 
+	//unbind any old event handlers
+	$("#nationalIndicatorChart").unbind("plothover");
 	bindHoverTip("#nationalIndicatorChart", graphXData, graphYAxis);
 }
 
@@ -1043,8 +1047,7 @@ function bindHoverTip(id, graphXData, graphYAxis){
 	
 	$(id).bind("plothover", function (event, pos, item) {
 		  if (item) { 
-	            $("#tooltip").remove(); 
-				console.log(graphYAxis.length);
+	            $("#tooltip").remove(); 				
 	            //datapoint is minus 1 as graphYAxis is 0 indexed and datapoint is 1 indexed
 	            var hoverName = graphYAxis[item.datapoint[1] - 1][1];
 	            
