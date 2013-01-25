@@ -60,7 +60,10 @@ class Controller_Public extends Controller_Main {
 	 				}
 	 		}
 	 	}
-	 	
+	 	//checking if this is where the increment_visits should be included
+	 	if(!($user != null AND $user->id == $map->user_id)){
+	 		Model_Usagestatistics::increment_visit($map->id);
+	 	}
 	 	$map_template = ORM::factory('Template', $map->template_id);
 	 	
 	 	$this->template = false;

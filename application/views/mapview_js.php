@@ -11,7 +11,7 @@
 <link href="<?php echo  URL::base() ?>media/css/templatePreview.css" type="text/css" rel="stylesheet">
 <link href="<?php echo  URL::base() ?>media/css/largemap.css" type="text/css" rel="stylesheet">  
 
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="<?php echo URL::base(); ?> media/css/jquery-ui.css" />
 <style> <?php echo $map->CSS?></style>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.min.js"> </script>
 

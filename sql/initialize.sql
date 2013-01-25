@@ -242,3 +242,19 @@ UPDATE `columns`, `regionmapping` SET `columns`.`template_region_id` = `regionma
 DROP TABLE regionmapping;
 /** now update the DB version **/
 UPDATE `metadata` SET  `v` =  '1.0.018' WHERE  `metadata`.`k` ='Database Version';
+
+
+/** Dylan creating tables to hold map statistics Jan 25, 2013 **/
+CREATE TABLE IF NOT EXISTS `usagestatistics` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `map_id` int(11) UNSIGNED NOT NULL,
+  `visits` int(11) UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+ALTER TABLE `usagestatistics`ADD CONSTRAINT `statistics_map_id_fk` FOREIGN KEY (`map_id`) REFERENCES `maps` (`id`) ON DELETE CASCADE;
+ALTER TABLE `usagestatistics` ADD INDEX  `usagestats_map` (`map_id`);
+ALTER TABLE `usagestatistics` ADD INDEX  `usagestats_date` (`date`);
+/** now update the DB version **/
+UPDATE `metadata` SET  `v` =  '1.0.019' WHERE  `metadata`.`k` ='Database Version';
+

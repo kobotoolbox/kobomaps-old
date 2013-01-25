@@ -197,6 +197,9 @@ return array
 		'Link to share this indicator'=>'Link to share this indicator',
 		'Code to embed map'=>'Code to embed map',
 		'By KoboMaps'=>'By KoboMaps',
+		
+		//statistics
+		'Select Maps' => 'Select Maps'
 
 );
 
