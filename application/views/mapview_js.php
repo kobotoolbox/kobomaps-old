@@ -32,10 +32,10 @@
  */
 
 /*Todo: Make all these setings on the website:*/
-var kmapInfodivHeight = 300;
+var kmapInfodivHeight = 280;
 //modify the base setting for the Google chart here (if necessary)
 var kmapInfochartWidth = 315; //if this number is changed, the legend div (which contains the national graph) also needs to be adjusted 
-var kmapInfochartBarHeight = 16; //these are numbers, not strings
+var kmapInfochartBarHeight = 40; //these are numbers, not strings
 var kmapInfochartXAxisMargin = 35;
 
 
@@ -452,15 +452,17 @@ function showByIndicator(indicator)
 	$("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).addClass("active");
 	//scroll to the just highlighted sheet
 	currentListTop = $("#sheetnames").offset().top;
-	currentTopOfSelectedItem = $("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).offset().top
-	scrollSheets(-(currentTopOfSelectedItem-currentListTop));
+	if($("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).offset() != null){
+		currentTopOfSelectedItem = $("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).offset().top
+		scrollSheets(-(currentTopOfSelectedItem-currentListTop));
+	}
 	$("li.sheet").hide();
 	$("li.sheet").removeClass("active");
 	$("li.sheet#sheetli_"+sheetId).show();
 	$("li.sheet#sheetli_"+sheetId).addClass("active");
 	
 	dataPtr = mapData.sheets[sheetId]; //get the sheet, because it's different
-
+	
 	var currentIndicator = sheetId; // stores the current indicator key as we built it up
 	//loop over the remaining indicators
 	for(i in ids)
@@ -792,17 +794,18 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 					if(value > largest){
 						largest = value;
 					}	
-					tempYAxis.push(regionData.indicators[i].name);
-					tempXData.push(value);
+					tempYAxis[i] = regionData.indicators[i].name;
+					tempXData[i] = value;
 				}
 				break;
 			}
 		}
 		
 	}
-	count = tempYAxis.length;
+	count = Object.keys(tempYAxis).length;
 
-	for(i = 0; i < tempYAxis.length; i++){
+
+	for(i in tempYAxis){
 		graphYAxis.push([count, tempYAxis[i]]);
 		graphXData.push([tempXData[i], count]);
 		if(i == indicatorIdNum){
@@ -824,12 +827,12 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 	graphYAxis.reverse();
 
 	//add extra padding to regional chart if only one data response
-	if(graphYAxis.length == 1){
-		graphYAxis.push([2, "No other data."]);
+	/*if(graphYAxis.length == 1){
+		graphYAxis.push([2, ""]);
 		graphYAxis.push([3, ""]);
 	}
-
-	var kmapInfochartHeight = (graphYAxis.length * (parseInt(kmapInfochartBarHeight) )) + Math.round(parseInt(kmapInfochartXAxisMargin) * 1.7);
+*/
+	var kmapInfochartHeight = calculateBarHeight(graphYAxis.length);
 
 	
 	//possible dark blue color is '223953'
@@ -871,8 +874,8 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 		 $.plot($("#iChartLocal"), bothData,  {
 		    	bars: {show: true, horizontal: true, fill: true},
 		    	grid: {hoverable: true},
-		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 75, labelHeight: 20, panRange: [0.5, tempYAxis.length+1]},
-		    	xaxes:[{panRange: [0, largest]}, {position:"top", reserveSpace:true}],
+		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, panRange: [0.5, tempYAxis.length+1]},
+		    	xaxes:[{panRange: [0, largest]}],
 		    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
 			}
 		);
@@ -948,7 +951,7 @@ function drawGeneralChart(fullId, dataPath, name){
 	 $.plot($("#iChartFull"+fullId), bothData,  {
 	    	bars: {show: true, horizontal: true, fill: true},
 	    	grid: {hoverable: true},
-	    	yaxis:{ticks: graphYAxis, panRange: [0.5, count]},
+	    	yaxis:{ticks: graphYAxis, panRange: [0.5, count], labelWidth: 60},
 	    	xaxis:{panRange: [0, largest]},
 	    	pan:  {interactive: true, cursor: 'move', frameRate: 20}
 		}
@@ -1004,7 +1007,7 @@ function drawTotalChart(indicator){
 	graphYAxis.reverse();
 
 	//attempt to change height and width of nationalIndicatorChart div
-	var kmapInfochartHeight = (graphYAxis.length * (parseInt(kmapInfochartBarHeight) )) + Math.round(parseInt(kmapInfochartXAxisMargin) * 1.7);
+	var kmapInfochartHeight = calculateBarHeight(graphYAxis.length);
 	//add in a new chart
 	$("#nationalIndicatorChart").empty();
 	$("#nationalIndicatorChart").height(kmapInfochartHeight);
@@ -1025,12 +1028,12 @@ function drawTotalChart(indicator){
 		        	  }
 		  ];
 
-	$("#nationalIndicatorChart").empty();
+	//$("#nationalIndicatorChart").empty();
 	$.plot($("#nationalIndicatorChart"), bothData,  {
     	bars: {show: true, horizontal: true, fill: true},
     	grid: {hoverable: true},
-    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 50, labelHeight: 20, panRange: [0.5, tempYAxis.length+1]},
-    	xaxes:[{}, {position:"top", reserveSpace:true}],
+    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, panRange: [0.5, tempYAxis.length+1]},
+    	xaxes:[{}],
     	pan:  {interactive: false, cursor: 'move', frameRate: 20}
 		}
 	);
@@ -1044,7 +1047,7 @@ function drawTotalChart(indicator){
 
 //used by both charts to create the hover tooltip that finds the bar that is being hovered over
 function bindHoverTip(id, graphXData, graphYAxis){
-	
+	$(id).unbind("plothover");
 	$(id).bind("plothover", function (event, pos, item) {
 		  if (item) { 
 	            $("#tooltip").remove(); 				
@@ -1060,6 +1063,10 @@ function bindHoverTip(id, graphXData, graphYAxis){
 }
 
 
+function calculateBarHeight(barCount){
+	var temp = (barCount * (parseInt(kmapInfochartBarHeight))) ;
+	return temp; //(barCount * (parseInt(kmapInfochartBarHeight)));
+}
 /**
 * Name: Area's name as defined in the JSON that defines areas and their bounds
 * Percentage: percentage of X in the given area
@@ -1153,22 +1160,23 @@ function createHTMLChart(name,title, data, id)
 		//areaName = encodeURIComponent(areaName).replace(/ /g, "+");
 	}
 
-	var kmapInfochartHeight = (count * (parseInt(kmapInfochartBarHeight) )) + Math.round(parseInt(kmapInfochartXAxisMargin) * 1.7);
-
+	var kmapInfochartHeight = calculateBarHeight(count);
+	
 	//creates the tab html that contains the chart ids
 	var chartStr = '<div id="'+ id + '" class="infowindow"><p class="bubbleheader">' + name + "; " + title
 	+'</p>' +
-	'<div id = "iChartTabs" style= "width: 350px; height:'+ (kmapInfochartHeight + 55) + 'px">' +
+	'<div id = "iChartTabs" style= "width: 350px; height: 200px">' +
 	  		'<ul>' +
 	  			'<li> <a href="#iChartFull">' + title + ' </a> </li>' + 
-				'<li> <a href="#iChartLocal">' + name + '</a> </li>' +
+				'<li> <a href="#iChartLocalTab">' + name + '</a> </li>' +
 	  		'</ul>' +
-	  		'<div id= "iChartFull" style= "overflow: auto;">'+
+	  		'<div id= "iChartFull" style="height: 140px; overflow-y: auto; overflow-x: hidden">'+
 	  			'<div id="iChartFull' + id + '"  style=" width:300px; height:'+kmapInfochartHeight+'px">' + 
 	  				'</div>' +
 	  			'</div>' +
-	  		'<div id="iChartLocal" style = " width : 320px; position: relative; padding: 0px">' +
-	  			'</div>' + 
+	  			'<div id="iChartLocalTab" style="height: 140px; overflow-y: auto; overflow-x: hidden">' +
+	  		'<div id="iChartLocal" style = " width : 300px; position: relative; padding: 0px">' +
+	  			'</div> </div>' + 
 	  	'</div> ';
 		
 
