@@ -52,17 +52,35 @@ class Controller_Statistics extends Controller_Loggedin {
 		return 'rgb('.$r.','.$g.','.$b.')';
 	}
 	
-	
+
+	/**
+	 * AJAX call for getting JSON data for a specific set of maps and time frame
+	 * POST variables for this are start, end, and map. 
+	 */
 	public function action_getData(){
+		
+		
 		$this->auto_render = false;
 		$this->response->headers('Content-Type','application/json');
+
+		//make sure all the required parameters have been specified
+		if(!isset($_POST['start']) OR !isset($_POST['end']) OR !isset($_POST['map']))
+		{
+			echo '{}';
+			exit;
+		}
+		//make sure the map parameter is an array and has at least one map specified
+		if(!is_array($_POST['map']) OR count($_POST['map']) == 0)
+		{
+			echo '{}';
+			exit;
+		}
 		
-		$data = $_POST;
 		
-		$startDate = date('Y-m-d',strtotime($data['start']));
-		$endDate = date('Y-m-d',strtotime($data['end']));
-		$map = $data['map'];
-		echo '[';
+		$startDate = date('Y-m-d',strtotime($_POST['start']));
+		$endDate = date('Y-m-d',strtotime($_POST['end']));
+		$map = $_POST['map'];
+		echo '{';
 		$j = 0;
 		foreach($map as $id){
 			$j++;
@@ -70,11 +88,13 @@ class Controller_Statistics extends Controller_Loggedin {
 			if($j>1){
 				echo ',';
 			}
-			echo $map_name.':{data:[';
-			
-			$stat_obj = ORM::factory('Usagestatistics')->where('date', '>=', $startDate)->where('date', '<=', $endDate)
-			->where('map_id', '=', $id)->find_all();
-			
+			echo json_encode($map_name).':[';
+			$stat_obj = ORM::factory('Usagestatistics')
+				->where('date', '>=', $startDate)
+				->where('date', '<=', $endDate)
+				->where('map_id', '=', $id)
+				->find_all();
+			$stats_array = array();
 			$i = 0;
 			foreach($stat_obj as $values){
 				$i++;
@@ -82,12 +102,11 @@ class Controller_Statistics extends Controller_Loggedin {
 				{
 					echo ',';
 				}
-				echo '['.$values->date.','.$values->visits.']';
-				
+				echo '["'.$values->date.'",'.$values->visits.']';
 			}
-			echo ']}';
+			echo ']';
 		}
-		echo ']';
+		echo '}';
 	}
 	
 		 
