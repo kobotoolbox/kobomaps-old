@@ -164,7 +164,9 @@ return array
 		'Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.'=>'Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.',
 		'Please be patient while the map is loading.'=>'Please be patient while the map is loading.',
 		'powered by KoboToolbox'=>'powered by KoboToolbox',
-		'Please select an indicator to display its data.',
+		'Please select an indicator to display its data.'=>'Please select an indicator to display its data.',
+		'Toggle Labels' => 'Toggle Labels',
+		'Toggle Values' => 'Toggle Values',
 		
 		
 		//footer

@@ -56,15 +56,29 @@
 	<div id="sheetnamesRightControl" class="sheetScrollerControll"><a href="">&gt;</a></div>
 	<div id="sheetnamesEndControl" class="sheetScrollerControll"><a href="">&gt;&gt;</a></div>
 	<div id="mapSocialShare">
-		<a id="shareButton" rel="#overlay" href="<?php echo url::base(); ?>share/window?id=<?php echo $map->id;?>" >
-			<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
-		</a>
-		<a id="fullScreenButton" href="">
-			<img class="fullscreen" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
-		</a>
-		<a id="turnOffLabelsButton" href="">
-			<img class="toggleLabels" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
-		</a>
+		<ul>			
+			<li>
+				<a id="shareButton" rel="#overlay" href="<?php echo url::base(); ?>share/window?id=<?php echo $map->id;?>" >
+					<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
+				</a>
+			</li>
+			<li>
+				<a id="fullScreenButton" href="">
+					<img class="fullscreen" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
+				</a>
+			</li>
+			<li>
+				<img class="toggleLabels" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
+				<ul id="toggleTextButtons">
+					<li>
+						<a href="" id="turnOffLabelsButton"><?php echo __('Toggle Labels')?></a>
+					</li>
+					<li>
+						<a href="" id="turnOffValuesButton"><?php echo __('Toggle Values')?></a>
+					</li>
+				</ul>
+			</li>
+		</ul>
 	</div>
 	
 </div>

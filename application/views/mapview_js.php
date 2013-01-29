@@ -1778,9 +1778,22 @@ function scrollSheets(delta)
  var headerOffset = 0;
 function initialize_buttons()
 {
+	//hanlde toggling between full screen and normal view
 	$("#fullScreenButton").click(function(){$("#siteHeader").toggle(); return false;});
 
-	$("#turnOffLabelsButton").click(function(){$(".countylabel").toggle(); return false;});
+	//handle turning off and on the labels on the map
+	$("#turnOffLabelsButton").click(function(){
+		$(".countylabelname").toggle(); 
+		$("#turnOffLabelsButton").toggleClass("active"); 
+		return false;
+		});
+
+	//hanndle turning on and off values on the map
+	$("#turnOffValuesButton").click(function(){
+		$(".areaVal").toggle();
+		$("#turnOffValuesButton").toggleClass("active"); 
+		return false;
+		});
 
 
 	//initialize the apple overlay effect
