@@ -200,6 +200,7 @@ return array
 		
 		//statistics
 		'Select Maps' => 'Select Maps'
+		
 
 );
 

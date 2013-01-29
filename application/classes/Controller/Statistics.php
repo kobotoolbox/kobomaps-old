@@ -23,6 +23,8 @@ class Controller_Statistics extends Controller_Loggedin {
 		$this->template->header->menu_page = "statistics";
 		$this->template->content = new View('statistics/main');
 		$this->template->html_head->script_files[] = 'media/js/jquery-ui.min.js';
+		$this->template->html_head->script_files[] = 'media/js/flot/jquery.flot.js';
+		$this->template->html_head->script_files[] = 'media/js/flot/jquery.flot.navigate.js';
 		$this->template->html_head->script_views[] = new View('statistics/main_js');
 		$this->template->html_head->styles['all'] = 'media/css/jquery-ui.css';
 		
@@ -34,23 +36,7 @@ class Controller_Statistics extends Controller_Loggedin {
 		
 	}//end action_index
 	
-	private function hash_colors($id)
-	{
-		$hash = 255 % $id;
-		$r = 255;
-		$g = 255;
-		$b = 255;
-		if($hash % 3 == 0){
-			$b = $hash;
-		}
-		if($hash % 2 == 0){
-			$g = $hash;
-		}
-		if($hash % 1 == 0){
-			$r = $hash;
-		}
-		return 'rgb('.$r.','.$g.','.$b.')';
-	}
+
 	
 
 	/**
@@ -58,7 +44,6 @@ class Controller_Statistics extends Controller_Loggedin {
 	 * POST variables for this are start, end, and map. 
 	 */
 	public function action_getData(){
-		
 		
 		$this->auto_render = false;
 		$this->response->headers('Content-Type','application/json');
@@ -80,7 +65,7 @@ class Controller_Statistics extends Controller_Loggedin {
 		$startDate = date('Y-m-d',strtotime($_POST['start']));
 		$endDate = date('Y-m-d',strtotime($_POST['end']));
 		$map = $_POST['map'];
-		echo '{';
+		echo '[';
 		$j = 0;
 		foreach($map as $id){
 			$j++;
@@ -88,11 +73,13 @@ class Controller_Statistics extends Controller_Loggedin {
 			if($j>1){
 				echo ',';
 			}
-			echo json_encode($map_name).':[';
+			
+			echo '{"label":'.json_encode($map_name).', "data":[';
 			$stat_obj = ORM::factory('Usagestatistics')
 				->where('date', '>=', $startDate)
 				->where('date', '<=', $endDate)
 				->where('map_id', '=', $id)
+				->order_by('date', 'ASC')
 				->find_all();
 			$stats_array = array();
 			$i = 0;
@@ -102,11 +89,11 @@ class Controller_Statistics extends Controller_Loggedin {
 				{
 					echo ',';
 				}
-				echo '["'.$values->date.'",'.$values->visits.']';
+				echo '['.(strtotime($values->date) * 1000).','.$values->visits.']';
 			}
-			echo ']';
+			echo ']}';
 		}
-		echo '}';
+		echo ']';
 	}
 	
 		 

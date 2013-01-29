@@ -884,7 +884,7 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 		$('iChartLocal').text("No regional data to display.");
      }
 
-	bindHoverTip("#iChartLocal", graphXData, graphYAxis);
+	bindHoverTip("#iChartLocal", graphYAxis);
 
 	
 	
@@ -956,7 +956,7 @@ function drawGeneralChart(fullId, dataPath, name){
 	    	pan:  {interactive: true, cursor: 'move', frameRate: 20}
 		}
 	);
-	bindHoverTip("#iChartFull" + fullId, graphXData, graphYAxis);
+	bindHoverTip("#iChartFull" + fullId,graphYAxis);
 }
 
 
@@ -1038,15 +1038,13 @@ function drawTotalChart(indicator){
 		}
 	);
 
-	//unbind any old event handlers
-	$("#nationalIndicatorChart").unbind("plothover");
-	bindHoverTip("#nationalIndicatorChart", graphXData, graphYAxis);
+	bindHoverTip("#nationalIndicatorChart", graphYAxis);
 }
 
 
 
-//used by both charts to create the hover tooltip that finds the bar that is being hovered over
-function bindHoverTip(id, graphXData, graphYAxis){
+//used by all charts to create the hover tooltip that finds the bar that is being hovered over
+function bindHoverTip(id, graphYAxis){
 	$(id).unbind("plothover");
 	$(id).bind("plothover", function (event, pos, item) {
 		  if (item) { 

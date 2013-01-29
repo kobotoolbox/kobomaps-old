@@ -773,3 +773,18 @@ ul.sharingTasks li{
 select.needstobemapped{
 	border: 3px solid #FF9900;
 }
+
+
+/************************************************************
+						Stats
+*************************************************************/
+#statChart{
+	float: right;
+}
+.hasDatepicker{
+	width: 80px;
+}
+#statsControls{
+	width: 200px;
+}
+
