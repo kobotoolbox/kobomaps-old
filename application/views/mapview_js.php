@@ -636,10 +636,13 @@ function parseJsonToGmap(jsonUrl, jsonDataUrl)
 */
 function formatAreaOpacityColor(name, opacityValue, colorValue)
 {
-	areaGPolygons[name].setOptions({
-				fillColor: colorValue,
-				fillOpacity: opacityValue
-			});
+	if(typeof areaGPolygons[name] != "undefined")
+	{
+		areaGPolygons[name].setOptions({
+					fillColor: colorValue,
+					fillOpacity: opacityValue
+				});
+	}
 }
 
 /**
