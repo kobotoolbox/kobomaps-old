@@ -201,7 +201,11 @@ return array
 		'By KoboMaps'=>'By KoboMaps',
 		
 		//statistics
-		'Select Maps' => 'Select Maps'
+		'Select Maps' => 'Select Maps',
+		'Please choose a map' => 'Please choose a map',
+		'End Date' => 'End Date',
+		'Start Date' => 'Start Date',
+		'Dates on the graph that are shaded grey corespond to weekends.' => 'Dates on the graph that are shaded grey corespond to weekends.'
 		
 
 );

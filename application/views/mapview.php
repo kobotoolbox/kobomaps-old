@@ -110,8 +110,8 @@
 			<span id="nationalaveragelabel"></span>
 			<span id="nationalaverageimg" ></span>
 		</div>
-		<div id="nationalChartScrollDiv"  style=" width:320px; height: 130px; overflow-y: auto; overflow-x: hidden">
-        	<div id="nationalIndicatorChart" style="width: 300px "></div>		
+		<div id="nationalChartScrollDiv"  style=" width:320px; overflow-y: auto; overflow-x: hidden">
+        	<div id="nationalIndicatorChart" style="width: 300px"></div>		
         </div>
         <div id="sourcetext">
 			<span id="sourcetextspan" style="display:none;"> Data Source:  

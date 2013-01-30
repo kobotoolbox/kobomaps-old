@@ -44,6 +44,28 @@
 		return 'rgb(' + r + ',' + g + ',' + b + ')';
 	}
 
+
+	//color the weekends in the stat chart
+	 function weekendAreas(axes) {
+	        var markings = [];
+	        var d = new Date(axes.xaxis.min);
+	        // go to the first Saturday
+	        d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 1) % 7))
+	        d.setUTCSeconds(0);
+	        d.setUTCMinutes(0);
+	        d.setUTCHours(0);
+	        var i = d.getTime();
+	        do {
+	            // when we don't set yaxis, the rectangle automatically
+	            // extends to infinity upwards and downwards
+	            markings.push({ xaxis: { from: i, to: i + 2 * 24 * 60 * 60 * 1000 } });
+	            i += 7 * 24 * 60 * 60 * 1000;
+	        } while (i < axes.xaxis.max);
+
+	        return markings;
+	}
+
+	    
 	function drawGraph(data){
 		var names = new Array();
 		
@@ -52,75 +74,76 @@
 	    		lines: {show: true, lineWidth: 1.5},
 	    		points: {show: true}
 			},
-	    	grid: {hoverable: true, autoHighlight: true},
+	    	grid: {hoverable: true, autoHighlight: true, markings: weekendAreas},
 	    	yaxis:{position: "left", labelWidth: 60, labelHeight: 20, min:0},
-	    	xaxis: {mode: 'time', timeformat: '%m/%d/%y',
-	    		timezone: 'browser'}
+	    	xaxis: {mode: 'time', timezone: 'browser'}
 			}
 		);
 		
 		bindHoverTip("#statChart");
 	}
 
-	function parseData(data){
-		console.log(data);
-		var today = new Date();
-		today = Date.parse(today);
-		var monthAgo = new Date();
-		var dayLength = 24 * 60 * 60 * 1000;
-		monthAgo = Date.parse(monthAgo) - (24 * 60 * 60 * 30);
-		
-		for(maps in data){
-			if(data[maps].data.length == 0){
-				var currentDay = monthAgo;
-				for(var i = 0; i < 31; i++){
-					data[maps].data.push([currentDay, 0]);
-					currentDay -= dayLength;
-				}
-			}
-			else{
-				for(i in data[maps].data){
-					if(data[maps].data[+i + 1] != null){
-						if(data[maps].data[+i + 1][0] - data[maps].data[+i][0] > dayLength){
-							var tempDay = data[maps].data[+i][0];
-							var temp = data[maps].data[+i + 1][0] - data[maps].data[+i][0];
-							for(var i = 0; i < Math.round(temp / dayLength); i ++){
-								data[maps].data.splice((+i), 0, [tempDay + dayLength, 0]);
-							}
-						} 
-					}
-					var currentDay = monthAgo;
-					//for(var i = 0; i < 31; i++){
-					//	data[maps].data.push([currentDay, 0]);
-					//	currentDay -= dayLength;
-					//}
-				}
-			}
+	function parseDates(date){
+		var returnVal = new Date(date);
+		returnVal.setUTCHours(0);
+		return returnVal.valueOf();
+	}
 
-			//make a new array to push all data into after checking if days apart
-			//change the 31 in the for loop above to be variable
-			console.log(data);
+	function parseData(data){
+		var startDate = parseDates($("#startDate").val());
+		var endDate = parseDates($("#endDate").val());
+		var dayLength = 24 * 60 * 60 * 1000;
+
+		if(data[0].data == null){
+			alert("<?php echo __('Please chooose a map')?>");
 		}
+		
+		else {
+			for(maps in data){
+			//for the days between startDate and endDate go into the data arrays
+			var currentDay = startDate;
+			for(var j = 0; j <= Math.round((endDate - startDate) / dayLength); j++){
+				var containsDay = false;
+				//check to see if this date is not already in the array
+					for(var k = 0; k < data[maps].data.length; k++){
+						if(data[maps].data[k][0] == currentDay){
+							containsDay = true;
+							break;
+						}
+					}
+					//if no day, put a day with value of 0
+					if(!containsDay){
+						data[maps].data.push([currentDay, 0]);
+						currentDay += dayLength;
+					}
+					else currentDay += dayLength;
+						
+					}
+			//sort the array to draw in proper sequence	
+			data[maps].data.sort(function(a,b){return a[0]-b[0]});	
+			}
+		}
+
 		return data;
 	}
 	function bindHoverTip(id){
 		$(id).unbind("plothover");
 		$(id).bind("plothover", function (event, pos, item) {
 			  if (item) { 
-		            $("#tooltip").remove(); 
+		            $("#statsTooltip").remove(); 
 		            var myDate = new Date(item.datapoint[0]);
 		            showTooltip(item.series.color, pos.pageX, pos.pageY, 
 				            item.series.label + ' was visited ' + item.datapoint[1] + 
-				            ' times on ' + (myDate.getMonth() + 1) + '/' + myDate.getDate() + '/' + myDate.getFullYear() + '.');
+				            ' times on ' + (myDate.getUTCMonth() + 1) + '/' + myDate.getUTCDate() + '/' + myDate.getUTCFullYear() + '.');
 			   }
 			    else { 
-		             $("#tooltip").remove(); 
+		             $("#statsTooltip").remove(); 
 		           } 
 			});
 	}
 	
 	function showTooltip(color, x, y, contents) {
-        $('<div id="tooltip">' + contents + '</div>').css( {
+        $('<div id="statsTooltip">' + contents + '</div>').css( {
             position: 'absolute',
             display: 'none',
             top: y - 25,

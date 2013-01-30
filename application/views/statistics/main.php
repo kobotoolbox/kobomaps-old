@@ -10,15 +10,17 @@
 	
 <h1> <?php echo __('Statistics')?></h1>
 
-<div id="statChart" style= "width:700px; height:500px"></div>
+
+<div id="statChartWrapper"> <p> <?php echo __('Dates on the graph that are shaded grey corespond to weekends.')?> </p> 
+<div id="statChart" style= "width:700px; height:500px"></div></div>
 <div id="statsControls">
 	<?php echo __('Select Maps')?> <br/>
 	<?php echo Form::select('maps',$maps,null, array('id'=>'maps', 'multiple'=>'multiple'));?>
 	
-	<p>Start Date: <input type="text" id="startDate" value="<?php 
+	<p><?php echo __('Start Date')?>: <input type="text" id="startDate" value="<?php 
 			echo date('m/d/Y', time() - (24 * 60 * 60 * 30));
 		?>"/>
 	</p>
-	<p>End Date: <input type="text" id="endDate" value="<?php echo date('m/d/Y', time());?>" /></p>
-	<input type="button" value="Submit" onclick="updateGraph()"/>
+	<p><?php echo __('End Date')?>: <input type="text" id="endDate" value="<?php echo date('m/d/Y', time());?>" /></p>
+	<input type="button" value="<?php echo __('Submit')?>" onclick="updateGraph()"/>
 </div>

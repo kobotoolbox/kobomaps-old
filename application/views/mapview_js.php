@@ -11,7 +11,7 @@
 <link href="<?php echo  URL::base() ?>media/css/templatePreview.css" type="text/css" rel="stylesheet">
 <link href="<?php echo  URL::base() ?>media/css/largemap.css" type="text/css" rel="stylesheet">  
 
-<link rel="stylesheet" href="<?php echo URL::base(); ?> media/css/jquery-ui.css" />
+<link rel="stylesheet" href="<?php echo URL::base(); ?>media/css/jquery-ui.css" />
 <style> <?php echo $map->CSS?></style>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.min.js"> </script>
 
@@ -980,65 +980,75 @@ function drawTotalChart(indicator){
 			totalData = dataPtr;
 		}
 	}
-//fill temp arrays with data
-	for(i in totalData.indicators){
-		var total = parseFloat(totalData.indicators[i].total);
-		if(!isNaN(total)){
-			tempYAxis.push(totalData.indicators[i].name);
-			tempXData.push(total);
+
+	if(dataPtr.total == null){
+		$("#nationalChartScrollDiv").hide();
+		return;
+	}
+
+	else{
+		$("#nationalChartScrollDiv").show();
+		$("#nationalChartScrollDiv").height(130);
+	//fill temp arrays with data
+		for(i in totalData.indicators){
+			var total = parseFloat(totalData.indicators[i].total);
+			if(!isNaN(total)){
+				tempYAxis.push(totalData.indicators[i].name);
+				tempXData.push(total);
+			}
 		}
-	}
-
-	count = tempYAxis.length;
-//fill in full arrays so that the chart is as large as it needs to be
-	for(i = 0; i < tempYAxis.length; i++){
-		graphYAxis.push([count, tempYAxis[i]]);
-		graphXData.push([tempXData[i], count]);
-		if(i == id[id.length - 1]){
-			selecY = count;
-			selecX = tempXData[i];
-		}	
-		
-		count --;
-	}
-
-	//fixes tooltip issue
-	graphXData.reverse();
-	graphYAxis.reverse();
-
-	//attempt to change height and width of nationalIndicatorChart div
-	var kmapInfochartHeight = calculateBarHeight(graphYAxis.length);
-	//add in a new chart
-	$("#nationalIndicatorChart").empty();
-	$("#nationalIndicatorChart").height(kmapInfochartHeight);
-
-
 	
-	selectedArea = [[selecX, selecY]];
-	var bothData = [
-		        	  {
-			        	data: graphXData,
-			          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(34,57,83)"} ,
-			          	color: "rgb(34,57,83)"
-		        	  },
-		        	  {
-			        	data: selectedArea,
-			        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(215, 24, 24)"} ,
-		        		color: "rgb(215, 24, 24)"
-		        	  }
-		  ];
-
-	//$("#nationalIndicatorChart").empty();
-	$.plot($("#nationalIndicatorChart"), bothData,  {
-    	bars: {show: true, horizontal: true, fill: true},
-    	grid: {hoverable: true},
-    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, panRange: [0.5, tempYAxis.length+1]},
-    	xaxes:[{}],
-    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
+		count = tempYAxis.length;
+	//fill in full arrays so that the chart is as large as it needs to be
+		for(i = 0; i < tempYAxis.length; i++){
+			graphYAxis.push([count, tempYAxis[i]]);
+			graphXData.push([tempXData[i], count]);
+			if(i == id[id.length - 1]){
+				selecY = count;
+				selecX = tempXData[i];
+			}	
+			
+			count --;
 		}
-	);
-
-	bindHoverTip("#nationalIndicatorChart", graphYAxis);
+	
+		//fixes tooltip issue
+		graphXData.reverse();
+		graphYAxis.reverse();
+	
+		//attempt to change height and width of nationalIndicatorChart div
+		var kmapInfochartHeight = calculateBarHeight(graphYAxis.length);
+		//add in a new chart
+		$("#nationalIndicatorChart").empty();
+		$("#nationalIndicatorChart").height(kmapInfochartHeight);
+	
+	
+		
+		selectedArea = [[selecX, selecY]];
+		var bothData = [
+			        	  {
+				        	data: graphXData,
+				          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(34,57,83)"} ,
+				          	color: "rgb(34,57,83)"
+			        	  },
+			        	  {
+				        	data: selectedArea,
+				        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(215, 24, 24)"} ,
+			        		color: "rgb(215, 24, 24)"
+			        	  }
+			  ];
+	
+		//$("#nationalIndicatorChart").empty();
+		$.plot($("#nationalIndicatorChart"), bothData,  {
+	    	bars: {show: true, horizontal: true, fill: true},
+	    	grid: {hoverable: true},
+	    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, panRange: [0.5, tempYAxis.length+1]},
+	    	xaxes:[{}],
+	    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
+			}
+		);
+	
+		bindHoverTip("#nationalIndicatorChart", graphYAxis);
+	}
 }
 
 

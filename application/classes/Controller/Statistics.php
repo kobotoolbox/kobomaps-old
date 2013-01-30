@@ -89,7 +89,7 @@ class Controller_Statistics extends Controller_Loggedin {
 				{
 					echo ',';
 				}
-				echo '['.(strtotime($values->date) * 1000).','.$values->visits.']';
+				echo '['.(strtotime($values->date. " UTC") * 1000).','.$values->visits.']';
 			}
 			echo ']}';
 		}

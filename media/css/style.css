@@ -778,7 +778,7 @@ select.needstobemapped{
 /************************************************************
 						Stats
 *************************************************************/
-#statChart{
+#statChartWrapper{
 	float: right;
 }
 .hasDatepicker{
@@ -787,4 +787,6 @@ select.needstobemapped{
 #statsControls{
 	width: 200px;
 }
-
+#statChartWrapper p{
+	text-align: center;
+}
