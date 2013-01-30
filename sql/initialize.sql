@@ -258,3 +258,9 @@ ALTER TABLE `usagestatistics` ADD INDEX  `usagestats_date` (`date`);
 /** now update the DB version **/
 UPDATE `metadata` SET  `v` =  '1.0.019' WHERE  `metadata`.`k` ='Database Version';
 
+/** Dylan updating maps table to hold show_empty_name column on Jan 30, 2013 **/
+ALTER TABLE  `maps` ADD  `show_empty_name` BOOLEAN NOT NULL DEFAULT TRUE;
+/** now update the DB version **/
+UPDATE `metadata` SET  `v` =  '1.0.020' WHERE  `metadata`.`k` ='Database Version';
+
+
