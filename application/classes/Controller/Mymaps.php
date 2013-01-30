@@ -1381,7 +1381,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					
 	 					//only do this if we need to
 	 					if(isset($_POST['same_settings']))
-	 					{
+	 					{	 						
 		 					$select_sql = "SELECT name, template_region_id FROM columns WHERE mapsheet_id = $sheet_id AND type = 'region'";
 		 					$result = $database->query($select_sql);
 		 					for ($row_no = $result->num_rows - 1; $row_no >= 0; $row_no--)
@@ -1415,11 +1415,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 						$update_sql = "";
 	 						foreach($column_name_to_region as $name=>$region_id)
 	 						{		 								 						
-		 						$update_sql .= "UPDATE  `columns` SET  `template_region_id` =  '".$region_id."' WHERE  `columns`.`mapsheet_id` = ".$sheet_id." AND `columns`.`name` = '".$name."';";
+		 						$update_sql = "UPDATE  `columns` SET  `template_region_id` =  '".$region_id."' WHERE  `columns`.`mapsheet_id` = ".$sheet_id." AND `columns`.`name` = '".$name."';";
 		 						$database->query($update_sql);
 	 						}
 	 						
-	 						$database->close();
+	 						$database->close();	 						
 	 						$database = new mysqli($server, $user_name, $password, $database_name);
 	 					}
 	 					
