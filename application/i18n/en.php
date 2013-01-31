@@ -152,6 +152,7 @@ return array
 		'There are no templates'=>'There are no templates',
 		'No Rounding'=>'No Rounding',
 		'Pan and zoom the map to adjust what the default view will be for the map'=>'Pan and zoom the map to adjust what the default view will be for the map',
+		'You have to choose a template.'=>'You have to choose a template.',
 		
 		//add 5 page
 		'Add Map - Geo Matching'=>'Add Map - Geo Matching',
@@ -206,7 +207,12 @@ return array
 		'Please choose a map' => 'Please choose a map',
 		'End Date' => 'End Date',
 		'Start Date' => 'Start Date',
-		'Dates on the graph that are shaded grey corespond to weekends.' => 'Dates on the graph that are shaded grey corespond to weekends.'
+		'Dates on the graph that are shaded grey corespond to weekends.' => 'Dates on the graph that are shaded grey corespond to weekends.',
+		
+		
+		//public map page
+		'Search Maps'=>'Search Maps',
+		'Publicly viewable maps'=>'Publicly viewable maps',
 		
 
 );

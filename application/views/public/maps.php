@@ -7,7 +7,7 @@
 *************************************************************/
 ?>
 		
-<p><?php echo __('Select a map to edit or create a new one');?></p>
+<h2><?php echo __('Publicly viewable maps');?></h2>
 
 
 <?php if(count($errors) > 0 )
@@ -51,6 +51,14 @@
 <p>
 
 </p>
+<div id="searchPublicMapsDiv">
+<?
+	echo Form::open(NULL, array('id'=>'searchPublicMapForm', 'method' => 'get'));
+	echo Form::input('q', isset($_GET['q']) ? $_GET['q'] : null, array('id'=>'q', 'style'=>'width:600px;'));
+	echo Form::submit('search', __('Search Maps'), array('id'=>'search_button'));
+	echo Form::close();
+?>
+</div>
 <div class="scroll_table">
 <table class="list_table" >
 	<thead>
@@ -83,7 +91,7 @@
 		</td>
 		<td class="mapTasks" style="width:355px;">
 			<ul>
-			<?php if($user != null){?>
+			<?php if($user != null AND $user->id == $map->user_id){?>
 			<li>
 				<a href="<?php echo url::base(); ?>mymaps/add1/?id=<?php echo $map->id;?>" > 
 					<img class="edit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Edit');?>
@@ -106,7 +114,7 @@
 					<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Share');?>
 				</a>
 			</li>
-			<?php if($user != null){?>
+			<?php if($user != null AND $user->id == $map->user_id){?>
 			<li>
 				<a href="#" onclick="deleteMap(<?php echo $map->id?>);">
 					<img class="delete" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Delete');?>

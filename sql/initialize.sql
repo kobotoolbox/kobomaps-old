@@ -263,4 +263,8 @@ ALTER TABLE  `maps` ADD  `show_empty_name` BOOLEAN NOT NULL DEFAULT TRUE;
 /** now update the DB version **/
 UPDATE `metadata` SET  `v` =  '1.0.020' WHERE  `metadata`.`k` ='Database Version';
 
-
+/** John Etherton -- Added index to maps.title, maps.descrition, and template.title to map searching faster**/
+ALTER TABLE  `maps` ADD INDEX  `maps_title_index` (  `title` ( 13 ) );
+ALTER TABLE  `maps` ADD INDEX  `maps_description_index` (  `description` ( 20 ) );
+ALTER TABLE  `templates` ADD INDEX  `templates_title_index` (  `title` ( 13 ) );
+UPDATE `metadata` SET  `v` =  '1.0.021' WHERE  `metadata`.`k` ='Database Version';

@@ -790,3 +790,16 @@ select.needstobemapped{
 #statChartWrapper p{
 	text-align: center;
 }
+
+
+
+/*********************************************************
+               Public maps page
+*********************************************************/
+#searchPublicMapsDiv{
+	text-align:center;
+	padding:10px;
+}
+#searchPublicMapsDiv input#q{
+	margin-right:20px;
+}

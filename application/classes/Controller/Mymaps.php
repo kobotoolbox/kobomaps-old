@@ -1140,6 +1140,13 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 			//if we're editing things
 	 			if($_POST['action'] == 'edit')
 	 			{
+	 				//make sure they chose a template
+	 				if(!isset($_POST['template_id']))
+	 				{
+	 					$this->template->content->errors[] = __('You have to choose a template.');
+	 					return;
+	 				}
+	 				
 					$map_array = $map->as_array();
 					$map_array['template_id'] = $_POST['template_id'];
 					

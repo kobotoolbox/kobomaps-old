@@ -73,7 +73,7 @@
 	<?php
 		if(count($maps) == 0)
 		{
-			echo '<tr><td colspan="3">'.__('You have no maps').'</td></tr>';
+			echo '<tr><td colspan="4" style="width:880px;text-align:center;">'.__('You have no maps').'</td></tr>';
 		}
 		$i = 0;
 		foreach($maps as $map){

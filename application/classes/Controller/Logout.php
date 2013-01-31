@@ -24,6 +24,7 @@ class Controller_Logout extends Controller_Main {
 		}
 		
 		$auth->logout();
+		$this->user = null;
 		 
 		$this->template->html_head->title = __("logout");
 		$this->template->content = View::factory('logout');

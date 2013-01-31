@@ -44,8 +44,18 @@ class Controller_Public extends Controller_Main {
 		/*****Render the forms****/
 	
 		//get the forms that belong to this user
-		$maps = ORM::factory("Map")
-		->where('is_private', '=', '0')
+		$maps = ORM::factory("Map");
+		//if we're doing a search then throw in the template table
+		if(isset($_GET['q']) AND $_GET['q'] != "")
+		{
+			$query = '%'.$_GET['q'].'%';
+			$maps = $maps->join('templates')
+				->on('templates.id','=','map.template_id')
+				->or_where('map.title', 'LIKE', $query)
+				->or_where('map.description', 'LIKE', $query)
+				->or_where('templates.title', 'LIKE', $query);
+		}
+		$maps = $maps->where('is_private', '=', '0')
 		->order_by('title', 'ASC')
 		->find_all();
 	
