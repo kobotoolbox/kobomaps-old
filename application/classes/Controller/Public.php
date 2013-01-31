@@ -28,6 +28,8 @@ class Controller_Public extends Controller_Main {
 		$this->template->content->errors = array();
 		$this->template->content->messages = array();
 		$this->template->html_head->script_files[] = 'media/js/jquery.tools.min.js';
+		$this->template->html_head->script_files[] = 'media/js/jquery-ui.min.js';
+		$this->template->html_head->styles['all'] = 'media/css/jquery-ui.css';
 		//set the JS
 		$js = view::factory('public/maps_js');
 		$this->template->html_head->script_views[] = $js;
@@ -64,6 +66,47 @@ class Controller_Public extends Controller_Main {
 	
 	
 	}//end action_index
+	
+	
+	/**
+	 * Used to make the auto complete work on the public maps page
+	 * expets there to be a GET param of 'term' of type String
+	 */
+	public function action_search()
+	{
+		$this->auto_render = false;
+		$this->response->headers('Content-Type','application/json');
+		
+		//if there's no term return an empty dataset
+		if(!isset($_GET['term']))
+		{
+			echo '[]';
+			return;
+		}
+		
+		$maps = ORM::factory("Map");
+		$query = '%'.$_GET['term'].'%';
+		$maps = $maps->join('templates')
+			->on('templates.id','=','map.template_id')
+			->or_where('map.title', 'LIKE', $query)
+			->or_where('map.description', 'LIKE', $query)
+			->or_where('templates.title', 'LIKE', $query)		
+			->order_by('title', 'ASC')
+			->limit(10,0)
+			->find_all();
+		
+		echo '[';
+		$i = 0;
+		foreach($maps as $map)
+		{
+			$i++;
+			if($i > 1){echo ',';}
+			$title_encoded = json_encode($map->title);
+			echo '{"id":"'.$map->id.'","label":'.$title_encoded.',"value":'.$title_encoded.'}';
+		}
+		echo ']';
+		
+	}
 	
 	
 	

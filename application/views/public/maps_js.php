@@ -22,7 +22,13 @@
 
 	$(document).ready(function() 
 			{
-				
+				//for the search auto complete
+				$( "input#q" ).autocomplete({
+				      source: "<?php echo URL::base()?>public/search",
+				      minLength: 2,
+				    });
+
+				//for sharing
 				$("a[rel]").overlay({
 					mask: 'grey',
 					effect: 'apple',
