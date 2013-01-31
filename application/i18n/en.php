@@ -12,6 +12,7 @@ return array
 		'Share'=>'Share',
 		'Statistics'=>'Statistics',
 		'Map Templates'=>'Map Templates',
+		'Public Maps'=>'Public Maps',
 		
 		//sub menus
 		'Create New Map'=>'Create New Map',

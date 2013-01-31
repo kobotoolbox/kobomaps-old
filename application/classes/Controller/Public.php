@@ -1,8 +1,9 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /***********************************************************
-* Mymaps.php - Controller
+* Public.php - Controller
 * This software is copy righted by Kobo 2012
 * Writen by John Etherton <john@ethertontech.com>, Etherton Technologies <http://ethertontech.com>
+* This handles thing for the public to see
 * Started on 2012-11-08
 *************************************************************/
 
@@ -10,6 +11,53 @@ class Controller_Public extends Controller_Main {
 
 
   	
+	
+	/**
+	 where users go to change their profiel
+	 */
+	public function action_maps()
+	{
+		/***** initialize stuff****/
+		//The title to show on the browser
+		$this->template->html_head->title = __("Public Maps");
+		//make messages roll up when done
+		$this->template->html_head->messages_roll_up = true;
+		//the name in the menu
+		$this->template->header->menu_page = "publicmaps";
+		$this->template->content = view::factory("public/maps");
+		$this->template->content->errors = array();
+		$this->template->content->messages = array();
+		$this->template->html_head->script_files[] = 'media/js/jquery.tools.min.js';
+		//set the JS
+		$js = view::factory('public/maps_js');
+		$this->template->html_head->script_views[] = $js;
+		$this->template->html_head->script_views[] = view::factory('js/messages');
+		$this->template->html_head->script_views[] = view::factory('js/facebook');
+	
+		//figure out if the current user is logged in.
+		$auth = Auth::instance();
+		//is the user logged in?
+		$this->template->content->user = $this->user;
+		
+	
+		
+		/*****Render the forms****/
+	
+		//get the forms that belong to this user
+		$maps = ORM::factory("Map")
+		->where('is_private', '=', '0')
+		->order_by('title', 'ASC')
+		->find_all();
+	
+		$this->template->content->maps = $maps;
+	
+	
+	
+	}//end action_index
+	
+	
+	
+	
 	
 	 
 	 /**

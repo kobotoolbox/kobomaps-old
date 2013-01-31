@@ -20,6 +20,12 @@ class Controller_Main extends Controller_Template {
 		
 
 		$this->user = null; //not logged in
+		$auth = Auth::instance();
+		//is the user logged in?
+		if($auth->logged_in())
+		{
+			$this->user = ORM::factory('user',$auth->get_user());
+		}
 		$this->session = Session::instance();
 		//if auto rendere set this up
 		if ($this->auto_render)

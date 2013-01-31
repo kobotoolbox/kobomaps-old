@@ -16,6 +16,17 @@ class Helper_Menus
 		//Don't show the register link if the user is logged in
 		if($user == null)
 		{
+			// public maps page
+			if($page == "publicmaps")
+			{
+				echo '<li class="selected">';
+			}
+			else
+			{
+				echo '<li>';
+			}
+			echo '<a href="'.url::base().'public/maps">'.__("Public Maps").'</a></li>';
+			
 			//register page
 			if($page == "signup")
 			{
@@ -57,6 +68,17 @@ class Helper_Menus
 					echo '<li>';
 				}
 				echo '<a href="'.url::base().'mymaps">'.__("My Maps").'</a></li>';
+				
+				// public maps page
+				if($page == "publicmaps")
+				{
+					echo '<li class="selected">';
+				}
+				else
+				{
+					echo '<li>';
+				}
+				echo '<a href="'.url::base().'public/maps">'.__("Public Maps").'</a></li>';
 				
 				// Create a map
 				if($page == "createmap")
