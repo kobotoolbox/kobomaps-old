@@ -71,6 +71,7 @@ return array
 		'Share'=>'Share',
 		'Delete'=>'Delete',
 		'You have no maps'=>'You have no maps',
+		'Delete Selected'=>'Delete Selected',
 		
 		
 		//add 1 page

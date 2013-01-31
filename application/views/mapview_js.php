@@ -96,7 +96,7 @@ var round = true;
 
 //add a title to the map 
 	$(document).ready(function() {
-	   $("#kmapTitle").html('<?php echo $map->title;?>');
+	   $("#kmapTitle").html(<?php echo json_encode($map->title);?>);
 	   
 	   initialize_map();
 	   initialize_buttons();

@@ -51,12 +51,14 @@
 <p>
 
 </p>
+<?php echo Form::open(NULL, array('id'=>'edit_map_form')); ?>
+<a href="#" class="deleteSelectedBtn"><?php echo __('Delete Selected'); ?></a>
 <div class="scroll_table">
 <table class="list_table" >
 	<thead>
 		<tr class="header">
 			<th class="selectColumn">
-				<?php echo __('Select');?>
+				<?php echo __('Select').Form::checkbox('select_all', null, false, array('id'=>'selectAll'));?>
 			</th>
 			<th class="mapName">
 				<?php echo __('Map');?>
@@ -83,7 +85,7 @@
 
 	<tr <?php echo $odd_row; ?>>
 		<td class="selectColumn">
-			X
+			<?php echo Form::checkbox('map_check['.$map->id.']', null, false, array('id'=>'map_check_'.$map->id)); ?>			
 		</td>
 		<td class="mapName">
 			<a href="<?php echo url::base(); ?>public/view/?id=<?php echo $map->id;?>" >
@@ -120,15 +122,16 @@
 			</ul>
 		</td>
 		<td class="lastColumn">
-			X
+			<?php echo $map->is_private == 0 ? 'X':''; ?>
 		</td>
 	</tr>
 	<?php }?>
 	</tbody>
 </table>
 </div>
-<?php
-echo Form::open(NULL, array('id'=>'edit_map_form')); 
+<a href="#" class="deleteSelectedBtn"><?php echo __('Delete Selected'); ?></a>
+
+<?php 
 echo Form::hidden('action','edit', array('id'=>'action'));
 echo Form::hidden('map_id','0', array('id'=>'map_id'));
 echo Form::close();

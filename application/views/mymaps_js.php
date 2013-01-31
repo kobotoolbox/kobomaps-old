@@ -22,7 +22,9 @@
 
 	$(document).ready(function() 
 			{
-				
+
+
+			//make the apple overlay work for sharing purposes
 				$("a[rel]").overlay({
 					mask: 'grey',
 					effect: 'apple',
@@ -35,6 +37,19 @@
 			            wrap.load(this.getTrigger().attr("href"));
 			        }
 				});
+
+				//make the select all/deselect all check box work
+				$("#selectAll").change(function(){
+					$('input[id^="map_check_"]').prop('checked', this.checked);
+										
+				});
+
+				//setup the Delete Selected button handler
+				$(".deleteSelectedBtn").click(function(){
+					$("#action").val('delete_selected');
+					$("#edit_map_form").submit();
+					return false;
+					});
 				
 		    });
 </script>

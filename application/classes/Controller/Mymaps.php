@@ -42,8 +42,36 @@ class Controller_Mymaps extends Controller_Loggedin {
 			{	
 				if($_POST['action'] == 'delete')
 				{
-					Model_Map::delete_map($_POST['map_id']);
-					$this->template->content->messages[] = __('Map Deleted');
+					$map = ORM::factory('Map',$_POST['map_id']);
+					//make sure the user owns this map
+					if($this->user->id == $map->user_id)
+					{
+						$this->template->content->messages[] = __('Map Deleted').': '.$map->title;
+						Model_Map::delete_map($_POST['map_id']);
+					}
+					else
+					{
+						$this->template->content->errors[] = 'Hey, You are trying to delete someone elses map. Shame on you.';
+					}
+					
+				}
+				
+				if($_POST['action'] == 'delete_selected' AND isset($_POST['map_check']))
+				{
+					foreach($_POST['map_check'] as $map_id=>$value)
+					{
+						$map = ORM::factory('Map',$map_id);
+						if($this->user->id == $map->user_id)
+						{
+							$this->template->content->messages[] = __('Map Deleted').': '.$map->title;
+							Model_Map::delete_map($map_id);
+						}
+						else
+						{
+							$this->template->content->errors[] = 'Hey, You are trying to delete someone elses map. Shame on you.';
+						}
+						
+					}
 				}
 			}
 			catch (ORM_Validation_Exception $e)
