@@ -42,7 +42,7 @@ Label.prototype.onRemove = function() {
 
 // Implement draw
 Label.prototype.draw = function() {
- var projection = this.getProjection();
+	var projection = this.getProjection();
  if(projection == undefined) //not sure why this happens, but for some reason we need to gaurd against it.
  {
 	 return;
@@ -61,6 +61,35 @@ Label.prototype.draw = function() {
 	 areaValueTxt = '<div class="areaVal">'+areaValue+'</div>';
 }
 	  
- this.labeldiv_.innerHTML = areaValueTxt + '<div class="countylabelname">' + this.get('areaName').toString() + '</div>';
+ if(Label.renderLabelVals && Label.renderLabelNames){
+	 if(areaValueTxt == "" && !this.get('show_empty_name')){
+		 //don't draw empty name labels
+		 //clear out past labels
+		 this.labeldiv_.innerHTML = '';
+	 }
+	 else {
+		 this.labeldiv_.innerHTML = areaValueTxt + '<div class="countylabelname">' + this.get('areaName').toString() + '</div>';
+	 }
+ }
+ else if(Label.renderLabelVals){
+	 this.labeldiv_.innerHTML = areaValueTxt;
+ }
+ else if(Label.renderLabelNames){
+	 if(areaValueTxt == "" && !this.get('show_empty_name')){
+		 //don't draw empty name labels
+		 //clear out past labels
+		 this.labeldiv_.innerHTML = '';
+	 }
+	 else {
+		 this.labeldiv_.innerHTML = '<div class="countylabelname">' + this.get('areaName').toString() + '</div>';
+	 }
+ }
+ else {
+	 this.labeldiv_.innerHTML = '';
+ }
 };
 
+//Used to global turn on or off the labels
+Label.renderLabels = false;
+Label.renderLabelNames = false;
+Label.renderLabelVals = false;

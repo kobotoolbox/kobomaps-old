@@ -11,7 +11,7 @@
 <h1> <?php echo __('Statistics')?></h1>
 
 
-<div id="statChartWrapper"> <p> <?php echo __('Dates on the graph that are shaded grey corespond to weekends.')?> </p> 
+<div id="statChartWrapper"> <p> <?php echo __('Dates on the graph that are shaded grey correspond to weekends.')?> </p> 
 <div id="statChart" style= "width:700px; height:500px"></div></div>
 <div id="statsControls">
 	<?php echo __('Select Maps')?> <br/>

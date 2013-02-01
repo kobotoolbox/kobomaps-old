@@ -139,10 +139,17 @@
 	
 
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
-	echo Form::label('show_label', __('<br/>Show labels').": ");
+	echo Form::label('show_label', __('<br/>Show All Labels').": ");
 	echo '</td><td></br>';
-	echo Form::checkbox('show_region_label', null, 0);
-	echo Form::label('show_label_description', __(' If checked, regions with no data will not display their labels.'));
+	echo Form::checkbox('show_empty_name', null, $data['show_names']==1);
+	echo Form::label('show_label_description', __('Maps will show region names with no data.'));
+	
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('label_zoom_level', __('<br/>Zoom level to show labels').": ");
+	$label_zoom_options = array('-1'=>'Always Visible', 0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9, 10=>10, 11=>11, 12=>12, 13=>13, 14=>14, 15=>15, 16=>16, 17=>17, 18=>18, 19=>19);
+	echo '</td><td></br>';
+	echo Form::select('label_zoom_level', $label_zoom_options, $data['label_zoom_level']);
+	echo Form::label('show_label_description', __('  Level at which labels will begin to appear.'));
 	
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
 	echo Form::label('CSS', __('Map CSS').": ");

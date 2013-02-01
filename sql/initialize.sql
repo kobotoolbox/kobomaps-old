@@ -280,5 +280,9 @@ UPDATE `metadata` SET  `v` =  '1.0.022' WHERE  `metadata`.`k` ='Database Version
 ALTER TABLE  `templates` ADD  `is_private` BOOLEAN NOT NULL DEFAULT FALSE , ADD INDEX (  `is_private` );
 UPDATE `metadata` SET  `v` =  '1.0.023' WHERE  `metadata`.`k` ='Database Version';
 
+/** Dylan Gillespie --added a column for label_zoom_level in maps **/\
+ALTER TABLE  `maps` ADD  `label_zoom_level` INT NOT NULL DEFAULT  '1';
+UPDATE `metadata` SET  `v` =  '1.0.024' WHERE  `metadata`.`k` ='Database Version';
+
 
 

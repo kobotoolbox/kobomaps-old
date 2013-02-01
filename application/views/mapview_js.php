@@ -105,7 +105,7 @@ var round = true;
 
 //itintializes everything, both the mandatory google maps stuff, and our totally awesome json to gPolygon code
 function initialize_map() {
-	  
+
 	  
 	  //setup drag stuff for the key
 	  var dragresize = new DragResize('dragresize',
@@ -195,8 +195,40 @@ function initialize_map() {
 	    });
 				
 	<?php }?>
-	
 
+	if(<?php echo $map->label_zoom_level?> <= map.getZoom()){
+		Label.renderLabelNames = true;
+		Label.renderLabelVals = true;
+		//Label.renderLabels = true;
+	}
+
+	var previousZoom = map.getZoom();
+	google.maps.event.addListener(map, 'zoom_changed', function() {
+		var	mapZoom = <?php echo $map->label_zoom_level?>;
+		//console.log(Label.renderLabelNames + " names");
+		//console.log(Label.renderLabelVals + " values");
+		
+		if((previousZoom >= mapZoom &&  map.getZoom() < mapZoom))
+		{
+			//Label.renderLabels = true;
+			Label.renderLabelNames = false;
+			Label.renderLabelVals = false;
+			//if($("#turnOffLabelsButton").active()){
+				//$("#turnOffLabelsButton").toggleClass("active");
+			//}
+			//if($("#turnOffValuesButton").active()){
+				//$("#turnOffValusSButton").toggleClass("active");
+			//}
+		}
+		else if(previousZoom < mapZoom &&  map.getZoom() >= mapZoom)
+		{
+			//Label.renderLabels = true;
+			Label.renderLabelNames = true;
+			Label.renderLabelVals = true;	
+		}
+
+		previousZoom = map.getZoom();
+	});
 
 	
 };
@@ -692,11 +724,10 @@ function UpdateAreaPercentage(name, percentage, min, spread, unit)
 	//update the polygon with this new color
 	formatAreaOpacityColor(name, 0.6, color);
 	
-	//update the label
+	//update the labels
 
 	labels[name].set("areaValue", addCommas(percentage)+" "+unit);
 	labels[name].draw();
-	
 
 }
 
@@ -1622,7 +1653,13 @@ function zeroOutMap()
 		//set the polygon back to default colors
 		formatAreaOpacityColor(areaName, 0.75, "#aaaaaa");
 		//set the label to blank("")
+
 		labels[areaName].set("areaValue", "");
+		<?php if($map->show_empty_name == 1){?>
+		labels[areaName].set('show_empty_name'	, true);
+		<?php }else{ ?>
+		labels[areaName].set('show_empty_name', false);
+		<?php }?>
 		labels[areaName].draw();
 		//remove any old listeners pop-up listeners
 		google.maps.event.clearListeners(areaGPolygons[areaName], 'click');
@@ -1815,14 +1852,14 @@ function initialize_buttons()
 
 	//handle turning off and on the labels on the map
 	$("#turnOffLabelsButton").click(function(){
-		$(".countylabelname").toggle(); 
+		Label.renderLabelNames = !Label.renderLabelNames; 
 		$("#turnOffLabelsButton").toggleClass("active"); 
 		return false;
 		});
 
 	//hanndle turning on and off values on the map
 	$("#turnOffValuesButton").click(function(){
-		$(".areaVal").toggle();
+		Label.renderLabelVals = !Label.renderLabelVals; 
 		$("#turnOffValuesButton").toggleClass("active"); 
 		return false;
 		});

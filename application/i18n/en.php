@@ -101,6 +101,10 @@ return array
 		'Revert to default map style'=>'Revert to default map style',
 		'Default'=>'Default',
 		'Continue'=>'Continue',
+		'<br/>Show All Labels' => '<br/>Show All Labels',
+		'Maps will show region names with no data.' => 'Maps will show region names with no data.',
+		'  Level at which labels will begin to appear.' => '  Level at which labels will begin to appear.',
+		'<br/>Zoom level to show labels' => '<br/>Zoom level to show labels',
 		
 		//add 2 page
 		'Add Map - Data Structure'=>'Add Map - Data Structure',
@@ -217,7 +221,7 @@ return array
 		'Please choose a map' => 'Please choose a map',
 		'End Date' => 'End Date',
 		'Start Date' => 'Start Date',
-		'Dates on the graph that are shaded grey corespond to weekends.' => 'Dates on the graph that are shaded grey corespond to weekends.',
+		'Dates on the graph that are shaded grey correspond to weekends.' => 'Dates on the graph that are shaded grey correspond to weekends.',
 		
 		
 		//public map page
