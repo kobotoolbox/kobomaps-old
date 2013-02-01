@@ -14,11 +14,13 @@
 			<a href="http://www.gadm.org/country" target="_blank">http://www.gadm.org/country</a>. 
 			The files there will work with this converter.
 </p>
+<?php if($map_count != -1){?>
 <p>
 	<strong>
 		<?php echo $map_count.' '.__('maps use this template.')?>
 	</strong>
 </p>
+<?php }?>
 
 <a class="button" id="add_back_to_templates" href="<?php echo url::base(); ?>templates"><?php echo __('Back to Templates');?></a>
 

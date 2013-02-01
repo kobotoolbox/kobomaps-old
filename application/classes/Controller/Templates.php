@@ -152,14 +152,18 @@ class Controller_Templates extends Controller_Loggedin {
 		}
 		
 		//make sure the user is allowed to look at this template
-		if($template->user_id != $this->user->id)
+		if($template != null AND $template->user_id != $this->user->id)
 		{
 			HTTP::redirect('templates');
 		}
 		
-		$map_count = ORM::factory('Map')
-			->where('template_id','=',$template->id)
-			->count_all();
+		$map_count = -1;
+		if($template != null)
+		{
+			$map_count = ORM::factory('Map')
+				->where('template_id','=',$template->id)
+				->count_all();
+		}
 		 
 		
 		/***Now that we have the form, lets initialize the UI***/
