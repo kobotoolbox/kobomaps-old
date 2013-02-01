@@ -17,6 +17,9 @@
 <p>
 <a class="button" id="download_kml_button" href="<?php echo url::base(); ?>uploads/templates/<?php echo $data['kml_file'];?>"><?php echo __('Download KML File');?></a>
 </p>
+<p>
+<a class="button" id="copy_template" href="<?php echo url::base(); ?>templates/copy?id=<?php echo $data['id'];?>"><?php echo __('Copy Template');?></a>
+</p>
 <?php }?>
 
 <?php if(count($errors) > 0 )

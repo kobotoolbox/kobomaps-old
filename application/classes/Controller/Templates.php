@@ -53,6 +53,8 @@ class Controller_Templates extends Controller_Loggedin {
 		$js = view::factory('templates/templates_js');
 		$this->template->html_head->script_views[] = $js;
 		$this->template->html_head->script_views[] = view::factory('js/messages');
+		$this->template->html_head->script_files[] = 'media/js/jquery-ui.min.js';
+		$this->template->html_head->styles['all'] = 'media/css/jquery-ui.css';
 		$this->template->content->is_admin = $this->is_admin;
 		
 		/********Check if we're supposed to do something ******/
@@ -545,6 +547,77 @@ class Controller_Templates extends Controller_Loggedin {
 	 }//end action_view
 	 
 
+	 
+	 
+	 /**
+	  * Used to make the auto complete work on the templates page
+	  * expets there to be a GET param of 'term' of type String
+	  * there could also be a GET param of 'mine'
+	  */
+	 public function action_search()
+	 {
+	 	$this->auto_render = false;
+	 	$this->response->headers('Content-Type','application/json');
+	 
+	 	//if there's no term return an empty dataset
+	 	if(!isset($_GET['term']))
+	 	{
+	 		echo '[]';
+	 		return;
+	 	}
+	 
+	 	//if you're an admin and you can do whatever you want then you see all templates
+		$templates = ORM::factory("Template");		//if there is a search term
+		if(isset($_GET['term']) AND $_GET['term'] != "")
+		{
+			$query = '%'.$_GET['term'].'%';
+			$templates = $templates
+				->where_open()
+				->or_where('template.title', 'LIKE', $query)
+				->or_where('template.description', 'LIKE', $query)
+				->where_close();
+		}
+		//if we only want to see my templates
+		if(isset($_GET['mine']))
+		{
+			$templates = $templates->where('user_id','=', $this->user->id);
+		}
+		else
+		{
+			if($this->is_admin)
+			{							
+			}
+			else //you're a regular user and can only see your own templates
+			{
+				$templates = $templates->where_open()
+					->where_open()
+		 			->where('is_official','=',1)
+		 			->where('is_private','=', '0')
+		 			->where_close()
+		 			->or_where('user_id','=', $this->user->id)
+		 			->or_where('is_private','=', '0')
+					->where_close();
+			}
+		}
+		$templates = $templates
+			->order_by('title', 'ASC')
+			->limit(10,0)
+			->find_all();
+	 
+	 	echo '[';
+	 	$i = 0;
+	 	foreach($templates as $template)
+	 	{
+	 		$i++;
+	 		if($i > 1){
+	 			echo ',';
+	 		}
+	 		$title_encoded = json_encode($template->title);
+	 		echo '{"id":"'.$template->id.'","label":'.$title_encoded.',"value":'.$title_encoded.'}';
+	 	}
+	 	echo ']';
+	 
+	 }
 	 
 	 
 	 /**

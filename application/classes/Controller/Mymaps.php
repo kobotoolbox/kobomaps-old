@@ -1152,8 +1152,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 			->where('is_official','=',1)
 	 			->where('is_private','=', '0')
 	 			->where_close()
-	 			->or_where('user_id','=', $this->user->id)
-	 			->or_where('is_private','=', '0');
+	 			->or_where('user_id','=', $this->user->id);
 	 	}
 	 	$templates = $templates->order_by('title', 'ASC')
 	 		->find_all();
@@ -1219,7 +1218,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				}
 	 				
 	 				$template = ORM::factory('Template',$_POST['template_id']);
-	 				if($template->is_official == 0 AND $template->user_id != $this->user->id)
+	 				if(($template->is_official == 0 AND $template->user_id != $this->user->id) OR 
+	 						($template->is_official == 1 AND $template->is_private == 1))
 	 				{
 	 					throw new Cannot_Access_Template_Exception(__('You do not have access to this template'));
 	 				}

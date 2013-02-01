@@ -10,8 +10,13 @@
 		
 <h2><?php echo __('Add Map - Geo Set-up') . ' - '.$map->title ?></h2>
 <h3><?php echo __('Select which map template you want to use for your map');?></h3>
-<p><?php echo __('Templates in bold, and marked official, are provided by KoBo staff.')?></p>
-<p><?php  echo __('If you want to add your own template click'). ' <a href="'.URL::base().'templates/edit">'.__('here').'</a>' ;?></p>
+<p>
+	<?php echo __('Choose from official KoBoMap Templates, in bold, or use your own templates.')?>
+</p>
+<p>
+	<?php  echo __('If you want to add your own template click'). ' <a href="'.URL::base().'templates/edit">'.__('here.').'</a>' ;?> 
+	<?php  echo __('If you want to copy someone else\'s template click'). ' <a href="'.URL::base().'templates">'.__('here.').'</a>' ;?>
+</p>
 
 
 

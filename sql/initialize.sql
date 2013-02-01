@@ -284,5 +284,8 @@ UPDATE `metadata` SET  `v` =  '1.0.023' WHERE  `metadata`.`k` ='Database Version
 ALTER TABLE  `maps` ADD  `label_zoom_level` INT NOT NULL DEFAULT  '1';
 UPDATE `metadata` SET  `v` =  '1.0.024' WHERE  `metadata`.`k` ='Database Version';
 
+/** John Etherton -- 2013-02-01 -- Added an index to the templates table for the description column */
+ALTER TABLE  `kobomaps`.`templates` ADD INDEX  `templates_description_index` (  `description` ( 20 ) );
+UPDATE `metadata` SET  `v` =  '1.0.025' WHERE  `metadata`.`k` ='Database Version';
 
 

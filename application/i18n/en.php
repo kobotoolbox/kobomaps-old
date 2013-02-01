@@ -162,10 +162,12 @@ return array
 		'Pan and zoom the map to adjust what the default view will be for the map'=>'Pan and zoom the map to adjust what the default view will be for the map',
 		'You have to choose a template.'=>'You have to choose a template.',
 		'Official'=>'Official',
-		'Templates in bold, and marked official, are provided by KoBo staff.'=>'Templates in bold, and marked official, are provided by KoBo staff.',
+		'Choose from official KoBoMap Templates, in bold, or use your own templates.'=>'Choose from official KoBoMap Templates, in bold, or use your own templates.',
 		'If you want to add your own template click'=>'If you want to add your own template click',
 		'here'=>'here',
+		'here.'=>'here.',
 		'You do not have access to this template'=>'You do not have access to this template',
+		'If you want to copy someone else\'s template click'=>'If you want to copy someone else\'s template click',
 		
 		//add 5 page
 		'Add Map - Geo Matching'=>'Add Map - Geo Matching',
