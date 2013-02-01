@@ -716,6 +716,9 @@ textarea:focus{
 #missingTemplate{
 	text-align:center;
 }
+#missingTemplate.apple_overlay .close {
+	display:none;
+}
 
 /* container for external content. uses vertical scrollbar, if needed */
 div.contentWrap {
