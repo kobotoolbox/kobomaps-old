@@ -148,7 +148,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'is_private'=>0,
 			'private_password'=>null,
 			'map_creation_progress'=>1,
-			'show_names' => true
+			'show_names' => true,
+			'label_zoom_level' => 0
 			);
 		
 		$map = null;
@@ -179,10 +180,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['is_private'] = $map->is_private;
 			$data['private_password'] = $map->private_password;
 			$data['show_names'] = $map->show_empty_name;
+			$data['label_zoom_level'] = $map->label_zoom_level;
 		}
 		
-				
-		
+
 		 
 		
 		/***Now that we have the form, lets initialize the UI***/
@@ -261,7 +262,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 				//this handles is private
 				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;
 				$_POST['show_empty_name'] = isset($_POST['show_empty_name']) ? 1 : 0;
-				
+
 				//handle the status
 				if($map->map_creation_progress != null)
 				{
@@ -345,6 +346,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 				$this->template->content->data = $data;
 			}
 		}
+		
+		
+		
 	 }//end action_add1
 	 
 	 
@@ -1222,6 +1226,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 					$map_array['lat'] = $_POST['lat'];
 					$map_array['lon'] = $_POST['lon'];
 					$map_array['zoom'] = $_POST['zoom'];
+					
 					
 					//update map creation progress tracker
 					//don't change the map creation progress if they've already gone past this point

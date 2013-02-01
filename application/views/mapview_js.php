@@ -105,7 +105,7 @@ var round = true;
 
 //itintializes everything, both the mandatory google maps stuff, and our totally awesome json to gPolygon code
 function initialize_map() {
-	  
+
 	  
 	  //setup drag stuff for the key
 	  var dragresize = new DragResize('dragresize',
@@ -195,8 +195,28 @@ function initialize_map() {
 	    });
 				
 	<?php }?>
-	
 
+	if(<?php echo $map->label_zoom_level?> <= map.getZoom()){
+		Label.renderLabels = true;	
+	}
+
+	var previousZoom = map.getZoom();
+	google.maps.event.addListener(map, 'zoom_changed', function() {
+		var	mapZoom = <?php echo $map->label_zoom_level?>;
+		
+		if((previousZoom >= mapZoom &&  map.getZoom() < mapZoom))
+		{
+			Label.renderLabels = false;
+		}
+		else if(previousZoom < mapZoom &&  map.getZoom() >= mapZoom)
+		{
+			Label.renderLabels = true;		
+		}
+		else if(map.getZoom() >= mapZoom){
+			Label.renderLabels = true;	
+		}
+		previousZoom = map.getZoom();
+	});
 
 	
 };
@@ -692,12 +712,10 @@ function UpdateAreaPercentage(name, percentage, min, spread, unit)
 	//update the polygon with this new color
 	formatAreaOpacityColor(name, 0.6, color);
 	
-	//update the label
+	//update the labels
 
-	
 	labels[name].set("areaValue", addCommas(percentage)+" "+unit);
 	labels[name].draw();
-	
 
 }
 
@@ -1623,6 +1641,7 @@ function zeroOutMap()
 		//set the polygon back to default colors
 		formatAreaOpacityColor(areaName, 0.75, "#aaaaaa");
 		//set the label to blank("")
+
 		labels[areaName].set("areaValue", "");
 		<?php if($map->show_empty_name == 1){?>
 		labels[areaName].set('show_empty_name'	, true);

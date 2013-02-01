@@ -98,8 +98,10 @@ return array
 		'Revert to default map style'=>'Revert to default map style',
 		'Default'=>'Default',
 		'Continue'=>'Continue',
-		'<br/>Do not show labels' => '<br/>Do not show labels',
-		'Maps will hide region names with no data.' => 'Maps will hide region names with no data.',
+		'<br/>Show All Labels' => '<br/>Show All Labels',
+		'Maps will show region names with no data.' => 'Maps will show region names with no data.',
+		'  Level at which labels will begin to appear.' => '  Level at which labels will begin to appear.',
+		'<br/>Zoom level to show labels' => '<br/>Zoom level to show labels',
 		
 		//add 2 page
 		'Add Map - Data Structure'=>'Add Map - Data Structure',
