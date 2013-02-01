@@ -61,6 +61,13 @@ Label.prototype.draw = function() {
 	 areaValueTxt = '<div class="areaVal">'+areaValue+'</div>';
 }
 	  
- this.labeldiv_.innerHTML = areaValueTxt + '<div class="countylabelname">' + this.get('areaName').toString() + '</div>';
+ if(areaValueTxt == "" && !this.get('show_empty_name')){
+	 //don't draw empty name labels
+	 //clear out past labels
+	 this.labeldiv_.innerHTML = '<div class="countylabelname"></div>';
+ }
+ else {
+	 this.labeldiv_.innerHTML = areaValueTxt + '<div class="countylabelname">' + this.get('areaName').toString() + '</div>';
+ }
 };
 

@@ -694,6 +694,7 @@ function UpdateAreaPercentage(name, percentage, min, spread, unit)
 	
 	//update the label
 
+	
 	labels[name].set("areaValue", addCommas(percentage)+" "+unit);
 	labels[name].draw();
 	
@@ -1623,6 +1624,11 @@ function zeroOutMap()
 		formatAreaOpacityColor(areaName, 0.75, "#aaaaaa");
 		//set the label to blank("")
 		labels[areaName].set("areaValue", "");
+		<?php if($map->show_empty_name == 1){?>
+		labels[areaName].set('show_empty_name'	, true);
+		<?php }else{ ?>
+		labels[areaName].set('show_empty_name', false);
+		<?php }?>
 		labels[areaName].draw();
 		//remove any old listeners pop-up listeners
 		google.maps.event.clearListeners(areaGPolygons[areaName], 'click');
