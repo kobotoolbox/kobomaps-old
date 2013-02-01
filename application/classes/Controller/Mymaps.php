@@ -9,6 +9,23 @@
 class Controller_Mymaps extends Controller_Loggedin {
 
 	
+	/**
+	 Set stuff up, mainly just check if the user is an admin or not
+	 */
+	public function before()
+	{
+		parent::before();
+	
+	
+		$this->is_admin = false;
+	
+		//see if the given user is an admin, if so they can do super cool stuff
+		$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
+		if($this->user->has('roles', $admin_role))
+		{
+			$this->is_admin = true;
+		}
+	}
 	
 
 
@@ -1120,8 +1137,13 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 
 	 	
 	 	//grab all the templates
-	 	$templates = ORM::factory('Template')
-	 		->order_by('title', 'ASC')
+	 	$templates = ORM::factory('Template');	 		
+	 	if(!$this->is_admin)
+	 	{
+	 		$templates = $templates->or_where('is_official','=',1)
+	 			->or_where('user_id','=', $this->user->id);
+	 	}
+	 	$templates = $templates->order_by('title', 'ASC')
 	 		->find_all();
 	 	 
 	 	 
@@ -1184,6 +1206,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					return;
 	 				}
 	 				
+	 				$template = ORM::factory('Template',$_POST['template_id']);
+	 				if($template->is_official == 0 AND $template->user_id != $this->user->id)
+	 				{
+	 					throw new Cannot_Access_Template_Exception(__('You do not have access to this template'));
+	 				}
+	 				
 					$map_array = $map->as_array();
 					$map_array['template_id'] = $_POST['template_id'];
 					
@@ -1222,6 +1250,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				}
 	 			}
 	 		}
+	 		catch(Cannot_Access_Template_Exception $e)
+	 		{
+	 			$this->template->content->errors[] = $e->getMessage();
+	 		}
 	 	}
 	 	 
 	 
@@ -1253,6 +1285,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
+	 	
+	 	//make sure the template is still there. If it isn't send them to add4
+	 	if(!ORM::factory('Template',$map->template_id)->loaded())
+	 	{
+	 		HTTP::redirect('mymaps/add4?id='.$map_id);
+	 	}
 	 	
 	 	//not the owner of the map
 	 	if($map->user_id != $this->user->id)
@@ -2045,3 +2083,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 
 	
 }//end of class
+
+
+class Cannot_Access_Template_Exception extends Exception
+{
+
+
+}

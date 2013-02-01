@@ -14,6 +14,8 @@
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/label.js"> </script>
 <script type="text/javascript">
 
+var dontUpdate = false;
+
 /**
  *  gives us a list of names for geographicAreas
  */
@@ -112,6 +114,41 @@ var labels = new Array();
 		map.mapTypes.set('kmaps', kmapsMapType); 
 		map.setMapTypeId('kmaps');
 
+		//add a pan listener
+		 google.maps.event.addListener(map, 'center_changed', function() {
+			 if(dontUpdate)
+			 {
+				 dontUpdate = false;
+				 return;
+			 }
+
+		    var center = map.getCenter();
+		    var lat = center.lat();
+		    var lon = center.lng();
+		    //keep the lon from wrapping
+		    lon = lon % 360;
+			if(lon > 180)
+			{
+				lon = lon -360; 
+			}
+			else if(lon < -180)
+			{
+				lon = lon +360;
+			}
+			else
+			{
+				lon = lon;
+			}
+		    
+		    $("#lat").val(lat);
+		    $("#lon").val(lon);
+		  });
+		 //add zoom listener
+		 google.maps.event.addListener(map, 'zoom_changed', function() {
+			    var zoom = map.getZoom();			    
+			    $("#zoom").val(zoom);
+			  });
+
 		//now parse the json
 
 		//Calling the boundaries and data files. The variables need to be defined in the container file as they are country-specific
@@ -199,6 +236,35 @@ var labels = new Array();
 	 }//end parse json
 		
 
+	 function changeZoom(){
+		 var zoom = parseInt($("#zoom").val());
+		 map.setZoom(zoom);
+	 }
+
+	 function latChanged()
+	 {
+		 var latStr = $("#lat").val();
+		 var lat = parseFloat(latStr);
+		 if(!isNaN(lat) && lat < 90 && lat > -90 && latStr.substring(latStr.length - 1) != '.')
+		 {
+			dontUpdate = true;
+		 	var latLon = new google.maps.LatLng(lat,map.getCenter().lng());
+		 	map.setCenter(latLon);
+		 }
+	 }
+
+	 function lonChanged()
+	 {
+		 var lonStr = $("#lon").val();
+		 var lon = parseFloat(lonStr);
+		 if(!isNaN(lon) && lon <= 180 && lon >= -180 && lonStr.substring(lonStr.length - 1) != '.')
+		 {
+			dontUpdate = true;
+		 	var latLon = new google.maps.LatLng(map.getCenter().lat(), lon);
+		 	map.setCenter(latLon);
+		 }
+		 return true;
+	 }
 
 </script>
 <?php } ?>

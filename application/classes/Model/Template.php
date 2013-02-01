@@ -69,7 +69,7 @@ class Model_Template extends ORM {
 	public function update_template($values)
 	{
 	
-		$expected = array('title', 'description', 'admin_level', 'file', 'decimals', 'lat', 'lon', 'zoom', 'user_id');
+		$expected = array('title', 'description', 'admin_level', 'file', 'decimals', 'lat', 'lon', 'zoom', 'user_id', 'is_official');
 	
 		$this->values($values, $expected);
 		$this->check();

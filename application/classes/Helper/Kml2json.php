@@ -30,15 +30,23 @@ function utf8_encode_callback($m)
 class Helper_Kml2json
 {
 	
+	public $deleted_regions;
+	/**
+	 * Constructor
+	 */
+	public function __construct()	
+	{
+		$this->deleted_regions = array();
+	}
 	
 	/**
 	 * Takes the full path to a KML file creates a json file out of it
 	 * and then returns the name of that json file
 	 * @param string $file_path
 	 */
-	public static function convert($file_path, $template)
+	public function convert($file_path, $template)
 	{
-		
+		$this->deleted_regions = array();
 		
 		try 
 		{
@@ -96,7 +104,7 @@ class Helper_Kml2json
 		
 			foreach($target_paths as $target_path)
 			{
-				self::parseXml($target_path, $template);
+				$this->parseXml($target_path, $template);
 				//only delete the file if we're working with the components of a KMZ. Don't delete the orignal KML/KMZ
 				if($target_path != $directory.$file_path)
 				{
@@ -110,7 +118,7 @@ class Helper_Kml2json
 			$fp = fopen($directory.$fileName.".json", "w");
 			fwrite($fp,$contents);
 			fclose($fp);
-			
+			ob_get_clean();
 			return $fileName.".json";
 		}
 		catch(Exception $e)
@@ -137,8 +145,12 @@ class Helper_Kml2json
 	
 	
 	
-	
-	public static function parseXml($kmlUrl, $template)
+	/**
+	 * Handles the parsing of each XML file
+	 * @param string $kmlUrl
+	 * @param database_obj $template
+	 */
+	public function parseXml($kmlUrl, $template)
 	{
 
 		//set the mb_detect_order
@@ -194,13 +206,14 @@ class Helper_Kml2json
 			{
 				echo ",";
 			}
-			self::parsePlacemark($placemark, $region);
+			$this->parsePlacemark($placemark, $region);
 		}
 		
 		//delete regions that weren't used
 		foreach($regions_array as $region)
 		{
-			Model_Templateregion::delete_region($region->id);
+			$this->deleted_regions[] = $region;
+			Model_Templateregion::delete_region($region->id);			
 		}
 	
 	}

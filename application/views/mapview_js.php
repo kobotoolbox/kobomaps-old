@@ -1441,7 +1441,7 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 	//loop over all our data
 	for(areaName in data)
 	{
-		if(!isNaN(data[areaName]))
+		if(!isNaN(data[areaName]) && typeof labels[areaName] != 'undefined')
 		{
 			UpdateAreaPercentageTitleData(areaName, data[areaName], min, spread, title, data, indicator, unit);
 		}

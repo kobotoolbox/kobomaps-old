@@ -8,6 +8,7 @@
 
 class Controller_Templates extends Controller_Loggedin {
 
+	protected $deleted_regions = null;
 	
 	/**
 	 Set stuff up, mainly just check if the user is an admin or not
@@ -63,8 +64,17 @@ class Controller_Templates extends Controller_Loggedin {
 					$template = ORM::factory('Template',$_POST['template_id']);
 					if($this->is_admin OR $template->user_id = $this->user->id)
 					{
+						//check for maps that use this template
+						$maps_use_template = ORM::factory('Map')
+							->where('template_id','=',$template->id)
+							->find_all();
 						Model_Template::delete_template($_POST['template_id']);
 						$this->template->content->messages[] = __('Template Deleted') . ' - ' . $template->title;
+						//create errors for maps that have lost their template
+						foreach($maps_use_template as $m)
+						{
+							$this->template->content->errors[] = '<a href="'.URL::base().'mymaps/add4?id='.$m->id.'">'.$m->title.'</a> '.__('is now missing its template.');
+						}
 					}
 				}
 			}
@@ -123,6 +133,8 @@ class Controller_Templates extends Controller_Loggedin {
 			'id'=>'0',
 			'title'=>'',
 			'description'=>'',
+			'is_private'=>0,
+			'is_official'=>0,
 			'file'=>'',
 			'admin_level'=>0,
 			'decimals'=>-1,
@@ -139,7 +151,15 @@ class Controller_Templates extends Controller_Loggedin {
 			$template = ORM::factory('Template', $_GET['id']);		
 		}
 		
-		//TODO write code to hanlde a user editing this once it's been set		
+		//make sure the user is allowed to look at this template
+		if($template->user_id != $this->user->id)
+		{
+			HTTP::redirect('templates');
+		}
+		
+		$map_count = ORM::factory('Map')
+			->where('template_id','=',$template->id)
+			->count_all();
 		 
 		
 		/***Now that we have the form, lets initialize the UI***/
@@ -152,10 +172,11 @@ class Controller_Templates extends Controller_Loggedin {
 		//the name in the menu
 		$this->template->header->menu_page = "templates";
 		$this->template->content = view::factory("templates/template_add");
-		
+		$this->template->content->map_count = $map_count;
 		$this->template->content->errors = array();
 		$this->template->content->messages = array();
 		$this->template->content->header = $header;		
+		$this->template->content->is_admin = $this->is_admin;
 		$this->template->html_head->script_views[] = view::factory('js/messages');
 		$js = view::factory('templates/template_add_js');
 				
@@ -202,7 +223,15 @@ class Controller_Templates extends Controller_Loggedin {
 				//if they aren't an admin, then they can't set officialness
 				if(!$this->is_admin)
 				{
-					unset($_POST['is_official']);
+					$_POST['is_official'] = 0;
+				}
+				else if(!isset($_POST['is_official']))
+				{
+					$_POST['is_official'] = 0;
+				}
+				else
+				{
+					$_POST['is_official'] = 1;
 				}
 				$template->update_template($_POST);
 				
@@ -228,7 +257,29 @@ class Controller_Templates extends Controller_Loggedin {
 					$filename = $this->_save_file(null, $template);
 				}
 				$template->save();
-				HTTP::redirect('/templates?status=saved');				
+				$this->template->content->messages[] = __('Template Saved');	
+				//check if we deleted any regions
+				if($this->deleted_regions != null)
+				{
+					foreach($this->deleted_regions as $dr)
+					{
+						//if we did delete a region list the maps this affected
+						$maps_affected = ORM::factory('Map')
+							->join('mapsheets')
+							->on('mapsheets.map_id','=','map.id')
+							->join('columns')
+							->on('columns.mapsheet_id','=','mapsheets.id')
+							->where('columns.template_region_id','=',$dr->id)
+							->group_by('map.id')
+							->find_all();
+						foreach($maps_affected as $ma)
+						{
+							$this->template->content->errors[] = '<a href="'.URL::base().'mymaps/add5?id='.
+								$ma->id.'">'.$ma->title.'</a> '.__('is now missing the region'). ' '. $dr->title;
+						}
+						 
+					}
+				}
 				
 			}
 			catch (ORM_Validation_Exception $e)
@@ -267,6 +318,7 @@ class Controller_Templates extends Controller_Loggedin {
 			$data['id'] =  $template->id;
 			$data['title'] =  $template->title;
 			$data['description'] =  $template->description;
+			$data['is_official'] = $template->is_official;
 			$data['file'] =  $template->file;
 			$data['admin_level'] =  $template->admin_level;
 			$data['decimals'] =  $template->decimals;
@@ -296,7 +348,9 @@ class Controller_Templates extends Controller_Loggedin {
 	 	if($upload_file == null AND $template->kml_file != null)
 	 	{
 	 		$filename = $template->kml_file;
-	 		$json_file = Helper_Kml2json::convert($filename, $template);	 		
+	 		$kml_converter = new Helper_Kml2json();
+	 		$json_file = $kml_converter->convert($filename, $template);
+	 		$this->deleted_regions = $kml_converter->deleted_regions;	 		
 	 		return $json_file;
 	 	}
 	 	//Now deal with the case whe we're creating a new templae and just uploaded a file
@@ -319,7 +373,9 @@ class Controller_Templates extends Controller_Loggedin {
 		 	$template->kml_file = $filename;
 		 	if ($file = Upload::save($upload_file, $filename, $directory))
 		 	{	 			 
-		 		$json_file = Helper_Kml2json::convert($filename, $template);
+		 		$kml_converter = new Helper_Kml2json();
+		 		$json_file = $kml_converter->convert($filename, $template);
+		 		$this->deleted_regions = $kml_converter->deleted_regions;
 		 		return $json_file;
 		 	}
 		 

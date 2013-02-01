@@ -158,6 +158,7 @@ return array
 		'Templates in bold, and marked official, are provided by KoBo staff.'=>'Templates in bold, and marked official, are provided by KoBo staff.',
 		'If you want to add your own template click'=>'If you want to add your own template click',
 		'here'=>'here',
+		'You do not have access to this template'=>'You do not have access to this template',
 		
 		//add 5 page
 		'Add Map - Geo Matching'=>'Add Map - Geo Matching',
@@ -219,12 +220,20 @@ return array
 		//public map page
 		'Search Maps'=>'Search Maps',
 		'Publicly viewable maps'=>'Publicly viewable maps',
+		'is now missing its template.'=>'is now missing its template.',
 		
 		
 		//templates main page
 		'Templates are the base maps from which custom maps are made.'=>'Templates are the base maps from which custom maps are made.',
 		'User'=>'User',
-
+		"Are you sure you want to delete this template? \r\n\r\n You will break any maps that use this template."=>"Are you sure you want to delete this template? \\r\\n\\r\\n You will break any maps that use this template.",
+		
+		
+		//templates edit page
+		'maps use this template.'=>'maps use this template.',
+		'Template Saved'=>'Template Saved',
+		'is now missing the region'=>'is now missing the region',
+		'Is an official template'=>'Is an official template',
 );
 
 

@@ -11,7 +11,7 @@
 	
 	function deleteTemplate(id)
 	{
-		if (confirm("<?php echo __('are you sure you want to delete this template');?>"))
+		if (confirm("<?php echo __("Are you sure you want to delete this template? \r\n\r\n You will break any maps that use this template.");?>"))
 		{
 			$("#template_id").val(id);
 			$("#action").val('delete');

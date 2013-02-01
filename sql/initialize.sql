@@ -275,3 +275,10 @@ UPDATE  `templates` SET  `user_id` =  '1' WHERE  `templates`.`id` = `templates`.
 ALTER TABLE `templates`ADD CONSTRAINT `template_user_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 UPDATE `templates` SET `is_official` = '1' WHERE `templates`.`id` = `templates`.`id`;
 UPDATE `metadata` SET  `v` =  '1.0.022' WHERE  `metadata`.`k` ='Database Version';
+
+/** John Etherton -- Added a column for is public to templates */
+ALTER TABLE  `templates` ADD  `is_private` BOOLEAN NOT NULL DEFAULT FALSE , ADD INDEX (  `is_private` );
+UPDATE `metadata` SET  `v` =  '1.0.023' WHERE  `metadata`.`k` ='Database Version';
+
+
+
