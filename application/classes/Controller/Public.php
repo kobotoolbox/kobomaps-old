@@ -125,12 +125,18 @@ class Controller_Public extends Controller_Main {
 	 	{
 	 		HTTP::redirect('mymaps');
 	 	}
+	 	
 	 		
 	 	$user = null;
 	 	
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	 
+	 	//if the map isn't ready send it back to where it needs to go
+	 	if(intval($map->map_creation_progress) != 5)
+	 	{
+	 		HTTP::redirect('mymaps/add'.$map->map_creation_progress.'?id='.$map->id);
+	 	}
 	 
 	 	$auth = Auth::instance();
 	 	//is the user logged in?
@@ -176,6 +182,7 @@ class Controller_Public extends Controller_Main {
 	 	$js =  view::factory("mapview_js");
 	 	$js->map = $map;
 	 	$js->template = $map_template;
+	 	$view->template = $map_template;
 	 	$view->html_head = $js;
 	 	
 	 	$view->menu_page = 'mapview';

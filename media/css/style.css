@@ -707,10 +707,14 @@ textarea:focus{
 	width:35px;
 }
 
-#overlay {
+#overlay, #missingTemplate {
 	background-image:url(../img/transparent.png);
 	color:#333;
 	height:450px;
+}
+
+#missingTemplate{
+	text-align:center;
 }
 
 /* container for external content. uses vertical scrollbar, if needed */

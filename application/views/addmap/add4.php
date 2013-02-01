@@ -10,6 +10,8 @@
 		
 <h2><?php echo __('Add Map - Geo Set-up') . ' - '.$map->title ?></h2>
 <h3><?php echo __('Select which map template you want to use for your map');?></h3>
+<p><?php echo __('Templates in bold, and marked official, are provided by KoBo staff.')?></p>
+<p><?php  echo __('If you want to add your own template click'). ' <a href="'.URL::base().'templates/edit">'.__('here').'</a>' ;?></p>
 
 
 
@@ -73,9 +75,10 @@
 				<tr>
 					<th class="selectColumn"><div><?php echo __('Select')?></div></th>
 					<th style="width:300px;"><div><?php echo __('Title')?></div></th>
-					<th style="width:300px;"><div><?php echo __('Description')?></div></th>
-					<th style="width:100px;"><div><?php echo __('Admin Level')?></div></th>
-					<th><div><?php echo __('Decimals')?></div></th>
+					<th style="width:250px;"><div><?php echo __('Description')?></div></th>
+					<th style="width:50px;"><div><?php echo __('Admin Level')?></div></th>
+					<th style="width:90px;"><div><?php echo __('Decimals')?></div></th>
+					<th style="width:60px;"><div><?php echo __('Official')?></div></th>
 				</tr>	
 			</thead>
 		</table>
@@ -98,10 +101,15 @@
 				echo '<td class="selectColumn">';
 				echo Form::radio('template_id', $template->id, $data['template_id'] == $template->id, array('onchange'=>'renderMap("'.$template->file.'",'.$template->lat.','.$template->lon.','.$template->zoom.'); return false;'));
 				echo '</td>';
-				echo '<td style="width:300px;"><a href="#" onclick="renderMap(\''.$template->file.'\','.$template->lat.','.$template->lon.','.$template->zoom.'); return false;">'.$template->title.'</a></td>';
-				echo '<td style="width:300px;"><span title="'.$template->description.'">'.$description.'</span></td>';
-				echo '<td style="width:100px;">'.$template->admin_level.'</td>';
-				echo '<td>'.($template->decimals == -1 ? __('No Rounding'):$template->decimals).'</td>';
+				echo '<td style="width:300px;">';
+				echo $template->is_official == 1 ? '<strong>':'';
+				echo '<a href="#" onclick="renderMap(\''.$template->file.'\','.$template->lat.','.$template->lon.','.$template->zoom.'); return false;">'.$template->title.'</a>';
+				echo $template->is_official == 1 ? '</strong>':'';
+				echo '</td>';
+				echo '<td style="width:250px;"><span title="'.$template->description.'">'.$description.'</span></td>';
+				echo '<td style="width:50px;">'.$template->admin_level.'</td>';
+				echo '<td style="width:90px;">'.($template->decimals == -1 ? __('No Rounding'):$template->decimals).'</td>';
+				echo '<td style="width:60px;text-align:center;">'.($template->is_official == 1 ? 'X':'').'</td>';
 				echo '</tr>';
 			}
 		}

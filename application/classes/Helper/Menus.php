@@ -121,7 +121,15 @@ class Helper_Menus
 				}
 				echo '<a href="'.url::base().'statistics">'.__("Statistics").'</a></li>';
 				
-			
+				if($page == "templates")
+				{
+					echo '<li class="selected">';
+				}
+				else
+				{
+					echo '<li>';
+				}
+				echo '<a href="'.url::base().'templates">'.__("Templates").'</a></li>';
 				
 			}
 		
@@ -133,15 +141,7 @@ class Helper_Menus
 			if($user->has('roles', $admin_role))
 			{
 				
-				if($page == "templates")
-				{
-					echo '<li class="adminmenu selected">';
-				}
-				else
-				{
-					echo '<li class="adminmenu">';
-				}
-				echo '<a href="'.url::base().'templates">'.__("Map Templates").'</a></li>';
+				
 					
 									
 				

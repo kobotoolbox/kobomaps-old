@@ -173,9 +173,28 @@ function initialize_map() {
 	map.mapTypes.set('kmaps', kmapsMapType); 
 	map.setMapTypeId('kmaps');
 
-	
+	<?php 
+		//check if the template exists, if it doesn't this has happened because a user, or careless admin
+		//deleted it out from under our poor user. If this has happened show an error
+		if($template->loaded())
+		{	
+	?>	
 	//Calling the boundaries and data files. The variables need to be defined in the container file as they are country-specific
 	parseJsonToGmap('<?php echo URL::base() .'uploads/templates/'. $template->file; ?>', '<?php echo URL::base() .'uploads/data/'. $map->json_file; ?>');
+	<?php }else{
+		//the template is missing :-( show an error message
+	?>
+
+	$("#missingTemplate").overlay({
+		mask: 'grey',
+		effect: 'apple',
+	    // disable this for modal dialog-type of overlays
+	    closeOnClick: false,
+	    // load it immediately after the construction
+	    load: true
+	    });
+				
+	<?php }?>
 	
 
 

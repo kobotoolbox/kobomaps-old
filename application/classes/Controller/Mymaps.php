@@ -1149,7 +1149,16 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$js->lat = $map->lat;
 	 	$js->lon = $map->lon;
 	 	$js->zoom = $map->zoom;
-	 	$js->template_id = $map->template_id;
+	 	//make sure the map template exists. If it's a user template they could have deleted it out from under themselves.
+	 	$template = ORM::factory('Template', $map->template_id);
+	 	if($template->loaded())
+	 	{
+	 		$js->template_id = $map->template_id;
+	 	}
+	 	else
+	 	{
+	 		$js->template_id = null;
+	 	}
 	 	$this->template->html_head->script_views[] = $js;
 	 
 	 	//get the status

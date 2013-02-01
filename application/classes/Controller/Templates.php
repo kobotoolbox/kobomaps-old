@@ -8,6 +8,25 @@
 
 class Controller_Templates extends Controller_Loggedin {
 
+	
+	/**
+	 Set stuff up, mainly just check if the user is an admin or not
+	 */
+	public function before()
+	{
+		parent::before();
+	
+	
+		$this->is_admin = false;
+		
+		//see if the given user is an admin, if so they can do super cool stuff
+		$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
+		if($this->user->has('roles', $admin_role))
+		{
+			$this->is_admin = true;
+		}
+	}
+	
 
   	
 	/**
@@ -15,6 +34,8 @@ class Controller_Templates extends Controller_Loggedin {
 	*/
 	public function action_index()
 	{
+		
+	
 		/***** initialize stuff****/
 		//The title to show on the browser
 		$this->template->html_head->title = __("Templates");
@@ -29,6 +50,7 @@ class Controller_Templates extends Controller_Loggedin {
 		$js = view::factory('templates/templates_js');
 		$this->template->html_head->script_views[] = $js;
 		$this->template->html_head->script_views[] = view::factory('js/messages');
+		$this->template->content->is_admin = $this->is_admin;
 		
 		/********Check if we're supposed to do something ******/
 		if(!empty($_POST)) // They've submitted the form to update his/her wish
@@ -37,8 +59,13 @@ class Controller_Templates extends Controller_Loggedin {
 			{	
 				if($_POST['action'] == 'delete')
 				{
-					Model_Template::delete_template($_POST['template_id']);
-					$this->template->content->messages[] = __('Template Deleted');
+					//make make sure this user has the rights to do this
+					$template = ORM::factory('Template',$_POST['template_id']);
+					if($this->is_admin OR $template->user_id = $this->user->id)
+					{
+						Model_Template::delete_template($_POST['template_id']);
+						$this->template->content->messages[] = __('Template Deleted') . ' - ' . $template->title;
+					}
 				}
 			}
 			catch (ORM_Validation_Exception $e)
@@ -63,9 +90,19 @@ class Controller_Templates extends Controller_Loggedin {
 		
 		/*****Render the forms****/
 		
-		//get the forms that belong to this user
+		//if you're an admin and you can do whatever you want then you see all templates
 		$maps = ORM::factory("Template")
-			->order_by('title', 'ASC')
+			->select('users.username')
+			->join('users')
+			->on('users.id','=','template.user_id');
+		if($this->is_admin)
+		{							
+		}
+		else //you're a regular user and can only see your own templates
+		{
+			$maps = $maps->where('user_id','=',$this->user->id);			
+		}
+		$maps = $maps->order_by('title', 'ASC')
 			->find_all();
 		
 		$this->template->content->maps = $maps;
@@ -161,7 +198,12 @@ class Controller_Templates extends Controller_Loggedin {
 						$region->save();
 					}
 				}
-				
+				$_POST['user_id'] = $this->user->id;
+				//if they aren't an admin, then they can't set officialness
+				if(!$this->is_admin)
+				{
+					unset($_POST['is_official']);
+				}
 				$template->update_template($_POST);
 				
 			
@@ -176,7 +218,7 @@ class Controller_Templates extends Controller_Loggedin {
 						{
 							Model_Template::delete_template($template->id);
 						}
-						throw new Exception($filename['error']);
+						throw new UTF_Character_Exception($filename['error']);
 					}
 					
 					$template->file = $filename;					
@@ -210,6 +252,14 @@ class Controller_Templates extends Controller_Loggedin {
 			catch (UTF_Character_Exception $e)
 			{
 				$this->template->content->errors[] = $e->getMessage();
+				$data['id'] =  $_POST['id'];
+				$data['title'] =  $_POST['title'];
+				$data['description'] =  $_POST['description'];
+				$data['admin_level'] =  $_POST['admin_level'];
+				$data['decimals'] =  $_POST['decimals'];
+				$data['zoom'] =  $_POST['zoom'];
+				$data['lat'] =  $_POST['lat'];
+				$data['lon'] =  $_POST['lon'];
 			}	
 		}
 		if(isset($_GET['id']) AND intval($_GET['id']) != 0)

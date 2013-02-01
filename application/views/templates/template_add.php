@@ -81,12 +81,17 @@
 	echo Form::label('admin_level', __('Admin Level').": ");
 	echo '</td><td>';
 	$admin_levels = array(0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8);
-	echo Form::select('admin_level', $admin_levels, $data['admin_level']);
+	echo Form::select('admin_level', $admin_levels, $data['admin_level'], array('style'=>'width:100px'));
 	echo '</td></tr><tr><td>';
 	echo Form::label('decimals', __('How many decimal places to round to').": ");
 	echo '</td><td>';
 	$rounding_options = array('-1'=>'Do not round', 0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8);
 	echo Form::select('decimals', $rounding_options, $data['decimals']);
+	echo '</td></tr><tr><td>';
+	echo Form::label('round_mem', __('How far back to remember rounding').": ");
+	echo '</td><td>';
+	$round_mem_options = array(1=>1, 5=>5, 50=>50, 500=>500, 5000=>5000);
+	echo Form::select('round_mem', $round_mem_options);
 	echo '</td></tr><tr><td>';
 	echo Form::label('lat', __('By default, what should the center point latitude be').": ");
 	echo '</td><td>';

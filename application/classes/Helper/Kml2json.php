@@ -211,6 +211,7 @@ class Helper_Kml2json
 	 */
 	public static function parsePlacemark ($placemark, $region)
 	{
+		set_time_limit(30);//because this could take a long freaking time.
 		$cumaltive_lat = 0;
 		$cumaltive_lon = 0;
 		$count = 0;
@@ -249,10 +250,12 @@ class Helper_Kml2json
 	
 			$tripletsCount = 0;
 			//now loop over these triplets
-			$lastLat = -200;
-			$lastLon = -200;
+			$lastPointArray = array();
+			$i = 0;
+			$memory = intval($_POST['round_mem']) == 0 ? 1 : intval($_POST['round_mem']);
 			foreach($coordinateArray as $cordTriplet)
 			{
+				$i++;
 				$subArray = explode(",", $cordTriplet);
 	
 				if(count($subArray)< 2)
@@ -279,8 +282,9 @@ class Helper_Kml2json
 					$roundedLat = $lat;
 					$roundedLon = $lon;
 				}
-				//skip duplicate points
-				if($lastLat == $roundedLat AND $lastLon == $roundedLon)
+				//skip duplicate points				
+				//if($lastLat == $roundedLat AND $lastLon == $roundedLon)
+				if($_POST['decimals'] != '-1' AND in_array($roundedLat.','.$roundedLon, $lastPointArray))
 				{
 					continue;
 				}
@@ -292,8 +296,8 @@ class Helper_Kml2json
 					echo ",";
 				}
 					
-				$lastLat = $roundedLat;
-				$lastLon = $roundedLon;
+				$lastPointArray[$i % $memory] =  $roundedLat.','.$roundedLon;
+				
 					
 				$count++;
 				$cumaltive_lon = $cumaltive_lon + $lon;

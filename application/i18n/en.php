@@ -11,7 +11,7 @@ return array
 		'View Map'=>'View Map',
 		'Share'=>'Share',
 		'Statistics'=>'Statistics',
-		'Map Templates'=>'Map Templates',
+		'Templates'=>'Templates',
 		'Public Maps'=>'Public Maps',
 		
 		//sub menus
@@ -154,6 +154,10 @@ return array
 		'No Rounding'=>'No Rounding',
 		'Pan and zoom the map to adjust what the default view will be for the map'=>'Pan and zoom the map to adjust what the default view will be for the map',
 		'You have to choose a template.'=>'You have to choose a template.',
+		'Official'=>'Official',
+		'Templates in bold, and marked official, are provided by KoBo staff.'=>'Templates in bold, and marked official, are provided by KoBo staff.',
+		'If you want to add your own template click'=>'If you want to add your own template click',
+		'here'=>'here',
 		
 		//add 5 page
 		'Add Map - Geo Matching'=>'Add Map - Geo Matching',
@@ -170,6 +174,7 @@ return array
 		'Please select an indicator to display its data.'=>'Please select an indicator to display its data.',
 		'Toggle Labels' => 'Toggle Labels',
 		'Toggle Values' => 'Toggle Values',
+		'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. Please check back soon.'=>'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. <br/><br/>Please check back soon.',
 		
 		
 		//footer
@@ -215,6 +220,10 @@ return array
 		'Search Maps'=>'Search Maps',
 		'Publicly viewable maps'=>'Publicly viewable maps',
 		
+		
+		//templates main page
+		'Templates are the base maps from which custom maps are made.'=>'Templates are the base maps from which custom maps are made.',
+		'User'=>'User',
 
 );
 
