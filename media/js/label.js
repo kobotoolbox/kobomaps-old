@@ -61,20 +61,35 @@ Label.prototype.draw = function() {
 	 areaValueTxt = '<div class="areaVal">'+areaValue+'</div>';
 }
 	  
- if(Label.renderLabels){
+ if(Label.renderLabelVals && Label.renderLabelNames){
 	 if(areaValueTxt == "" && !this.get('show_empty_name')){
 		 //don't draw empty name labels
 		 //clear out past labels
-		 this.labeldiv_.innerHTML = '<div class="countylabelname"></div>';
+		 this.labeldiv_.innerHTML = '';
 	 }
 	 else {
 		 this.labeldiv_.innerHTML = areaValueTxt + '<div class="countylabelname">' + this.get('areaName').toString() + '</div>';
 	 }
  }
+ else if(Label.renderLabelVals){
+	 this.labeldiv_.innerHTML = areaValueTxt;
+ }
+ else if(Label.renderLabelNames){
+	 if(areaValueTxt == "" && !this.get('show_empty_name')){
+		 //don't draw empty name labels
+		 //clear out past labels
+		 this.labeldiv_.innerHTML = '';
+	 }
+	 else {
+		 this.labeldiv_.innerHTML = '<div class="countylabelname">' + this.get('areaName').toString() + '</div>';
+	 }
+ }
  else {
-	 this.labeldiv_.innerHTML = "";
+	 this.labeldiv_.innerHTML = '';
  }
 };
 
 //Used to global turn on or off the labels
-Label.renderLabels = true;
+Label.renderLabels = false;
+Label.renderLabelNames = false;
+Label.renderLabelVals = false;

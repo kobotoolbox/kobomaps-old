@@ -197,24 +197,36 @@ function initialize_map() {
 	<?php }?>
 
 	if(<?php echo $map->label_zoom_level?> <= map.getZoom()){
-		Label.renderLabels = true;	
+		Label.renderLabelNames = true;
+		Label.renderLabelVals = true;
+		//Label.renderLabels = true;
 	}
 
 	var previousZoom = map.getZoom();
 	google.maps.event.addListener(map, 'zoom_changed', function() {
 		var	mapZoom = <?php echo $map->label_zoom_level?>;
+		//console.log(Label.renderLabelNames + " names");
+		//console.log(Label.renderLabelVals + " values");
 		
 		if((previousZoom >= mapZoom &&  map.getZoom() < mapZoom))
 		{
-			Label.renderLabels = false;
+			//Label.renderLabels = true;
+			Label.renderLabelNames = false;
+			Label.renderLabelVals = false;
+			//if($("#turnOffLabelsButton").active()){
+				//$("#turnOffLabelsButton").toggleClass("active");
+			//}
+			//if($("#turnOffValuesButton").active()){
+				//$("#turnOffValusSButton").toggleClass("active");
+			//}
 		}
 		else if(previousZoom < mapZoom &&  map.getZoom() >= mapZoom)
 		{
-			Label.renderLabels = true;		
+			//Label.renderLabels = true;
+			Label.renderLabelNames = true;
+			Label.renderLabelVals = true;	
 		}
-		else if(map.getZoom() >= mapZoom){
-			Label.renderLabels = true;	
-		}
+
 		previousZoom = map.getZoom();
 	});
 
@@ -1840,14 +1852,14 @@ function initialize_buttons()
 
 	//handle turning off and on the labels on the map
 	$("#turnOffLabelsButton").click(function(){
-		$(".countylabelname").toggle(); 
+		Label.renderLabelNames = !Label.renderLabelNames; 
 		$("#turnOffLabelsButton").toggleClass("active"); 
 		return false;
 		});
 
 	//hanndle turning on and off values on the map
 	$("#turnOffValuesButton").click(function(){
-		$(".areaVal").toggle();
+		Label.renderLabelVals = !Label.renderLabelVals; 
 		$("#turnOffValuesButton").toggleClass("active"); 
 		return false;
 		});
