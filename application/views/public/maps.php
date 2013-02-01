@@ -51,8 +51,8 @@
 <p>
 
 </p>
-<div id="searchPublicMapsDiv">
-<?
+<div class="searchBigDiv">
+<?php
 	echo Form::open(NULL, array('id'=>'searchPublicMapForm', 'method' => 'get'));
 	echo Form::input('q', isset($_GET['q']) ? $_GET['q'] : null, array('id'=>'q', 'style'=>'width:600px;'));
 	echo Form::submit('search', __('Search Maps'), array('id'=>'search_button'));

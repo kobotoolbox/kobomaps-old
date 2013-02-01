@@ -20,9 +20,14 @@
 		<?php echo $map_count.' '.__('maps use this template.')?>
 	</strong>
 </p>
+<p>
+<a class="button" id="download_kml_button" href="<?php echo url::base(); ?>uploads/templates/<?php echo $data['kml_file'];?>"><?php echo __('Download KML File');?></a>
+</p>
+<p>
+<a class="button" id="copy_template_button" href="<?php echo url::base(); ?>templates/copy?id=<?php echo $data['id'];?>"><?php echo __('Copy Template');?></a>
+</p>
 <?php }?>
 
-<a class="button" id="add_back_to_templates" href="<?php echo url::base(); ?>templates"><?php echo __('Back to Templates');?></a>
 
 <?php if(count($errors) > 0 )
 {
@@ -81,13 +86,12 @@
 	echo '</td><td>';
 	echo Form::textarea('description', $data['description'], array('id'=>'description', 'style'=>'width:600px;'));
 	echo '</td></tr><tr><td>';
-	/*
-	 * We need to think about how changes to public templates affects everyone else.
-	echo Form::label('file', __('Make template Private').": ");
+	echo Form::label('file', __('Visibility').": ");
 	echo '</td><td>';
-	echo Form::checkbox('is_private', null, 1==$data['is_private'] );
+	$visbility_options = array('0'=>__('Public'), '1'=>__('Private'));
+	echo Form::select('is_private', $visbility_options,$data['is_private']). '<br/>';
+	echo __('Private templates can only be used by you. Public templates will be made available for other users to copy and use in their maps.');
 	echo '</td></tr><tr><td>';
-	*/
 	if($is_admin){
 		echo Form::label('file', __('Is an official template').": ");
 		echo '</td><td>';

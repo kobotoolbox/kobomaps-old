@@ -1140,8 +1140,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$templates = ORM::factory('Template');	 		
 	 	if(!$this->is_admin)
 	 	{
-	 		$templates = $templates->or_where('is_official','=',1)
-	 			->or_where('user_id','=', $this->user->id);
+	 		$templates = $templates->where_open()
+	 			->where('is_official','=',1)
+	 			->where('is_private','=', '0')
+	 			->where_close()
+	 			->or_where('user_id','=', $this->user->id)
+	 			->or_where('is_private','=', '0');
 	 	}
 	 	$templates = $templates->order_by('title', 'ASC')
 	 		->find_all();

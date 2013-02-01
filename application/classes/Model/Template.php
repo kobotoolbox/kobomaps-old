@@ -69,7 +69,7 @@ class Model_Template extends ORM {
 	public function update_template($values)
 	{
 	
-		$expected = array('title', 'description', 'admin_level', 'file', 'decimals', 'lat', 'lon', 'zoom', 'user_id', 'is_official');
+		$expected = array('title', 'description', 'admin_level', 'file', 'decimals', 'lat', 'lon', 'zoom', 'user_id', 'is_official','is_private');
 	
 		$this->values($values, $expected);
 		$this->check();
@@ -93,6 +93,44 @@ class Model_Template extends ORM {
 			unlink(DOCROOT.'uploads/templates/'.$template->kml_file);
 		}
 		$template->delete();
+	}
+	
+	/**
+	 * Used to make a copy of a template for the given user
+	 * @param int $user_id DB ID of the user you're making this copy for
+	 * @return db_obj The new template
+	 */
+	public function copy($user_id)
+	{
+		//first copy the template itself
+		$new_template = ORM::factory('Template');
+		$copy_array = $this->as_array();
+		$copy_array['user_id'] = $user_id;
+		$copy_array['title'] = $copy_array['title']. ' ('.__('Copy').')'; 
+		$new_template->update_template($copy_array);
+		
+		//now copy the regions
+		$regions = ORM::factory('Templateregion')
+			->where('template_id','=',$copy_array['id'])
+			->find_all();
+		foreach($regions as $region)
+		{
+			$region->copy($new_template->id);
+		}
+		
+		//copy the json file
+		$new_file = $new_template->id.'.json';
+		copy(DOCROOT.'uploads/templates/'.$this->file,DOCROOT.'uploads/templates/'.$new_file);
+		//copy the KML/KMZ file
+		$extention = pathinfo($this->kml_file, PATHINFO_EXTENSION);
+		$new_kml = $new_template->id.'.'.$extention;
+		copy(DOCROOT.'uploads/templates/'.$this->kml_file,DOCROOT.'uploads/templates/'.$new_kml);
+		//copy the new file locations
+		$new_template->file = $new_file;
+		$new_template->kml_file = $new_kml;
+		$new_template->save();
+		
+		return $new_template;
 	}
 
 	

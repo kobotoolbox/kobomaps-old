@@ -189,9 +189,9 @@ class Helper_Menus
 				<?php 
 				break;
 				
-				case "createmap":
-					
-				case "mapview":
+			case "createmap":
+				
+			case "mapview":
 
 					$pageNumber = Request::initial()->action();
 					$pageNumber = intval(str_replace('add', '', $pageNumber));
@@ -271,6 +271,32 @@ class Helper_Menus
 					<?php 
 
 					break;
+				case "templates":
+					$action = Request::initial()->action();
+				?>
+					<li class="<?php echo $action=='index' ? 'active':'';?>">
+						<?php if($action=='index'){?><span><?php }else{?><a href="<?php echo URL::base();?>templates"><?php }?>
+						<div>
+							<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('All Templates');?>
+						</div>
+						<?php if($action=='index'){?></span><?php }else{?></a><?php }?>
+					</li>
+					<li class="<?php echo $action=='mine' ? 'active':'';?>">
+						<?php if($action=='mine'){?><span><?php }else{?><a href="<?php echo URL::base();?>templates/mine"><?php }?>
+						<div>
+							<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('My Templates');?>
+						</div>
+						<?php if($action=='mine'){?></span><?php }else{?></a><?php }?>
+					</li>
+					<li class="<?php echo $action=='edit' ? 'active':'';?>">
+						<?php if($action=='edit'){?><span><?php }else{?><a href="<?php echo URL::base();?>templates/edit"><?php }?>
+						<div>
+							<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create Template');?>
+						</div>
+						<?php if($action=='edit'){?></span><?php }else{?></a><?php }?>
+					</li>										
+				<?php 
+				break;
 		}		
 		
 		echo '</ul>';

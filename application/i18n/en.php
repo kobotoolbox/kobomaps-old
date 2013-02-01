@@ -24,6 +24,9 @@ return array
 		'Geo Set-up'=>'Geo Set-up',
 		'Geo Matching'=>'Geo Matching',
 		'View Map'=>'View Map',
+		'Create Template'=>'Create Template',
+		'All Templates'=>'All Templates',
+		'My Templates'=>'My Templates',
 		
 		
 		//User Menu
@@ -234,6 +237,17 @@ return array
 		'Template Saved'=>'Template Saved',
 		'is now missing the region'=>'is now missing the region',
 		'Is an official template'=>'Is an official template',
+		'Visibility'=>'Visibility',
+		'Private'=>'Private',
+		'Copy Template'=>'Copy Template',
+		
+		
+		//templates view page
+		'View Template'=>'View Template',
+		'Decimal places rounded to'=>'Decimal places rounded to',
+		'Center point latitude'=>'Center point latitude',
+		'Center point longitude'=>'Center point longitude',
+		'Default zoom level'=>'Default zoom level',
 );
 
 

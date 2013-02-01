@@ -139,10 +139,15 @@
 				echo '<thead><tr><th class="header firstCol"></th>';
 				foreach($row as $column_index=>$column)
 				{
+					$i++;
 					//set a default for each drop down
 					$column_default = $data['column'][$sheet_model->id][$column_index];
 					if($column_default == null OR $column_default == "")
 					{
+						if($i <= 3)
+						{
+							$column_default = 'indicator';
+						}
 						if(trim(strtolower($column)) == "unit")
 						{
 							$column_default = 'unit';

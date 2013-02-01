@@ -803,10 +803,10 @@ select.needstobemapped{
 /*********************************************************
                Public maps page
 *********************************************************/
-#searchPublicMapsDiv{
+.searchBigDiv{
 	text-align:center;
 	padding:10px;
 }
-#searchPublicMapsDiv input#q{
+.searchBigDiv input#q{
 	margin-right:20px;
 }
