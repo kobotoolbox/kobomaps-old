@@ -205,26 +205,24 @@ function initialize_map() {
 	var previousZoom = map.getZoom();
 	google.maps.event.addListener(map, 'zoom_changed', function() {
 		var	mapZoom = <?php echo $map->label_zoom_level?>;
-		//console.log(Label.renderLabelNames + " names");
-		//console.log(Label.renderLabelVals + " values");
-		
+	
 		if((previousZoom >= mapZoom &&  map.getZoom() < mapZoom))
 		{
 			//Label.renderLabels = true;
 			Label.renderLabelNames = false;
 			Label.renderLabelVals = false;
-			//if($("#turnOffLabelsButton").active()){
-				//$("#turnOffLabelsButton").toggleClass("active");
-			//}
-			//if($("#turnOffValuesButton").active()){
-				//$("#turnOffValusSButton").toggleClass("active");
-			//}
+
+			$("#turnOffLabelsButton").addClass("active");
+			$("#turnOffValuesButton").addClass("active");
+
 		}
 		else if(previousZoom < mapZoom &&  map.getZoom() >= mapZoom)
 		{
 			//Label.renderLabels = true;
 			Label.renderLabelNames = true;
-			Label.renderLabelVals = true;	
+			Label.renderLabelVals = true;
+			$("#turnOffLabelsButton").removeClass("active");
+			$("#turnOffValuesButton").removeClass("active");	
 		}
 
 		previousZoom = map.getZoom();
@@ -1853,14 +1851,24 @@ function initialize_buttons()
 	//handle turning off and on the labels on the map
 	$("#turnOffLabelsButton").click(function(){
 		Label.renderLabelNames = !Label.renderLabelNames; 
-		$("#turnOffLabelsButton").toggleClass("active"); 
+		$("#turnOffLabelsButton").toggleClass("active");
+		//redraw all the labels 
+		for(i in labels)
+		{
+			labels[i].draw();
+		} 
 		return false;
 		});
 
 	//hanndle turning on and off values on the map
 	$("#turnOffValuesButton").click(function(){
 		Label.renderLabelVals = !Label.renderLabelVals; 
-		$("#turnOffValuesButton").toggleClass("active"); 
+		$("#turnOffValuesButton").toggleClass("active");
+		//redraw all the labels 
+		for(i in labels)
+		{
+			labels[i].draw();
+		}
 		return false;
 		});
 
