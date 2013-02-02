@@ -171,14 +171,7 @@ class Helper_Menus
 						<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create New Map');?>
 					</div>
 					</a>
-				</li>
-				<li>
-					<a href="<?php echo URL::base();?>mymaps/share">
-					<div>
-						<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Share'); ?>
-					</div>
-					</a>
-				</li>
+				</li>				
 				<li>
 					<a href="<?php echo URL::base();?>mymaps/messages">
 					<div>
@@ -277,24 +270,43 @@ class Helper_Menus
 					<li class="<?php echo $action=='index' ? 'active':'';?>">
 						<?php if($action=='index'){?><span><?php }else{?><a href="<?php echo URL::base();?>templates"><?php }?>
 						<div>
-							<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('All Templates');?>
+							<img class="allTemplates" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('All Templates');?>
 						</div>
 						<?php if($action=='index'){?></span><?php }else{?></a><?php }?>
 					</li>
 					<li class="<?php echo $action=='mine' ? 'active':'';?>">
 						<?php if($action=='mine'){?><span><?php }else{?><a href="<?php echo URL::base();?>templates/mine"><?php }?>
 						<div>
-							<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('My Templates');?>
+							<img class="myTemplates" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('My Templates');?>
 						</div>
 						<?php if($action=='mine'){?></span><?php }else{?></a><?php }?>
 					</li>
-					<li class="<?php echo $action=='edit' ? 'active':'';?>">
-						<?php if($action=='edit'){?><span><?php }else{?><a href="<?php echo URL::base();?>templates/edit"><?php }?>
+					<li class="<?php echo ($action=='edit' AND !isset($_GET['id'])) ? 'active':'';?>">
+						<?php if($action=='edit' AND !isset($_GET['id'])){?><span><?php }else{?><a href="<?php echo URL::base();?>templates/edit"><?php }?>
 						<div>
-							<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create Template');?>
+							<img class="newTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create Template');?>
 						</div>
-						<?php if($action=='edit'){?></span><?php }else{?></a><?php }?>
-					</li>										
+						<?php if($action=='edit' AND !isset($_GET['id'])){?></span><?php }else{?></a><?php }?>
+					</li>
+					<?php if($action=='edit' AND isset($_GET['id'])){?>
+					<li class="active">
+						<span>
+						<div>
+							<img class="newTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Edit Template');?>
+						</div>
+						</span>
+					</li>						
+					<?php }?>														
+					
+					<?php if($action=='view'){?>
+					<li class="active">
+						<span>
+						<div>
+							<img class="viewTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View Template');?>
+						</div>
+						</span>
+					</li>						
+					<?php }?>														
 				<?php 
 				break;
 		}		

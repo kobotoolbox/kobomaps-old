@@ -63,10 +63,10 @@
 			<th style="width:200px;">
 				<?php echo __('Map');?>
 			</th>
-			<th style="width:400px;">
+			<th style="width:370px;">
 				<?php echo __('Description');?>
 			</th>
-			<th style="width:120px;">
+			<th style="width:150px;">
 				<?php echo __('Actions');?>
 			</th>
 			<th style="width:100px;">
@@ -95,18 +95,35 @@
 			<a href="<?php echo url::base(); ?>templates/<?php echo $action.'?id='.$template->id;?>" ><?php echo $template->title; ?></a>
 			<?php echo $template->is_official == 1 ? '</strong>':'';?>
 		</td>
-		<td style="width:400px;">
+		<td style="width:370px;">
 			<?php echo $template->description; ?>
 		</td>
-		<td style="width:120px;">
+		<td style="width:150px;" class="templateTasks">
+			<ul>
 			<?php if(!$is_admin AND ($template->is_official == 1 OR $template->user_id != $user->id)){?>
-				<a href="<?php echo url::base(); ?>templates/view?id=<?php echo $template->id;?>" > <?php echo __('View');?></a>
+				<li>
+					<a href="<?php echo url::base(); ?>templates/view?id=<?php echo $template->id;?>" >
+						<img class="viewTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View');?>
+					</a>
+				</li>
 			<?php }else{?>
-			
-			<a href="<?php echo url::base(); ?>templates/edit?id=<?php echo $template->id;?>" > <?php echo __('Edit');?></a>
-			<a href="#" onclick="deleteTemplate(<?php echo $template->id?>);"> <?php echo __('Delete');?></a>
+			<li>
+				<a href="<?php echo url::base(); ?>templates/edit?id=<?php echo $template->id;?>" >
+					<img class="editTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Edit');?>
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="deleteTemplate(<?php echo $template->id?>);">
+					<img class="delete" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Delete');?>
+				</a>
+			</li>
 			<?php }?>
-			<a href="<?php echo url::base(); ?>templates/copy?id=<?php echo $template->id;?>" > <?php echo __('Copy');?></a>
+			<li>
+				<a href="<?php echo url::base(); ?>templates/copy?id=<?php echo $template->id;?>" >
+					<img class="copy" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Copy');?>
+				</a>
+			</li>
+			</ul>
 		</td>
 		<td style="width:100px;">
 			<?php echo $template->username . ($is_admin ? ' - '. $template->user_id : '');?>

@@ -234,7 +234,7 @@ div#subMenu
 
 
 #subMenu li img{
-	height: 43px;
+	height: 47px;
 	margin: 0px;
 	padding: 0px;
 }
@@ -251,48 +251,60 @@ div#subMenu
 
 #subMenu img.createNewMap{
 	background: url('../img/submenuSprite.png') -0px 0px;	
-	width:38px;	
-}
-
-#subMenu img.share{
-	background: url('../img/submenuSprite.png') -40px 0px;	
-	width:41px;	
+	width:47px;	
 }
 
 #subMenu img.message{
-	background: url('../img/submenuSprite.png') -88px 0px;	
-	width:38px;	
+	background: url('../img/submenuSprite.png') -46px 0px;	
+	width:47px;	
 }
 
 #subMenu img.basicSetup{
-	background: url('../img/submenuSprite.png') -129px 0px;	
+	background: url('../img/submenuSprite.png') -93px 0px;	
 	width:44px;
 }
 
 #subMenu img.dataStruct{
-	background: url('../img/submenuSprite.png') -177px 0px;	
-	width:38px;
+	background: url('../img/submenuSprite.png') -140px 0px;	
+	width:43px;
 }
 
 #subMenu img.validation{
-	background: url('../img/submenuSprite.png') -221px 0px;	
+	background: url('../img/submenuSprite.png') -186px 0px;	
 	width:42px;
 }
 
 #subMenu img.geoSetup{
-	background: url('../img/submenuSprite.png') -268px 0px;	
-	width:71px;
+	background: url('../img/submenuSprite.png') -228px 0px;	
+	width:45px;
 }
 
 #subMenu img.geoMatch{
-	background: url('../img/submenuSprite.png') -345px 0px;	
-	width:69px;
+	background: url('../img/submenuSprite.png') -273px 0px;	
+	width:47px;
 }
 
 #subMenu img.genMap{
-	background: url('../img/submenuSprite.png') -0px 0px;	
-	width:38px;	
+	background: url('../img/submenuSprite.png') -324px 0px;	
+	width:48px;	
 }
+#subMenu img.allTemplates{
+	background: url('../img/submenuSprite.png') -375px 0px;	
+	width:46px;	
+}
+#subMenu img.myTemplates{
+	background: url('../img/submenuSprite.png') -419px 0px;	
+	width:46px;	
+}
+#subMenu img.newTemplate{
+	background: url('../img/submenuSprite.png') -465px 0px;	
+	width:46px;	
+}
+#subMenu img.viewTemplate{
+	background: url('../img/submenuSprite.png') -509px 0px;	
+	width:46px;	
+}
+
 
 
 
@@ -392,46 +404,56 @@ table.list_table tr td a:hover
 *************************************************************/
 
 
-.mapTasks ul{
+.mapTasks ul, .templateTasks ul{
 	padding:0px;
 	margin:0px;
 	list-style:none;
 }
 
-.mapTasks ul li{
+.mapTasks ul li, .templateTasks ul li{
 	float:left;
 	margin:3px;
 	padding:3px;
 	}
-.mapTasks ul li a{
+.mapTasks ul li a, .templateTasks ul li a{
 	font-size: 12px;
 	}
 
-.mapTasks img{
-	height:27px;
+.mapTasks img, .templateTasks img{
+	height:32px;
 	background-repeat: no-repeat;
 }
 .mapTasks img.edit{
 	background: url('../img/tasksSprite.png') 0px 0px;	
-	width:23px;
+	width:32px;
 	}
 
-.mapTasks img.copy{
-	background: url('../img/tasksSprite.png') -24px -2px;	
-	width:22px;
+.mapTasks img.copy,.templateTasks img.copy{
+	background: url('../img/tasksSprite.png') -32px 0px;	
+	width:32px;
 	}
 .mapTasks img.view{
-	background: url('../img/tasksSprite.png') -63px 0px;	
-	width:27px;
+	background: url('../img/tasksSprite.png') -64px 0px;	
+	width:32px;
 	}
 .mapTasks img.share{
-	background: url('../img/tasksSprite.png') -110px 0px;	
-	width:27px;
+	background: url('../img/tasksSprite.png') -98px 0px;	
+	width:31px;
 	}			
-.mapTasks img.delete{
-	background: url('../img/tasksSprite.png') -139px 0px;	
-	width:27px;
-	}	
+.mapTasks img.delete, .templateTasks img.delete{
+	background: url('../img/tasksSprite.png') -130px 0px;	
+	width:32px;
+	}
+.templateTasks img.viewTemplate{
+	background: url('../img/tasksSprite.png') -273px 0px;	
+	width:32px;
+	}
+.templateTasks img.editTemplate{
+	background: url('../img/tasksSprite.png') -241px 0px;	
+	width:32px;
+	}			
+	
+
 
 
 /************************************************************
