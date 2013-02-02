@@ -9,7 +9,8 @@
 class Controller_Main extends Controller_Template {
 
 	public $template = 'main';
-	
+	/** Stores the DB object of the current user, if one exists, else null*/
+	public $user = null;
 	/**
 		Set stuff up
 	*/

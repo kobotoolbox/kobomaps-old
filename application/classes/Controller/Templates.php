@@ -18,16 +18,7 @@ class Controller_Templates extends Controller_Loggedin {
 	public function before()
 	{
 		parent::before();
-	
-	
 		$this->is_admin = false;
-		
-		//see if the given user is an admin, if so they can do super cool stuff
-		$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
-		if($this->user->has('roles', $admin_role))
-		{
-			$this->is_admin = true;
-		}
 	}
 
 

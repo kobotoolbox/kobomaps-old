@@ -254,6 +254,15 @@ return array
 		'Center point latitude'=>'Center point latitude',
 		'Center point longitude'=>'Center point longitude',
 		'Default zoom level'=>'Default zoom level',
+		
+		//limits exceeded
+		'Map Limit Exceeded'=>'Map Limit Exceeded',
+		'Back to my maps'=>'Back to my maps',
+		'We\'re sorry, but you have'=>'We\'re sorry, but you have',
+		'maps and your account only allows you to have'=>'maps,<br/>and your account only allows you to have',
+		'If you want to add a new map you must remove'=>'If you want to add a new map you must remove',
+		'maps.'=>'maps.',
+		'SENTANCE_END'=>'.',
 );
 
 
