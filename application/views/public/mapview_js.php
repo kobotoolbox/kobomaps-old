@@ -501,8 +501,14 @@ function showByIndicator(indicator)
 	//scroll to the just highlighted sheet
 	currentListTop = $("#sheetnames").offset().top;
 	if($("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).offset() != null){
+		var currentTopOfDispaly = $("#sheetlinks").offset().top;
+		var currentListTop = $("#sheetnames").offset().top;
+		var actualOffset = currentListTop - currentTopOfDispaly;		
 		currentTopOfSelectedItem = $("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).offset().top
-		scrollSheets(-(currentTopOfSelectedItem-currentListTop));
+		if(actualOffset != (-(currentTopOfSelectedItem-currentListTop)))
+		{
+			scrollSheets(-(currentTopOfSelectedItem-currentListTop));
+		}
 	}
 	$("li.sheet").hide();
 	$("li.sheet").removeClass("active");
@@ -1730,11 +1736,7 @@ function scrollSheets(delta)
 	{
 		actualOffset = (actualOffset/increment).round();
 	}
-	if(actualOffset == delta)
-	{
-		//do nothing
-		return;
-	}
+	
 	if(delta > 0 && (actualOffset + delta) <= 0 ) //scrolling up
 	{
 		actualOffset += delta;
