@@ -67,7 +67,9 @@
 <?php 
 }
 ?>
-<?php if($data['id']!=0){?>
+<?php
+$is_add =  $data['id']==0;
+if($data['id']!=0){?>
 <div id="map_div" style="width:900px; height:400px;"></div>
 <?php }?>
 
@@ -119,16 +121,30 @@
 	echo '</td></tr><tr><td>';
 	echo Form::label('lat', __('By default, what should the center point latitude be').": ");
 	echo '</td><td>';
-	echo Form::input('lat', $data['lat'], array('id'=>'lat', 'style'=>'width:300px;','onchange'=>'latChanged();','onkeyup'=>'latChanged();'));
+	$lat_options = array('id'=>'lat', 'style'=>'width:300px;');
+	if(!$is_add){
+		$lat_options['onkeyup'] = 'latChanged();';
+		$lat_options['onchange'] = 'latChanged();';
+	}
+	echo Form::input('lat', $data['lat'],$lat_options );
 	echo '</td></tr><tr><td>';
 	echo Form::label('lon', __('By default, what should the center point longitude be').": ");
 	echo '</td><td>';
-	echo Form::input('lon', $data['lon'], array('id'=>'lon', 'style'=>'width:300px;','onchange'=>'lonChanged();','onkeyup'=>'lonChanged();'));
+	$lon_options = array('id'=>'lon', 'style'=>'width:300px;');
+	if(!$is_add){
+		$lon_options['onkeyup'] = 'lonChanged();';
+		$lon_options['onchange'] = 'lonChanged();';
+	}
+	echo Form::input('lon', $data['lon'], $lon_options);
 	echo '</td></tr><tr><td>';
 	echo Form::label('zoom', __('By Default what should this map zoom to').": ");
 	echo '</td><td>';
 	$zoom_options = array(0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9, 10=>10, 11=>11, 12=>12, 13=>13, 14=>14, 15=>15, 16=>16, 17=>17, 18=>18, 19=>19);
-	echo Form::select('zoom', $zoom_options, $data['zoom'], array('id'=>'zoom', 'onchange'=>'changeZoom();'));
+	$zoom_params = array('id'=>'zoom');
+	if(!$is_add){
+		$zoom_params['onchange']='changeZoom();';
+	}
+	echo Form::select('zoom', $zoom_options, $data['zoom'],$zoom_params);
 	echo '</td></tr><tr><td>';
 	$i = 0;
 	foreach($data['regions'] as $r_id=>$r_title)

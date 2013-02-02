@@ -1361,6 +1361,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//grab the regions that the map comes with
 	 	$map_regions_temp = ORM::factory('Templateregion')	 	
 	 		->where('template_id', '=',$map->template_id)
+	 		->order_by('title', 'ASC')
 	 		->find_all();
 	 	//setup the regions as an array
 	 	$map_regions = array();
@@ -2092,6 +2093,24 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 {
 	 	$this->template->header->menu_page = "mymaps";
 	 	$this->template->content = "<h1> Work in Progress</h1>";
+	 	
+	 	//make sure there's an id
+	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+	 	//something went wrong, kick them back home
+	 	if($map_id == 0)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
+	 	$map = ORM::factory('Map',$map_id);
+	 	//they aren't allowed to be here, or this isn't a valid id
+	 	if(!$map->loaded() OR $map->user_id != $this->user->id)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
+	 	
+	 	$new_map = $map->copy($this->user->id);
+	 	
+	 	HTTP::redirect('mymaps/add1?id='.$new_map->id);
 	 }
 	 
 	

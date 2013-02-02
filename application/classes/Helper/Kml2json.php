@@ -77,8 +77,10 @@ class Helper_Kml2json
 						$fp = fopen($newTarget[$i], "w");
 						if (zip_entry_open($zip, $zip_entry, "r"))
 						{
-							$buf = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
-							fwrite($fp,"$buf");
+							while(($buf = zip_entry_read($zip_entry, 1024*1024)) != "")
+							{
+								fwrite($fp,"$buf");
+							}
 							zip_entry_close($zip_entry);
 							fclose($fp);
 						}

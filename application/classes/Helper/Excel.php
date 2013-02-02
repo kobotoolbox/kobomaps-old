@@ -24,7 +24,6 @@ class Helper_Excel
 		require_once Kohana::find_file('PHPExcel', 'Classes/PHPExcel');
 		PHPExcel_CachedObjectStorageFactory::initialize(PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp); //reduce memory usage
 		$reader = PHPExcel_IOFactory::createReaderForFile($file_name);
-		$reader->setReadDataOnly(true); //supposed to reduce memory usage
 		$excel = $reader->load($file_name);
 		return $excel;
 	}
