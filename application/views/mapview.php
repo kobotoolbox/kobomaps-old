@@ -93,59 +93,62 @@
 ?>
 <div id="topbar" class="drsElement drsMoveHandle" style="left:355px; top: 400px;">
 	 
-	<div id="legend">
-
-		<div id="legendtext">
-			<span id="spanLegendText"><?php echo __('Please select an indicator to display its data.')?></span>
-		</div>
-		<div id="legend_gradient">
-			<div id="percentleft">
-				
+	<div id="legendMinDiv">
+		<div id="legend">
+			<div id="minButtonLegend" style=" float: right"></div>
+			<div id="restoreButtonLegendDiv" style="float:right"></div>
+			<div id="legendtext">
+				<span id="spanLegendText"><?php echo __('Please select an indicator to display its data.')?></span>
 			</div>
-			<div id="percentright">
-				
+			<div id="legend_gradient">
+				<div id="percentleft">
+					
+				</div>
+				<div id="percentright">
+					
+				</div>
 			</div>
-		</div>
-		<div id="nationalaveragediv">
-			<span id="nationalaveragelabel"></span>
-			<span id="nationalaverageimg" ></span>
-		</div>
-		<div id="nationalChartScrollDiv"  style=" width:320px; overflow-y: auto; overflow-x: hidden">
-        	<div id="nationalIndicatorChart" style="width: 300px"></div>		
-        </div>
-        <div id="sourcetext">
-			<span id="sourcetextspan" style="display:none;"> Data Source:  
-				<a id="sourceURL" href="" title=""></a>
-				<span id="sourceNoURL"></span>
-			</span>
-        </div>
+			<div id="nationalaveragediv">
+				<span id="nationalaveragelabel"></span>
+				<span id="nationalaverageimg" ></span>
+			</div>
+			<div id="nationalChartScrollDiv"  style=" width:320px; overflow-y: auto; overflow-x: hidden">
+	        	<div id="nationalIndicatorChart" style="width: 300px"></div>		
+	        </div>
+	        <div id="sourcetext">
+				<span id="sourcetextspan" style="display:none;"> Data Source:  
+					<a id="sourceURL" href="" title=""></a>
+					<span id="sourceNoURL"></span>
+				</span>
+	        </div>
+        
 	
-<?php
-//Powered by KoBoToolbox - Please be kind and leave a reference with a link to our website.
-?>
-		<div id="poweredby">
-		<a href="http://www.kobotoolbox.org" title="KoBoToolbox.org"><?php echo __('powered by KoboToolbox')?></a>
+		<?php
+		//Powered by KoBoToolbox - Please be kind and leave a reference with a link to our website.
+		?>
+				<div id="poweredby">
+				<a href="http://www.kobotoolbox.org" title="KoBoToolbox.org"><?php echo __('powered by KoboToolbox')?></a>
+				</div>
+			</div>
 		</div>
-	</div>
-</div>
-
-<?php if(!$template->loaded()){?>
-	<div class="apple_overlay" id="missingTemplate">
-		<div class="contentWrap" style="position:relative;padding:30px;">
-			<img src="<?php echo URL::base();?>media/img/big_error.png"/>
-			<h2 >
-				<?php echo __('We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. Please check back soon.');?>
-			</h2>
+		
+		<?php if(!$template->loaded()){?>
+			<div class="apple_overlay" id="missingTemplate">
+				<div class="contentWrap" style="position:relative;padding:30px;">
+					<img src="<?php echo URL::base();?>media/img/big_error.png"/>
+					<h2 >
+						<?php echo __('We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. Please check back soon.');?>
+					</h2>
+				</div>
+			</div>
+		<?php }?>
+		
+		<div class="apple_overlay" id="overlay">
+			<div class="contentWrap">
+				<img class="contentWrapWaiter" src="<?php echo URL::base();?>media/img/waiter_barber.gif"/>
+			</div>
 		</div>
-	</div>
-<?php }?>
-
-<div class="apple_overlay" id="overlay">
-	<div class="contentWrap">
-		<img class="contentWrapWaiter" src="<?php echo URL::base();?>media/img/waiter_barber.gif"/>
-	</div>
 </div>
-
 
 
 
