@@ -24,6 +24,10 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 #nationalIndicatorChart {float:left;}
 #legend div.infowindow {padding:0;margin:9px 0 0;}
 #legend div.infowindow p {margin:4px 0;border:none}
+#minButtonLegend{
+	color: #000;
+	font-size: 23px;
+}
 
 #twitterbutton {float:left;margin:4px 0 0 0;clear:both;}
 

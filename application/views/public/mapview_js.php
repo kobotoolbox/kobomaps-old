@@ -815,16 +815,17 @@ function DrawDataGraph(id, name){
 /*
  * Controls the information that appears when clicking on a bar within the pop-up graph
  */
-function showTooltip(x, y, contents) {
+function showTooltip(x, y, contents, backColor, fontColor) {
           $('<div id="tooltip">' + contents + '</div>').css( {
               position: 'absolute',
               display: 'none',
-              top: y - 27,
+              top: y,
               left: x,
               'z-index': 1000,
               border: '1px solid #000',
               padding: '2px',
-              'background-color': '#FFF',
+              'background-color': backColor,
+              'font-color': fontColor,
               opacity: 1
           }).appendTo("body").fadeIn(200);
 }
@@ -1103,7 +1104,7 @@ function bindHoverTip(id, graphYAxis){
 	            //datapoint is minus 1 as graphYAxis is 0 indexed and datapoint is 1 indexed
 	            var hoverName = graphYAxis[item.datapoint[1] - 1][1];
 	            
-	            showTooltip(pos.pageX, pos.pageY, 'The value of ' + hoverName + ' is ' + item.datapoint[0] + '.');
+	            showTooltip(pos.pageX, pos.pageY - 27, 'The value of ' + hoverName + ' is ' + item.datapoint[0] + '.', '#FFF', '#000');
 		   }
 		    else { 
 	             $("#tooltip").remove(); 
@@ -1810,6 +1811,19 @@ function initialize_buttons()
 		}
 		return false;
 		});
+
+	$("#turnOffLabelsButton").tooltip( {
+		position:{
+			my: "left+45 center-20",
+			at: "center top"	
+		}
+	});
+	$("#turnOffValuesButton").tooltip( {
+		position:{
+			my: "left+45 center-20",
+			at: "center top"	
+		}
+	});
 
 
 	//initialize the apple overlay effect

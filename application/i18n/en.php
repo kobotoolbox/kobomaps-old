@@ -185,6 +185,8 @@ return array
 		'Toggle Labels' => 'Toggle Labels',
 		'Toggle Values' => 'Toggle Values',
 		'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. Please check back soon.'=>'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. <br/><br/>Please check back soon.',
+		'Toggles the region names.' => 'Toggles the region names.',
+		'Toggles the data values.' => 'Toggles the data values.',
 		
 		
 		//footer
