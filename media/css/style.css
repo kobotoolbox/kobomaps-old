@@ -806,7 +806,7 @@ select.needstobemapped{
 /************************************************************
 							add3 LongUnits warning
 *************************************************************/
-.longUnits h4 {
+.longUnits  {
 	color: #d81417;
 	font-weight: bold;
 }

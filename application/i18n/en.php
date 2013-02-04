@@ -149,6 +149,10 @@ return array
 		'Regions in sheet'=>'Regions in sheet',
 		'Indicators in sheet'=>'Indicators in sheet',
 		'If the indicators above are not correct please check the rows that you set as data and the columns you set as denoting indicators.'=>'If the indicators above are not correct please check the rows that you set as data and the columns you set as denoting indicators.',
+		'The following unit values in this sheet are large, we recommend that you condense the units or your maps will look cluttered. </br>
+				Such as use "%" instead of "Percentage." Thank you.'
+			=> 'The following unit values in this sheet are large, we recommend that you condense the units or your maps will look cluttered. </br>
+				Such as use "%" instead of "Percentage." Thank you.',
 		
 		//add 4 page
 		'Add Map - Geo Set-up'=>'Add Map - Geo Set-up',
