@@ -293,6 +293,20 @@ ALTER TABLE  `roles` ADD  `max_items` INT NOT NULL DEFAULT  '-1';
 UPDATE  `roles` SET  `max_items` =  '5' WHERE  `roles`.`id` =1;
 UPDATE `metadata` SET  `v` =  '1.0.026' WHERE  `metadata`.`k` ='Database Version';
 
+/** Dylan Gillespie --added a message_center table **/
+CREATE TABLE IF NOT EXISTS `message_center` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `map_id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `poster_name` char(255) NOT NULL,
+  `poster_email` char(255) NOT NULL,
+  `message` text NOT NULL,
+  `unread` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+UPDATE `metadata` SET  `v` =  '1.0.027' WHERE  `metadata`.`k` ='Database Version';
+
+
 
 
 
