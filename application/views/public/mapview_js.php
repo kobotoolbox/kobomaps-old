@@ -100,6 +100,7 @@ var round = true;
 	   
 	   initialize_map();
 	   initialize_buttons();
+	   init_legend_listener();
 	});
 
 
@@ -1827,6 +1828,18 @@ function initialize_buttons()
 }
 
 
+function init_legend_listener(){
+	$("#minButtonLegend").click(function(){
+		if($("#legendMinDiv").is(":visible")){
+			$("#legendMinDiv").toggle();
+			$("#minButtonLegend").html("+");
+		}
+		else {
+			$("#legendMinDiv").toggle();
+			$("#minButtonLegend").html("-");
+		}
+	});	
+}
 
 </script>
 	

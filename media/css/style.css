@@ -832,3 +832,12 @@ select.needstobemapped{
 .searchBigDiv input#q{
 	margin-right:20px;
 }
+
+
+/************************************************************
+				Legend Minimize Div
+*************************************************************/
+#minButtonLegend{
+	color: #000;
+	font-size: 23px;
+}
