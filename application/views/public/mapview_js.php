@@ -1162,7 +1162,7 @@ function createHTMLChart(name,title, data, id)
 	var kmapInfochartHeight = calculateBarHeight(count);
 	
 	//creates the tab html that contains the chart ids
-	var chartStr = '<div id="'+ id + '" class="infowindow"><p class="bubbleheader">' + name + " - " + title +": "+data[name]
+	var chartStr = '<div id="'+ id + '" class="infowindow"><p class="bubbleheader">' + name + " - " + title +": " + data[name]
 	+'</p>' +
 	'<div id = "iChartTabs" style= "width: 350px; height: 200px">' +
 	  		'<ul>' +

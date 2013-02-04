@@ -80,6 +80,28 @@
 	</ul>
 </div>
 
+<div class="longUnits">
+	<?php
+	//stop multiple printing if there are more than one sheet.
+	static $onlyOne = true; 
+	foreach($longUnit as $unitSize){
+		if(count($unitSize) > 0 AND $onlyOne){ 
+			$onlyOne = false;
+			echo '<h4>'.__('The following unit values are large, we recommend that you condense the units or your maps will look cluttered. </br> 
+				Such as "%" instead of Percentage. Thank you.').'</h4>';}}?>
+	<ul>
+	<?php
+		foreach($longUnit as $unitName)
+		{
+			foreach($unitName as $units){
+				echo '<li>'.$units.'</li>';
+			}
+		}	 
+	?>
+	
+	</ul>
+</div>
+
 <div>
 <?php 	
 

@@ -1034,8 +1034,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$sheet_indicators = array();
 	 	$errors = array();
 	 	$warnings = array();
+	 	$longUnits = array();
 	 	foreach($sheets as $sheet)
 	 	{
+	 		$longUnits[$sheet->id] = array();
 	 		if($sheet->is_ignored == 0)
 	 		{	
 	 			//get the index of the header
@@ -1070,6 +1072,22 @@ class Controller_Mymaps extends Controller_Loggedin {
 	
 		 		//TODO check indicators, total, units, source, and source link
 		 		$sheet_indicators[$sheet->id] = $this->_build_indicators_html($sheet_data, $header_index, $rows[$sheet->id]['data'], $columns[$sheet->id]['indicator'], $errors, $warnings);
+		 		
+		 		//check if units are too long for a easily viewable map
+		 		if(count($columns[$sheet->id]['unit']) > 0){
+			 		$unitColumnName = '';
+			 		foreach($columns[$sheet->id]['unit'] as $unitColumn){
+			 			$unitColumnName = $unitColumn->name;
+			 			break;
+			 		}
+			 		foreach($rows[$sheet->id]['data'] as $dataRow){
+				 		$unit = $sheet_data[$dataRow->name][$unitColumnName];
+				 		if(strlen($unit) > 12){
+				 			$longUnits[$sheet->id][] = $unit;
+				 		}
+			 		}
+		 		}
+		 		
 	 		}
 	 	}
 	 	
@@ -1088,6 +1106,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content->map = $map;
 	 	$this->template->content->sheets = $sheets;
 	 	$this->template->content->errors = $errors;
+	 	$this->template->content->longUnit = $longUnits;
 	 	$this->template->content->warnings = $warnings;
 	 	$this->template->content->sheet_regions = $sheet_regions;
 	 	$this->template->content->sheet_indicators = $sheet_indicators;

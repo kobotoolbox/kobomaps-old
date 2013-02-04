@@ -803,6 +803,17 @@ select.needstobemapped{
 	border: 3px solid #FF9900;
 }
 
+/************************************************************
+							add3 LongUnits warning
+*************************************************************/
+.longUnits h4 {
+	color: #d81417;
+	font-weight: bold;
+}
+.longUnits li {
+	font-weight: bold;
+	font-size: 15px;
+}
 
 /************************************************************
 						Stats
