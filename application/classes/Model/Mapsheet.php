@@ -45,6 +45,44 @@ class Model_Mapsheet extends ORM {
 	}//end function
 	
 	
+	
+	/**
+	 * Make a full on copy of a map sheet for a map
+	 * @param int $map_id - The DB ID of the map who will own the copied sheet
+	 */
+	public function copy($map_id)
+	{
+		//copy the map database entry.
+		$copy = ORM::factory('Mapsheet');
+
+		$copy->map_id = $map_id;
+		$copy->name = $this->name;
+		$copy->position = $this->position;
+		$copy->is_ignored = $this->is_ignored;
+		$copy->save();
+	
+		//copy the rows
+		$rows = ORM::factory('Row')
+			->where('mapsheet_id', '=',$this->id)
+			->find_all();
+		foreach($rows as $row)
+		{
+			$row->copy($copy->id);
+		}
+		
+		//copy the columns
+		$columns = ORM::factory('Column')
+			->where('mapsheet_id', '=',$this->id)
+			->find_all();
+		foreach($columns as $column)
+		{
+			$column->copy($copy->id);
+		}
+	
+		return $copy;
+	}
+	
+	
 
 	
 } // End mapsheet Model

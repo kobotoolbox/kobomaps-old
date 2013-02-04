@@ -196,35 +196,32 @@ function initialize_map() {
 				
 	<?php }?>
 
-	if(<?php echo $map->label_zoom_level?> <= map.getZoom()){
-		Label.renderLabelNames = true;
-		Label.renderLabelVals = true;
-		//Label.renderLabels = true;
+	if(map.getZoom() < <?php echo $map->label_zoom_level?>){
+		Label.renderLabelNames = false;
+		Label.renderLabelVals = false;
 	}
 
 	var previousZoom = map.getZoom();
 	google.maps.event.addListener(map, 'zoom_changed', function() {
 		var	mapZoom = <?php echo $map->label_zoom_level?>;
-		//console.log(Label.renderLabelNames + " names");
-		//console.log(Label.renderLabelVals + " values");
-		
+	
 		if((previousZoom >= mapZoom &&  map.getZoom() < mapZoom))
 		{
 			//Label.renderLabels = true;
 			Label.renderLabelNames = false;
 			Label.renderLabelVals = false;
-			//if($("#turnOffLabelsButton").active()){
-				//$("#turnOffLabelsButton").toggleClass("active");
-			//}
-			//if($("#turnOffValuesButton").active()){
-				//$("#turnOffValusSButton").toggleClass("active");
-			//}
+
+			$("#turnOffLabelsButton").addClass("active");
+			$("#turnOffValuesButton").addClass("active");
+
 		}
 		else if(previousZoom < mapZoom &&  map.getZoom() >= mapZoom)
 		{
 			//Label.renderLabels = true;
 			Label.renderLabelNames = true;
-			Label.renderLabelVals = true;	
+			Label.renderLabelVals = true;
+			$("#turnOffLabelsButton").removeClass("active");
+			$("#turnOffValuesButton").removeClass("active");	
 		}
 
 		previousZoom = map.getZoom();
@@ -504,8 +501,14 @@ function showByIndicator(indicator)
 	//scroll to the just highlighted sheet
 	currentListTop = $("#sheetnames").offset().top;
 	if($("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).offset() != null){
+		var currentTopOfDispaly = $("#sheetlinks").offset().top;
+		var currentListTop = $("#sheetnames").offset().top;
+		var actualOffset = currentListTop - currentTopOfDispaly;		
 		currentTopOfSelectedItem = $("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).offset().top
-		scrollSheets(-(currentTopOfSelectedItem-currentListTop));
+		if(actualOffset != (-(currentTopOfSelectedItem-currentListTop)))
+		{
+			scrollSheets(-(currentTopOfSelectedItem-currentListTop));
+		}
 	}
 	$("li.sheet").hide();
 	$("li.sheet").removeClass("active");
@@ -879,19 +882,10 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 	graphXData.reverse();
 	graphYAxis.reverse();
 
-	//add extra padding to regional chart if only one data response
-	/*if(graphYAxis.length == 1){
-		graphYAxis.push([2, ""]);
-		graphYAxis.push([3, ""]);
-	}
-*/
+	
 	var kmapInfochartHeight = calculateBarHeight(graphYAxis.length);
 
-	
-	//possible dark blue color is '223953'
-	//red color is 'D71818'
-	//var d2/graphXData = [[13,1], [28,2], [75,3]];
-	//var ticks/graphYAxis = [[1,'Florida'], [2,'Georgia'], [3,'Seafree'], [4,'Freemont'], [5,'Monaco']];
+
 
 	var dimen = " height: " + kmapInfochartHeight + "px; ";
 	var oldStyle = $("#iChartLocal").attr("style");
@@ -927,7 +921,7 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 		 $.plot($("#iChartLocal"), bothData,  {
 		    	bars: {show: true, horizontal: true, fill: true},
 		    	grid: {hoverable: true},
-		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, panRange: [0.5, tempYAxis.length+1]},
+		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, min:0, max:graphXData.length+1},
 		    	xaxes:[{panRange: [0, largest]}],
 		    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
 			}
@@ -978,11 +972,6 @@ function drawGeneralChart(fullId, dataPath, name){
 			selecX = graphXData[i][0];
 		}
 	}
-
-	//possible dark blue color is '223953'
-	//red color is 'D71818'
-	//var d2/graphXData = [[13,1], [28,2], [75,3]];
-	//var ticks/graphYAxis = [[1,'Florida'], [2,'Georgia'], [3,'Seafree'], [4,'Freemont'], [5,'Monaco']];
 	selectedArea = [[selecX, selecY]];
 	var bothData = [
 		        	  {
@@ -1002,11 +991,9 @@ function drawGeneralChart(fullId, dataPath, name){
       */
 
 	 $.plot($("#iChartFull"+fullId), bothData,  {
-	    	bars: {show: true, horizontal: true, fill: true},
+	    	bars: {horizontal: true},
 	    	grid: {hoverable: true},
-	    	yaxis:{ticks: graphYAxis, panRange: [0.5, count], labelWidth: 60},
-	    	xaxis:{panRange: [0, largest]},
-	    	pan:  {interactive: true, cursor: 'move', frameRate: 20}
+	    	yaxis:{ticks: graphYAxis, labelWidth: 60, min:0, max: graphXData.length + 1}	    
 		}
 	);
 	bindHoverTip("#iChartFull" + fullId,graphYAxis);
@@ -1094,7 +1081,7 @@ function drawTotalChart(indicator){
 		$.plot($("#nationalIndicatorChart"), bothData,  {
 	    	bars: {show: true, horizontal: true, fill: true},
 	    	grid: {hoverable: true},
-	    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, panRange: [0.5, tempYAxis.length+1]},
+	    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, min:0, max:graphXData.length},
 	    	xaxes:[{}],
 	    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
 			}
@@ -1153,57 +1140,6 @@ function UpdateAreaPercentageTitleData(name, percentage, min, spread, title, dat
 }
 
 
-/**
-* Creates the URL for the chart that shows the spread over indicator for a given question for
-* both area and overal average
-* 
-* message: the message string as it currently stands
-* indicator: the indicator we're looking at
-* name: the name of the current geographical area
-*
-function createChartByIndicators(message, indicator, name, unit)
-{
-	//first check if there's more than one answer to the given question
-	if($("#bottom_level_"+indicator).siblings().length == 0)
-	{
-    //clear out the National Chart
-    $("#nationalIndicatorChart").html("");
-			return message;
-	}
-	//there is more than one answer ...as so many questions have.
-	
-	//get the data for those questions
-	var dataForArea = new Array();
-	var mainIndicatorText = $("#bottom_level_"+indicator).text(); 
-	var questionText = $("#bottom_level_"+indicator).parents("li.level2").children("span.level2").text();
-	//get the data for the indicator we're focused on
-	
-	dataForArea[mainIndicatorText] = indicatorsToUpdateParams[indicator]["data"][name];
-
-	
-	//get the rest of the data
-	$.each($("#bottom_level_"+indicator).siblings(), function() {			
-		var otherIndicator = $(this);
-		var otherIndicatorId = otherIndicator.attr("id").substring(13);
-		var indicatorText = otherIndicator.text();
-		dataForArea[indicatorText] =  indicatorsToUpdateParams[otherIndicatorId]["data"][name];
-	});
-	
-	//calculate the min and spread for the area specific graph
-	var spreadMin = calculateMinSpread(dataForArea);
-	var min = spreadMin["min"];
-	var spread = spreadMin["spread"];
-	
-	//build the freaking chart this is not that much fun. I should write a JS library that does this for me.
-	//that's a really good idea. I should find someone to pay me to do that. You know it's probably already been done.
-	//it's been done in like every language but javasript, so I just made the below function.
-	//message += createHTMLChart(name + ": " + questionText, dataForArea, indicator+"_by_indicator_area_chart");
-	
-	
-	return message;
-}
-*/
-
 function createHTMLChart(name,title, data, id)
 {
 	
@@ -1224,7 +1160,7 @@ function createHTMLChart(name,title, data, id)
 	var kmapInfochartHeight = calculateBarHeight(count);
 	
 	//creates the tab html that contains the chart ids
-	var chartStr = '<div id="'+ id + '" class="infowindow"><p class="bubbleheader">' + name + "; " + title
+	var chartStr = '<div id="'+ id + '" class="infowindow"><p class="bubbleheader">' + name + " - " + title +": "+data[name]
 	+'</p>' +
 	'<div id = "iChartTabs" style= "width: 350px; height: 200px">' +
 	  		'<ul>' +
@@ -1800,7 +1736,7 @@ function scrollSheets(delta)
 	{
 		actualOffset = (actualOffset/increment).round();
 	}
-
+	
 	if(delta > 0 && (actualOffset + delta) <= 0 ) //scrolling up
 	{
 		actualOffset += delta;
@@ -1853,14 +1789,24 @@ function initialize_buttons()
 	//handle turning off and on the labels on the map
 	$("#turnOffLabelsButton").click(function(){
 		Label.renderLabelNames = !Label.renderLabelNames; 
-		$("#turnOffLabelsButton").toggleClass("active"); 
+		$("#turnOffLabelsButton").toggleClass("active");
+		//redraw all the labels 
+		for(i in labels)
+		{
+			labels[i].draw();
+		} 
 		return false;
 		});
 
 	//hanndle turning on and off values on the map
 	$("#turnOffValuesButton").click(function(){
 		Label.renderLabelVals = !Label.renderLabelVals; 
-		$("#turnOffValuesButton").toggleClass("active"); 
+		$("#turnOffValuesButton").toggleClass("active");
+		//redraw all the labels 
+		for(i in labels)
+		{
+			labels[i].draw();
+		}
 		return false;
 		});
 

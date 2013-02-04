@@ -7,7 +7,7 @@
 *************************************************************/
 ?>
 		
-<h2><?php echo __('Templates'); ?></h2>
+<h2><?php echo request::initial()->action() == 'index' ? __('Templates') : __('My Templates'); ?></h2>
 <p><?php echo __('Templates are the base maps from which custom maps are made.');?></p>
 
 
@@ -49,19 +49,24 @@
 <?php 
 }
 ?>
-<p>
-<a class="button" id="add_template_button" href="<?php echo URL::base();?>templates/edit"><?php echo __('Add A Template');?></a>
-</p>
+<div class="searchBigDiv">
+<?php
+	echo Form::open(NULL, array('id'=>'searchPublicMapForm', 'method' => 'get'));
+	echo Form::input('q', isset($_GET['q']) ? $_GET['q'] : null, array('id'=>'q', 'style'=>'width:600px;'));
+	echo Form::submit('search', __('Search Maps'), array('id'=>'search_button'));
+	echo Form::close();
+?>
+</div>
 <table class="list_table" >
 	<thead>
 		<tr class="header">
 			<th style="width:200px;">
 				<?php echo __('Map');?>
 			</th>
-			<th style="width:400px;">
+			<th style="width:370px;">
 				<?php echo __('Description');?>
 			</th>
-			<th style="width:120px;">
+			<th style="width:150px;">
 				<?php echo __('Actions');?>
 			</th>
 			<th style="width:100px;">
@@ -71,13 +76,13 @@
 	</thead>
 	<tbody style="height:300px;">
 	<?php
-		if(count($maps) == 0)
+		if(count($templates) == 0)
 		{
 			echo '<tr><td colspan="4" style="text-align:center;width:860px;">'.__('you have no templates').'</td></tr>';
 		}
 		$i = 0;
-		foreach($maps as $map){
-			if($map->id != 0)	//ignore template
+		foreach($templates as $template){
+			if($template->id != 0)	//ignore template
 			{
 				$i++;
 				$odd_row = ($i % 2) == 0 ? 'class="odd_row"' : '';
@@ -85,19 +90,43 @@
 
 	<tr <?php echo $odd_row; ?> style="height:50px;">
 		<td style="width:200px;">
-			<?php echo $map->is_official == 1 ? '<strong>':'';?>
-			<a href="<?php echo url::base(); ?>templates/edit?id=<?php echo $map->id;?>" ><?php echo $map->title; ?></a>
-			<?php echo $map->is_official == 1 ? '</strong>':'';?>
+			<?php echo $template->is_official == 1 ? '<strong>':'';?>
+			<?php if(!$is_admin AND $user->id != $template->user_id){$action='view';}else{$action='edit';}?>
+			<a href="<?php echo url::base(); ?>templates/<?php echo $action.'?id='.$template->id;?>" ><?php echo $template->title; ?></a>
+			<?php echo $template->is_official == 1 ? '</strong>':'';?>
 		</td>
-		<td style="width:400px;">
-			<?php echo $map->description; ?>
+		<td style="width:370px;">
+			<?php echo $template->description; ?>
 		</td>
-		<td style="width:120px;">
-			<a href="<?php echo url::base(); ?>templates/edit?id=<?php echo $map->id;?>" > <?php echo __('edit');?></a>
-			<a href="#" onclick="deleteTemplate(<?php echo $map->id?>);"> <?php echo __('delete');?></a>
+		<td style="width:150px;" class="templateTasks">
+			<ul>
+			<?php if(!$is_admin AND ($template->is_official == 1 OR $template->user_id != $user->id)){?>
+				<li>
+					<a href="<?php echo url::base(); ?>templates/view?id=<?php echo $template->id;?>" >
+						<img class="viewTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View');?>
+					</a>
+				</li>
+			<?php }else{?>
+			<li>
+				<a href="<?php echo url::base(); ?>templates/edit?id=<?php echo $template->id;?>" >
+					<img class="editTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Edit');?>
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="deleteTemplate(<?php echo $template->id?>);">
+					<img class="delete" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Delete');?>
+				</a>
+			</li>
+			<?php }?>
+			<li>
+				<a href="<?php echo url::base(); ?>templates/copy?id=<?php echo $template->id;?>" >
+					<img class="copy" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Copy');?>
+				</a>
+			</li>
+			</ul>
 		</td>
 		<td style="width:100px;">
-			<?php echo $map->username . ($is_admin ? ' - '. $map->user_id : '');?>
+			<?php echo $template->username . ($is_admin ? ' - '. $template->user_id : '');?>
 		</td>
 	</tr>
 	<?php 

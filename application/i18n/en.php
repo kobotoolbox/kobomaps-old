@@ -24,6 +24,9 @@ return array
 		'Geo Set-up'=>'Geo Set-up',
 		'Geo Matching'=>'Geo Matching',
 		'View Map'=>'View Map',
+		'Create Template'=>'Create Template',
+		'All Templates'=>'All Templates',
+		'My Templates'=>'My Templates',
 		
 		
 		//User Menu
@@ -159,10 +162,12 @@ return array
 		'Pan and zoom the map to adjust what the default view will be for the map'=>'Pan and zoom the map to adjust what the default view will be for the map',
 		'You have to choose a template.'=>'You have to choose a template.',
 		'Official'=>'Official',
-		'Templates in bold, and marked official, are provided by KoBo staff.'=>'Templates in bold, and marked official, are provided by KoBo staff.',
+		'Choose from official KoBoMap Templates, in bold, or use your own templates.'=>'Choose from official KoBoMap Templates, in bold, or use your own templates.',
 		'If you want to add your own template click'=>'If you want to add your own template click',
 		'here'=>'here',
+		'here.'=>'here.',
 		'You do not have access to this template'=>'You do not have access to this template',
+		'If you want to copy someone else\'s template click'=>'If you want to copy someone else\'s template click',
 		
 		//add 5 page
 		'Add Map - Geo Matching'=>'Add Map - Geo Matching',
@@ -238,6 +243,26 @@ return array
 		'Template Saved'=>'Template Saved',
 		'is now missing the region'=>'is now missing the region',
 		'Is an official template'=>'Is an official template',
+		'Visibility'=>'Visibility',
+		'Private'=>'Private',
+		'Copy Template'=>'Copy Template',
+		
+		
+		//templates view page
+		'View Template'=>'View Template',
+		'Decimal places rounded to'=>'Decimal places rounded to',
+		'Center point latitude'=>'Center point latitude',
+		'Center point longitude'=>'Center point longitude',
+		'Default zoom level'=>'Default zoom level',
+		
+		//limits exceeded
+		'Map Limit Exceeded'=>'Map Limit Exceeded',
+		'Back to my maps'=>'Back to my maps',
+		'We\'re sorry, but you have'=>'We\'re sorry, but you have',
+		'maps and your account only allows you to have'=>'maps,<br/>and your account only allows you to have',
+		'If you want to add a new map you must remove'=>'If you want to add a new map you must remove',
+		'maps.'=>'maps.',
+		'SENTANCE_END'=>'.',
 );
 
 

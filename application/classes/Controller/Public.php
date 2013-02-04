@@ -176,10 +176,10 @@ class Controller_Public extends Controller_Main {
 	 	$this->template = false;
 	 	$this->auto_render = false;
 
-	 	$view = view::factory("mapview");
+	 	$view = view::factory("public/mapview");
 	 	$view->map_id = $map_id;
 	 	$view->map = $map;	
-	 	$js =  view::factory("mapview_js");
+	 	$js =  view::factory("public/mapview_js");
 	 	$js->map = $map;
 	 	$js->template = $map_template;
 	 	$view->template = $map_template;

@@ -2,7 +2,7 @@
 function Label(opt_options) {
  // Initialization
  this.setValues(opt_options);
-
+this.set('show_empty_name', true);
  // Label specific
  var labeldiv = this.labeldiv_ = document.createElement('div');
  labeldiv.setAttribute("class","countylabel");					  
@@ -90,6 +90,5 @@ Label.prototype.draw = function() {
 };
 
 //Used to global turn on or off the labels
-Label.renderLabels = false;
-Label.renderLabelNames = false;
-Label.renderLabelVals = false;
+Label.renderLabelNames = true;
+Label.renderLabelVals = true;

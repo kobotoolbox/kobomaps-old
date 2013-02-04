@@ -8,7 +8,9 @@
 
 class Controller_Templates extends Controller_Loggedin {
 
+	/** Used to store the regions that are lost when uploading a new KML file**/
 	protected $deleted_regions = null;
+	
 	
 	/**
 	 Set stuff up, mainly just check if the user is an admin or not
@@ -16,18 +18,9 @@ class Controller_Templates extends Controller_Loggedin {
 	public function before()
 	{
 		parent::before();
-	
-	
 		$this->is_admin = false;
-		
-		//see if the given user is an admin, if so they can do super cool stuff
-		$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
-		if($this->user->has('roles', $admin_role))
-		{
-			$this->is_admin = true;
-		}
 	}
-	
+
 
   	
 	/**
@@ -51,6 +44,8 @@ class Controller_Templates extends Controller_Loggedin {
 		$js = view::factory('templates/templates_js');
 		$this->template->html_head->script_views[] = $js;
 		$this->template->html_head->script_views[] = view::factory('js/messages');
+		$this->template->html_head->script_files[] = 'media/js/jquery-ui.min.js';
+		$this->template->html_head->styles['all'] = 'media/css/jquery-ui.css';
 		$this->template->content->is_admin = $this->is_admin;
 		
 		/********Check if we're supposed to do something ******/
@@ -101,29 +96,64 @@ class Controller_Templates extends Controller_Loggedin {
 		/*****Render the forms****/
 		
 		//if you're an admin and you can do whatever you want then you see all templates
-		$maps = ORM::factory("Template")
+		$templates = ORM::factory("Template")
 			->select('users.username')
 			->join('users')
 			->on('users.id','=','template.user_id');
-		if($this->is_admin)
-		{							
-		}
-		else //you're a regular user and can only see your own templates
+		//if there is a search term
+		if(isset($_GET['q']) AND $_GET['q'] != "")
 		{
-			$maps = $maps->where('user_id','=',$this->user->id);			
+			$query = '%'.$_GET['q'].'%';
+			$templates = $templates
+				->where_open()
+				->or_where('template.title', 'LIKE', $query)
+				->or_where('template.description', 'LIKE', $query)
+				->where_close();
 		}
-		$maps = $maps->order_by('title', 'ASC')
+		//if we only want to see my templates
+		if(Request::initial()->action() == 'mine')
+		{
+			$templates = $templates->where('user_id','=', $this->user->id);
+		}
+		else
+		{
+			if($this->is_admin)
+			{							
+			}
+			else //you're a regular user and can only see your own templates
+			{
+				$templates = $templates->where_open()
+					->where_open()
+		 			->where('is_official','=',1)
+		 			->where('is_private','=', '0')
+		 			->where_close()
+		 			->or_where('user_id','=', $this->user->id)
+		 			->or_where('is_private','=', '0')
+					->where_close();
+			}
+		}
+		$templates = $templates->order_by('title', 'ASC')
 			->find_all();
 		
-		$this->template->content->maps = $maps;
+		$this->template->content->user = $this->user;
+		$this->template->content->is_admin = $this->is_admin;
+		$this->template->content->templates = $templates;
 		
 		
 	}//end action_index
 	
 	
+	/**
+	 * Shows just the user's own templates.
+	 */
+	public function action_mine()
+	{
+		$this->action_index();
+	}
+	
 	
 	/**
-	 * the function for editing a form
+	 * the function for editing a Template
 	 * super exciting
 	 */
 	 public function action_edit()
@@ -141,7 +171,8 @@ class Controller_Templates extends Controller_Loggedin {
 			'lat'=>'',
 			'lon'=>'',
 			'zoom'=>4,
-			'regions'=>array());
+			'regions'=>array(),
+			'kml_file'=>'');
 		
 		$template = null;
 		
@@ -152,14 +183,18 @@ class Controller_Templates extends Controller_Loggedin {
 		}
 		
 		//make sure the user is allowed to look at this template
-		if($template->user_id != $this->user->id)
+		if($template != null AND $template->user_id != $this->user->id AND !$this->is_admin)
 		{
 			HTTP::redirect('templates');
 		}
 		
-		$map_count = ORM::factory('Map')
-			->where('template_id','=',$template->id)
-			->count_all();
+		$map_count = -1;
+		if($template != null)
+		{
+			$map_count = ORM::factory('Map')
+				->where('template_id','=',$template->id)
+				->count_all();
+		}
 		 
 		
 		/***Now that we have the form, lets initialize the UI***/
@@ -219,7 +254,15 @@ class Controller_Templates extends Controller_Loggedin {
 						$region->save();
 					}
 				}
-				$_POST['user_id'] = $this->user->id;
+				//only set the user when the template is edited for the first time
+				if($first_time)
+				{
+					$_POST['user_id'] = $this->user->id;
+				}
+				else
+				{
+					$_POST['user_id'] = $template->user_id;
+				}
 				//if they aren't an admin, then they can't set officialness
 				if(!$this->is_admin)
 				{
@@ -299,6 +342,14 @@ class Controller_Templates extends Controller_Loggedin {
 						}
 					}
 				}
+				$data['id'] =  $_POST['id'];
+				$data['title'] =  $_POST['title'];
+				$data['description'] =  $_POST['description'];
+				$data['admin_level'] =  $_POST['admin_level'];
+				$data['decimals'] =  $_POST['decimals'];
+				$data['zoom'] =  $_POST['zoom'];
+				$data['lat'] =  $_POST['lat'];
+				$data['lon'] =  $_POST['lon'];
 			}
 			catch (UTF_Character_Exception $e)
 			{
@@ -311,7 +362,13 @@ class Controller_Templates extends Controller_Loggedin {
 				$data['zoom'] =  $_POST['zoom'];
 				$data['lat'] =  $_POST['lat'];
 				$data['lon'] =  $_POST['lon'];
-			}	
+			}
+
+			//if we just created a new template, go to that page
+			if(!isset($_GET['id']))
+			{
+				HTTP::redirect('templates/edit?id='.$template->id);				
+			}
 		}
 		if(isset($_GET['id']) AND intval($_GET['id']) != 0)
 		{
@@ -319,12 +376,14 @@ class Controller_Templates extends Controller_Loggedin {
 			$data['title'] =  $template->title;
 			$data['description'] =  $template->description;
 			$data['is_official'] = $template->is_official;
+			$data['is_private'] = $template->is_private;
 			$data['file'] =  $template->file;
 			$data['admin_level'] =  $template->admin_level;
 			$data['decimals'] =  $template->decimals;
 			$data['zoom'] =  $template->zoom;
 			$data['lat'] =  $template->lat;
 			$data['lon'] =  $template->lon;
+			$data['kml_file'] = $template->kml_file;
 			
 			$regions = ORM::factory('Templateregion')
 				->where('template_id', '=', $template->id)
@@ -337,10 +396,226 @@ class Controller_Templates extends Controller_Loggedin {
 		$this->template->content->data = $data;
 		$js->template = $template;			
 		$this->template->html_head->script_views[] = $js;
-	 }//end action_add1
+	 }//end action_edit
 	 
+	 
+	 
+	 
+	 /**
+	  * the function for view a template
+	  * super exciting
+	  */
+	 public function action_view()
+	 {
+	 	//initialize data
+	 	$data = array(
+	 			'id'=>'0',
+	 			'title'=>'',
+	 			'description'=>'',
+	 			'is_private'=>0,
+	 			'is_official'=>0,
+	 			'file'=>'',
+	 			'admin_level'=>0,
+	 			'decimals'=>-1,
+	 			'lat'=>'',
+	 			'lon'=>'',
+	 			'zoom'=>4,
+	 			'regions'=>array(),
+	 			'kml_file'=>'');
+	 
+	 	$template = null;
+	 
+	 	//check if there's a id
+	 	if(isset($_GET['id']) AND intval($_GET['id']) != 0)
+	 	{
+	 		$template = ORM::factory('Template', $_GET['id']);
+	 	}
+	 	else //get out of here
+	 	{
+	 		HTTP::redirect('templates');
+	 	}
+	 
+	 	//make sure the user is allowed to look at this template
+	 	if($template != null AND $template->is_private == 1 AND !$this->is_admin)
+	 	{
+	 		HTTP::redirect('templates');
+	 	}
+	 
+	 	$map_count = -1;
+	 	if($template != null)
+	 	{
+	 		$map_count = ORM::factory('Map')
+	 		->where('template_id','=',$template->id)
+	 		->count_all();
+	 	}
+	 		
+	 
+	 	/***Now that we have the form, lets initialize the UI***/
+	 	//The title to show on the browser
+	 
+	 	$header =  $data['id'] == 0 ? __("Add a Template") : __("Edit Template") ;
+	 	$this->template->html_head->title = $header;
+	 	//make messages roll up when done
+	 	$this->template->html_head->messages_roll_up = true;
+	 	//the name in the menu
+	 	$this->template->header->menu_page = "templates";
+	 	$this->template->content = view::factory("templates/template_view");
+	 	$this->template->content->map_count = $map_count;
+	 	$this->template->content->errors = array();
+	 	$this->template->content->messages = array();
+	 	$this->template->content->header = $header;
+	 	$this->template->content->is_admin = $this->is_admin;
+	 	$this->template->html_head->script_views[] = view::factory('js/messages');
+	 	$js = view::factory('templates/template_add_js');
+	 
+	 	//get the status
+	 	$status = isset($_GET['status']) ? $_GET['status'] : null;
+	 	if($status == 'saved')
+	 	{
+	 		$this->template->content->messages[] = __('changes saved');
+	 	}
 	 
 
+ 		$data['id'] =  $template->id;
+ 		$data['title'] =  $template->title;
+ 		$data['description'] =  $template->description;
+ 		$data['is_official'] = $template->is_official;
+ 		$data['is_private'] = $template->is_private;
+ 		$data['file'] =  $template->file;
+ 		$data['admin_level'] =  $template->admin_level;
+ 		$data['decimals'] =  $template->decimals;
+ 		$data['zoom'] =  $template->zoom;
+ 		$data['lat'] =  $template->lat;
+ 		$data['lon'] =  $template->lon;
+ 		$data['kml_file'] = $template->kml_file;
+ 			
+ 		$regions = ORM::factory('Templateregion')
+	 		->where('template_id', '=', $template->id)
+ 			->find_all();
+ 		foreach($regions as $r)
+ 		{
+ 			$data['regions'][$r->id] = $r->title;
+ 		}
+ 		
+	 	$this->template->content->data = $data;
+	 	$js->template = $template;
+	 	$this->template->html_head->script_views[] = $js;
+	 }//end action_view
+	 
+	 
+	 
+	 
+	 
+	 
+	 /**
+	  * This function copies an existing template
+	  * The template to copy is referenced via $_GET['id']
+	  */
+	 public function action_copy()
+	 {
+	 
+	 	$template = null;
+	 
+	 	//check if there's a id
+	 	if(isset($_GET['id']) AND intval($_GET['id']) != 0)
+	 	{
+	 		$template = ORM::factory('Template', $_GET['id']);
+	 	}
+	 	else //get out of here
+	 	{
+	 		HTTP::redirect('templates');
+	 	}
+	 
+	 	//make sure the user is allowed to look at this template
+	 	if($template != null AND $template->is_private == 1 AND !$this->is_admin)
+	 	{
+	 		HTTP::redirect('templates');
+	 	}
+	 
+		$new_template = $template->copy($this->user->id);
+		
+		HTTP::redirect('templates/edit?id='.$new_template->id);
+	 }//end action_view
+	 
+
+	 
+	 
+	 /**
+	  * Used to make the auto complete work on the templates page
+	  * expets there to be a GET param of 'term' of type String
+	  * there could also be a GET param of 'mine'
+	  */
+	 public function action_search()
+	 {
+	 	$this->auto_render = false;
+	 	$this->response->headers('Content-Type','application/json');
+	 
+	 	//if there's no term return an empty dataset
+	 	if(!isset($_GET['term']))
+	 	{
+	 		echo '[]';
+	 		return;
+	 	}
+	 
+	 	//if you're an admin and you can do whatever you want then you see all templates
+		$templates = ORM::factory("Template");		//if there is a search term
+		if(isset($_GET['term']) AND $_GET['term'] != "")
+		{
+			$query = '%'.$_GET['term'].'%';
+			$templates = $templates
+				->where_open()
+				->or_where('template.title', 'LIKE', $query)
+				->or_where('template.description', 'LIKE', $query)
+				->where_close();
+		}
+		//if we only want to see my templates
+		if(isset($_GET['mine']))
+		{
+			$templates = $templates->where('user_id','=', $this->user->id);
+		}
+		else
+		{
+			if($this->is_admin)
+			{							
+			}
+			else //you're a regular user and can only see your own templates
+			{
+				$templates = $templates->where_open()
+					->where_open()
+		 			->where('is_official','=',1)
+		 			->where('is_private','=', '0')
+		 			->where_close()
+		 			->or_where('user_id','=', $this->user->id)
+		 			->or_where('is_private','=', '0')
+					->where_close();
+			}
+		}
+		$templates = $templates
+			->order_by('title', 'ASC')
+			->limit(10,0)
+			->find_all();
+	 
+	 	echo '[';
+	 	$i = 0;
+	 	foreach($templates as $template)
+	 	{
+	 		$i++;
+	 		if($i > 1){
+	 			echo ',';
+	 		}
+	 		$title_encoded = json_encode($template->title);
+	 		echo '{"id":"'.$template->id.'","label":'.$title_encoded.',"value":'.$title_encoded.'}';
+	 	}
+	 	echo ']';
+	 
+	 }
+	 
+	 
+	 /**
+	  * helper function that stores the uploaded file
+	  * @param array $upload_file data from $_FILES
+	  * @param db_obj $template ORM object of the template that this file is going to be saved for
+	  */
 	 protected function _save_file($upload_file, $template)
 	 {
 	 	//if we're working with a file that's already been uploaded.

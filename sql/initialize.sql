@@ -280,9 +280,21 @@ UPDATE `metadata` SET  `v` =  '1.0.022' WHERE  `metadata`.`k` ='Database Version
 ALTER TABLE  `templates` ADD  `is_private` BOOLEAN NOT NULL DEFAULT FALSE , ADD INDEX (  `is_private` );
 UPDATE `metadata` SET  `v` =  '1.0.023' WHERE  `metadata`.`k` ='Database Version';
 
-/** Dylan Gillespie --added a column for label_zoom_level in maps **/\
+/** Dylan Gillespie --added a column for label_zoom_level in maps **/
 ALTER TABLE  `maps` ADD  `label_zoom_level` INT NOT NULL DEFAULT  '1';
 UPDATE `metadata` SET  `v` =  '1.0.024' WHERE  `metadata`.`k` ='Database Version';
+
+/** John Etherton -- 2013-02-01 -- Added an index to the templates table for the description column */
+ALTER TABLE  `templates` ADD INDEX  `templates_description_index` (  `description` ( 20 ) );
+UPDATE `metadata` SET  `v` =  '1.0.025' WHERE  `metadata`.`k` ='Database Version';
+
+/** John Etherton -- 2013-02-01 -- Added the max_items column to the roles table to define how many maps a given group can have.*/
+ALTER TABLE  `roles` ADD  `max_items` INT NOT NULL DEFAULT  '-1';
+UPDATE  `roles` SET  `max_items` =  '5' WHERE  `roles`.`id` =1;
+UPDATE `metadata` SET  `v` =  '1.0.026' WHERE  `metadata`.`k` ='Database Version';
+
+
+
 
 
 

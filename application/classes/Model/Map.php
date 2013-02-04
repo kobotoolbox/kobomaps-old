@@ -175,4 +175,45 @@ class Model_Map extends ORM {
 	}
 
 	
+	/**
+	 * Make a full on copy of a map for a user
+	 * @param int $user_id - The DB ID of the user who will own the copied map
+	 */
+	public function copy($user_id)
+	{
+		//copy the map database entry.
+		$copy_array = $this->as_array();
+		$new_map = ORM::factory('Map');
+		$copy_array['user_id'] = $user_id;
+		$copy_array['title'] = $copy_array['title'] .'('.__('Copy').')';
+		$new_map->update_map($copy_array);
+		
+		//copy the map files
+		$path = DOCROOT.'uploads/data/'; 
+		
+		//copy the json file
+		$new_json = $new_map->id.'.json';
+		copy($path.$this->json_file,$path.$new_json);
+		$new_map->json_file = $new_json;
+		
+		//copy the .xls file
+		$extention = pathinfo($this->file, PATHINFO_EXTENSION);
+		$new_xls = $new_map->user_id.'-'.$new_map->id.'.'.$extention;
+		copy($path.$this->file, $path.$new_xls);
+		$new_map->file = $new_xls;
+		
+		$new_map->save();
+		
+		//now copy each of the map sheets
+		$map_sheets = ORM::factory('Mapsheet')
+			->where('map_id','=',$this->id)
+			->find_all();
+		foreach($map_sheets as $map_sheet)
+		{
+			$map_sheet->copy($new_map->id);
+		}
+		
+		return $new_map;
+	}
+	
 } // End User Model

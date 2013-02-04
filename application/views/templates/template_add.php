@@ -14,13 +14,20 @@
 			<a href="http://www.gadm.org/country" target="_blank">http://www.gadm.org/country</a>. 
 			The files there will work with this converter.
 </p>
+<?php if($map_count != -1){?>
 <p>
 	<strong>
 		<?php echo $map_count.' '.__('maps use this template.')?>
 	</strong>
 </p>
+<p>
+<a class="button" id="download_kml_button" href="<?php echo url::base(); ?>uploads/templates/<?php echo $data['kml_file'];?>"><?php echo __('Download KML File');?></a>
+</p>
+<p>
+<a class="button" id="copy_template_button" href="<?php echo url::base(); ?>templates/copy?id=<?php echo $data['id'];?>"><?php echo __('Copy Template');?></a>
+</p>
+<?php }?>
 
-<a class="button" id="add_back_to_templates" href="<?php echo url::base(); ?>templates"><?php echo __('Back to Templates');?></a>
 
 <?php if(count($errors) > 0 )
 {
@@ -60,7 +67,9 @@
 <?php 
 }
 ?>
-<?php if($data['id']!=0){?>
+<?php
+$is_add =  $data['id']==0;
+if($data['id']!=0){?>
 <div id="map_div" style="width:900px; height:400px;"></div>
 <?php }?>
 
@@ -79,13 +88,12 @@
 	echo '</td><td>';
 	echo Form::textarea('description', $data['description'], array('id'=>'description', 'style'=>'width:600px;'));
 	echo '</td></tr><tr><td>';
-	/*
-	 * We need to think about how changes to public templates affects everyone else.
-	echo Form::label('file', __('Make template Private').": ");
+	echo Form::label('file', __('Visibility').": ");
 	echo '</td><td>';
-	echo Form::checkbox('is_private', null, 1==$data['is_private'] );
+	$visbility_options = array('0'=>__('Public'), '1'=>__('Private'));
+	echo Form::select('is_private', $visbility_options,$data['is_private']). '<br/>';
+	echo __('Private templates can only be used by you. Public templates will be made available for other users to copy and use in their maps.');
 	echo '</td></tr><tr><td>';
-	*/
 	if($is_admin){
 		echo Form::label('file', __('Is an official template').": ");
 		echo '</td><td>';
@@ -113,16 +121,30 @@
 	echo '</td></tr><tr><td>';
 	echo Form::label('lat', __('By default, what should the center point latitude be').": ");
 	echo '</td><td>';
-	echo Form::input('lat', $data['lat'], array('id'=>'lat', 'style'=>'width:300px;','onchange'=>'latChanged();','onkeyup'=>'latChanged();'));
+	$lat_options = array('id'=>'lat', 'style'=>'width:300px;');
+	if(!$is_add){
+		$lat_options['onkeyup'] = 'latChanged();';
+		$lat_options['onchange'] = 'latChanged();';
+	}
+	echo Form::input('lat', $data['lat'],$lat_options );
 	echo '</td></tr><tr><td>';
 	echo Form::label('lon', __('By default, what should the center point longitude be').": ");
 	echo '</td><td>';
-	echo Form::input('lon', $data['lon'], array('id'=>'lon', 'style'=>'width:300px;','onchange'=>'lonChanged();','onkeyup'=>'lonChanged();'));
+	$lon_options = array('id'=>'lon', 'style'=>'width:300px;');
+	if(!$is_add){
+		$lon_options['onkeyup'] = 'lonChanged();';
+		$lon_options['onchange'] = 'lonChanged();';
+	}
+	echo Form::input('lon', $data['lon'], $lon_options);
 	echo '</td></tr><tr><td>';
 	echo Form::label('zoom', __('By Default what should this map zoom to').": ");
 	echo '</td><td>';
 	$zoom_options = array(0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9, 10=>10, 11=>11, 12=>12, 13=>13, 14=>14, 15=>15, 16=>16, 17=>17, 18=>18, 19=>19);
-	echo Form::select('zoom', $zoom_options, $data['zoom'], array('id'=>'zoom', 'onchange'=>'changeZoom();'));
+	$zoom_params = array('id'=>'zoom');
+	if(!$is_add){
+		$zoom_params['onchange']='changeZoom();';
+	}
+	echo Form::select('zoom', $zoom_options, $data['zoom'],$zoom_params);
 	echo '</td></tr><tr><td>';
 	$i = 0;
 	foreach($data['regions'] as $r_id=>$r_title)

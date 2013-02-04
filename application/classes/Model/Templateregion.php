@@ -74,4 +74,22 @@ class Model_Templateregion extends ORM {
 		$region->delete();
 	}
 	
+	/**
+	 * Used to make a copy of a template for the given user
+	 * @param int $template_id DB ID of the template to copy to
+	 * @return db_obj The new template
+	 */
+	public function copy($template_id)
+	{
+		//copy the region
+		$new_region = ORM::factory('Templateregion');
+		$copy_array = $this->as_array();
+		$copy_array['template_id'] = $template_id;
+		$new_region->original_title = $this->original_title;
+		$new_region->update_template_region($copy_array);
+	
+		return $new_region;
+	}
+	
+	
 } // End User Model

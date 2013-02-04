@@ -16,15 +16,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	{
 		parent::before();
 	
-	
-		$this->is_admin = false;
-	
-		//see if the given user is an admin, if so they can do super cool stuff
-		$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
-		if($this->user->has('roles', $admin_role))
-		{
-			$this->is_admin = true;
-		}
 	}
 	
 
@@ -41,12 +32,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 		$this->template->html_head->messages_roll_up = true;
 		//the name in the menu
 		$this->template->header->menu_page = "mymaps";
-		$this->template->content = view::factory("mymaps");
+		$this->template->content = view::factory("mymaps/mymaps");
 		$this->template->content->errors = array();
 		$this->template->content->messages = array();
 		$this->template->html_head->script_files[] = 'media/js/jquery.tools.min.js';
 		//set the JS
-		$js = view::factory('mymaps_js');
+		$js = view::factory('mymaps/mymaps_js');
 		$this->template->html_head->script_views[] = $js;
 		$this->template->html_head->script_views[] = view::factory('js/messages');
 		$this->template->html_head->script_views[] = view::factory('js/facebook');
@@ -182,6 +173,14 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['show_names'] = $map->show_empty_name;
 			$data['label_zoom_level'] = $map->label_zoom_level;
 		}
+		else
+		{
+			//this is a new map, check that the user is allowed to have more maps
+			if(!$this->check_max_items())
+			{
+				return;
+			}
+		}
 		
 
 		 
@@ -193,7 +192,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 		//make messages roll up when done
 		$this->template->html_head->messages_roll_up = true;
 		//the name in the menu
-		$this->template->content = view::factory("addmap/add1");
+		$this->template->content = view::factory("mymaps/add1");
 		$this->template->content->data = $data;
 		$this->template->content->errors = array();
 		$this->template->content->messages = array();
@@ -202,7 +201,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 		//set the JS
 		
 		//$js = view::factory('add1_js/form_edit_js');
-		$js = view::factory('addmap/add1_js');
+		$js = view::factory('mymaps/add1_js');
 		//$js->is_add = $is_add;
 		$this->template->html_head->script_views[] = $js;		
 		$this->template->html_head->script_views[] = view::factory('js/messages');
@@ -487,7 +486,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->html_head->messages_roll_up = true;
 	 	//the name in the menu
 	 	$this->template->header->menu_page = "mymaps";
-	 	$this->template->content = view::factory("addmap/add2");
+	 	$this->template->content = view::factory("mymaps/add2");
 	 	$this->template->content->map_id = $map_id;
 	 	$this->template->content->map = $map;
 	 	$this->template->content->data = $data;
@@ -498,7 +497,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content->sheet_position = $sheet_position;
 	 	$this->template->header->menu_page = "createmap";
 	 	
-	 	$js = view::factory('addmap/add2_js');
+	 	$js = view::factory('mymaps/add2_js');
 	 	$this->template->html_head->script_views[] = $js;
 	 	
 	 	//some contstants for the form
@@ -1084,7 +1083,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->html_head->messages_roll_up = true;
 	 	//the name in the menu
 	 	$this->template->header->menu_page = "mymaps";
-	 	$this->template->content = view::factory("addmap/add3");
+	 	$this->template->content = view::factory("mymaps/add3");
 	 	$this->template->content->map_id = $map_id;
 	 	$this->template->content->map = $map;
 	 	$this->template->content->sheets = $sheets;
@@ -1148,7 +1147,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$templates = ORM::factory('Template');	 		
 	 	if(!$this->is_admin)
 	 	{
-	 		$templates = $templates->or_where('is_official','=',1)
+	 		$templates = $templates->where_open()
+	 			->where('is_official','=',1)
+	 			->where('is_private','=', '0')
+	 			->where_close()
 	 			->or_where('user_id','=', $this->user->id);
 	 	}
 	 	$templates = $templates->order_by('title', 'ASC')
@@ -1164,7 +1166,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->html_head->messages_roll_up = true;
 	 	//the name in the menu
 	 	$this->template->header->menu_page = "mymaps";
-	 	$this->template->content = view::factory("addmap/add4");
+	 	$this->template->content = view::factory("mymaps/add4");
 	 	$this->template->content->map_id = $map_id;
 	 	$this->template->content->map = $map;
 	 	$this->template->content->templates = $templates;	
@@ -1175,7 +1177,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->html_head->styles['all'] = 'media/css/jquery-ui.css';
 	 	$this->template->html_head->script_files[] = 'media/js/jquery-ui.min.js';
 	 	$this->template->html_head->script_views[] = view::factory('js/messages');
-	 	$js =  view::factory("addmap/add4_js");
+	 	$js =  view::factory("mymaps/add4_js");
 	 	$js->lat = $map->lat;
 	 	$js->lon = $map->lon;
 	 	$js->zoom = $map->zoom;
@@ -1215,7 +1217,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				}
 	 				
 	 				$template = ORM::factory('Template',$_POST['template_id']);
-	 				if($template->is_official == 0 AND $template->user_id != $this->user->id)
+	 				if(($template->is_official == 0 AND $template->user_id != $this->user->id) OR 
+	 						($template->is_official == 1 AND $template->is_private == 1))
 	 				{
 	 					throw new Cannot_Access_Template_Exception(__('You do not have access to this template'));
 	 				}
@@ -1357,6 +1360,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//grab the regions that the map comes with
 	 	$map_regions_temp = ORM::factory('Templateregion')	 	
 	 		->where('template_id', '=',$map->template_id)
+	 		->order_by('title', 'ASC')
 	 		->find_all();
 	 	//setup the regions as an array
 	 	$map_regions = array();
@@ -1402,7 +1406,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->html_head->messages_roll_up = true;
 	 	//the name in the menu
 	 	$this->template->header->menu_page = "mymaps";
-	 	$this->template->content = view::factory("addmap/add5");
+	 	$this->template->content = view::factory("mymaps/add5");
 	 	$this->template->content->map_id = $map_id;
 	 	$this->template->content->map = $map;
 	 	$this->template->content->sheets = $sheets;
@@ -2079,6 +2083,35 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	
 	 }//end function
 	
+	 
+	 /**
+	  * Checks to see if the user has exceeded thier
+	  * maximum number of maps and if so
+	  * sends them to an error page
+	  */
+	 protected function check_max_items()
+	 {
+	 	if($this->user_max_items == -1) //they can add whatever they want
+	 	{
+	 		return true;
+	 	}
+	 	
+	 	//figure out how many maps you the current user has
+	 	$map_count = ORM::factory('Map')
+	 		->where('user_id','=',$this->user->id)
+	 		->count_all();
+	 	if($map_count >= $this->user_max_items)
+	 	{
+	 		$this->template->header->menu_page = "mymaps";
+	 		$this->template->content = new View('mymaps/exceeded_limit');
+	 		$this->template->content->user_max_items = $this->user_max_items;
+	 		$this->template->content->current_items = $map_count;
+	 		return false;
+	 	}
+	 	
+	 	return true;
+	 	
+	 }
 
 	 /**
 	  * Creates a copy of a given map
@@ -2086,8 +2119,31 @@ class Controller_Mymaps extends Controller_Loggedin {
 	  */
 	 public function action_copy()
 	 {
-	 	$this->template->header->menu_page = "mymaps";
-	 	$this->template->content = "<h1> Work in Progress</h1>";
+	 	
+	 	
+	 	//this is a new map, check that the user is allowed to have more maps
+	 	if(!$this->check_max_items())
+	 	{
+	 		return;
+	 	}
+	 	
+	 	//make sure there's an id
+	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+	 	//something went wrong, kick them back home
+	 	if($map_id == 0)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
+	 	$map = ORM::factory('Map',$map_id);
+	 	//they aren't allowed to be here, or this isn't a valid id
+	 	if(!$map->loaded() OR $map->user_id != $this->user->id)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
+	 	
+	 	$new_map = $map->copy($this->user->id);
+	 	
+	 	HTTP::redirect('mymaps/add1?id='.$new_map->id);
 	 }
 	 
 	

@@ -18,4 +18,15 @@
 			$("#edit_template_form").submit();
 		}
 	}
+
+	$().ready(function(){
+
+		//for the search auto complete
+		$( "input#q" ).autocomplete({
+		      source: "<?php echo URL::base()?>templates/search<?php echo Request::current()->action() == 'mine' ? '?mine=true' : '';?>",
+		      minLength: 2,
+		    });
+	
+
+		});
 </script>
