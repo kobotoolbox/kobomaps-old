@@ -80,6 +80,8 @@
 	</ul>
 </div>
 
+
+
 <div>
 <?php 	
 
@@ -98,6 +100,18 @@
 		echo "\n";
 		echo $sheet_indicators[$sheet->id];
 		echo '<p>'. __('If the indicators above are not correct please check the rows that you set as data and the columns you set as denoting indicators.').'</p>';
+		
+		if(count($longUnit[$sheet->id]) > 0)
+		{
+			echo '<div class="longUnits">';
+			echo '<h4>'.__('The following unit values in this sheet are large, we recommend that you condense the units or your maps will look cluttered. </br>
+					Such as use "%" instead of "Percentage." Thank you.').'</h4>';			
+			foreach($longUnit[$sheet->id] as $unit)
+			{
+				echo '<li>'.$unit.'</li>';
+			}
+			echo '</div>';
+		}
  	
 	}
 

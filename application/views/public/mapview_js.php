@@ -100,6 +100,7 @@ var round = true;
 	   
 	   initialize_map();
 	   initialize_buttons();
+	   init_legend_listener();
 	});
 
 
@@ -814,16 +815,17 @@ function DrawDataGraph(id, name){
 /*
  * Controls the information that appears when clicking on a bar within the pop-up graph
  */
-function showTooltip(x, y, contents) {
+function showTooltip(x, y, contents, backColor, fontColor) {
           $('<div id="tooltip">' + contents + '</div>').css( {
               position: 'absolute',
               display: 'none',
-              top: y - 27,
+              top: y,
               left: x,
               'z-index': 1000,
               border: '1px solid #000',
               padding: '2px',
-              'background-color': '#FFF',
+              'background-color': backColor,
+              'font-color': fontColor,
               opacity: 1
           }).appendTo("body").fadeIn(200);
 }
@@ -921,7 +923,7 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 		 $.plot($("#iChartLocal"), bothData,  {
 		    	bars: {show: true, horizontal: true, fill: true},
 		    	grid: {hoverable: true},
-		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, min:0, max:graphXData.length+1},
+		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, min:.45, max:graphXData.length + .55},
 		    	xaxes:[{panRange: [0, largest]}],
 		    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
 			}
@@ -993,7 +995,7 @@ function drawGeneralChart(fullId, dataPath, name){
 	 $.plot($("#iChartFull"+fullId), bothData,  {
 	    	bars: {horizontal: true},
 	    	grid: {hoverable: true},
-	    	yaxis:{ticks: graphYAxis, labelWidth: 60, min:0, max: graphXData.length + 1}	    
+	    	yaxis:{ticks: graphYAxis, labelWidth: 60, min:.45, max:graphXData.length + .55}	    
 		}
 	);
 	bindHoverTip("#iChartFull" + fullId,graphYAxis);
@@ -1081,7 +1083,7 @@ function drawTotalChart(indicator){
 		$.plot($("#nationalIndicatorChart"), bothData,  {
 	    	bars: {show: true, horizontal: true, fill: true},
 	    	grid: {hoverable: true},
-	    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, min:0, max:graphXData.length},
+	    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, min:.45, max:graphXData.length + .55},
 	    	xaxes:[{}],
 	    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
 			}
@@ -1102,7 +1104,7 @@ function bindHoverTip(id, graphYAxis){
 	            //datapoint is minus 1 as graphYAxis is 0 indexed and datapoint is 1 indexed
 	            var hoverName = graphYAxis[item.datapoint[1] - 1][1];
 	            
-	            showTooltip(pos.pageX, pos.pageY, 'The value of ' + hoverName + ' is ' + item.datapoint[0] + '.');
+	            showTooltip(pos.pageX, pos.pageY - 27, 'The value of ' + hoverName + ' is ' + item.datapoint[0] + '.', '#FFF', '#000');
 		   }
 		    else { 
 	             $("#tooltip").remove(); 
@@ -1160,7 +1162,7 @@ function createHTMLChart(name,title, data, id)
 	var kmapInfochartHeight = calculateBarHeight(count);
 	
 	//creates the tab html that contains the chart ids
-	var chartStr = '<div id="'+ id + '" class="infowindow"><p class="bubbleheader">' + name + " - " + title +": "+data[name]
+	var chartStr = '<div id="'+ id + '" class="infowindow"><p class="bubbleheader">' + name + " - " + title +": " + data[name]
 	+'</p>' +
 	'<div id = "iChartTabs" style= "width: 350px; height: 200px">' +
 	  		'<ul>' +
@@ -1810,6 +1812,19 @@ function initialize_buttons()
 		return false;
 		});
 
+	$("#turnOffLabelsButton").tooltip( {
+		position:{
+			my: "left+45 center-20",
+			at: "center top"	
+		}
+	});
+	$("#turnOffValuesButton").tooltip( {
+		position:{
+			my: "left+45 center-20",
+			at: "center top"	
+		}
+	});
+
 
 	//initialize the apple overlay effect
 	$("a[rel]").overlay({
@@ -1827,6 +1842,18 @@ function initialize_buttons()
 }
 
 
+function init_legend_listener(){
+	$("#minButtonLegend").click(function(){
+		if($("#legendMinDiv").is(":visible")){
+			$("#legendMinDiv").toggle();
+			$("#minButtonLegend").html("+");
+		}
+		else {
+			$("#legendMinDiv").toggle();
+			$("#minButtonLegend").html("-");
+		}
+	});	
+}
 
 </script>
 	

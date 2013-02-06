@@ -149,6 +149,10 @@ return array
 		'Regions in sheet'=>'Regions in sheet',
 		'Indicators in sheet'=>'Indicators in sheet',
 		'If the indicators above are not correct please check the rows that you set as data and the columns you set as denoting indicators.'=>'If the indicators above are not correct please check the rows that you set as data and the columns you set as denoting indicators.',
+		'The following unit values in this sheet are large, we recommend that you condense the units or your maps will look cluttered. </br>
+				Such as use "%" instead of "Percentage." Thank you.'
+			=> 'The following unit values in this sheet are large, we recommend that you condense the units or your maps will look cluttered. </br>
+				Such as use "%" instead of "Percentage." Thank you.',
 		
 		//add 4 page
 		'Add Map - Geo Set-up'=>'Add Map - Geo Set-up',
@@ -185,6 +189,8 @@ return array
 		'Toggle Labels' => 'Toggle Labels',
 		'Toggle Values' => 'Toggle Values',
 		'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. Please check back soon.'=>'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. <br/><br/>Please check back soon.',
+		'Toggles the region names.' => 'Toggles the region names.',
+		'Toggles the data values.' => 'Toggles the data values.',
 		
 		
 		//footer

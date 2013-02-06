@@ -803,6 +803,17 @@ select.needstobemapped{
 	border: 3px solid #FF9900;
 }
 
+/************************************************************
+							add3 LongUnits warning
+*************************************************************/
+.longUnits  {
+	color: #d81417;
+	font-weight: bold;
+}
+.longUnits li {
+	font-weight: bold;
+	font-size: 15px;
+}
 
 /************************************************************
 						Stats
@@ -832,3 +843,4 @@ select.needstobemapped{
 .searchBigDiv input#q{
 	margin-right:20px;
 }
+
