@@ -307,6 +307,19 @@ CREATE TABLE IF NOT EXISTS `message_center` (
 UPDATE `metadata` SET  `v` =  '1.0.027' WHERE  `metadata`.`k` ='Database Version';
 
 
+/** John Etherton -- 2013-02-05 -- Added a table to let users share their table with other users and to let them edit their maps**/
+CREATE TABLE IF NOT EXISTS `sharing` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `map_id` int(11) unsigned NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
+  `permission` char(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+ALTER TABLE  `sharing` ADD INDEX  `sharing map_id` (  `map_id` );
+ALTER TABLE  `sharing` ADD INDEX  `sharing user_id` (  `user_id` );
+ALTER TABLE  `sharing` ADD FOREIGN KEY (  `map_id` ) REFERENCES  `maps` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION ;
+ALTER TABLE  `sharing` ADD FOREIGN KEY (  `user_id` ) REFERENCES  `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION ;
+UPDATE `metadata` SET  `v` =  '1.0.028' WHERE  `metadata`.`k` ='Database Version';
 
 
 

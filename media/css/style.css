@@ -785,6 +785,11 @@ ul.sharingTasks li{
 	background: url('../img/shareSprite.png') 32px 0px;	
 	width:32px;
 	}
+div.section{
+	border-top: solid 2px #9a9a9a;
+	margin: 10px 0px;
+	padding: 10px 0px;
+}
 
 /************************************************************
 							add5 page stuff

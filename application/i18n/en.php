@@ -223,6 +223,15 @@ return array
 		'Link to share this indicator'=>'Link to share this indicator',
 		'Code to embed map'=>'Code to embed map',
 		'By KoboMaps'=>'By KoboMaps',
+		'Add User'=>'Add User',
+		'Add a user to this map'=>'Add a user to this map',
+		'This map is public - Anyone can view it'=>'This map is public - Anyone can view it',
+		'This map is private - Only the people below can view it'=>'This map is private - Only the people below can view it',
+		'Change to'=>'Change to',
+		'You dont have permission.'=>'You don\'t have permission.',
+		'Not a valid map.'=>'Not a valid map.',
+		'Can view'=>'Can view',
+		'Can edit'=>'Can edit',
 		
 		//statistics
 		'Select Maps' => 'Select Maps',

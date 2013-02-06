@@ -66,6 +66,7 @@ class Controller_Share extends Controller_Main {
 				
 		$view = new View('share/window');
 		$view->map = $map;
+		$view->user = $this->user;
 		echo $view;
 		
 	}//end action_index
@@ -79,6 +80,48 @@ class Controller_Share extends Controller_Main {
 		$this->template = null;
 	
 		echo "<html><head><script>close();</script></head></html>";
+	}
+	
+	
+	
+	
+	/**
+	 * this function is used to process ajax requests
+	 * to toggle the privacy state of a map. This method expects there to be
+	 * a $_POST['id'] to know which map we're trying to change.
+	 */
+	public function action_changestateajax()
+	{
+		$this->auto_render = false;
+		$this->response->headers('Content-Type','application/json');
+	
+		//get the map id
+		$map_id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+		if($map_id == 0)
+		{
+			echo '{"status":"error", "message":'.json_encode(__('Not a valid map.')).'}';
+			return;
+		}
+		//get the map
+		$map = ORM::factory('Map', $map_id);
+		//is this your map
+		if($map->user_id != $this->user->id)
+		{
+			echo '{"status":"error", "message":'.json_encode(__('You dont have permission.')).'}';
+			return;
+		}
+		
+		//flip the status of the map
+		$map->is_private = intval($map->is_private) == 1 ? 0 : 1;
+		$map->save();
+		
+		echo '{"status":"success", "html":';
+		$view = new View('share/map_state');
+		$view->map = $map;
+		echo json_encode($view->render());
+		echo '}';
+		return;
+		
 	}
 	
 	

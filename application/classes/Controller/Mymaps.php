@@ -2165,6 +2165,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	HTTP::redirect('mymaps/add1?id='.$new_map->id);
 	 }
 	 
+	 
+	 
 	
 }//end of class
 

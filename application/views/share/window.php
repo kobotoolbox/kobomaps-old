@@ -9,7 +9,6 @@
 	
 <div class="shareWindow" id="shareWindow_<?php echo $map->id;?>">
 <h2><?php echo __('Sharing Settings:');?> <?php echo $map->title;?></h2>
-<?php echo __('Sharing Settings:');?>
 
 
 	<?php echo __('Code to embed map')?><br/>
@@ -55,6 +54,21 @@
 			</li>
 		</ul>
 	</div>
+	<?php  if($map->user_id == $user->id){?>
+	<div id="whoHasAccess" class="section">
+		<?php $mapStateView = new view('share/map_state');
+		$mapStateView->map = $map;
+		echo $mapStateView; ?>
+		
+	</div>
+	<div id="addPeople" class="section">
+		<?php echo __('Add a user to this map');?>
+		<?php echo Form::input('newUserName',null,array('id'=>'newUserName','style'=>'width:300px;','placeholder'=>'User name or email address'))?> <?php echo Form::select('newUserPrivildge',array('view'=>__('Can view'), 'edit'=>__('Can edit')), null, array('id'=>'newUserPrivildge'));?>
+		<br/>
+		<input type="button" style="width:80px;" value="<?php echo __('Add User')?>" onclick="addNewUser(<?php echo $map->id?>); return false;"/>
+		<span id="stateWaitingUser"></span>
+	</div>
+	<?php }?>
 	
 	<script type="text/javascript">
 		//make this global
@@ -95,7 +109,66 @@
 					null);
 			return false;
 		}
-			
+
+		function changeState(id)
+		{
+			$("#stateWaiting").html('<img src="<?php echo URL::base();?>media/img/wait16trans.gif"/>');
+			//send the data to the server
+			$.post("<?php echo url::base()?>share/changestateajax", { "id":id},
+					  function(data){
+						$("#stateWaiting").html(''); //turn off waiter
+					    if(data.status == "success")
+					    {
+						    $("#mapState").remove();
+						    $("#whoHasAccess").prepend(data.html);
+					    }
+					    else
+					    {
+						    if(typeof data.message == 'undefined')
+						    {
+						    	alert("Error. Please try again.");
+						    }
+						    else
+						    {
+							    alert(data.message);
+						    }
+					    }
+					  }, "json");  
+		}
+
+
+		function addNewUser(id)
+		{
+			$("#stateWaitingUser").html('<img src="<?php echo URL::base();?>media/img/wait16trans.gif"/>');
+			var name = $("#newUserName").val();
+			var permission = $("#newUserPrivildge").val();
+			$.post("<?php echo url::base()?>share/adduserajax", { "id":id,
+						"name": name,
+						"permission": permission
+						},
+					  function(data){
+						$("#stateWaitingUser").html(''); //turn off waiter
+					    if(data.status == "success")
+					    {
+						    $("#accessList").remove();
+						    $("#whoHasAccess").prepend(data.html);
+					    }
+					    else
+					    {
+						    if(typeof data.message == 'undefined')
+						    {
+						    	alert("Error. Please try again.");
+						    }
+						    else
+						    {
+							    alert(data.message);
+						    }
+					    }
+					  }, "json");  
+		}
+
+		
+	
 		
 	</script> 
 
