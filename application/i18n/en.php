@@ -257,11 +257,15 @@ return array
 		
 		//limits exceeded
 		'Map Limit Exceeded'=>'Map Limit Exceeded',
+		'Template Limit Exceeded'=>'Template Limit Exceeded',
 		'Back to my maps'=>'Back to my maps',
 		'We\'re sorry, but you have'=>'We\'re sorry, but you have',
 		'maps and your account only allows you to have'=>'maps,<br/>and your account only allows you to have',
 		'If you want to add a new map you must remove'=>'If you want to add a new map you must remove',
+		'templates and your account only allows you to have'=>'templates,<br/>and your account only allows you to have',
+		'If you want to add a new template you must remove'=>'If you want to add a new template you must remove',
 		'maps.'=>'maps.',
+		'templates.'=>'templates.',
 		'SENTANCE_END'=>'.',
 );
 

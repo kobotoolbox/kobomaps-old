@@ -181,6 +181,14 @@ class Controller_Templates extends Controller_Loggedin {
 		{
 			$template = ORM::factory('Template', $_GET['id']);		
 		}
+		else
+		{
+			//it's a new template
+			if(!$this->check_max_items())
+		 	{
+		 		return;
+		 	}
+		}
 		
 		//make sure the user is allowed to look at this template
 		if($template != null AND $template->user_id != $this->user->id AND !$this->is_admin)
@@ -527,10 +535,16 @@ class Controller_Templates extends Controller_Loggedin {
 	 	}
 	 
 	 	//make sure the user is allowed to look at this template
-	 	if($template != null AND $template->is_private == 1 AND !$this->is_admin)
+	 	if($template != null AND ($template->is_private == 1 AND $template->user_id != $this->user->id) AND !$this->is_admin)
 	 	{
 	 		HTTP::redirect('templates');
 	 	}
+	 	
+	 	//make sure the user hasn't exceed their template limit
+	 	if(!$this->check_max_items())
+		{
+			return;
+		}
 	 
 		$new_template = $template->copy($this->user->id);
 		
@@ -660,6 +674,36 @@ class Controller_Templates extends Controller_Loggedin {
 	 
 	 function get_file_extension($file_name) {
 	 	return substr(strrchr($file_name,'.'),1);
+	 }
+	 
+	 
+	 /**
+	  * Checks to see if the user has exceeded thier
+	  * maximum number of maps and if so
+	  * sends them to an error page
+	  */
+	 protected function check_max_items()
+	 {
+	 	if($this->user_max_items == -1) //they can add whatever they want
+	 	{
+	 		return true;
+	 	}
+	 		
+	 	//figure out how many maps you the current user has
+	 	$map_count = ORM::factory('Template')
+	 	->where('user_id','=',$this->user->id)
+	 	->count_all();
+	 	if($map_count >= $this->user_max_items)
+	 	{
+	 		$this->template->header->menu_page = "templates";
+	 		$this->template->content = new View('templates/exceeded_limit');
+	 		$this->template->content->user_max_items = $this->user_max_items;
+	 		$this->template->content->current_items = $map_count;
+	 		return false;
+	 	}
+	 		
+	 	return true;
+	 		
 	 }
 	
 	
