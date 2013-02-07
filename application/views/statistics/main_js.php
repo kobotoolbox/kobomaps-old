@@ -2,7 +2,7 @@
 /***********************************************************
 * main_js.php - View
 * This software is copy righted by Etherton Technologies Ltd. 2013
-* Writen by John Etherton <john@ethertontech.com> Tino also did some work on this back in the day
+* Writen by Dylan Gillespie <dylan@ethertontech.com> Tino also did some work on this back in the day
 * Started on 2013-01-25
 * Javascript way of showing users their stats
 *************************************************************/
@@ -19,7 +19,7 @@
 		var endDate = $("#endDate").val();
 		var maps = $("#maps").val();
 		
-		$.post("<?php echo URL::base(); ?>statistics/getData", { "map": maps, "start": startDate, "end": endDate }).done(
+		$.post("<?php echo URL::base(); ?>statistics/getdata", { "map": maps, "start": startDate, "end": endDate }).done(
 		function(data) {
 			drawGraph(parseData(data));
 		});	

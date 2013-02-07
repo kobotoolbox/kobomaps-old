@@ -191,6 +191,9 @@ return array
 		'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. Please check back soon.'=>'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. <br/><br/>Please check back soon.',
 		'Toggles the region names.' => 'Toggles the region names.',
 		'Toggles the data values.' => 'Toggles the data values.',
+		'Message sent successfully!' =>'Message sent successfully!',
+		'Name (Optional)' => 'Name (Optional)',
+		'Email address (Optional)' => 'Email address (Optional)',
 		
 		
 		//footer
@@ -239,6 +242,9 @@ return array
 		'End Date' => 'End Date',
 		'Start Date' => 'Start Date',
 		'Dates on the graph that are shaded grey correspond to weekends.' => 'Dates on the graph that are shaded grey correspond to weekends.',
+		
+		//Comment error
+		'Your comment is empty, please try again.' => 'Your comment is empty, please try again.',
 		
 		
 		//public map page
