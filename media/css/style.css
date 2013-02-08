@@ -849,3 +849,39 @@ select.needstobemapped{
 	margin-right:20px;
 }
 
+
+/*********************************************************
+               Message Center
+*********************************************************/
+.messageData{
+	text-decoration:none;
+	white-space: nowrap;
+}
+.messageTable th{
+	color: #444444;
+	overflow:hidden;
+	word-wrap:break-word;
+	max-width: 150px;
+}
+.messageTable td{
+	overflow:hidden;
+	word-wrap:break-word;
+	max-width: 200px;
+}
+.messageDetails p{
+	font-size: 20px;
+}
+.unread a{
+	font-weight: bold;
+	color: black;
+}
+.read a{
+	font-weight:lighter;
+	color: black;
+}
+.unread a:hover{
+	text-decoration:underline;
+}
+.read a:hover{
+	text-decoration:underline;
+}

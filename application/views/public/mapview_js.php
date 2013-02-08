@@ -923,7 +923,7 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 		 $.plot($("#iChartLocal"), bothData,  {
 		    	bars: {show: true, horizontal: true, fill: true},
 		    	grid: {hoverable: true},
-		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, min:.45, max:graphXData.length + .55},
+		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 72, labelHeight: 20, min:.45, max:graphXData.length + .55},
 		    	xaxes:[{panRange: [0, largest]}],
 		    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
 			}
@@ -995,7 +995,7 @@ function drawGeneralChart(fullId, dataPath, name){
 	 $.plot($("#iChartFull"+fullId), bothData,  {
 	    	bars: {horizontal: true},
 	    	grid: {hoverable: true},
-	    	yaxis:{ticks: graphYAxis, labelWidth: 60, min:.45, max:graphXData.length + .55}	    
+	    	yaxis:{ticks: graphYAxis, labelWidth: 72, min:.45, max:graphXData.length + .55}	    
 		}
 	);
 	bindHoverTip("#iChartFull" + fullId,graphYAxis);

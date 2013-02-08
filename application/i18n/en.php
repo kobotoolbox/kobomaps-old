@@ -13,6 +13,7 @@ return array
 		'Statistics'=>'Statistics',
 		'Templates'=>'Templates',
 		'Public Maps'=>'Public Maps',
+		'Messages' => 'Messages',
 		
 		//sub menus
 		'Create New Map'=>'Create New Map',
@@ -245,6 +246,14 @@ return array
 		
 		//Comment error
 		'Your comment is empty, please try again.' => 'Your comment is empty, please try again.',
+		
+		//Message center
+		'No name given.' => 'No name given.',
+		'No email given.' => 'No email given.',
+		'Email Address' => 'Email Address',
+		'Date submitted:' => 'Date submitted:',
+		'From' => 'From',
+		'Comment' => 'Comment',
 		
 		
 		//public map page
