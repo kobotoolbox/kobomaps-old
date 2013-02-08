@@ -254,6 +254,9 @@ return array
 		'Date submitted:' => 'Date submitted:',
 		'From' => 'From',
 		'Comment' => 'Comment',
+		'Are you sure you want to delete this message' => 'are you sure you want to delete this message',
+		'These are the comments that have been submitted for your maps.' => 'These are the comments that have been submitted for your maps.',
+		'You have no messages' => 'You have no messages',
 		
 		
 		//public map page
