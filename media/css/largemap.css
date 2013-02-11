@@ -111,6 +111,13 @@ div#sheetlinks div#mapSocialShare img.share{
 	background-repeat: no-repeat;
 	margin: 5px 0px
 	}			
+div#sheetlinks div#mapSocialShare img.comment{
+	background: url('../img/tasksSprite.png') -164px 0px;	
+	width:31px;
+	height:32px;
+	background-repeat: no-repeat;
+	margin: 5px 0px
+}
 div#sheetlinks div#mapSocialShare img.fullscreen{
 	background: url('../img/tasksSprite.png') -192px 0px;	
 	width:22px;

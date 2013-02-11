@@ -55,8 +55,13 @@
 	</div>
 	<div id="sheetnamesRightControl" class="sheetScrollerControll"><a href="">&gt;</a></div>
 	<div id="sheetnamesEndControl" class="sheetScrollerControll"><a href="">&gt;&gt;</a></div>
-	<div id="mapSocialShare">
+	<div id="mapSocialShare" style="width: 120px">
 		<ul>			
+			<li>
+				<a id="commentButton" rel="#overlay" href="<?php echo url::base(); ?>comment/window?id=<?php echo $map->id;?>" >
+					<img class="comment" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
+				</a>
+			</li>
 			<li>
 				<a id="shareButton" rel="#overlay" href="<?php echo url::base(); ?>share/window?id=<?php echo $map->id;?>" >
 					<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		

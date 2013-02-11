@@ -13,6 +13,7 @@ return array
 		'Statistics'=>'Statistics',
 		'Templates'=>'Templates',
 		'Public Maps'=>'Public Maps',
+		'Messages' => 'Messages',
 		
 		//sub menus
 		'Create New Map'=>'Create New Map',
@@ -191,6 +192,9 @@ return array
 		'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. Please check back soon.'=>'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. <br/><br/>Please check back soon.',
 		'Toggles the region names.' => 'Toggles the region names.',
 		'Toggles the data values.' => 'Toggles the data values.',
+		'Message sent successfully!' =>'Message sent successfully!',
+		'Name (Optional)' => 'Name (Optional)',
+		'Email address (Optional)' => 'Email address (Optional)',
 		
 		
 		//footer
@@ -248,6 +252,20 @@ return array
 		'End Date' => 'End Date',
 		'Start Date' => 'Start Date',
 		'Dates on the graph that are shaded grey correspond to weekends.' => 'Dates on the graph that are shaded grey correspond to weekends.',
+		
+		//Comment error
+		'Your comment is empty, please try again.' => 'Your comment is empty, please try again.',
+		
+		//Message center
+		'No name given.' => 'No name given.',
+		'No email given.' => 'No email given.',
+		'Email Address' => 'Email Address',
+		'Date submitted:' => 'Date submitted:',
+		'From' => 'From',
+		'Comment' => 'Comment',
+		'Are you sure you want to delete this message' => 'are you sure you want to delete this message',
+		'These are the comments that have been submitted for your maps.' => 'These are the comments that have been submitted for your maps.',
+		'You have no messages' => 'You have no messages',
 		
 		
 		//public map page

@@ -293,7 +293,7 @@ ALTER TABLE  `roles` ADD  `max_items` INT NOT NULL DEFAULT  '-1';
 UPDATE  `roles` SET  `max_items` =  '5' WHERE  `roles`.`id` =1;
 UPDATE `metadata` SET  `v` =  '1.0.026' WHERE  `metadata`.`k` ='Database Version';
 
-/** Dylan Gillespie --added a message_center table **/
+/** Dylan Gillespie 2013-02-04--added a message_center table **/
 CREATE TABLE IF NOT EXISTS `message_center` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `map_id` int(11) NOT NULL,
@@ -321,7 +321,10 @@ ALTER TABLE  `sharing` ADD FOREIGN KEY (  `map_id` ) REFERENCES  `maps` (`id`) O
 ALTER TABLE  `sharing` ADD FOREIGN KEY (  `user_id` ) REFERENCES  `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION ;
 UPDATE `metadata` SET  `v` =  '1.0.028' WHERE  `metadata`.`k` ='Database Version';
 
-
-
+/** Dylan Gillespie 2013-02-06--added a message_center index **/
+ALTER TABLE `message_center` ADD INDEX  `Message_map_id` (  `map_id` );
+ALTER TABLE  `message_center` CHANGE  `map_id`  `map_id` INT( 11 ) UNSIGNED NOT NULL;
+ALTER TABLE  `message_center` ADD FOREIGN KEY (  `map_id` ) REFERENCES  `maps` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION ;
+UPDATE `metadata` SET  `v` =  '1.0.029' WHERE  `metadata`.`k` ='Database Version';
 
 

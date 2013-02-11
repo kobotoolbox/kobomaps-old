@@ -131,6 +131,30 @@ class Helper_Menus
 				}
 				echo '<a href="'.url::base().'templates">'.__("Templates").'</a></li>';
 				
+				//Message center
+				if($page == "messages")
+				{
+					echo '<li class="selected">';
+				}
+				else
+				{
+					echo '<li>';
+				}
+				$unread = ORM::factory('Messagecenter')
+					->join('maps')
+					->on('maps.id', '=', 'messagecenter.map_id')
+					->where('maps.user_id','=',$user->id)
+					->where('unread','=',1)
+					->count_all();
+				if($unread > 0)
+				{
+					$unread = '('.$unread.')';
+				}
+				else{
+					$unread = '';
+				}					
+				echo '<a href="'.url::base().'comment">'.__("Messages").$unread.'</a></li>';
+				
 			}
 		
 		

@@ -419,7 +419,7 @@ table.list_table tr td a:hover
 	font-size: 12px;
 	}
 
-.mapTasks img, .templateTasks img{
+.mapTasks img, .templateTasks img, .messageTable img{
 	height:32px;
 	background-repeat: no-repeat;
 }
@@ -440,7 +440,7 @@ table.list_table tr td a:hover
 	background: url('../img/tasksSprite.png') -98px 0px;	
 	width:31px;
 	}			
-.mapTasks img.delete, .templateTasks img.delete{
+.mapTasks img.delete, .templateTasks img.delete, .messageTable img.delete{
 	background: url('../img/tasksSprite.png') -130px 0px;	
 	width:32px;
 	}
@@ -871,3 +871,48 @@ select.needstobemapped{
 	margin-right:20px;
 }
 
+
+/*********************************************************
+               Message Center
+*********************************************************/
+.messageData{
+	text-decoration:none;
+}
+.messageTable th{
+	color: #444444;
+	overflow:hidden;
+	max-width: 150px;
+}
+.messageTable td{
+	overflow:hidden;
+	max-width: 200px;
+}
+.messageTable a{
+	color:black;
+}
+.messageTable a:hover{
+	color:black;
+	text-decoration:underline;
+}
+.messageDetails p{
+	font-size: 20px;
+}
+.messageDetails a{
+	font-weight: bold;
+	color: black;
+	font-size: 18px;
+}
+table .unread{
+	background: #ececec;
+}
+.unread a, .read a{
+	font-weight: bold;
+	color: black;
+}
+.read a{
+	font-weight:lighter;
+	color: black;
+}
+.unread a:hover, .read a:hover{
+	text-decoration:underline;
+}
