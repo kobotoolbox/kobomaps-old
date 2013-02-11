@@ -58,12 +58,18 @@
 	<div id="whoHasAccess" class="section">
 		<?php $mapStateView = new view('share/map_state');
 		$mapStateView->map = $map;
-		echo $mapStateView; ?>
+		echo $mapStateView;
+		
+		$colaboratorsView = new view('share/map_colaborators');
+		$colaboratorsView->colaborators = $colaborators;
+		$colaboratorsView->permissions = $permissions;
+		echo $colaboratorsView; ?>
 		
 	</div>
 	<div id="addPeople" class="section">
 		<?php echo __('Add a user to this map');?>
-		<?php echo Form::input('newUserName',null,array('id'=>'newUserName','style'=>'width:300px;','placeholder'=>'User name or email address'))?> <?php echo Form::select('newUserPrivildge',array('view'=>__('Can view'), 'edit'=>__('Can edit')), null, array('id'=>'newUserPrivildge'));?>
+		<?php echo Form::input('newUserName',null,array('id'=>'newUserName','style'=>'width:300px;','placeholder'=>'User name or email address'))?>
+		<?php echo Form::select('newUserPrivildge',$permissions, null, array('id'=>'newUserPrivildge'));?>
 		<br/>
 		<input type="button" style="width:80px;" value="<?php echo __('Add User')?>" onclick="addNewUser(<?php echo $map->id?>); return false;"/>
 		<span id="stateWaitingUser"></span>
@@ -71,105 +77,44 @@
 	<?php }?>
 	
 	<script type="text/javascript">
-		//make this global
-		var mapShareIndicatorURL = null;
-		if( typeof $.address != 'undefined')
+	//make this global
+	var mapShareIndicatorURL = null;
+	if( typeof $.address != 'undefined')
+	{
+		var mapShareIndicator = $.address.parameter("indicator");
+		if(typeof indicator != 'undefined')
 		{
-			var mapShareIndicator = $.address.parameter("indicator");
-			if(typeof indicator != 'undefined')
-			{
 
-				var indicatorLink = $("#indicatorLink input").val() + mapShareIndicator;
-				mapShareIndicatorURL = indicatorLink;
-				$("#indicatorLink input").val(indicatorLink);
-				$("#indicatorLink").show();
-				var body = encodeURIComponent("<?php echo __('I want to share this map with you:');?> " + indicatorLink);
-				var subject = "<?php echo rawurlencode(__('Sharing'). ' '.$map->title. ' '.__('map')); ?>";
-				$("#indicatorEmail").attr("href","mailto:?subject="+subject+"&body="+body);
-			}
-			
+			var indicatorLink = $("#indicatorLink input").val() + mapShareIndicator;
+			mapShareIndicatorURL = indicatorLink;
+			$("#indicatorLink input").val(indicatorLink);
+			$("#indicatorLink").show();
+			var body = encodeURIComponent("<?php echo __('I want to share this map with you:');?> " + indicatorLink);
+			var subject = "<?php echo rawurlencode(__('Sharing'). ' '.$map->title. ' '.__('map')); ?>";
+			$("#indicatorEmail").attr("href","mailto:?subject="+subject+"&body="+body);
 		}
-
-		function postMapLinkToFacebookFeed()
-		{
-			postToFacebookFeed($("#indicatorLink input").val(),
-					'<?php echo str_replace("'", "\'", $map->title);?>',
-					'<?php echo __('By KoboMaps');?>',
-					'<?php echo str_replace("'", "\'", $map->description);?>',
-					null);
-			return false;
-		}
-
-		function postIndicatorLinkToFacebookFeed()
-		{
-			postToFacebookFeed(mapShareIndicatorURL,
-					'<?php echo str_replace("'", "\'", $map->title);?> - ' + $("#indicatorSpanId_"+indicator).text(),
-					'<?php echo __('By KoboMaps');?>',
-					'<?php echo str_replace("'", "\'", $map->description);?>',
-					null);
-			return false;
-		}
-
-		function changeState(id)
-		{
-			$("#stateWaiting").html('<img src="<?php echo URL::base();?>media/img/wait16trans.gif"/>');
-			//send the data to the server
-			$.post("<?php echo url::base()?>share/changestateajax", { "id":id},
-					  function(data){
-						$("#stateWaiting").html(''); //turn off waiter
-					    if(data.status == "success")
-					    {
-						    $("#mapState").remove();
-						    $("#whoHasAccess").prepend(data.html);
-					    }
-					    else
-					    {
-						    if(typeof data.message == 'undefined')
-						    {
-						    	alert("Error. Please try again.");
-						    }
-						    else
-						    {
-							    alert(data.message);
-						    }
-					    }
-					  }, "json");  
-		}
-
-
-		function addNewUser(id)
-		{
-			$("#stateWaitingUser").html('<img src="<?php echo URL::base();?>media/img/wait16trans.gif"/>');
-			var name = $("#newUserName").val();
-			var permission = $("#newUserPrivildge").val();
-			$.post("<?php echo url::base()?>share/adduserajax", { "id":id,
-						"name": name,
-						"permission": permission
-						},
-					  function(data){
-						$("#stateWaitingUser").html(''); //turn off waiter
-					    if(data.status == "success")
-					    {
-						    $("#accessList").remove();
-						    $("#whoHasAccess").prepend(data.html);
-					    }
-					    else
-					    {
-						    if(typeof data.message == 'undefined')
-						    {
-						    	alert("Error. Please try again.");
-						    }
-						    else
-						    {
-							    alert(data.message);
-						    }
-					    }
-					  }, "json");  
-		}
-
 		
-	
-		
+	}
+
+	function postMapLinkToFacebookFeed()
+	{
+		postToFacebookFeed($("#indicatorLink input").val(),
+				'<?php echo str_replace("'", "\'", $map->title);?>',
+				'<?php echo __('By KoboMaps');?>',
+				'<?php echo str_replace("'", "\'", $map->description);?>',
+				null);
+		return false;
+	}
+
+	function postIndicatorLinkToFacebookFeed()
+	{
+		postToFacebookFeed(mapShareIndicatorURL,
+				'<?php echo str_replace("'", "\'", $map->title);?> - ' + $("#indicatorSpanId_"+indicator).text(),
+				'<?php echo __('By KoboMaps');?>',
+				'<?php echo str_replace("'", "\'", $map->description);?>',
+				null);
+		return false;
+	}
 	</script> 
 
 </div>

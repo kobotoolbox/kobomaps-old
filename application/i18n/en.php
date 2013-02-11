@@ -236,6 +236,15 @@ return array
 		'Not a valid map.'=>'Not a valid map.',
 		'Can view'=>'Can view',
 		'Can edit'=>'Can edit',
+		'The name field is empty'=>'The name field is empty',
+		'We cannot find a user with a name or email address of'=>'We cannot find a user with a name or email address of',
+		'That permission level is invalid'=>'That permission level is invalid',
+		'edit'=>'Edit',
+		'view'=>'View',
+		'this map.'=>'this map.',
+		'can now'=>'can now',
+		'can'=>'can',
+		'Delete Colaborator'=>'Delete Colaborator',
 		
 		//statistics
 		'Select Maps' => 'Select Maps',

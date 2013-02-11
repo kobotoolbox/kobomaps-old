@@ -138,34 +138,34 @@ class Controller_Public extends Controller_Main {
 	 		HTTP::redirect('mymaps/add'.$map->map_creation_progress.'?id='.$map->id);
 	 	}
 	 
+	 	$user = null;
 	 	$auth = Auth::instance();
 	 	//is the user logged in?
 	 	if($auth->logged_in())
 	 	{
+	 		
 	 		$user = ORM::factory('user',$auth->get_user());
-	 		if($user->id != $map->user_id)
+	 	}
+	 	
+	 	if($map->is_private)
+	 	{
+	 		//if the map is private and they aren't logged in, bounce them
+	 		if($user == null)		
 	 		{
-	 			if($map->is_private)
+	 			HTTP::redirect('mymaps');
+	 		}
+	 		else  //they're logged in, see if the map is something they have access to
+	 		{
+	 			$share = ORM::factory('Sharing')
+	 				->where('map_id','=',$map->id)
+	 				->where('user_id','=',$user->id)
+	 				->find();
+	 			if(!$share->loaded()) //couldn't find anything giving the user permission
 	 			{
-	 				if(!(isset($_POST['private_password']) AND $_POST['private_password'] == $map->private_password))
-	 				{
-	 					$this->template->content = view::factory('addmap/private_password');
-	 					return;
-	 				}
-	 				
+	 				HTTP::redirect('mymaps');
 	 			}
 	 		}
-	 	}
-	 	else
-	 	{
-	 		if($map->is_private)
-	 		{
-	 			if(!(isset($_POST['private_password']) AND $_POST['private_password'] == $map->private_password))
-	 				{
-	 					$this->template->content = view::factory('addmap/private_password');
-	 					return;
-	 				}
-	 		}
+	 	
 	 	}
 	 	//checking if this is where the increment_visits should be included
 	 	if(!($user != null AND $user->id == $map->user_id)){
