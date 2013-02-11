@@ -3,6 +3,11 @@
 class Model_Sharing extends ORM {
 
 	
+	public static $allowed_permissions;
+	
+	
+	
+		
 	
 	/**
 	 * Set the name of the table
@@ -72,3 +77,5 @@ class Model_Sharing extends ORM {
 
 	
 } // End User Model
+
+Model_Sharing::$allowed_permissions = array('view'=>'view','edit'=>'edit');

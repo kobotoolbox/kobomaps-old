@@ -791,6 +791,28 @@ div.section{
 	padding: 10px 0px;
 }
 
+div#accessList{
+	margin-top:20px;
+	border-top:solid 1px #ebebeb;
+}
+
+div#accessList table{
+	margin-left:20px;
+	border-collapse:collapse;
+	width:560px;
+}
+
+div#accessList td{
+	padding-top:10px;
+}
+
+
+div#accessList td{
+	padding-top:10px;
+	border-bottom:solid 1px #ebebeb;
+}
+
+
 /************************************************************
 							add5 page stuff
 *************************************************************/
