@@ -39,5 +39,5 @@
 
 <script type ="text/javascript">
 	//changes weight of message text to read
-	$("#messageRow<?php echo $message->id ?>").attr("class", "read");
+	$("#messageRow<?php echo $message->id ?>").removeClass("unread");
 </script>

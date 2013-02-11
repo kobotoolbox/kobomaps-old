@@ -404,18 +404,18 @@ table.list_table tr td a:hover
 *************************************************************/
 
 
-.mapTasks ul, .templateTasks ul{
+.mapTasks ul, .templateTasks ul, .messageTasks ul{
 	padding:0px;
 	margin:0px;
 	list-style:none;
 }
 
-.mapTasks ul li, .templateTasks ul li{
+.mapTasks ul li, .templateTasks ul li, .messageTasks ul li{
 	float:left;
 	margin:3px;
 	padding:3px;
 	}
-.mapTasks ul li a, .templateTasks ul li a{
+.mapTasks ul li a, .templateTasks ul li a, .messageTasks ul li a{
 	font-size: 12px;
 	}
 
@@ -853,18 +853,6 @@ select.needstobemapped{
 /*********************************************************
                Message Center
 *********************************************************/
-.messageData{
-	text-decoration:none;
-}
-.messageTable th{
-	color: #444444;
-	overflow:hidden;
-	max-width: 150px;
-}
-.messageTable td{
-	overflow:hidden;
-	max-width: 200px;
-}
 .messageTable a{
 	color:black;
 }
@@ -881,16 +869,15 @@ select.needstobemapped{
 	font-size: 18px;
 }
 table .unread{
-	background: #ececec;
+	background: #aebcce;
 }
-.unread a, .read a{
+table.list_table tr.unread.odd_row  td {
+	background: #aebcce;
+}
+.unread a{
 	font-weight: bold;
 	color: black;
 }
-.read a{
-	font-weight:lighter;
-	color: black;
-}
-.unread a:hover, .read a:hover{
+.unread a:hover{
 	text-decoration:underline;
 }

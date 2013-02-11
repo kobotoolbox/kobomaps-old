@@ -12,7 +12,9 @@
 <link href="<?php echo  URL::base() ?>media/css/largemap.css" type="text/css" rel="stylesheet">  
 
 <link rel="stylesheet" href="<?php echo URL::base(); ?>media/css/jquery-ui.css" />
-<style> <?php echo $map->CSS?></style>
+<style> <?php echo $map->CSS?>
+
+</style>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.min.js"> </script>
 
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/dragresize.js"> </script>
