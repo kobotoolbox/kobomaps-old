@@ -59,17 +59,17 @@
 		<ul>			
 			<li>
 				<a id="commentButton" rel="#overlay" href="<?php echo url::base(); ?>comment/window?id=<?php echo $map->id;?>" >
-					<img class="comment" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
+					<img class="comment" title="<?php echo __('Comment on this map.')?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
 				</a>
 			</li>
 			<li>
 				<a id="shareButton" rel="#overlay" href="<?php echo url::base(); ?>share/window?id=<?php echo $map->id;?>" >
-					<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
+					<img class="share" title="<?php echo __('Share this map.')?>"  src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
 				</a>
 			</li>
 			<li>
 				<a id="fullScreenButton" href="">
-					<img class="fullscreen" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
+					<img class="fullscreen" title="<?php echo __('Make this map fullscreen.')?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
 				</a>
 			</li>
 			<li>
@@ -117,6 +117,7 @@
 				<span id="nationalaveragelabel"></span>
 				<span id="nationalaverageimg" ></span>
 			</div>
+			</br>
 			<div id="nationalChartScrollDiv"  style=" width:320px; overflow-y: auto; overflow-x: hidden">
 		       	<div id="nationalIndicatorChart" style="width: 300px"></div>		
 		       </div>

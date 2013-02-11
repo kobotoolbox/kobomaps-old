@@ -1831,6 +1831,25 @@ function initialize_buttons()
 			at: "center top"	
 		}
 	});
+	$("#commentButton").tooltip( {
+		position:{
+			my: "left+15 center-19",
+			at: "center top"	
+		}
+	});
+	$("#shareButton").tooltip( {
+		position:{
+			my: "left+14 center-19",
+			at: "center top"	
+		}
+	});
+	$("#fullScreenButton").tooltip( {
+		position:{
+			my: "left+14 center-19",
+			at: "center top"	
+		}
+	});
+	
 
 
 	//initialize the apple overlay effect

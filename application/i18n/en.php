@@ -199,6 +199,9 @@ return array
 		'Message sent successfully!' =>'Message sent successfully!',
 		'Name (Optional)' => 'Name (Optional)',
 		'Email address (Optional)' => 'Email address (Optional)',
+		'Comment on this map.' => 'Comment on this map.',
+		'Share this map.' => 'Share this map.',
+		'Make this map fullscreen.' => 'Make this map fullscreen.',
 		
 		
 		//footer
@@ -256,6 +259,7 @@ return array
 		'End Date' => 'End Date',
 		'Start Date' => 'Start Date',
 		'Dates on the graph that are shaded grey correspond to weekends.' => 'Dates on the graph that are shaded grey correspond to weekends.',
+		'You have no maps to view statistics for.' => 'You have no maps to view statistics for.',
 		
 		//Comment error
 		'Your comment is empty, please try again.' => 'Your comment is empty, please try again.',
