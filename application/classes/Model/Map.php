@@ -77,6 +77,21 @@ class Model_Map extends ORM {
 				'template_id' => array(
 						array('not_empty'),
 				),
+				'label_zoom_level' => array(
+						array('not_empty'),
+						array('numeric'),
+						array('range', array(':value',-1,24)),
+				),
+				'region_label_font' => array(
+						array('not_empty'),
+						array('numeric'),
+						array('range', array(':value',7,100)),
+				),
+				'value_label_font' => array(
+						array('not_empty'),
+						array('numeric'),
+						array('range', array(':value',7,100)),
+				),
 		);
 	}//end function
 	
@@ -96,7 +111,8 @@ class Model_Map extends ORM {
 	{
 	
 		$expected = array('title', 'description', 'user_id', 'file', 'map_style', 'CSS', 'lat', 'lon', 'zoom', 
-				'template_id','json_file', 'is_private', 'private_password', 'map_creation_progress', 'show_empty_name', 'label_zoom_level');
+				'template_id','json_file', 'is_private', 'private_password', 'map_creation_progress', 
+				'show_empty_name', 'label_zoom_level', 'region_label_font', 'value_label_font');
 	
 		$this->values($values, $expected);
 		$this->check();

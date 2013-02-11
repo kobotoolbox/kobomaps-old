@@ -106,6 +106,10 @@ return array
 		'Maps will show region names with no data.' => 'Maps will show region names with no data.',
 		'  Level at which labels will begin to appear.' => '  Level at which labels will begin to appear.',
 		'<br/>Zoom level to show labels' => '<br/>Zoom level to show labels',
+		'<br/>Font size of region names' => '<br/>Font size of region names',
+		'  Font size of the region titles as seen in maps, in pixels.' => '  Font size of the region titles as seen in maps, in pixels.',
+		'<br/>Font size of data values' => '<br/>Font size of data values',
+		'  Font size of the data values as seen in maps, in pixels.' => '  Font size of the data values as seen in maps, in pixels.',
 		
 		//add 2 page
 		'Add Map - Data Structure'=>'Add Map - Data Structure',

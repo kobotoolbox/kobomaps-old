@@ -140,7 +140,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'private_password'=>null,
 			'map_creation_progress'=>1,
 			'show_names' => true,
-			'label_zoom_level' => 0
+			'label_zoom_level' => 0,
+			'region_label_font' => 12,
+			'value_label_font' => 12
 			);
 		
 		$map = null;
@@ -172,6 +174,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['private_password'] = $map->private_password;
 			$data['show_names'] = $map->show_empty_name;
 			$data['label_zoom_level'] = $map->label_zoom_level;
+			$data['region_label_font'] = $map->region_label_font;
+			$data['value_label_font'] = $map->value_label_font;
 		}
 		else
 		{

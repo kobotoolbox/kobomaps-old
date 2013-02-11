@@ -327,4 +327,8 @@ ALTER TABLE  `message_center` CHANGE  `map_id`  `map_id` INT( 11 ) UNSIGNED NOT 
 ALTER TABLE  `message_center` ADD FOREIGN KEY (  `map_id` ) REFERENCES  `maps` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION ;
 UPDATE `metadata` SET  `v` =  '1.0.029' WHERE  `metadata`.`k` ='Database Version';
 
+/** Dylan Gillespie 2013-02-11 --added font rows for region and value in maps **/
+ALTER TABLE  `maps` ADD  `region_label_font` INT NOT NULL DEFAULT  '12',
+ADD  `value_label_font` INT NOT NULL DEFAULT  '12'
+UPDATE `metadata` SET  `v` =  '1.0.030' WHERE  `metadata`.`k` ='Database Version';
 

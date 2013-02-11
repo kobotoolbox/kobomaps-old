@@ -13,7 +13,12 @@
 
 <link rel="stylesheet" href="<?php echo URL::base(); ?>media/css/jquery-ui.css" />
 <style> <?php echo $map->CSS?>
-
+	.countylabelname {
+		font-size: <?php echo $map->region_label_font.'px'?>;
+	}
+	.areaVal{
+		font-size: <?php echo $map->value_label_font.'px'?>;
+	}
 </style>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.min.js"> </script>
 
