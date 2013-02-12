@@ -104,9 +104,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 		
 		/*****Render the forms****/
 		
-		//get the forms that belong to this user
+		//get the forms that belong to this user or that they've been given permission
 		$maps = ORM::factory("Map")
-			->where('user_id', '=', $this->user->id)
+			->select('sharing.*')
+			->join('sharing')
+			->on('sharing.map_id','=','map.id')
+			->where('sharing.user_id', '=', $this->user->id)
 			->order_by('title', 'ASC')
 			->find_all();
 		
@@ -153,11 +156,13 @@ class Controller_Mymaps extends Controller_Loggedin {
 		{
 			$map = ORM::factory('Map', $map_id);
 			
-			//different user
-			if($map->user_id != $this->user->id)
+			//make sure the map exists
+			if(!$map->loaded())
 			{
 				HTTP::redirect('mymaps');
 			}
+			
+			$this->check_map_permissions($map_id, $this->user->id);
 				
 			$data['id'] = $map_id;
 			$data['title'] = $map->title;
@@ -221,10 +226,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 			{
 				
 				//save to the DB
-				
+				$first_time = false;
 				if($map == null)
-				{				
+				{			
+					$first_time = true;
 					$map = ORM::factory('Map');
+					
 					//check if they're using Excel files or Google Docs
 					if($_POST['filetype'] == 'excel')
 					{
@@ -268,6 +275,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 					$_POST['map_creation_progress'] = $map->map_creation_progress; 
 				}		
 				$map->update_map($_POST);
+				if($first_time)
+				{
+					//create this as being owned by the current user
+					$share = Model_Sharing::create_owner($map->id, $this->user->id);						
+				}
 				
 				
 				//handle the xls file, or Google Doc, if there's something to save
@@ -383,11 +395,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	
-	 	//not the owner of the map
-	 	if($map->user_id != $this->user->id)
-	 	{
-	 		HTTP::redirect('mymaps');
-	 	}
+	 	//check permissions of the user on this map
+	 	$this->check_map_permissions($map_id, $this->user->id);
 	 	
 	 	if($map->map_creation_progress < 1)
 	 	{
@@ -917,11 +926,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	
-	 	//not the owner of the map
-	 	if($map->user_id != $this->user->id)
-	 	{
-	 		HTTP::redirect('mymaps');
-	 	}
+	 	//check permissions of the user on this map
+	 	$this->check_map_permissions($map_id, $this->user->id);
 	 	
 	 	if($map->map_creation_progress < 2)
 	 	{
@@ -1145,11 +1151,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
 	 	
-	 	//not the owner of the map
-	 	if($map->user_id != $this->user->id)
-	 	{
-	 		HTTP::redirect('mymaps');
-	 	}
+	 	//check permissions of the user on this map
+	 	$this->check_map_permissions($map_id, $this->user->id);
 	 	
 	 	if($map->map_creation_progress < 2)
 	 	{
@@ -1323,11 +1326,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		HTTP::redirect('mymaps/add4?id='.$map_id);
 	 	}
 	 	
-	 	//not the owner of the map
-	 	if($map->user_id != $this->user->id)
-	 	{
-	 		HTTP::redirect('mymaps');
-	 	}
+	 	//check permissions of the user on this map
+	 	$this->check_map_permissions($map_id, $this->user->id);
 	 	
 	 	if($map->map_creation_progress < 4)
 	 	{
@@ -2165,6 +2165,32 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	HTTP::redirect('mymaps/add1?id='.$new_map->id);
 	 }
 	 
+	 
+	 /**
+	  * Checks if a give user can access a give map. True if they can, if they can't
+	  * then they get booted to /myamps
+	  * @param int $map_id DB ID of a map
+	  * @param int $user_id DB ID of a user
+	  */
+	 protected function check_map_permissions($map_id, $user_id)
+	 {
+	 	$share = Model_Sharing::get_share($map_id, $user_id);
+	 		
+	 	//no record of this map belonging to this user
+	 	if($share === false)
+	 	{
+	 		HTTP::redirect('mymaps');
+	 	}
+	 		
+	 	//This user can't edit this map
+	 	if($share->permission == Model_Sharing::$owner OR $share->permission == Model_Sharing::$edit )
+	 	{	 		
+	 		return true;
+	 	}
+	 	
+	 	HTTP::redirect('mymaps');
+	 	
+	 }
 	 
 	 
 	

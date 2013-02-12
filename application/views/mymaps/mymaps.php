@@ -85,18 +85,23 @@
 
 	<tr <?php echo $odd_row; ?>>
 		<td class="selectColumn">
-			<?php echo Form::checkbox('map_check['.$map->id.']', null, false, array('id'=>'map_check_'.$map->id)); ?>			
+			<?php if($map->permission == Model_Sharing::$owner) echo Form::checkbox('map_check['.$map->id.']', null, false, array('id'=>'map_check_'.$map->id)); ?>			
 		</td>
 		<td class="mapName">
 			<a href="<?php echo url::base(); ?>public/view/?id=<?php echo $map->id;?>" >
-				<?php echo substr($map->title, 0, 40); echo strlen($map->title) > 40 ? '...' : ''; ?>
+				<?php echo substr($map->title, 0, 40); echo strlen($map->title) > 40 ? '...' : '';
+				if($map->permission != Model_Sharing::$owner)
+				{
+					echo ' ('.__($map->permission).')';
+				}
+				?>
 			</a>
 		</td>
 		<td class="mapTasks">
 			<ul>
 			<li>
-				<a href="<?php echo url::base(); ?>mymaps/add1/?id=<?php echo $map->id;?>" > 
-					<img class="edit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Edit');?>
+				<a href="<?php echo url::base(); ?>public/view/?id=<?php echo $map->id;?>" >
+					<img class="view" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View');?>
 				</a>
 			</li>
 			<li>
@@ -105,20 +110,23 @@
 				</a>
 			</li>
 			<li>
-				<a href="<?php echo url::base(); ?>public/view/?id=<?php echo $map->id;?>" >
-					<img class="view" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View');?>
-				</a>
-			</li>
-			<li>
 				<a rel="#overlay" href="<?php echo url::base(); ?>share/window?id=<?php echo $map->id;?>" >
 					<img class="share" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Share');?>
 				</a>
+			</li>		
+			<?php if($map->permission == Model_Sharing::$edit OR $map->permission == Model_Sharing::$owner ){?>
+			<li>
+				<a href="<?php echo url::base(); ?>mymaps/add1/?id=<?php echo $map->id;?>" > 
+					<img class="edit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Edit');?>
+				</a>
 			</li>
+			<?php if($map->permission == Model_Sharing::$owner ){?>			
 			<li>
 				<a href="#" onclick="deleteMap(<?php echo $map->id?>);">
 					<img class="delete" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Delete');?>
 				</a>
-			</li>			
+			</li>
+			<?php }}?>			
 			</ul>
 		</td>
 		<td class="lastColumn">

@@ -4,7 +4,9 @@ class Model_Sharing extends ORM {
 
 	
 	public static $allowed_permissions;
-	
+	public static $owner = 'owner';
+	public static $edit = 'edit';
+	public static $view = 'view';
 	
 	
 		
@@ -73,9 +75,60 @@ class Model_Sharing extends ORM {
 	}//end function
 
 	
+	/**
+	 * Use this to create an owner entry
+	 * 
+	 * @param int $map_id DB ID of the map
+	 * @param int $user_id DB ID of the owner of the map
+	 */
+	public static function create_owner($map_id, $user_id)
+	{
+		$share = ORM::factory('Sharing');
+		$share->map_id = $map_id;
+		$share->user_id = $user_id;
+		$share->permission = Model_Sharing::$owner;
+		$share->save();
+		
+		return $share;
+	}
 	
+	/**
+	 * Gets the map share object for a map and a user
+	 * @param int $map_id DB ID of map
+	 * @param mixed $user_id Could be a ORM DB object or the ID of the DB entry for a user
+	 * @returns the Share object or false if it doesn't exist
+	 */
+	public static function get_share($map_id, $user)
+	{
+		
+		$user_id = 0;
+		//is it an int
+		if(is_int($user))
+		{			
+			$user_id = intval($user);
+		}
+		elseif(get_class($user) == 'Model_User')
+		{
+			$user_id = $user->id;
+		}
+		
+		$share = ORM::factory('Sharing')
+			->where('map_id','=',$map_id)
+			->where('user_id','=',$user_id)
+			->find();
+		
+		if($share->loaded())
+		{
+			return $share;
+		}
+		else
+		{
+			$share->permission = null;
+			return $share;
+		}
+	}
 
 	
 } // End User Model
 
-Model_Sharing::$allowed_permissions = array('view'=>'view','edit'=>'edit');
+Model_Sharing::$allowed_permissions = array(Model_Sharing::$view=>'view',Model_Sharing::$edit=>'edit');

@@ -54,7 +54,7 @@
 			</li>
 		</ul>
 	</div>
-	<?php  if($map->user_id == $user->id){?>
+	<?php  if($share->permission == Model_Sharing::$owner){?>
 	<div id="whoHasAccess" class="section">
 		<?php $mapStateView = new view('share/map_state');
 		$mapStateView->map = $map;

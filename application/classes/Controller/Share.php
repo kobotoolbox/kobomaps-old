@@ -8,18 +8,14 @@
 
 class Controller_Share extends Controller_Main {
 
-	
+	public $user = null;
 	
 	/**
 	 Set stuff up
 	 */
 	public function before()
 	{
-		//don't do any of this if it's a redirect
-		if(strpos(Request::initial()->action(), 'redirect') !== false)
-		{
-			return;
-		}
+		parent::before();
 		
 		$this->auth = Auth::instance();
 		//is the user logged in?
@@ -27,14 +23,7 @@ class Controller_Share extends Controller_Main {
 		{
 			$this->user = ORM::factory('user',$this->auth->get_user());
 		}
-		//if not send them to the login page
-		else
-		{
-			//record where the user was trying to go
-			$url = (!empty($_SERVER['HTTPS'])) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : "http://".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
-			Session::instance()->set('returnUrl',$url);
-			HTTP::redirect('/login');
-		}
+
 	}
 	
 	
@@ -46,7 +35,8 @@ class Controller_Share extends Controller_Main {
 	public function action_window()
 	{
 		$this->auto_render = false;
-		$this->template = null;				
+		$this->template = null;
+
 		
 		//grab the map ID
 		//was an id given?
@@ -64,7 +54,7 @@ class Controller_Share extends Controller_Main {
 		{
 			return;
 		}
-		
+
 		//get a list of users who are colaborators on this
 		$colaborators = ORM::factory('Sharing')
 			->select('users.*')
@@ -78,10 +68,15 @@ class Controller_Share extends Controller_Main {
 		{
 			$permissions[$p] = __($p);
 		}
+		
+		
+		$share = Model_Sharing::get_share($map->id, $this->user);
+		
 				
 		$view = new View('share/window');
 		$view->map = $map;
 		$view->user = $this->user;
+		$view->share = $share;
 		$view->colaborators = $colaborators;
 		$view->permissions = $permissions;
 		echo $view;

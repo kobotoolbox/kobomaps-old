@@ -193,10 +193,15 @@ class Model_Map extends ORM {
 		
 		//copy the json file
 		$new_json = $new_map->id.'.json';
-		copy($path.$this->json_file,$path.$new_json);
-		$new_map->json_file = $new_json;
+		if(file_exists($path.$this->json_file))
+		{
+			copy($path.$this->json_file,$path.$new_json);
+		}
+		
+		
 		
 		//copy the .xls file
+		$new_map->json_file = $new_json;
 		$extention = pathinfo($this->file, PATHINFO_EXTENSION);
 		$new_xls = $new_map->user_id.'-'.$new_map->id.'.'.$extention;
 		copy($path.$this->file, $path.$new_xls);
@@ -212,6 +217,9 @@ class Model_Map extends ORM {
 		{
 			$map_sheet->copy($new_map->id);
 		}
+		
+		//create a new owner entry
+		Model_Sharing::create_owner($new_map->id, $user_id);
 		
 		return $new_map;
 	}
