@@ -12,7 +12,14 @@
 <link href="<?php echo  URL::base() ?>media/css/largemap.css" type="text/css" rel="stylesheet">  
 
 <link rel="stylesheet" href="<?php echo URL::base(); ?>media/css/jquery-ui.css" />
-<style> <?php echo $map->CSS?></style>
+<style> <?php echo $map->CSS?>
+	.countylabelname {
+		font-size: <?php echo $map->region_label_font.'px'?>;
+	}
+	.areaVal{
+		font-size: <?php echo $map->value_label_font.'px'?>;
+	}
+</style>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.min.js"> </script>
 
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/dragresize.js"> </script>
@@ -1824,6 +1831,25 @@ function initialize_buttons()
 			at: "center top"	
 		}
 	});
+	$("#commentButton").tooltip( {
+		position:{
+			my: "left+15 center-19",
+			at: "center top"	
+		}
+	});
+	$("#shareButton").tooltip( {
+		position:{
+			my: "left+14 center-19",
+			at: "center top"	
+		}
+	});
+	$("#fullScreenButton").tooltip( {
+		position:{
+			my: "left+14 center-19",
+			at: "center top"	
+		}
+	});
+	
 
 
 	//initialize the apple overlay effect

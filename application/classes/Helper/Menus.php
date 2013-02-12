@@ -132,7 +132,7 @@ class Helper_Menus
 				echo '<a href="'.url::base().'templates">'.__("Templates").'</a></li>';
 				
 				//Message center
-				if($page == "messages")
+				if($page == "comment")
 				{
 					echo '<li class="selected">';
 				}

@@ -106,6 +106,10 @@ return array
 		'Maps will show region names with no data.' => 'Maps will show region names with no data.',
 		'  Level at which labels will begin to appear.' => '  Level at which labels will begin to appear.',
 		'<br/>Zoom level to show labels' => '<br/>Zoom level to show labels',
+		'<br/>Font size of region names' => '<br/>Font size of region names',
+		'  Font size of the region titles as seen in maps, in pixels.' => '  Font size of the region titles as seen in maps, in pixels.',
+		'<br/>Font size of data values' => '<br/>Font size of data values',
+		'  Font size of the data values as seen in maps, in pixels.' => '  Font size of the data values as seen in maps, in pixels.',
 		
 		//add 2 page
 		'Add Map - Data Structure'=>'Add Map - Data Structure',
@@ -195,6 +199,9 @@ return array
 		'Message sent successfully!' =>'Message sent successfully!',
 		'Name (Optional)' => 'Name (Optional)',
 		'Email address (Optional)' => 'Email address (Optional)',
+		'Comment on this map.' => 'Comment on this map.',
+		'Share this map.' => 'Share this map.',
+		'Make this map fullscreen.' => 'Make this map fullscreen.',
 		
 		
 		//footer
@@ -252,6 +259,7 @@ return array
 		'End Date' => 'End Date',
 		'Start Date' => 'Start Date',
 		'Dates on the graph that are shaded grey correspond to weekends.' => 'Dates on the graph that are shaded grey correspond to weekends.',
+		'You have no maps to view statistics for.' => 'You have no maps to view statistics for.',
 		
 		//Comment error
 		'Your comment is empty, please try again.' => 'Your comment is empty, please try again.',

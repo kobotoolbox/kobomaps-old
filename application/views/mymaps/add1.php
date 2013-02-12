@@ -138,18 +138,36 @@
 	echo Form::input('advanced_options', __('Advanced'), array('type'=>'button', 'id'=>'advanced_options', 'onclick'=>"toggle_class('advanced'); return false;", 'style'=>'width:600px;'));
 	
 
+	//show empty region names
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
 	echo Form::label('show_label', __('<br/>Show All Labels').": ");
 	echo '</td><td></br>';
 	echo Form::checkbox('show_empty_name', null, $data['show_names']==1);
 	echo Form::label('show_label_description', __('Maps will show region names with no data.'));
 	
+	//label zoom box
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
 	echo Form::label('label_zoom_level', __('<br/>Zoom level to show labels').": ");
 	$label_zoom_options = array('-1'=>'Always Visible', 0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9, 10=>10, 11=>11, 12=>12, 13=>13, 14=>14, 15=>15, 16=>16, 17=>17, 18=>18, 19=>19);
 	echo '</td><td></br>';
 	echo Form::select('label_zoom_level', $label_zoom_options, $data['label_zoom_level']);
 	echo Form::label('show_label_description', __('  Level at which labels will begin to appear.'));
+	
+	//region font size area
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('region_label', __('<br/>Font size of region names').": ");
+	$label_font_options = array(8=>'8 px', 10=>'10 px', 12=>'12 px', 14=>'14 px', 16=>'16 px', 18=>'18 px', 20=>'20 px', 22=>'22 px', 24=>'24 px', 26=>'26 px', 28=>'28 px', 
+			30=>'30 px', 32=>'32 px', 34=>'34 px', 36=>'36 px', 38=>'38 px', 40=>'40 px', 42=>'42 px', 44=>'44 px', 46=>'46 px', 48=>'48 px');
+	echo '</td><td></br>';
+	echo Form::select('region_label_font', $label_font_options, $data['region_label_font']);
+	echo Form::label('show_region_font', __('  Font size of the region titles as seen in maps, in pixels.'));
+	
+	//data font size area
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('data_label', __('<br/>Font size of data values').": ");
+	echo '</td><td></br>';
+	echo Form::select('value_label_font', $label_font_options, $data['value_label_font']);
+	echo Form::label('show_region_font', __('  Font size of the data values as seen in maps, in pixels.'));
 	
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
 	echo Form::label('CSS', __('Map CSS').": ");

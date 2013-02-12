@@ -12,33 +12,43 @@
 <div class="messageTable" scroll="auto">
 	</br>
 	<a href="#" class="deleteSelectedBtn"><?php echo __('Delete Selected'); ?></a>
-	<table border="3" style="width: 850px">
+	<table border="3" class="list_table">
 		<thead>
-		<tr>
-			<th style="width: 80px"> <?php echo __('Select').'</br>'.Form::checkbox('select_all', null, false, array('id'=>'selectAll'));?></th>
-			<th style="width: 150px"> <?php echo __('Date')?></th>
-			<th style="width: 200px"><?php echo __('Name')?></th> 
-			<th> <?php echo __('Email Address')?></th>
-			<th style="width: 80px"> <?php echo __('Tasks')?> </th>
+		<tr class="header">
+			<th style="width: 60px"> <?php echo __('Select').'</br>'.Form::checkbox('select_all', null, false, array('id'=>'selectAll'));?></th>
+			<th style="width: 167px"> <?php echo __('Date')?></th>
+			<th style="width: 285px"><?php echo __('Name')?></th> 
+			<th style="width: 285px"> <?php echo __('Email Address')?></th>
+			<th style="width: 90px"> <?php echo __('Tasks')?> </th>
+		</thead>
+		<tbody>
 			<?php 
 			if(count($messages) == 0)
 			{
 				echo '<tr><td colspan="5" style="width:880px;text-align:center;">'.__('You have no messages').'</td></tr>';
 			}
+			$i = 0;
 				foreach($messages as $message){
-					if($message->unread == 0){
-						echo '<tr class="read" id="messageRow'.$message->id.'">';
+					$i++;
+					$odd_row = ($i % 2) == 0 ? ' odd_row' : '';
+					
+					echo '<tr ';
+					
+					if($message->unread == 1){
+						echo 'class="unread'.$odd_row.'" id="messageRow'.$message->id.'">';
 					}
-					else{
-						echo '<tr class="unread"id="messageRow'.$message->id.'">';
+					else {
+						echo 'class="'.$odd_row.'" id="messageRow'.$message->id.'">';
 					}
-					echo '<td class="selectColumn">';
+					
+					
+					echo '<td style="width:65px">';
 					echo Form::checkbox('message_check['.$message->id.']', null, false, array('id'=>'message_check_'.$message->id));
-					echo '</td><td>';
+					echo '</td><td style="width: 175px">';
 					
 					
 					echo $message->date;
-					echo '</td><td>';
+					echo '</td><td style="width: 300px">';
 					//end of date column
 					
 					echo '<a class="messageData" rel="#overlay" href="'.url::base().'comment/messageDetails?id='.$message->id.'">';
@@ -49,7 +59,7 @@
 					else {
 						echo $message->poster_name;
 					}
-					echo '</td><td>';
+					echo '</td><td style="width: 300px">';
 
 					echo '<a class="messageData" rel="#overlay" href="'.url::base().'comment/messageDetails?id='.$message->id.'">';
 						
@@ -59,13 +69,13 @@
 					else {
 						echo $message->poster_email;
 					}
-					echo '</td></a><td>';
+					echo '</td></a><td style="width: 75px" class="messageTasks">';
 					//tasks stuff
 					echo '<a href="#" onclick="deleteMessage('.$message->id.')"><img class="delete" src="'.URL::base().'media/img/img_trans.gif" width="1" height="1"/></br>'. __('Delete');
 					
 					echo '</a></td></tr>';
 				}?>
-		</thead>
+		</tbody>
 	</table>
 	<a href="#" class="deleteSelectedBtn"><?php echo __('Delete Selected'); ?></a>
 </div>
