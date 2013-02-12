@@ -332,13 +332,12 @@ UPDATE `metadata` SET  `v` =  '1.0.029' WHERE  `metadata`.`k` ='Database Version
 
 
 /** Dylan Gillespie 2013-02-11 --added font rows for region and value in maps **/
-ALTER TABLE  `maps` ADD  `region_label_font` INT NOT NULL DEFAULT  '12',
-ADD  `value_label_font` INT NOT NULL DEFAULT  '12'
+ALTER TABLE  `maps` ADD  `region_label_font` INT NOT NULL DEFAULT  '12', ADD  `value_label_font` INT NOT NULL DEFAULT  '12';
 UPDATE `metadata` SET  `v` =  '1.0.030' WHERE  `metadata`.`k` ='Database Version';
 
 /** John Etherton 2012-02-12 -- Moving map permissions wholly to the sharing table. 
 This SQl will populate the sharing table with the necessary permissions for existing owners to be properly recognized**/
 INSERT INTO sharing (map_id, user_id, permission)
 SELECT id, user_id, 'owner' FROM maps;
-ALTER TABLE `maps` DROP `private_password`
+ALTER TABLE `maps` DROP `private_password`;
 UPDATE `metadata` SET  `v` =  '1.0.031' WHERE  `metadata`.`k` ='Database Version';
