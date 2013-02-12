@@ -129,7 +129,7 @@
 			<?php }}?>			
 			</ul>
 		</td>
-		<td class="lastColumn">
+		<td class="lastColumn" id="privateCol_<?php echo $map->id;?>">
 			<?php echo $map->is_private == 0 ? 'X':''; ?>
 		</td>
 	</tr>

@@ -68,21 +68,8 @@
 	
 	echo Form::label('description', __('Should this map be private').": ");
 	echo '</td><td>';
-	echo Form::checkbox('is_private', null, 1==$data['is_private'], array('onchange'=>"toggle_id('private_password_row')"));
-	echo '</td></tr>';
+	echo Form::checkbox('is_private', null, 1==$data['is_private']);
 	
-	if($data['is_private'] != 1)
-	{
-		$password_style = "display:none";		
-	}
-	else {
-		$password_style = "";
-	}
-	
-	echo '<tr id="private_password_row" style="'.$password_style.'"><td>';
-	echo Form::label('private_password', __('Password (if private)').": ");
-	echo '</td><td>';
-	echo Form::password('private_password', $data['private_password'], array('id'=>'private_password', 'style'=>'width:300px;'));
 	echo '</td></tr><tr><td>';
 	echo Form::label('filetype', __('Is the data source').": ");
 	echo '</td><td>';

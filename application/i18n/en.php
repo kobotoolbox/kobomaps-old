@@ -76,7 +76,8 @@ return array
 		'Delete'=>'Delete',
 		'You have no maps'=>'You have no maps',
 		'Delete Selected'=>'Delete Selected',
-		
+		'are you sure you want to delete the selected maps'=>'are you sure you want to delete the selected maps',
+		'are you sure you want to delete this map'=>'are you sure you want to delete this map',
 		
 		//add 1 page
 		'Add Map - Basic Setup'=>'Add Map - Basic Setup',

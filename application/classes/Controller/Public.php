@@ -41,26 +41,22 @@ class Controller_Public extends Controller_Main {
 		//is the user logged in?
 		$this->template->content->user = $this->user;
 		
-	
 		
-		/*****Render the forms****/
-	
-		//get the forms that belong to this user
-		$maps = ORM::factory("Map");
-		//if we're doing a search then throw in the template table
-		if(isset($_GET['q']) AND $_GET['q'] != "")
+
+		
+		//check if the user is logged in, if so grab their user_id
+		$user_id = 0;
+		$auth = Auth::instance();
+		//is the user logged in?
+		if($auth->logged_in())
 		{
-			$query = '%'.$_GET['q'].'%';
-			$maps = $maps->join('templates')
-				->on('templates.id','=','map.template_id')
-				->or_where('map.title', 'LIKE', $query)
-				->or_where('map.description', 'LIKE', $query)
-				->or_where('templates.title', 'LIKE', $query);
+			$user_id = $auth->get_user();
 		}
-		$maps = $maps->where('is_private', '=', '0')
-		->order_by('title', 'ASC')
-		->find_all();
-	
+		
+		$q = (isset($_GET['q']) AND $_GET['q'] != "") ? $_GET['q'] : null;
+
+		$maps = $this->get_maps($user_id, $q);
+			
 		$this->template->content->maps = $maps;
 	
 	
@@ -84,16 +80,19 @@ class Controller_Public extends Controller_Main {
 			return;
 		}
 		
-		$maps = ORM::factory("Map");
-		$query = '%'.$_GET['term'].'%';
-		$maps = $maps->join('templates')
-			->on('templates.id','=','map.template_id')
-			->or_where('map.title', 'LIKE', $query)
-			->or_where('map.description', 'LIKE', $query)
-			->or_where('templates.title', 'LIKE', $query)		
-			->order_by('title', 'ASC')
-			->limit(10,0)
-			->find_all();
+		$user_id = 0;
+		$auth = Auth::instance();
+		//is the user logged in?
+		if($auth->logged_in())
+		{
+			$user_id = $auth->get_user();
+		}
+		
+		
+		$q = (isset($_GET['term']) AND $_GET['term'] != "") ? $_GET['term'] : null;
+		
+		$maps = $this->get_maps($user_id, $q);
+		
 		
 		echo '[';
 		$i = 0;
@@ -101,13 +100,68 @@ class Controller_Public extends Controller_Main {
 		{
 			$i++;
 			if($i > 1){echo ',';}
-			$title_encoded = json_encode($map->title);
-			echo '{"id":"'.$map->id.'","label":'.$title_encoded.',"value":'.$title_encoded.'}';
+			$title_encoded = json_encode($map['title']);
+			echo '{"id":"'.$map['id'].'","label":'.$title_encoded.',"value":'.$title_encoded.'}';
 		}
 		echo ']';
 		
 	}
 	
+	
+	/**
+	 * This function gets the maps that a user is allowed to see
+	 * @param int $user_id DB ID of the user, zero if there's no logged in user
+	 * @param string $q query string, null if no query string present
+	 * @param int $limit number of results to return, null for unlimited
+	 * @return array An array of map names, ids, and permission levels
+	 */
+	protected function get_maps($user_id = 0, $q = null, $limit = null)
+	{
+		
+		//we have to touch the DB directly to get the data we want
+		$server = Kohana::$config->load('database.default.connection.hostname');
+		$user_name = Kohana::$config->load('database.default.connection.username');
+		$password = Kohana::$config->load('database.default.connection.password');
+		$database = Kohana::$config->load('database.default.connection.database');
+			
+		$database = new mysqli($server, $user_name, $password, $database);
+		$maps = array();
+		
+		$sql = 'SELECT maps.id as id, maps.title as title, sharing.permission as permission ';
+		$sql .= 'FROM maps ';
+		$sql .= 'LEFT JOIN `sharing` ON (`sharing`.`map_id` = `maps`.`id` AND sharing.user_id = '.$user_id.') ';
+		
+		
+		if($q != null)
+		{
+			$query = '\'%'.$database->real_escape_string($q).'%\'';
+			$sql .= 'JOIN templates ON (templates.id = maps.template_id) ';
+		}
+		$sql .= 'WHERE (maps.map_creation_progress = 5 OR 
+			(sharing.user_id = '.$user_id.' AND 
+			(sharing.permission = \''.Model_Sharing::$edit.'\' OR sharing.permission = \''.Model_Sharing::$owner.'\'))) 
+			AND (maps.is_private = 0 OR sharing.user_id = '.$user_id.') ';
+		
+		if($q != null)
+		{
+			$sql .= 'AND (maps.title LIKE '.$query.' OR maps.description LIKE '.$query.' OR templates.title LIKE '.$query.' ) ';
+		}
+		
+		$sql .= 'ORDER BY maps.title ASC ';
+		if($limit != null)
+		{
+			$sql .= 'LIMIT 0,'.$limit;
+		}
+		$results = $database->query($sql);
+		while($row = $results->fetch_row())
+		{
+			$maps[$row[0]] = array('id'=>$row[0], 'title'=>$row[1], 'permission'=>$row[2]);
+		}
+		$results->close();
+		$database->close();
+		
+		return $maps;
+	}
 	
 	
 	
@@ -147,6 +201,8 @@ class Controller_Public extends Controller_Main {
 	 		$user = ORM::factory('user',$auth->get_user());
 	 	}
 	 	
+	 	$share = Model_Sharing::get_share($map->id, $user);
+	 	
 	 	if($map->is_private)
 	 	{
 	 		//if the map is private and they aren't logged in, bounce them
@@ -156,11 +212,7 @@ class Controller_Public extends Controller_Main {
 	 		}
 	 		else  //they're logged in, see if the map is something they have access to
 	 		{
-	 			$share = ORM::factory('Sharing')
-	 				->where('map_id','=',$map->id)
-	 				->where('user_id','=',$user->id)
-	 				->find();
-	 			if(!$share->loaded()) //couldn't find anything giving the user permission
+	 			if($share->permission == null) //couldn't find anything giving the user permission
 	 			{
 	 				HTTP::redirect('mymaps');
 	 			}
@@ -168,11 +220,15 @@ class Controller_Public extends Controller_Main {
 	 	
 	 	}
 	 	//checking if this is where the increment_visits should be included
-	 	if(!($user != null AND $user->id == $map->user_id)){
+	 	if($user == null){
 	 		Model_Usagestatistics::increment_visit($map->id);
 	 	}
-	 	$map_template = ORM::factory('Template', $map->template_id);
+	 	elseif($user != null AND $share->permission != Model_Sharing::$owner)
+	 	{
+	 		Model_Usagestatistics::increment_visit($map->id);	 		
+	 	}
 	 	
+	 	$map_template = ORM::factory('Template', $map->template_id);
 	 	$this->template = false;
 	 	$this->auto_render = false;
 

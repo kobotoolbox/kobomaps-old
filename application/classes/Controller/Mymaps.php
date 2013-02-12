@@ -50,10 +50,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 			{	
 				if($_POST['action'] == 'delete')
 				{
-					$map = ORM::factory('Map',$_POST['map_id']);
-					//make sure the user owns this map
-					if($this->user->id == $map->user_id)
+					$share = Model_Sharing::get_share($_POST['map_id'], $this->user);
+					
+					if($share->permission == Model_Sharing::$owner)
 					{
+						$map = ORM::factory('Map',$_POST['map_id']);
 						$this->template->content->messages[] = __('Map Deleted').': '.$map->title;
 						Model_Map::delete_map($_POST['map_id']);
 					}
@@ -68,9 +69,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 				{
 					foreach($_POST['map_check'] as $map_id=>$value)
 					{
-						$map = ORM::factory('Map',$map_id);
-						if($this->user->id == $map->user_id)
+						$share = Model_Sharing::get_share($map_id, $this->user);
+						if($share->permission == Model_Sharing::$owner)
 						{
+							$map = ORM::factory('Map',$map_id);
 							$this->template->content->messages[] = __('Map Deleted').': '.$map->title;
 							Model_Map::delete_map($map_id);
 						}
@@ -140,7 +142,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'map_style'=>Model_Map::$style_default,
 			'user_id'=>$this->user->id,
 			'is_private'=>0,
-			'private_password'=>null,
 			'map_creation_progress'=>1,
 			'show_names' => true,
 			'label_zoom_level' => 0,
@@ -176,7 +177,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['map_style'] = $map->map_style;
 			$data['user_id'] = $map->user_id;
 			$data['is_private'] = $map->is_private;
-			$data['private_password'] = $map->private_password;
 			$data['show_names'] = $map->show_empty_name;
 			$data['label_zoom_level'] = $map->label_zoom_level;
 			$data['region_label_font'] = $map->region_label_font;

@@ -117,7 +117,7 @@ class Controller_Share extends Controller_Main {
 		$map->is_private = intval($map->is_private) == 1 ? 0 : 1;
 		$map->save();
 		
-		echo '{"status":"success", "html":';
+		echo '{"status":"success", "state":"'.$map->is_private.'", "html":';
 		$view = new View('share/map_state');
 		$view->map = $map;
 		echo json_encode($view->render());

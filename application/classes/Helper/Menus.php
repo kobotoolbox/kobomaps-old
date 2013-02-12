@@ -197,7 +197,7 @@ class Helper_Menus
 					</a>
 				</li>				
 				<li>
-					<a href="<?php echo URL::base();?>mymaps/messages">
+					<a href="<?php echo URL::base();?>comment">
 					<div>
 						<img class="message" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Message Center'); ?>
 					</div>
@@ -215,12 +215,13 @@ class Helper_Menus
 
 					//$end_div = false;
 					$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+					$share = Model_Sharing::get_share($map_id, $user);
 					if($map_id != 0)
 					{
 						$map = ORM::factory('Map', $map_id);
 						$map_progress = $map->map_creation_progress;
 						//make sure the user is the owner, otherwise don't show the edit stuff
-						if($user==null OR $map->user_id != $user->id)
+						if($share->permission != Model_Sharing::$owner AND $share->permission != Model_Sharing::$edit)
 						{
 							return;
 						}

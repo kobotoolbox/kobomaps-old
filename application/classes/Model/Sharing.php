@@ -107,7 +107,11 @@ class Model_Sharing extends ORM {
 		{			
 			$user_id = intval($user);
 		}
-		elseif(get_class($user) == 'Model_User')
+		elseif(is_string($user) AND intval($user) != 0)
+		{
+			$user_id = intval($user);
+		}
+		elseif(is_object($user) AND get_class($user) == 'Model_User')
 		{
 			$user_id = $user->id;
 		}

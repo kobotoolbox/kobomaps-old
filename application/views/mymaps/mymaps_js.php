@@ -46,8 +46,11 @@
 
 				//setup the Delete Selected button handler
 				$(".deleteSelectedBtn").click(function(){
-					$("#action").val('delete_selected');
-					$("#edit_map_form").submit();
+					if (confirm("<?php echo __('are you sure you want to delete the selected maps');?>"))
+					{
+						$("#action").val('delete_selected');
+						$("#edit_map_form").submit();
+					}
 					return false;
 					});
 				
@@ -71,6 +74,15 @@
 				    {
 					    $("#mapState").remove();
 					    $("#whoHasAccess").prepend(data.html);
+					    if(data.state == "0")
+					    {
+					    	$("#privateCol_"+id).text("X");
+					    }
+					    else
+					    {
+					    	
+					    	$("#privateCol_"+id).text("");
+					    }
 				    }
 				    else
 				    {
