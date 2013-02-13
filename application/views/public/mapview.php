@@ -55,8 +55,28 @@
 	</div>
 	<div id="sheetnamesRightControl" class="sheetScrollerControll"><a href="">&gt;</a></div>
 	<div id="sheetnamesEndControl" class="sheetScrollerControll"><a href="">&gt;&gt;</a></div>
-	<div id="mapSocialShare" style="width: 120px">
-		<ul>			
+	<div id="mapSocialShare" style="width: 180px">
+		<ul>
+			<li>
+				<img class="toggleLabels" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
+				<ul id="playBackButtons">
+					<li id="playButton">
+						<a title="<?php echo __('Play through the sheets.') ?>"><?php echo __('Play')?></a>
+					</li>	
+					<li id="stopButton">
+						<a title="<?php  echo __('Stop the sheets.')?>"> <?php echo __('Stop')?></a>		
+					</li>
+					<li>
+					<?php 
+					//work on adding a onchange listener to the speed adjuster
+					?>
+						<div id="setSpeed">
+							<input id="speedVal" type="number" style="width: 35px" value="2" min="0.5" max="10" step="0.5"></input>
+								<a id="speedSubmit" onclick="setSpeed()" title="<?php echo __('Sets the speed in seconds of playback.')?>"><?php echo __('Seconds')?></a>
+						</div>
+					</li>
+				</ul>
+			</li>		
 			<li>
 				<a id="commentButton" rel="#overlay" href="<?php echo url::base(); ?>comment/window?id=<?php echo $map->id;?>" >
 					<img class="comment" title="<?php echo __('Comment on this map.')?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		

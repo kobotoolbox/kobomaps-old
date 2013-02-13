@@ -12,6 +12,23 @@
 	$(function(){
 		$("#startDate").datepicker();
 		$("#endDate").datepicker();
+
+		var startDate = parseDates($("#startDate").val());
+		var endDate = parseDates($("#endDate").val());
+
+
+		var data = [[startDate, 0], [endDate, 0]];
+		//draw default chart before values are selected
+		$.plot($("#statChart"), [data],  {
+			series:{
+	    		lines: {show: false, lineWidth: 1.5},
+	    		points: {show: false}
+			},
+	    	grid: {markings: weekendAreas},
+	    	yaxis:{position: "left", labelWidth: 60, labelHeight: 20, min:0, max:16},
+	    	xaxis: {mode: 'time', timezone: 'browser'}
+			}
+		);
 	});
 
 	function updateGraph(){
@@ -24,24 +41,6 @@
 			drawGraph(parseData(data));
 		});	
 
-	}
-
-	function hash_colors(id)
-	{
-		var	name = 65;
-		var r = 255;
-		var g = 255;
-		var b = 255;
-		if(name % 5 == 0){
-			b = name % 5;
-		}
-		else if(name % 3 == 0){
-			g = name % 3;
-		}
-		else if(name % 2 == 0){
-			r = name % 2;
-		}
-		return 'rgb(' + r + ',' + g + ',' + b + ')';
 	}
 
 
@@ -67,7 +66,6 @@
 
 	    
 	function drawGraph(data){
-		var names = new Array();
 		
 		$.plot($("#statChart"), data,  {
 			series:{
@@ -133,8 +131,8 @@
 		            $("#statsTooltip").remove(); 
 		            var myDate = new Date(item.datapoint[0]);
 		            showTooltip(item.series.color, pos.pageX, pos.pageY, 
-				            item.series.label + ' was visited ' + item.datapoint[1] + 
-				            ' times on ' + (myDate.getUTCMonth() + 1) + '/' + myDate.getUTCDate() + '/' + myDate.getUTCFullYear() + '.');
+				            item.series.label + ' <?php echo __('was visited')?> ' + item.datapoint[1] + 
+				            ' <?php echo __('times on')?> ' + (myDate.getUTCMonth() + 1) + '/' + myDate.getUTCDate() + '/' + myDate.getUTCFullYear() + '.');
 			   }
 			    else { 
 		             $("#statsTooltip").remove(); 

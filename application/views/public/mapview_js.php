@@ -61,6 +61,17 @@ var map;
 var mapData;
 
 /**
+ * global variable to hold sheets for iteration purposes
+ */
+var sheetArray = new Array();
+
+/**
+ * timer to increase sheets
+ */
+ var sheetTimer;
+
+ var sheetSpeed = 2000;
+/**
  *  gives us a list of names for geographicAreas
  */
 var geographicAreaNames = new Array();
@@ -440,7 +451,7 @@ function sheetSelect(sheetId)
 				var name = newPtr.indicators[i].name;
 				if(name == currentIndicatorName)
 				{
-					//we have a match show this indicator
+					//we have a match show, this indicator
 					newIndicatorIdString += i;
 					showByIndicator(newIndicatorIdString);
 					return;
@@ -509,13 +520,14 @@ function showByIndicator(indicator)
 	//scroll to the just highlighted sheet
 	currentListTop = $("#sheetnames").offset().top;
 	if($("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).offset() != null){
-		var currentTopOfDispaly = $("#sheetlinks").offset().top;
-		var currentListTop = $("#sheetnames").offset().top;
-		var actualOffset = currentListTop - currentTopOfDispaly;		
-		currentTopOfSelectedItem = $("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).offset().top
-		if(actualOffset != (-(currentTopOfSelectedItem-currentListTop)))
+		var currentTopOfDisplay = $("#sheetlinks").offset().top;
+	
+		currentTopOfSelectedItem = $("ul#sheetnames li.sheet2 span#sheetSelector_"+sheetId).offset().top;
+
+		var delta = (-(currentTopOfSelectedItem-currentTopOfDisplay));
+		if(0 != delta)
 		{
-			scrollSheets(-(currentTopOfSelectedItem-currentListTop));
+			scrollSheets(delta);
 		}
 	}
 	$("li.sheet").hide();
@@ -1085,18 +1097,23 @@ function drawTotalChart(indicator){
 			        		color: "rgb(215, 24, 24)"
 			        	  }
 			  ];
-	
-		//$("#nationalIndicatorChart").empty();
-		$.plot($("#nationalIndicatorChart"), bothData,  {
-	    	bars: {show: true, horizontal: true, fill: true},
-	    	grid: {hoverable: true},
-	    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, min:.45, max:graphXData.length + .55},
-	    	xaxes:[{}],
-	    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
-			}
-		);
-	
-		bindHoverTip("#nationalIndicatorChart", graphYAxis);
+
+		if(graphYAxis.length != 0){
+			//$("#nationalIndicatorChart").empty();
+			$.plot($("#nationalIndicatorChart"), bothData,  {
+		    	bars: {show: true, horizontal: true, fill: true},
+		    	grid: {hoverable: true},
+		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, min:.45, max:graphXData.length + .55},
+		    	xaxes:[{}],
+		    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
+				}
+			);
+		
+			bindHoverTip("#nationalIndicatorChart", graphYAxis);
+		}
+		else{
+			$("#nationalChartScrollDiv").hide();
+		}
 	}
 }
 
@@ -1736,14 +1753,14 @@ function scrollSheets(delta)
 {
 	//Get some base lines
 	var increment = $("#sheetnames").height();
-	var currentTopOfDispaly = $("#sheetlinks").offset().top;
+	var currentTopOfDisplay = $("#sheetlinks").offset().top;
 	var currentListTop = $("#sheetnames").offset().top;
-	var actualOffset = currentListTop - currentTopOfDispaly;
+	var actualOffset = currentListTop - currentTopOfDisplay;
 	
 	//make sure actualOffset is a multiple of increment
 	if(actualOffset % increment != 0)
 	{
-		actualOffset = (actualOffset/increment).round();
+		actualOffset = Math.round(actualOffset/increment);
 	}
 	
 	if(delta > 0 && (actualOffset + delta) <= 0 ) //scrolling up
@@ -1784,7 +1801,25 @@ function scrollSheets(delta)
 
 }
 
+//start the timer progressing through the sheets and changing the screen
+function progressSheet(sheets, index){
+	clearInterval(sheetTimer);
+	if(index < sheets.length){
+		sheetSelect(sheets[index]);
+		sheetTimer = setTimeout(function(){progressSheet(sheets, index+1)}, sheetSpeed);
+	}
+}
 
+
+function setSpeed(){
+	if(sheetArray.length == 0){
+		for(sheet in mapData.sheets){
+			sheetArray.push(+sheet);
+		}
+	}
+	sheetSpeed = 1000 * parseFloat($("#speedVal").val());
+	progressSheet(sheetArray, 0);
+}
 /**
  * This function is called to initialize the event handlers for the buttons on this page,
  * like the share button and the fullscreen button
@@ -1794,6 +1829,19 @@ function initialize_buttons()
 {
 	//hanlde toggling between full screen and normal view
 	$("#fullScreenButton").click(function(){$("#siteHeader").toggle(); return false;});
+
+	$("#playButton").click(function(){
+		if(sheetArray.length == 0){
+			for(sheet in mapData.sheets){
+				sheetArray.push(+sheet);
+			}
+		}
+		progressSheet(sheetArray, 0);
+	});
+
+	$("#stopButton").click(function(){
+		clearInterval(sheetTimer);
+	});
 
 	//handle turning off and on the labels on the map
 	$("#turnOffLabelsButton").click(function(){
@@ -1846,6 +1894,28 @@ function initialize_buttons()
 	$("#fullScreenButton").tooltip( {
 		position:{
 			my: "left+14 center-19",
+			at: "center top"	
+		}
+	});
+
+
+	$("#playButton").tooltip( {
+		position:{
+			my: "left+14 center-19",
+			at: "center top"	
+		}
+	});
+
+	$("#stopButton").tooltip( {
+		position:{
+			my: "left-134 center-19",
+			at: "center top"	
+		}
+	});
+	
+	$("#speedSubmit").tooltip( {
+		position:{
+			my: "left+24 center-22",
 			at: "center top"	
 		}
 	});

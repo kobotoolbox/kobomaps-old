@@ -203,6 +203,9 @@ return array
 		'Comment on this map.' => 'Comment on this map.',
 		'Share this map.' => 'Share this map.',
 		'Make this map fullscreen.' => 'Make this map fullscreen.',
+		'Stop the sheets.' => 'Stop the sheets.',
+		'Play through the sheets.' => 'Play through the sheets.',
+		'Sets the speed in seconds of playback.' => 'Sets the speed in seconds of playback.',
 		
 		
 		//footer
@@ -261,6 +264,8 @@ return array
 		'Start Date' => 'Start Date',
 		'Dates on the graph that are shaded grey correspond to weekends.' => 'Dates on the graph that are shaded grey correspond to weekends.',
 		'You have no maps to view statistics for.' => 'You have no maps to view statistics for.',
+		'was visited' => 'was visited',
+		'times on' => 'times on',
 		
 		//Comment error
 		'Your comment is empty, please try again.' => 'Your comment is empty, please try again.',

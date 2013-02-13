@@ -33,8 +33,6 @@
 		var myEmail = $("#emailField").val();
 		var myComment = $("#commentField").val();
 
-		console.log(myName, myEmail, myComment);
-
 		$.post("<?php echo URL::base(); ?>comment/submitmessage", 
 				{ 'myName': myName, 'myEmail': myEmail, 'myMessage': myComment, "map_id": "<?php echo $map->id?>" },
 				function(data) {
