@@ -23,7 +23,9 @@ class Controller_Profile extends Controller_Loggedin {
 				'first_name'=>$user->first_name,
 				'last_name'=>$user->last_name,
 				'password'=>'',
-				'password_confirm'=>''
+				'password_confirm'=>'',
+				'email_alerts'=>$user->email_alerts,
+				'email_warnings'=>$user->email_warnings
 				);
 		//turn set focus to first UI form element
 		$this->template->html_head->script_views[] = '<script type="text/javascript">$(document).ready(function() {$("input:text:visible:first").focus();});</script>';
@@ -44,9 +46,17 @@ class Controller_Profile extends Controller_Loggedin {
 		{
 			try 
 			{
+				if(!isset($_POST['email_alerts']))
+				{
+					$_POST['email_alerts'] = 0;
+				}
+				if(!isset($_POST['email_warnings']))
+				{
+					$_POST['email_warnings'] = 0;
+				}
 				$this->template->content->data = $_POST;				
 				//conver the DOB to a format mysql recognizes
-				$user->update_user($_POST, array('username','password','email', 'first_name','last_name'));
+				$user->update_user($_POST, array('username','password','email', 'first_name','last_name', 'email_alerts', 'email_warnings'));
 				            	
 				$this->template->content->messages[] = __('Profile updated successfully');
 			}

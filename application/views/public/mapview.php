@@ -58,7 +58,7 @@
 	<div id="mapSocialShare" style="width: 120px">
 		<ul>			
 			<li>
-				<a id="commentButton" rel="#overlay" href="<?php echo url::base(); ?>comment/window?id=<?php echo $map->id;?>" >
+				<a id="commentButton" rel="#overlay" href="<?php echo url::base(); ?>message/submit?id=<?php echo $map->id;?>" >
 					<img class="comment" title="<?php echo __('Comment on this map.')?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
 				</a>
 			</li>

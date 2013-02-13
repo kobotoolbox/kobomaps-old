@@ -188,6 +188,10 @@ class Controller_Share extends Controller_Main {
 		$share->permission = $permission;
 		$share->save();
 		
+		//notify the user they've been given access to a map		
+		$message = __('You have been granted permission to map', array(':permission'=>$permission, ':map_id'=>$map->id, ':map_title'=>$map->title));
+		Model_Message::add_message($user_to_add, $message, __('KoboMaps System'), 'noreply@kobomaps.org');
+		
 		//get the current list of colaborators
 		$colaborators = ORM::factory('Sharing')
 			->select('users.*')

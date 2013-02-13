@@ -43,6 +43,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 		$this->template->html_head->script_views[] = view::factory('js/facebook');
 		
 		
+		
+		
 		/********Check if we're supposed to do something ******/
 		if(!empty($_POST)) // They've submitted the form to update his/her wish
 		{

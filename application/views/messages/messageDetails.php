@@ -7,13 +7,12 @@
 *************************************************************/
 ?>
 
-<div class="messageDetails" id="messageDetails_<?php echo $message->map_id?>">
+<div class="messageDetails" id="messageDetails_<?php echo $message->id?>">
 
-	<p style="font-weight: bold">  <?php echo __('Date submitted:');?> <?php echo $message->date;?> </p>
+	<p><strong><?php echo __('Sent');?>:</strong>  <?php echo date('Y-m-d H:i',strtotime($message->date));?> </p>
 	
-	<a style="font-weight: bold" href="<?php echo URL::base()?>public/view/?id=<?php echo $message->map_id?>">  <?php echo __('Map');?>: <?php echo $map->title;?> </a>
 
-	<p> <?php echo __('From')?>:
+	<p> <strong><?php echo __('From')?>:</strong>
 	<?php if($message->poster_name == ""){
 			echo __('No name given.');
 		}
@@ -23,7 +22,7 @@
 	?>
 	</p>
 	
-	<p> <?php echo __('Email')?>:
+	<p><strong><?php echo __('Email')?>:</strong>
 	<?php if($message->poster_email == ""){
 			echo __('No email given.');
 		}
@@ -33,7 +32,7 @@
 	?>
 	</p>
 	</br>
-	<p> <?php echo __('Comment')?>: </br></br> <?php echo $message->message;?></p>
+	<p><strong><?php echo __('Comment')?>:</strong> </br></br> <?php echo nl2br($message->message);?></p>
 
 </div>
 
