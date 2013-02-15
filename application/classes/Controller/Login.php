@@ -76,46 +76,102 @@ class Controller_Login extends Controller_Main {
 			return;
 		}
 		//get the user that corresponds to this email
-		$user = ORM::factory('user')->and_where('email', '=', $email)->find();
+		$user = ORM::factory('User')->and_where('email', '=', $email)->find();
 		if(!$user->loaded())
 		{
 			echo __('no user found with email');
 			return;
 		}
 		
-		$this->_email_resetlink($email, $user->first_name, $user->last_name);
+		$this->_email_resetlink($user);
 		echo __('reset email sent');
 		
 	 }//end action reset
 	 
 	 
-	private function _email_resetlink( $email, $first_name, $last_name )
+	 /**
+	  * Called when a user has received the password reset key and wants
+	  * to now reset their password.
+	  */
+	 public function action_resetpassword()
+	 {
+	 	//make sure there's a key
+	 	$hash = isset($_GET['key']) ? $_GET['key'] : '';
+	 	
+	 	//get the user that's requesting the reset
+	 	$user = ORM::factory('User')
+	 		->where('reset_hash','=',$hash)
+	 		->find();
+	 	
+	 	//if this isn't valid get them out of here
+	 	if(!$user->loaded())
+	 	{
+	 		HTTP::redirect('');
+	 	}
+	 	
+	 	//get the expiration date of the key
+	 	$expiration_date = strtotime($user->reset_expire);
+	 	if($expiration_date < time())
+	 	{
+	 		HTTP::redirect('');
+	 	}
+	 	
+	 	
+	 	$this->template->html_head->title = __('Password Reset');
+	 	$this->template->content = View::factory('password_reset');
+	 	$this->template->header->menu_page = 'login';
+	 	$this->template->content->errors = array();
+	 	
+	 	//set the focus on the username input box
+	 	$this->template->html_head->script_views[] = '<script type="text/javascript">$(document).ready(function() {  $("#password").focus();});</script>';
+	 	
+	 	$this->template->html_head->script_files[] = 'media/js/jquery.tools.min.js';
+		
+	 	
+	 	if(!empty($_POST)) // They've submitted their registration form
+	 	{
+	 		//check if the two passwords match
+	 		if(isset($_POST['password']) AND isset($_POST['password_confirm']))
+	 		{
+	 			if($_POST['password'] == $_POST['password_confirm'])
+	 			{	 				
+	 				//reset the reset values in the DB and store this new password
+	 				$auth = Auth::instance();
+	 				$_POST['reset_hash'] = null;
+	 				$_POST['reset_expire'] = null;
+	 				$user->update_user($_POST, array('password','reset_hash','reset_expire'));
+	 				//kick them out to the login page
+	 				HTTP::redirect('login');
+	 			}
+	 			else
+	 			{
+	 				$this->template->content->errors[] = __('Your passwords don\'t match');
+	 			}
+	 		}
+	 	}	 	
+	 		
+	 }
+	 
+	private function _email_resetlink( $user)
 	{
-		
-		
-		/*
-		$secret = $auth->hash_password($user->email.$user->last_login);
-		$secret_link = url::site('login/index/'.$user->id.'/'.$secret.'?reset');		
-		*/
-		$secret_link = "http://dfdfdfdfddf.com";
-						
-		$to = $email;
-		$from = __('ui_admin.password_reset_from');
-		$subject = __('ui_admin.password_reset_subject');		
-		$message = "$first_name reset your password by following this link: " . $secret_link;
-		email::send( $to, $from, $subject, $message, FALSE );
+		//first create a hash
+		$auth = Auth::instance();
+		$hash = $auth->hash_password(date('U').$user->password);
+		$user->reset_hash = $hash;
+		$user->reset_expire = date('Y-m-d G:i:s', time() + (2*60*60)); //give them two hours
+		$user->save();
+		//create the link
+		$secret_link = '<a href="'.URL::site(NULL, 'http').'login/resetpassword?key='.$hash.'">'.URL::site(NULL, 'http').'login/resetpassword?key='.$hash.'</a>';
+		//figure out the no reply email address
+		$config = Kohana::$config->load('config');
+		$no_reply = $config->get('no_reply_email');
 
-		//email details
-		/*
-		if( email::send( $to, $from, $subject, $message, FALSE ) == 1 )
-		{
-			return TRUE;
-		}
-		else
-		{
-			return FALSE;
-		}
-		*/
+		$to = array($user->email=>$user->first_name. ' '. $user->last_name);
+		$from =array($no_reply=>__('KoboMaps System'));
+		$subject = __('KoboMaps Password Reset');		
+		$body = $user->first_name.' '.__('reset your password by following this link:').' '. $secret_link;		
+		
+		Helper_Email::send_email($to, $from, $subject, $body);
 
 	}
 	
