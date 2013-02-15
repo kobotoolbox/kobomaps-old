@@ -8,55 +8,56 @@
 
 
  
- function Playback(){
-	 this.sheetTimer = null;
-	 this.sheetSpeed = 2000;
-	 this.currentPlaybackIndex = 0;
-	 this.sheetArray = new Array();
+var playback = (function(){
+	
+	var sheetTimer = null;
+	var sheetSpeed = 2000;
+	var currentPlaybackIndex = 0;
+	var sheetArray = new Array();
 	 
-	 if(this.sheetArray.length == 0){
+	function onLoad(){
+		//setup the sheet array
+		if(sheetArray.length == 0){
 			for(sheet in mapData.sheets){
-				this.sheetArray.push(+sheet);
+				sheetArray.push(+sheet);
 			}
 		}
-	 
-	 this.progressSheet = playbackProgressSheet;
-	 this.setSpeed = playbackSetSpeed;
-	 
-	 var clearTimer = clearInterval(this.sheetTimer);
-	 
-	 var This = this;
-	 
-	 $("#speedVal").change(This.setSpeed);
-	 
-	 $("#playButton").click(
-			This.progressSheet(This.currentPlaybackIndex)
-		);
-	 
-	 $("#pauseButton").click(clearTimer);
-	 
- }
+		//set click and change listerns
+		$("#speedVal").change(function(){SetSpeed();});
+		$("#pauseButton").click(function(){clearTimer();});
+		$("#playButton").click(function(){progressSheet(currentPlaybackIndex);});
+	 }
+		 
+	function progressSheet(index){
+	
+		if(sheetTimer != null){
+			clearInterval(sheetTimer);
+		}
+	
+		if(index >= sheetArray.length)
+		{
+			currentPlaybackIndex = 0;
+			return;
+		}
+		currentPlaybackIndex = index;
+		sheetSelect(sheetArray[currentPlaybackIndex]);
+		sheetTimer = setTimeout(function(){progressSheet(index+1);}, sheetSpeed);
+	}
+		 
+	function clearTimer (){
+		clearInterval(sheetTimer);
+	}
+	  
+	function SetSpeed(){
+		sheetSpeed = 1000 * parseFloat($("#speedVal").val());
+	}
+		 
+	return {onLoad:onLoad};
+	  
+})();
  
 
 //start the timer progressing through the sheets and changing the screen
-function playbackProgressSheet(index){
 
-	if(this.sheetTimer != null){
-		clearInterval(this.sheetTimer);
-	}
-
-	if(index >= this.sheetArray.length)
-	{
-		this.currentPlaybackIndex = 0;
-		return;
-	}
-	this.currentPlaybackIndex = index;
-	sheetSelect(this.sheetArray[this.currentPlaybackIndex]);
-	this.sheetTimer = setTimeout(this.progressSheet(index+1), this.sheetSpeed);
-	
-}
 
 //sets speed of progression through charts
-function playbackSetSpeed(){
-	this.sheetSpeed = 1000 * parseFloat($("#speedVal").val());
-}

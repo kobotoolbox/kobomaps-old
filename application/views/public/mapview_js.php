@@ -61,8 +61,6 @@ var map;
  */
 var mapData;
 
-
-var myPlayback = null;
 /**
  *  gives us a list of names for geographicAreas
  */
@@ -363,7 +361,7 @@ function parseJsonData(jsonDataUrl)
 		
 		//hide the temporary loading text once the indicators are visible
 		$('#loadingtext').remove();
-		myPlayback = new Playback();
+		playback.onLoad();
 	});		
 }//end parseJsonData function
 
