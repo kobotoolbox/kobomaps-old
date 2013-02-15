@@ -26,7 +26,7 @@ class Helper_Email
 			
 		require Kohana::find_file('swiftmailer', 'classes/lib/swift_required');
 		//Create the Transport
-		$transport = Swift_SmtpTransport::newInstance('localhost', 25);
+		$transport = Swift_SmtpTransport::newInstance($_SERVER['HTTP_HOST'], 25);
 		//Create the Mailer using your created Transport
 		$mailer = Swift_Mailer::newInstance($transport);
 		//Create a message
