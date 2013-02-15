@@ -136,6 +136,13 @@ div#sheetlinks div#mapSocialShare img.toggleLabels{
 	background-repeat: no-repeat;
 	margin: 5px 0px
 	}
+div#sheetlinks div#mapSocialShare img.playbackLabels{
+	background: url('../img/tasksSprite.png') -305px -1px;	
+	width:35px;
+	height:29px;
+	background-repeat: no-repeat;
+	margin: 5px 0px
+}
 div#mapSocialShare ul li {
 	position:relative;
 

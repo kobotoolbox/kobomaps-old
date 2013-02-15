@@ -58,7 +58,7 @@
 	<div id="mapSocialShare" style="width: 180px">
 		<ul>
 			<li>
-				<img class="toggleLabels" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
+				<img class="playbackLabels" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
 				<ul id="playBackButtons">
 					<li id="playButton">
 						<a title="<?php echo __('Play through the sheets.') ?>"><?php echo __('Play')?></a>
