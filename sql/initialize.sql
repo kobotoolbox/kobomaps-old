@@ -357,4 +357,13 @@ ALTER TABLE  `message_center` CHANGE  `date`  `date` DATETIME NOT NULL;
 RENAME TABLE  `message_center` TO  `message` ;
 UPDATE `metadata` SET  `v` =  '1.0.033' WHERE  `metadata`.`k` ='Database Version';
 
+/** John Etherton -- 2013-02-14 -- Adding a column to store password reset hashes**/
+ALTER TABLE  `users` ADD  `reset_hash` CHAR( 64 ) NULL;
+ALTER TABLE  `users` ADD  `reset_expire` DATETIME NULL;
+UPDATE `metadata` SET  `v` =  '1.0.034' WHERE  `metadata`.`k` ='Database Version';
+
+
+
+
+
 

@@ -77,24 +77,15 @@ class Model_Message extends ORM {
 		if($user->email_alerts)
 		{
 			
-			$to = $user->email;
-			$from = 'noreply@kobomaps.org';
+			$config = Kohana::$config->load('config');
+			$no_reply = $config->get('no_reply_email');
+			
+			$to = array($user->email=>$user->first_name. ' '. $user->last_name);
+			$from = array($no_reply=>__('KoboMaps System'));
 			$subject = __('New alert from KoboMaps');
 			$body = __('You have recieved a new message');
 			
-			require Kohana::find_file('swiftmailer', 'classes/lib/swift_required');
-			//Create the Transport
-			$transport = Swift_SmtpTransport::newInstance('localhost', 25);
-			//Create the Mailer using your created Transport
-			$mailer = Swift_Mailer::newInstance($transport);
-			//Create a message
-			$message = Swift_Message::newInstance('Email')
-			->setSubject($subject)
-			->setFrom(array($from => __('KoboMaps System')))
-			->setTo(array($to))
-			->setBody($body, 'text/html');
-			//Send the message
-			$result = $mailer->send($message);
+			Helper_Email::send_email($to, $from, $subject, $body);
 			
 				
 		}
@@ -123,13 +114,15 @@ class Model_Message extends ORM {
 		//email the user if they've set their options so
 		$user = ORM::factory('User',$user_id);
 		if($user->email_warnings)
-		{
-			require Kohana::find_file('swiftmailer', 'classes/lib/swift_required');			
-			$to = $user->email;
-			$from = 'noreply@kobomaps.org';
+		{			
+			$config = Kohana::$config->load('config');
+			$no_reply = $config->get('no_reply_email');
+			
+			$to = array($user->email=>$user->first_name. ' '. $user->last_name);
+			$from = array($no_reply=>__('KoboMaps System'));
 			$subject = __('New warning from KoboMaps');
-			$message = __('You have recieved a new message');
-			Helper_Email::send( $to, $from, $subject, $message, FALSE );
+			$body = __('You have recieved a new warning');					
+			Helper_Email::send_email($to, $from, $subject, $body);
 		}
 	
 	

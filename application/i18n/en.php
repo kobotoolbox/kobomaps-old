@@ -46,7 +46,7 @@ return array
 		//log out page
 		'log out explanation'=>'You have successfully been logged out<br/><br/>Come on back now',
 		
-		//log in page
+		//log in page also called the login page
 		'Enter your password and username below to log in'=>'Enter your password and username below to log in',
 		'password'=>'password',
 		'user name'=>'user name',
@@ -55,6 +55,13 @@ return array
 		'Enter your email address and instructions to reset your password will be emailed to you'=>'Enter your email address and instructions to reset your password will be emailed to you',
 		'email address'=>'email address',
 		'Submit'=>'Submit',
+		'reset email sent'=>'Reset E-mail Sent',
+		'KoboMaps Password Reset'=>'KoboMaps Password Reset',
+		'reset your password by following this link:'=>'reset your password by following this link:',
+		'no user found with email'=>'No user found with that email.',
+		'Password Reset'=>'Password Reset',
+		'Your passwords don\'t match'=>'Your passwords don\'t match',
+		
 		
 		//sign up page
 		'Fill out this form to sign up for Kobo Maps'=>'Fill out this form to sign up for Kobo Maps',
