@@ -392,6 +392,7 @@ function sheetSelect(sheetId)
 		$('#sheetnames li.sheet2 span').removeClass("active");		
 		sheetButton.addClass("active");
 
+		playback.setSheetStart(sheetId);
 
 		///////////////////////////////////////////////////////
 		//This next part tries to figure out if there is a
@@ -1660,40 +1661,6 @@ function scrollSheets(delta)
 
 }
 
-//start the timer progressing through the sheets and changing the screen
-function progressSheet(index){
-	clearInterval(sheetTimer);
-
-	if(index >= sheetArray.length)
-	{
-		currentPlaybackIndex = 0;
-		return;
-	}
-	currentPlaybackIndex = index;
-	sheetSelect(sheetArray[currentPlaybackIndex]);
-	sheetTimer = setTimeout(function(){progressSheet(index+1)}, sheetSpeed);
-	
-	
-	
-}
-
-//allow speed to change on the fly with the select speed bar
-$(document).ready(function(){
-	$('#speedVal').change(setSpeed);
-});
-
-//sets speed of progression through charts
-function setSpeed(){
-	//if(sheetArray.length == 0){
-	//	for(sheet in mapData.sheets){
-	//		sheetArray.push(+sheet);
-	//	}
-	//}
-	sheetSpeed = 1000 * parseFloat($("#speedVal").val());
-	//progressSheet(currentSheet);
-}
-
-
 /**
  * This function is called to initialize the event handlers for the buttons on this page,
  * like the share button and the fullscreen button
@@ -1774,7 +1741,7 @@ function initialize_buttons()
 		}
 	});
 	
-	$("#speedSubmit").tooltip( {
+	$("#speedVal").tooltip( {
 		position:{
 			my: "left+24 center-22",
 			at: "center top"	

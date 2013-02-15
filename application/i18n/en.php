@@ -210,9 +210,11 @@ return array
 		'Comment on this map.' => 'Comment on this map.',
 		'Share this map.' => 'Share this map.',
 		'Make this map fullscreen.' => 'Make this map fullscreen.',
-		'Stop the sheets.' => 'Stop the sheets.',
+		'Pause the sheets.' => 'Pause the sheets.',
 		'Play through the sheets.' => 'Play through the sheets.',
 		'Sets the speed in seconds of playback.' => 'Sets the speed in seconds of playback.',
+		'Pause' => 'Pause',
+		'Play' => 'Play',
 		
 		
 		//footer

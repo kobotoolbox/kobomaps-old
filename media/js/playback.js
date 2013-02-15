@@ -7,7 +7,7 @@
 *************************************************************/
 
 
- 
+ //Constructor for playbacks
 var playback = (function(){
 	
 	var sheetTimer = null;
@@ -24,40 +24,59 @@ var playback = (function(){
 		}
 		//set click and change listerns
 		$("#speedVal").change(function(){SetSpeed();});
-		$("#pauseButton").click(function(){clearTimer();});
-		$("#playButton").click(function(){progressSheet(currentPlaybackIndex);});
+		$("#pauseButton").click(function(){
+			$("#playButton").removeClass('active');
+			clearTimer();
+		});
+		$("#playButton").click(function(){
+			$("#playButton").addClass('active');
+			progressSheet(currentPlaybackIndex);
+		});
 	 }
 		 
+	//start incrementing the sheets and creating a timer to increment within set speed
 	function progressSheet(index){
-	
 		if(sheetTimer != null){
 			clearInterval(sheetTimer);
 		}
-	
+
 		if(index >= sheetArray.length)
 		{
 			currentPlaybackIndex = 0;
+			$("#playButton").removeClass('active');
 			return;
 		}
 		currentPlaybackIndex = index;
 		sheetSelect(sheetArray[currentPlaybackIndex]);
 		sheetTimer = setTimeout(function(){progressSheet(index+1);}, sheetSpeed);
+		return false;
 	}
 		 
+	//stops timers
 	function clearTimer (){
 		clearInterval(sheetTimer);
+		sheetTimer = null;
 	}
 	  
+	//set by the speed selector within the submenu
 	function SetSpeed(){
 		sheetSpeed = 1000 * parseFloat($("#speedVal").val());
+		return false;
+	}
+	
+	//listens to the sheet that is auto selected when a map is loaded, or if a user selects a sheet while playback is in effect
+	function setSheetStart(sheetId){
+		if(sheetArray.indexOf(sheetId) == currentPlaybackIndex){
+			return;
+		}
+		currentPlaybackIndex = sheetArray.indexOf(sheetId);
+		if(sheetTimer != null){
+			clearTimer();
+			progressSheet(currentPlaybackIndex);
+		}
 	}
 		 
-	return {onLoad:onLoad};
+	return {onLoad:onLoad, setSheetStart:setSheetStart};
 	  
 })();
  
-
-//start the timer progressing through the sheets and changing the screen
-
-
-//sets speed of progression through charts

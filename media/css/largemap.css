@@ -81,7 +81,7 @@ div#sheetlinks li.sheet2 {display: block; width: 100px; height: 40px; float: lef
 div#sheetlinks li.sheet2 span {margin:0px; padding:0px 0px;padding-top:10px;height:30px;vertical-align:middle;color:white;font-size:14px;}
 div#sheetlinks li.sheet2 span.active {background: #444444;}
 div#sheetlinks li.sheet2 span:hover {background: #555555;}
-div#sheetlinks a {color:white;}
+div#sheetlinks a, div#sheetlinks span {color:white;}
 div#sheetlinks div#mapName {float:left;padding:10px 30px 10px 30px;font-weight:bold;font-size:20px;color:white;width:280px;}
 div#sheetlinks div.sheetScrollerControll{float:left;font-size:40px;font-weight:bold;padding:10px 10px;color:white;width:auto;margin-left:auto;}
 div#sheetlinks div.sheetScrollerControll a.inactive{color:gray;cursor:default}
@@ -170,16 +170,18 @@ div#mapSocialShare ul li ul li{
 	margin:0px;
 	padding:5px;
 	}
-div#mapSocialShare ul li ul li a{
+div#mapSocialShare ul li ul li a, div#mapSocialShare ul li ul li span{
 	padding:3px;
 	box-shadow: 1px 1px 7px #333;
 	width:100%;
 	border-radius:3px;
 }
-div#mapSocialShare ul li ul li a.active{
+div#mapSocialShare ul li ul li span{
+	cursor:pointer;
+}
+div#mapSocialShare ul li ul li a.active, div#mapSocialShare ul li ul li span.active{
 	box-shadow: none;
 }
-	
 
 /* Styling the indicator list */
 span.sheet2 {color: #000;display: block;margin:0.5em 0;padding: 0.4em 0;font-size:1.7em;}
