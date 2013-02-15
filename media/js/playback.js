@@ -17,21 +17,26 @@ var playback = (function(){
 	 
 	function onLoad(){
 		//setup the sheet array
-		if(sheetArray.length == 0){
-			for(sheet in mapData.sheets){
-				sheetArray.push(+sheet);
-			}
+		if(mapData.sheets.length < 3){
+			return;
 		}
-		//set click and change listerns
-		$("#speedVal").change(function(){SetSpeed();});
-		$("#pauseButton").click(function(){
-			$("#playButton").removeClass('active');
-			clearTimer();
-		});
-		$("#playButton").click(function(){
-			$("#playButton").addClass('active');
-			progressSheet(currentPlaybackIndex);
-		});
+		else{
+			if(sheetArray.length == 0){
+				for(sheet in mapData.sheets){
+					sheetArray.push(+sheet);
+				}
+			}
+			//set click and change listerns
+			$("#speedVal").change(function(){SetSpeed();});
+			$("#pauseButton").click(function(){
+				$("#playButton").removeClass('active');
+				clearTimer();
+			});
+			$("#playButton").click(function(){
+				$("#playButton").addClass('active');
+				progressSheet(currentPlaybackIndex);
+			});
+		}
 	 }
 		 
 	//start incrementing the sheets and creating a timer to increment within set speed

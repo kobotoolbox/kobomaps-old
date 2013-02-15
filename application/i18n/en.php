@@ -188,10 +188,12 @@ return array
 		
 		//add 5 page
 		'Add Map - Geo Matching'=>'Add Map - Geo Matching',
-		'Select how the regions specified in your data match up to the regions in the template you have chosen. A drop down box surrouned in <strong><span style="color:#ff9900;">orange</span></strong> need to be set since no match was deteced for them.'=>'Select how the regions specified in your data match up to the regions in the template you have chosen. A drop down box surrouned in <strong><span style="color:#ff9900;">orange</span></strong> need to be set since no match was deteced for them.',
+		'Select how the regions specified in your data match up to the regions in the template you have chosen. A drop down box surrounded in <strong><span style="color:#ff9900;">orange</span></strong> need to be set since no match was detected for them.'=>'Select how the regions specified in your data match up to the regions in the template you have chosen. A drop down box surrounded in <strong><span style="color:#ff9900;">orange</span></strong> need to be set since no match was detected for them.',
 		'Matches template region'=>'Matches template region',
 		'All following sheets have the same region settings?'=>'All following sheets have the same region settings?',
 		'Number of regions that couldn\'t be automatically matched:'=>'Number of regions that couldn\'t be automatically matched:',
+		'You have used region ' => 'You have used region ',
+		' times.' => ' times.',
 		
 		
 		//map view page

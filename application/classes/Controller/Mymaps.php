@@ -1457,7 +1457,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//echo "Just finished the default stuff: ". (microtime(true) - $time) . "<br/>";
 	 	//$time = microtime(true);
 	 	
-	 		 	 
+	
 	 	/******* Handle incoming data*****/
 	 	if(!empty($_POST)) // They've submitted the form to update his/her wish
 	 	{
@@ -1475,18 +1475,27 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				 
 	 				$database = new mysqli($server, $user_name, $password, $database_name);
 	 				$column_name_to_region = array();
+	 				$dupe_region_array = array();
 	 				
 	 				foreach($_POST['region'] as $sheet_id=>$sheet)
 	 				{
 	 					
 	 					$sheet_id = intval($sheet_id);
 	 					$update_sql = "";
+	 					$dupes = array();
 	 					foreach($sheet as $column=>$region_id)
 	 					{
-							$region_id = intval($region_id);
-							$column = intval($column);
-	 						$update_sql = "UPDATE  `columns` SET  `template_region_id` =  '".$region_id."' WHERE  `columns`.`id` = ".$column.";";
-	 						$database->query($update_sql);
+	 						if(!isset($dupes[$region_id])){
+	 							$dupes[$region_id] = 0;
+	 						}
+	 						if(++$dupes[$region_id] > 1){
+	 								$dupe_region_array[$region_id] = $dupes[$region_id];
+	 						}
+							else {$region_id = intval($region_id);
+								$column = intval($column);
+	 							$update_sql = "UPDATE  `columns` SET  `template_region_id` =  '".$region_id."' WHERE  `columns`.`id` = ".$column.";";
+	 							$database->query($update_sql);
+							}
 	 					}
 						
 						
@@ -1516,6 +1525,19 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					//echo "Just created the name to region mapping: ". (microtime(true) - $time) . "<br/>";
 	 					//$time = microtime(true);
 	 					
+	 				}
+	 				
+	 				if(count($dupe_region_array) > 0){
+	 					foreach($dupe_region_array as $region_id=>$num_dupes){
+	 						
+	 						$region = ORM::factory('Templateregion', $region_id);
+	 						
+	 						$error_string = __('You have used region ').$region->title.' '.$num_dupes.__(' times.');
+	 						$this->template->content->errors[] = $error_string;
+	 						
+	 					}
+	 					$this->template->content->data = $_POST['region'];
+	 					return;
 	 				}
 	 				
 	 				

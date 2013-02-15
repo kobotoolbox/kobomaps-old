@@ -10,7 +10,7 @@
 		
 <h2><?php echo __('Add Map - Geo Matching'). ' - '.$map->title ?></h2>
 
-<h3><?php echo __('Select how the regions specified in your data match up to the regions in the template you have chosen. A drop down box surrouned in <strong><span style="color:#ff9900;">orange</span></strong> need to be set since no match was deteced for them.');?></h3>
+<h3><?php echo __('Select how the regions specified in your data match up to the regions in the template you have chosen. A drop down box surrounded in <strong><span style="color:#ff9900;">orange</span></strong> need to be set since no match was detected for them.');?></h3>
 
 
 
@@ -101,7 +101,7 @@
 				$not_matched_count++;
 			}
 
-			echo Form::select('region['.$sheet->id.']['.$column->id.']', $map_regions,$selected, $extras_array);
+			echo Form::select('region['.$sheet->id.']['.$column->id.']', $map_regions, $selected, $extras_array);
 			echo '</td></tr>';
 			
 		}
