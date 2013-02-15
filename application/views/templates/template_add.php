@@ -100,7 +100,7 @@ if($data['id']!=0){?>
 		echo Form::checkbox('is_official', null, 1==$data['is_official'] );
 		echo '</td></tr><tr><td>';
 	}
-	echo Form::label('file', __('Spreadsheet (.kml, .kmz)').": ");
+	echo Form::label('file', __('File (.kml, .kmz)').": ");
 	echo '</td><td>';
 	echo Form::file('file', array('id'=>'file', 'style'=>'width:300px;'));	
 	echo '</td></tr><tr><td>';

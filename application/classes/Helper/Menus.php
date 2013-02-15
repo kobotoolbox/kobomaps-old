@@ -132,7 +132,7 @@ class Helper_Menus
 				echo '<a href="'.url::base().'templates">'.__("Templates").'</a></li>';
 				
 				//Message center
-				if($page == "comment")
+				if($page == "messages")
 				{
 					echo '<li class="selected">';
 				}
@@ -140,10 +140,8 @@ class Helper_Menus
 				{
 					echo '<li>';
 				}
-				$unread = ORM::factory('Messagecenter')
-					->join('maps')
-					->on('maps.id', '=', 'messagecenter.map_id')
-					->where('maps.user_id','=',$user->id)
+				$unread = ORM::factory('Message')					
+					->where('user_id','=',$user->id)
 					->where('unread','=',1)
 					->count_all();
 				if($unread > 0)
@@ -153,7 +151,7 @@ class Helper_Menus
 				else{
 					$unread = '';
 				}					
-				echo '<a href="'.url::base().'comment">'.__("Messages").$unread.'</a></li>';
+				echo '<a href="'.url::base().'message">'.__("Messages").$unread.'</a></li>';
 				
 			}
 		

@@ -256,6 +256,8 @@ return array
 		'can now'=>'can now',
 		'can'=>'can',
 		'Delete Colaborator'=>'Delete Colaborator',
+		'You have been granted permission to map'=>'You have been granted <strong>:permission</strong> permissions to the map <a href="'.URL::base().'public/view?id=:map_id">:map_title</a>',
+		'The template your map used has been delete. Please fix'=>'The template your map <strong>:title</strong> used has been delete. <br/><br/>Please fix this by clicking <a href="'.URL::base().'mymaps/add4?id=:id">here</a>.',
 		
 		//statistics
 		'Select Maps' => 'Select Maps',
@@ -280,6 +282,13 @@ return array
 		'Are you sure you want to delete this message' => 'are you sure you want to delete this message',
 		'These are the comments that have been submitted for your maps.' => 'These are the comments that have been submitted for your maps.',
 		'You have no messages' => 'You have no messages',
+		'From map:'=>'From map:',
+		'Sent'=>'Sent',
+		'KoboMaps System'=>'KoboMaps System',
+		'New alert from KoboMaps'=>'New alert from KoboMaps',
+		'You have recieved a new message'=> 'You have recieved a new message. Click <a href="'.URL::base().'message">here</a> to view it.',
+		'New warning from KoboMaps'=>'New warning from KoboMaps',
+		
 		
 		
 		//public map page
@@ -302,6 +311,7 @@ return array
 		'Visibility'=>'Visibility',
 		'Private'=>'Private',
 		'Copy Template'=>'Copy Template',
+		'File (.kml, .kmz)'=>'File (.kml, .kmz)',
 		
 		
 		//templates view page
@@ -323,6 +333,10 @@ return array
 		'maps.'=>'maps.',
 		'templates.'=>'templates.',
 		'SENTANCE_END'=>'.',
+		
+		//profile page
+		'Receive email alerts'=>'Receive email alerts',
+		
 );
 
 

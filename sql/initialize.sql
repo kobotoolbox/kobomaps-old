@@ -335,9 +335,26 @@ UPDATE `metadata` SET  `v` =  '1.0.029' WHERE  `metadata`.`k` ='Database Version
 ALTER TABLE  `maps` ADD  `region_label_font` INT NOT NULL DEFAULT  '12', ADD  `value_label_font` INT NOT NULL DEFAULT  '12';
 UPDATE `metadata` SET  `v` =  '1.0.030' WHERE  `metadata`.`k` ='Database Version';
 
-/** John Etherton 2012-02-12 -- Moving map permissions wholly to the sharing table. 
+/** John Etherton 2013-02-12 -- Moving map permissions wholly to the sharing table. 
 This SQl will populate the sharing table with the necessary permissions for existing owners to be properly recognized**/
 INSERT INTO sharing (map_id, user_id, permission)
 SELECT id, user_id, 'owner' FROM maps;
 ALTER TABLE `maps` DROP `private_password`;
 UPDATE `metadata` SET  `v` =  '1.0.031' WHERE  `metadata`.`k` ='Database Version';
+
+
+/** John Etherton -- 2013-02-12 -- Give users the ability to pick their spam preferences **/
+ALTER TABLE  `users` ADD  `email_alerts` BOOLEAN NOT NULL DEFAULT FALSE ,ADD  `email_warnings` BOOLEAN NOT NULL DEFAULT TRUE;
+UPDATE `metadata` SET  `v` =  '1.0.032' WHERE  `metadata`.`k` ='Database Version';
+
+/** John Etherton -- 2013-02-12 -- Make the messaging system more flexible, just send messages to users, not maps**/
+ALTER TABLE  `message_center` DROP FOREIGN KEY  `message_center_ibfk_1` ;
+ALTER TABLE  `message_center` CHANGE  `map_id`  `user_id` INT( 11 ) UNSIGNED NOT NULL;
+ALTER TABLE  `message_center` DROP INDEX  `Message_map_id` , ADD INDEX  `Message_map_id` (  `user_id` );
+DELETE FROM `message_center` WHERE 1;
+ALTER TABLE  `message_center` ADD FOREIGN KEY (  `user_id` ) REFERENCES  `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION ;
+ALTER TABLE  `message_center` CHANGE  `date`  `date` DATETIME NOT NULL;
+RENAME TABLE  `message_center` TO  `message` ;
+UPDATE `metadata` SET  `v` =  '1.0.033' WHERE  `metadata`.`k` ='Database Version';
+
+
