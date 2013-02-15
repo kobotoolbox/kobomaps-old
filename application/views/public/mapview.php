@@ -63,8 +63,8 @@
 					<li id="playButton">
 						<a title="<?php echo __('Play through the sheets.') ?>"><?php echo __('Play')?></a>
 					</li>	
-					<li id="stopButton">
-						<a title="<?php  echo __('Stop the sheets.')?>"> <?php echo __('Stop')?></a>		
+					<li id="pauseButton">
+						<a title="<?php  echo __('Pause the sheets.')?>"> <?php echo __('Pause')?></a>		
 					</li>
 					<li>
 					<?php 

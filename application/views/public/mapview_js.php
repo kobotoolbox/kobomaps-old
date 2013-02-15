@@ -31,6 +31,7 @@
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.tools.min.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery-ui.min.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.address-1.4.min.js"> </script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/playback.js"> </script>
 <script type="text/javascript">
 
 
@@ -60,17 +61,8 @@ var map;
  */
 var mapData;
 
-/**
- * global variable to hold sheets for iteration purposes
- */
-var sheetArray = new Array();
 
-/**
- * timer to increase sheets
- */
- var sheetTimer;
-
- var sheetSpeed = 2000;
+var myPlayback = null;
 /**
  *  gives us a list of names for geographicAreas
  */
@@ -371,6 +363,7 @@ function parseJsonData(jsonDataUrl)
 		
 		//hide the temporary loading text once the indicators are visible
 		$('#loadingtext').remove();
+		myPlayback = new Playback();
 	});		
 }//end parseJsonData function
 
@@ -1209,96 +1202,6 @@ function createHTMLChart(name,title, data, id)
 	return chartStr;
 	
 }
-/*function createChart(title, data, highLightName, id, unit, min, spread){
-	var blues = "";
-	var reds = "";
-	var numberDelim = ",";
-	 
-	var nameDelim = "|";
-	var count = 0;
-	for(areaName in data)
-	{
-		//handle non-numbers
-		var t = data[areaName]; 
-		if(isNaN(t) || typeof t == "undefined" || t == Number.NEGATIVE_INFINITY || t == Number.POSITIVE_INFINITY)
-		{
-			continue;
-		}
-
-		
-		count++;
-
-		
-		if(count > 1) //if we're doing this more than once
-		{
-			blues += numberDelim;
-			reds += numberDelim;
-		}
-		//handle the special case of the named area being the area who's data we're looping over
-		if(areaName.toUpperCase() == highLightName.toUpperCase())
-		{
-			blues += "0";
-			reds += data[areaName];			
-		}
-		else
-		{			
-			blues += data[areaName];
-			reds += "0";
-		}
-		
-		//for whatever reason the data names and the data values are in reverse order
-		areaName = encodeURIComponent(areaName).replace(/ /g, "+");
-		
-		names = nameDelim + areaName + names;
-	}
-		
-	//setup the height
-	var kmapInfochartHeight = (count * (parseInt(kmapInfochartBarHeight) + parseInt(kmapInfochartBarHeightMargin))) + Math.round(parseInt(kmapInfochartchxsFont) * 1.7);
-
-
-	var kmapInfochart_temp = kmapInfochart.replace("<HEIGHT>", kmapInfochartHeight);
-	//setup the range
-	var kmapInfoChartRange = "0,100,0,100";
-	if(unit != "%" || (unit == "%" && min < 0))
-	{
-		kmapInfoChartRange = min+","+(min+spread)+","+min+","+(min+spread);
-	}
-	
-	var kmapInfochart_temp = kmapInfochart_temp.replace("<RANGE>", kmapInfoChartRange);
-	
-	//setup the range labels
-	var kampInfoChartRangeLabels ="0|25|50|75|100";
-	if(unit != "%" || (unit == "%" && min < 0))
-	{
-		kampInfoChartRangeLabels = min+"|"+
-			(min+(spread*.25))+"|"+
-			(min+(spread*.5))+"|"+
-			(min+(spread*.75))+"|"+
-			(min+spread);
-		//toFixed(Math.log(10)/Math.log((1.0/minMagnitude)))
-	}
-	else
-	{
-		//not sure what's supposed to go here
-	}
-	
-	var kmapInfochart_temp = kmapInfochart_temp.replace("<RANGE_LABELS>", kampInfoChartRangeLabels);
-
-	
-	var chartStr = '<div id="'+id+'" class="infowindow"><p class="bubbleheader">'+title
-		+'</p><div id="iChart' + id + '"  style=" width:300px; height:'+kmapInfochartHeight+'px"></div>';
-
-		the code below is the code that's needed to create the image based charts
-		chartStr += '<img src="'+kmapInfochart_temp; //This is the base of the Google Chart API graph (without the data part). Needs to be defined in the container file.
-		chartStr += names + '&chd=t:' + blues + nameDelim + reds + '" height="' + kmapInfochartHeight + '" width="' + kmapInfochartWidth + '" />
-		
-	//now put all of that together
-	chartStr += '</div>';
-	//console.log(chartStr);
-	return chartStr;
-	
-}
-*/
 
 /**
 * This takes in a set of data and finds the min and max,
@@ -1537,49 +1440,7 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator, to
 	$("#nationalaverageimg").text(addCommas(nationalAverage)+" "+htmlDecode(unit));
 
 	$("#nationalaveragelabel").html(totalLabel);
-/*
-	////////////////////////////////////////////////////////////////
-	//updates the national average chart
-	////////////////////////////////////////////////////////////////
-	//first check if there's more than one answer to the given question
-	if($("#bottom_level_"+indicator).siblings().length == 0)
-	{
-		//clear out the National Chart
-		$("#nationalIndicatorChart").html("");
-		return;
-	}
-	//there is more than one answer ...as so many questions have.
-	
-	//get the data for those questions
-	var dataForNational = new Array();
-	var mainIndicatorText = $("#bottom_level_"+indicator).text(); 
-	var questionText = $("#bottom_level_"+indicator).parents("li.level2").children("span.level2").text();
-	//get the data for the indicator we're focused on
-	
-	dataForNational[mainIndicatorText] = indicatorsToUpdateParams[indicator]["nationalAverage"];
-	
-	//get the rest of the data
-	$.each($("#bottom_level_"+indicator).siblings(), function() {			
-		var otherIndicator = $(this);
-		var otherIndicatorId = otherIndicator.attr("id").substring(13);
-		var indicatorText = otherIndicator.text();
-		var otherNationalAverage = indicatorsToUpdateParams[otherIndicatorId]["nationalAverage"]; 	
-		if(!isNaN(otherNationalAverage))
-		{
-			dataForNational[indicatorText] =indicatorsToUpdateParams[otherIndicatorId]["nationalAverage"]; 	
-		}
-	});
-	
-		
-	//calculate the min and spread for the national graph specific
-	var spreadMin = calculateMinSpread(dataForNational);
-	var min = spreadMin["min"];
-	var spread = spreadMin["spread"];
-	//var nationalChart = createHTMLChart(questionText + ' ('+kmapAllAdminAreas+')', dataForNational, indicator+"_by_indicator_national_chart");
-	
-	//TODO: fix the national chart
-	//$("#nationalIndicatorChart").html(nationalChart);
-*/
+
 }
 
 //changed this to take another input 
@@ -1802,46 +1663,48 @@ function scrollSheets(delta)
 }
 
 //start the timer progressing through the sheets and changing the screen
-function progressSheet(sheets, index){
+function progressSheet(index){
 	clearInterval(sheetTimer);
-	if(index < sheets.length){
-		sheetSelect(sheets[index]);
-		sheetTimer = setTimeout(function(){progressSheet(sheets, index+1)}, sheetSpeed);
+
+	if(index >= sheetArray.length)
+	{
+		currentPlaybackIndex = 0;
+		return;
 	}
+	currentPlaybackIndex = index;
+	sheetSelect(sheetArray[currentPlaybackIndex]);
+	sheetTimer = setTimeout(function(){progressSheet(index+1)}, sheetSpeed);
+	
+	
+	
 }
 
+//allow speed to change on the fly with the select speed bar
+$(document).ready(function(){
+	$('#speedVal').change(setSpeed);
+});
 
+//sets speed of progression through charts
 function setSpeed(){
-	if(sheetArray.length == 0){
-		for(sheet in mapData.sheets){
-			sheetArray.push(+sheet);
-		}
-	}
+	//if(sheetArray.length == 0){
+	//	for(sheet in mapData.sheets){
+	//		sheetArray.push(+sheet);
+	//	}
+	//}
 	sheetSpeed = 1000 * parseFloat($("#speedVal").val());
-	progressSheet(sheetArray, 0);
+	//progressSheet(currentSheet);
 }
+
+
 /**
  * This function is called to initialize the event handlers for the buttons on this page,
  * like the share button and the fullscreen button
  */
  var headerOffset = 0;
 function initialize_buttons()
-{
-	//hanlde toggling between full screen and normal view
+{	
+	//handle toggling between full screen and normal view
 	$("#fullScreenButton").click(function(){$("#siteHeader").toggle(); return false;});
-
-	$("#playButton").click(function(){
-		if(sheetArray.length == 0){
-			for(sheet in mapData.sheets){
-				sheetArray.push(+sheet);
-			}
-		}
-		progressSheet(sheetArray, 0);
-	});
-
-	$("#stopButton").click(function(){
-		clearInterval(sheetTimer);
-	});
 
 	//handle turning off and on the labels on the map
 	$("#turnOffLabelsButton").click(function(){
@@ -1906,7 +1769,7 @@ function initialize_buttons()
 		}
 	});
 
-	$("#stopButton").tooltip( {
+	$("#pauseButton").tooltip( {
 		position:{
 			my: "left-134 center-19",
 			at: "center top"	
