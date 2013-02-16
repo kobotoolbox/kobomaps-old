@@ -60,19 +60,20 @@
 			<li>
 				<img class="playbackLabels" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
 				<ul id="playBackButtons">
-					<li id="playButton">
-						<a title="<?php echo __('Play through the sheets.') ?>"><?php echo __('Play')?></a>
+					<li>
+						<span id="playButton" title="<?php echo __('Play through the sheets.') ?>"><?php echo __('Play')?></a>
 					</li>	
 					<li id="pauseButton">
-						<a title="<?php  echo __('Pause the sheets.')?>"> <?php echo __('Pause')?></a>		
+						<span title="<?php  echo __('Pause the sheets.')?>"> <?php echo __('Pause')?></a>		
 					</li>
 					<li>
 					<?php 
 					//work on adding a onchange listener to the speed adjuster
 					?>
-						<div id="setSpeed">
-							<input id="speedVal" type="number" style="width: 35px" value="2" min="0.5" max="10" step="0.5"></input>
-								<a id="speedSubmit" onclick="setSpeed()" title="<?php echo __('Sets the speed in seconds of playback.')?>"><?php echo __('Seconds')?></a>
+						<div id="setSpeed" style="color:white">
+							<input id="speedVal" title="<?php echo __('Sets the speed in seconds of playback.')?>" 
+							type="number" style="width: 35px" value="2" min="0.5" max="10" step="0.5"></input> 
+							<?php echo __('Speed')?>
 						</div>
 					</li>
 				</ul>
