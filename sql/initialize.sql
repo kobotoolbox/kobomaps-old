@@ -363,6 +363,11 @@ ALTER TABLE  `users` ADD  `reset_expire` DATETIME NULL;
 UPDATE `metadata` SET  `v` =  '1.0.034' WHERE  `metadata`.`k` ='Database Version';
 
 
+/** John Etherton -- 2013-02-15 -- Adding a column to store the slug of a map**/
+ALTER TABLE  `maps` ADD  `slug` CHAR( 128 ) NULL AFTER  `description`;
+UPDATE maps SET slug = id;
+ALTER TABLE  `maps` ADD UNIQUE (`slug`);
+UPDATE `metadata` SET  `v` =  '1.0.035' WHERE  `metadata`.`k` ='Database Version';
 
 
 

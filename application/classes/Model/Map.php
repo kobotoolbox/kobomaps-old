@@ -53,6 +53,11 @@ class Model_Map extends ORM {
 						array('max_length', array(':value', 65533)),
 						array('min_length', array(':value', 1))
 				),
+				'slug' => array(
+						array('max_length', array(':value', 128)),
+						array('min_length', array(':value', 1)),
+						array(array($this, 'unique'), array('slug', ':value')),
+				),
 				'file' => array(
 						array('not_empty'),
 						array('max_length', array(':value', 254)),
@@ -110,7 +115,7 @@ class Model_Map extends ORM {
 	public function update_map($values)
 	{
 	
-		$expected = array('title', 'description', 'user_id', 'file', 'map_style', 'CSS', 'lat', 'lon', 'zoom', 
+		$expected = array('title', 'description', 'slug', 'user_id', 'file', 'map_style', 'CSS', 'lat', 'lon', 'zoom', 
 				'template_id','json_file', 'is_private', 'map_creation_progress', 
 				'show_empty_name', 'label_zoom_level', 'region_label_font', 'value_label_font');
 	
@@ -239,5 +244,6 @@ class Model_Map extends ORM {
 		
 		return $new_map;
 	}
+	
 	
 } // End User Model

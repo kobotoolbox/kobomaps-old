@@ -118,6 +118,9 @@ return array
 		'  Font size of the region titles as seen in maps, in pixels.' => '  Font size of the region titles as seen in maps, in pixels.',
 		'<br/>Font size of data values' => '<br/>Font size of data values',
 		'  Font size of the data values as seen in maps, in pixels.' => '  Font size of the data values as seen in maps, in pixels.',
+		'This will be the URL to access this map. It should be short and sweet'=>'This will be the URL to access this map. It should be short and sweet',
+		//add1 errors
+		'register/map.slug.unique'=>'Your slug is not unique, please pick another one',
 		
 		//add 2 page
 		'Add Map - Data Structure'=>'Add Map - Data Structure',
@@ -343,6 +346,12 @@ return array
 		
 		//profile page
 		'Receive email alerts'=>'Receive email alerts',
+		
+		
+		//errors
+		'We cannot find that'=>'We cannot find that',
+		'Go home'=>'Go home',
+		'Sorry, but we couldn\'t find'=>'Sorry, but we couldn\'t find',
 		
 );
 

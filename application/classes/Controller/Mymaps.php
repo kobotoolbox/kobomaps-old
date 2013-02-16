@@ -136,6 +136,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'id'=>'0',
 			'title'=>'',
 			'description'=>'',
+			'slug'=>'',
 			'file'=>'',
 			'CSS'=>'',
 			'lat'=>'0',
@@ -172,6 +173,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['id'] = $map_id;
 			$data['title'] = $map->title;
 			$data['description'] = $map->description;
+			$data['slug']= $map->slug;
 			$data['CSS'] = $map->CSS;
 			$data['lat'] = $map->lat;
 			$data['lon'] = $map->lon;
@@ -355,7 +357,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 					{
 						if(is_string($error))
 						{
-							$this->template->content->errors[] = $error;							
+							$this->template->content->errors[] = __($error);							
 						}
 					}
 				}
