@@ -7,7 +7,14 @@
 *************************************************************/
 ?>
 
-		
+</br>
+<div class="slug">
+		<ul>
+	<ul>
+		<li> <?php echo __('Your map has a large data file, loading might be slow.'); ?></li>
+		</ul>
+	</div>
+
 <h2><?php echo __('Add Map - Geo Matching'). ' - '.$map->title ?></h2>
 
 <h3><?php echo __('Select how the regions specified in your data match up to the regions in the template you have chosen. A drop down box surrounded in <strong><span style="color:#ff9900;">orange</span></strong> need to be set since no match was detected for them.');?></h3>

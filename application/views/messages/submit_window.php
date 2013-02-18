@@ -33,13 +33,10 @@
 		var myEmail = $("#emailField").val();
 		var myComment = $("#commentField").val();
 
-<<<<<<< HEAD:application/views/comment/window.php
-		$.post("<?php echo URL::base(); ?>comment/submitmessage", 
-=======
 		myComment = '<?php echo __('From map:');?> <a href="<?php echo URL::base().'public/view?id='.$map->id?>"><?php echo $map->title;?></a><br/><br/>' + myComment;
 
 		$.post("<?php echo URL::base(); ?>message/submitmessage", 
->>>>>>> df921402337cb9648d568b53857da4be5f4fa4ed:application/views/messages/submit_window.php
+
 				{ 'myName': myName, 'myEmail': myEmail, 'myMessage': myComment, "map_id": "<?php echo $map->id?>" },
 				function(data) {
 					if(data.status == 'success'){

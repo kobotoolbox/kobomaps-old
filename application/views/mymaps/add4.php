@@ -7,7 +7,14 @@
 *************************************************************/
 ?>
 
-		
+</br>
+<div class="slug">
+		<ul>
+	<ul>
+		<li> <?php echo __('Your map has a large data file, loading might be slow.'); ?></li>
+		</ul>
+	</div>
+
 <h2><?php echo __('Add Map - Geo Set-up') . ' - '.$map->title ?></h2>
 <h3><?php echo __('Select which map template you want to use for your map');?></h3>
 <p>

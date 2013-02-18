@@ -324,10 +324,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 					//read in the excel file
 					$excel = Helper_Excel::open_for_reading_data($file_path);
 					
+					//determine if spreadsheet is large or not
 					$sheet_names = $excel->getSheetNames();
+					
 					$i = 0;
 					foreach($sheet_names as $sheet_name)
-					{
+					{				
 						$sheet = $excel->getSheetByName($sheet_name);
 						$map_sheet = ORM::factory('Mapsheet');
 						$map_sheet->position = $i;
@@ -336,6 +338,21 @@ class Controller_Mymaps extends Controller_Loggedin {
 						$map_sheet->save(); 
 						$i++;
 					
+						$highestCol = $sheet->getHighestColumn();
+						$highestRow = $sheet->getHighestRow();
+						$large_file = false;
+												
+						//if there are more than 26 columns and 6 rows, would be approximately 200 datapoints
+						if(count($highestCol) > 1 && $highestRow[0] > 6 || $highestRow > 8){
+							$large_file = true;
+						}
+							
+						//set the map big file indicator if it's true
+						if($large_file){
+							$map_file = ORM::factory('Map', $map->id);
+							$map_file->large_file = $large_file;
+							$map_file->save();
+						}
 					}
 				}
 				
@@ -370,6 +387,73 @@ class Controller_Mymaps extends Controller_Loggedin {
 		
 	 }//end action_add1
 	 
+	 
+	 
+	 public function action_checkslug(){
+	 	$this->auto_render = false;
+	 	$this->response->headers('Content-Type','application/json');
+	 	
+	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+	 	$map = ORM::factory('Map', $map_id);
+	 	
+	 	if(!isset($_POST['slug'])){
+	 		echo '{}';
+	 		exit;
+	 	}
+	 	
+	 	$slug = $_POST['slug'];
+	 	
+	 	if($slug == $map->slug){
+	 		echo '{"status": "true", "slug" :'.$slug.'"}';
+	 		exit;
+	 	}
+	 	
+	 	$slug_ids = ORM::factory('Map')->
+	 	where('slug', '=', $slug)->
+	 	find_all();
+
+ 		if(count($slug_ids) > 0){
+	 		echo '{"status": "notUnique"}';
+	 		exit;
+	 	}
+
+	 	
+	 	//illegal characters in a url
+	 	$illegalChar = array( 
+	 			"+" => '+',
+	 			"/" => '/', 
+	 			"?" => '?', 
+	 			"%" => '%', 
+	 			"#" => '#', 
+	 			"&" => '&', 
+	 			"<" => '<', 
+	 			">" => '>', 
+	 			'"' => '"', 
+	 			"\'" => '\'', 
+	 			"@" => '@', 
+	 			"\\" => '\\');
+	 	
+	 	//go through the illegal character array and remove any instances of them in the slug
+	 	$hadIllegal = false;
+	 	foreach($illegalChar as $char){
+	 		$pos = strpos($slug, $char);
+	 		if($pos !== false){
+	 			$slug = str_replace($char, '', $slug);
+	 			$hadIllegal = true;
+	 		}
+	 	}
+	 	//replaces spaces with _
+	 	$slug = str_replace(' ', '_', $slug);
+	 	//return the json specifying if the slug is legal
+	 	if($hadIllegal){
+	 		echo '{"status":"false", "slug":"'.$slug.'"}';
+	 		exit;
+	 	}
+	 	else{
+	 		echo '{"status":"true", "slug":"'.$slug.'"}';
+	 		exit;
+	 	}
+	 }
 	 
 	 
 	
@@ -1533,10 +1617,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					foreach($dupe_region_array as $region_id=>$num_dupes){
 	 						
 	 						$region = ORM::factory('Templateregion', $region_id);
-	 						
-	 						$error_string = __('You have used region ').$region->title.' '.$num_dupes.__(' times.');
-	 						$this->template->content->errors[] = $error_string;
-	 						
+	 						if($region->title != 'ignore_region'){
+	 							$error_string = __('You have used region ').$region->title.' '.$num_dupes.__(' times.');
+	 							$this->template->content->errors[] = $error_string;
+	 							}
 	 					}
 	 					$this->template->content->data = $_POST['region'];
 	 					return;

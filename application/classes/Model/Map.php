@@ -115,7 +115,7 @@ class Model_Map extends ORM {
 	public function update_map($values)
 	{
 	
-		$expected = array('title', 'description', 'slug', 'user_id', 'file', 'map_style', 'CSS', 'lat', 'lon', 'zoom', 
+		$expected = array('title', 'description', 'slug', 'large_file', 'user_id', 'file', 'map_style', 'CSS', 'lat', 'lon', 'zoom', 
 				'template_id','json_file', 'is_private', 'map_creation_progress', 
 				'show_empty_name', 'label_zoom_level', 'region_label_font', 'value_label_font');
 	

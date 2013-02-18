@@ -27,5 +27,30 @@ function set_default_map_style(elem_id)
 	
 }
 
+$(document).ready(function(){
+	$("#slug").change(function(){
+		$("#slug").css('border-color', '');
+		$.post("<?php echo URL::base(); ?>mymaps/checkslug", { "slug": $("#slug").val() }).done(
+				function(response) {
+					response = JSON.parse(response);
+
+					if(response.status == 'true'){
+						$("#slug").css('border-color', 'green');
+						$("#slug").val(response.slug);
+					}
+					else if(response.status == 'false'){
+						$("#slug").css('border-color', 'red');
+						alert('<?php echo __('Your slug had illegal characters, they have been replaced.')?>');
+						$("#slug").val(response.slug);
+					}
+					else if(response.status == 'notUnique'){
+						$("#slug").css('border-color', 'red');
+						alert('<?php echo __('You slug has already been used. Please choose another.')?>');
+					}
+				});
+	});
+});	
+	
+
 
 </script>

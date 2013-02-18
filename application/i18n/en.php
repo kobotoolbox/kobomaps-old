@@ -121,6 +121,8 @@ return array
 		'This will be the URL to access this map. It should be short and sweet'=>'This will be the URL to access this map. It should be short and sweet',
 		//add1 errors
 		'register/map.slug.unique'=>'Your slug is not unique, please pick another one',
+		'Your slug had illegal characters, they have been replaced.' => 'Your slug had illegal characters, they have been replaced.',
+		'You slug has already been used. Please choose another.' => 'You slug has already been used. Please choose another.',
 		
 		//add 2 page
 		'Add Map - Data Structure'=>'Add Map - Data Structure',
@@ -158,6 +160,7 @@ return array
 		'Ignore'=>'Ignore',
 		'Data'=>'Data',
 		'Header'=>'Header',
+		'Your map has a large data file, loading will be slow.' => 'Your map has a large data file, loading will be slow.',
 		
 		//add 3 page
 		'Add Map - Validation'=>'Add Map - Validation',

@@ -65,6 +65,7 @@
 	echo '</td><td>';
 	echo URL::site(null,'HTTP').Form::input('slug', $data['slug'], array('id'=>'slug', 'style'=>'width:300px;', 'maxlength'=>128));
 	echo '<br/>'.__('This will be the URL to access this map. It should be short and sweet');
+
 	echo '</td></tr><tr><td>';
 	echo Form::label('description', __('Map Description').": ");
 	echo '</td><td>';

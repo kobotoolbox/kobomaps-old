@@ -7,6 +7,14 @@
 *************************************************************/
 ?>
 
+</br>
+<div class="slug">
+		<ul>
+	<ul>
+		<li> <?php echo __('Your map has a large data file, loading might be slow.'); ?></li>
+		</ul>
+	</div>
+
 
 <h2><?php echo __('Add Map - Data Structure'). ' - '.$map->title; ?></h2>
 <h3><?php echo __('Now tell us about the structure of your data');?></h3>
