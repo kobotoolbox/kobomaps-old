@@ -11,6 +11,16 @@
 <h2><?php echo __('Add Map - Basic Setup'); echo  $data['title'] == '' ? '' : ' - '.$data['title']?></h2>
 <h3><?php echo __('First we will need some basic information for your map');?></h3>
 
+<?php if($data['large_file']) { ?>
+<div class="slug">
+	<ul>
+		<li>
+			<?php echo __('Your map has a large data file, loading might be slow.');?>
+		</li>
+	</ul>
+</div>
+<?php }?>
+
 
 <?php if(count($errors) > 0 )
 {
