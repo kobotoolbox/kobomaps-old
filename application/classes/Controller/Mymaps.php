@@ -345,22 +345,18 @@ class Controller_Mymaps extends Controller_Loggedin {
 						$highestCol = $colTemp > $highestCol ? $colTemp : $highestCol;  
 						$highestRow = intval($sheet->getHighestDataRow()) > $highestRow ? intval($sheet->getHighestDataRow()) : $highestRow;						
 					}
+										
+					//if there are more than 26 columns and 6 rows, would be approximately 200 datapoints
+					if($i * $highestCol * $highestRow > 20000){
+						$map->large_file = TRUE;
+						$map->save();
+					}
+					else //clear the large map file if the size of the data source has dropped
+					{
+						$map->large_file = FALSE;
+						$map->save();
+					}
 				}
-				
-
-				$total = $i * $highestCol * $highestRow;
-				
-				//if there are more than 26 columns and 6 rows, would be approximately 200 datapoints
-				if($i * $highestCol * $highestRow > 20000){					
-					$map->large_file = TRUE;
-					$map->save();
-				}
-				else //clear the large map file if the size of the data source has dropped
-				{
-					$map->large_file = FALSE;
-					$map->save();
-				}
-					
 				
 				
 				HTTP::redirect('mymaps/add2?id='.$map->id);	

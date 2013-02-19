@@ -118,6 +118,21 @@ class Model_Map extends ORM {
 		$expected = array('title', 'description', 'slug', 'large_file', 'user_id', 'file', 'map_style', 'CSS', 'lat', 'lon', 'zoom', 
 				'template_id','json_file', 'is_private', 'map_creation_progress', 
 				'show_empty_name', 'label_zoom_level', 'region_label_font', 'value_label_font');
+		
+		//if no slug is set
+		if($values['slug'] == '')
+		{
+			$auth = $auth = Auth::instance();
+			$hash = substr($auth->hash_password(microtime().$this->id), 0, 32);
+			$values['slug'] = $hash;
+			$map = ORM::factory('Map')->where('slug','=',$hash)->find();
+			while($map->loaded()) //keep coming up with a new hash until we find a unique one.
+			{
+				$hash = substr($auth->hash_password(microtime().$this->id), 0, 32);
+				$values['slug'] = $hash;
+				$map = ORM::factory('Map')->where('slug','=',$hash)->find();
+			}			
+		}
 	
 		$this->values($values, $expected);
 		$this->check();
