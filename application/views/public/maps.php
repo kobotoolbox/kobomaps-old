@@ -79,6 +79,7 @@
 		}
 		$i = 0;
 		foreach($maps as $id=>$map){
+			$slug = $map['slug'];
 			$i++;
 			$odd_row = ($i % 2) == 0 ? 'class="odd_row"' : '';
 			$permission = $map['permission'];
@@ -86,7 +87,7 @@
 
 	<tr <?php echo $odd_row; ?>>		
 		<td class="mapName" style="width:500px;">
-			<a href="<?php echo url::base(); ?>public/view/?id=<?php echo $id;?>" >
+			<a href="<?php echo url::base(); ?><?php echo $slug;?>" >
 				<?php echo substr($map['title'], 0, 40); echo strlen($map['title']) > 40 ? '...' : ''; echo $permission != null ? '('.$permission.')' : ''?>
 			</a>
 		</td>
@@ -106,7 +107,7 @@
 			</li>
 			<?php }?>
 			<li>
-				<a href="<?php echo url::base(); ?>public/view/?id=<?php echo $id;?>" >
+				<a href="<?php echo url::base(); ?><?php echo $slug;?>" >
 					<img class="view" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View');?>
 				</a>
 			</li>

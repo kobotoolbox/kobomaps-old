@@ -127,7 +127,7 @@ class Controller_Public extends Controller_Main {
 		$database = new mysqli($server, $user_name, $password, $database);
 		$maps = array();
 		
-		$sql = 'SELECT maps.id as id, maps.title as title, sharing.permission as permission ';
+		$sql = 'SELECT maps.id as id, maps.title as title, sharing.permission as permission, maps.slug as slug ';
 		$sql .= 'FROM maps ';
 		$sql .= 'LEFT JOIN `sharing` ON (`sharing`.`map_id` = `maps`.`id` AND sharing.user_id = '.$user_id.') ';
 		
@@ -155,7 +155,7 @@ class Controller_Public extends Controller_Main {
 		$results = $database->query($sql);
 		while($row = $results->fetch_row())
 		{
-			$maps[$row[0]] = array('id'=>$row[0], 'title'=>$row[1], 'permission'=>$row[2]);
+			$maps[$row[0]] = array('id'=>$row[0], 'title'=>$row[1], 'permission'=>$row[2], 'slug'=>$row[3]);
 		}
 		$results->close();
 		$database->close();
