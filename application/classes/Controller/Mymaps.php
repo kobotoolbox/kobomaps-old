@@ -410,6 +410,17 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		exit;
 	 	}
 	 	
+	 	//also check if the slug is a controller name
+	 	$controllers_array =  Kohana::$config->load('config')->get('controllers');
+	 	foreach($controllers_array as $controller)
+	 	{
+	 		if(strtolower($slug) == strtolower($controller))
+	 		{
+	 			echo '{"status": "notUnique"}';
+	 			exit;
+	 		}
+	 	}
+	 	
 	 	$slug_ids = ORM::factory('Map')->
 	 	where('slug', '=', $slug)->
 	 	find_all();
@@ -418,6 +429,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		echo '{"status": "notUnique"}';
 	 		exit;
 	 	}
+	 	
 
 	 	
 	 	//illegal characters in a url
