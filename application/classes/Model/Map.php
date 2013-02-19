@@ -123,9 +123,11 @@ class Model_Map extends ORM {
 		if($values['slug'] == '')
 		{
 			$auth = $auth = Auth::instance();
+			
 			$hash = substr($auth->hash_password(microtime().$this->id), 0, 32);
 			$values['slug'] = $hash;
 			$map = ORM::factory('Map')->where('slug','=',$hash)->find();
+			
 			while($map->loaded()) //keep coming up with a new hash until we find a unique one.
 			{
 				$hash = substr($auth->hash_password(microtime().$this->id), 0, 32);

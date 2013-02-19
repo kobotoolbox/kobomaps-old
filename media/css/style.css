@@ -794,6 +794,7 @@ div.shareWindow input{
 ul.sharingTasks{
 	list-style-type: none;
 	margin-top:0px;
+	height:32px;
 }
 ul.sharingTasks li{
 	float:left;

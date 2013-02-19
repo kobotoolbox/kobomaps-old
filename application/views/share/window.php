@@ -12,14 +12,14 @@
 
 
 	<?php echo __('Code to embed map')?><br/>
-	<input readonly="readonly" type="text" value="<iframe src=&quot;<?php echo URL::site(NULL, TRUE)?>public/view?id=<?php echo $map->id?>&quot; width=&quot;800&quot; height=&quot;600&quot;/>"/>
+	<input readonly="readonly" type="text" value="<iframe src=&quot;<?php echo URL::site(NULL, TRUE)?><?php echo $map->slug?>&quot; width=&quot;800&quot; height=&quot;600&quot;/>"/>
 	<br/>
 	<br/>
 
 	<?php echo __('Link to share map')?><br/>
-	<input readonly="readonly" type="text" value="<?php echo URL::site(NULL, TRUE)?>public/view?id=<?php echo $map->id?>"/>
+	<input readonly="readonly" type="text" value="<?php echo URL::site(NULL, TRUE)?><?php echo $map->slug?>"/>
 	<?php
-		$body = __('I want to share this map with you:').' '.URL::site(NULL, TRUE).'public/view?id='.$map->id;
+		$body = __('I want to share this map with you:').' '.URL::site(NULL, TRUE).$map->slug;
 		$body = rawurlencode($body); 
 		$subject = rawurlencode(__('Sharing'). ' '.$map->title. ' '.__('map'));
 	?>
@@ -40,7 +40,7 @@
 	<br/>
 	<div id="indicatorLink" style="display:none;">
 		<?php echo __('Link to share this indicator')?><br/>
-		<input readonly="readonly" type="text" value="<?php echo URL::site(NULL, TRUE)?>public/view?id=<?php echo $map->id?>#/?indicator="/>
+		<input readonly="readonly" type="text" value="<?php echo URL::site(NULL, TRUE)?><?php echo $map->slug?>#/?indicator="/>
 		<ul class="sharingTasks">
 			<li>
 				<a href="" id="indicatorEmail">
@@ -82,7 +82,7 @@
 	if( typeof $.address != 'undefined')
 	{
 		var mapShareIndicator = $.address.parameter("indicator");
-		if(typeof indicator != 'undefined')
+		if(typeof mapShareIndicator != 'undefined')
 		{
 
 			var indicatorLink = $("#indicatorLink input").val() + mapShareIndicator;
@@ -109,7 +109,7 @@
 	function postIndicatorLinkToFacebookFeed()
 	{
 		postToFacebookFeed(mapShareIndicatorURL,
-				'<?php echo str_replace("'", "\'", $map->title);?> - ' + $("#indicatorSpanId_"+indicator).text(),
+				'<?php echo str_replace("'", "\'", $map->title);?> - ' + $("#indicatorSpanId_"+mapShareIndicator).text(),
 				'<?php echo __('By KoboMaps');?>',
 				'<?php echo str_replace("'", "\'", $map->description);?>',
 				null);
