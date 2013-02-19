@@ -57,6 +57,7 @@ class Model_Map extends ORM {
 						array('max_length', array(':value', 128)),
 						array('min_length', array(':value', 1)),
 						array(array($this, 'unique'), array('slug', ':value')),
+						array(array('Model_Map', 'slug_no_controller')),
 				),
 				'file' => array(
 						array('not_empty'),
@@ -262,5 +263,60 @@ class Model_Map extends ORM {
 		return $new_map;
 	}
 	
+	/**
+	 * Custom function to make sure that the slug isn't a
+	 * controller
+	 * @param string $value Slug value as a string
+	 */
+	public static function slug_no_controller($value)
+	{
+		$temp_val = strtolower($value);
+		$controllers_array =  Kohana::$config->load('config')->get('controllers');
+		foreach($controllers_array as $controller)
+		{
+			if($temp_val == strtolower($controller))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Used to clean up a slug and remove unwanted characters
+	 * @param string $slug the uncleaned slug
+	 * @return string the clean slug
+	 */
+	public static function clean_slug($slug)
+	{
+		//illegal characters in a url
+		$illegalChar = array(
+				"+" => '+',
+				"/" => '/',
+				"?" => '?',
+				"%" => '%',
+				"#" => '#',
+				"&" => '&',
+				"<" => '<',
+				">" => '>',
+				'"' => '"',
+				"\'" => '\'',
+				"@" => '@',
+				"\\" => '\\');
+		
+		//go through the illegal character array and remove any instances of them in the slug
+		$hadIllegal = false;
+		foreach($illegalChar as $char){
+			$pos = strpos($slug, $char);
+			if($pos !== false){
+				$slug = str_replace($char, '', $slug);
+				$hadIllegal = true;
+			}
+		}
+		//replaces spaces with _
+		$slug = str_replace(' ', '_', $slug);
+		 
+		return $slug;
+	}
 	
 } // End User Model
