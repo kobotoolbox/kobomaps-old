@@ -6,6 +6,7 @@
 *************************************************************/
 ?>
 	
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jscolor/jscolor.js"> </script>
 
 <script type="text/javascript">
 
@@ -49,6 +50,7 @@ $(document).ready(function(){
 					}
 				});
 	});
+	
 });	
 	
 

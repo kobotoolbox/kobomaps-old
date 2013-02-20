@@ -142,6 +142,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'lat'=>'0',
 			'lon'=>'0',
 			'zoom'=>'1',
+			'border_color' => '',
+			'region_color' => '',
 			'map_style'=>Model_Map::$style_default,
 			'user_id'=>$this->user->id,
 			'is_private'=>0,
@@ -181,6 +183,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['zoom'] = $map->zoom;
 			$data['map_style'] = $map->map_style;
 			$data['user_id'] = $map->user_id;
+			$data['border_color'] = $map->border_color;
+			$data['region_color'] = $map->region_color;
+			$data['polygon_color'] = $map->polygon_color;
+			$data['graph_bar_color'] = $map->graph_bar_color;
+			$data['graph_select_color'] = $map->graph_select_color;
 			$data['is_private'] = $map->is_private;
 			$data['show_names'] = $map->show_empty_name;
 			$data['label_zoom_level'] = $map->label_zoom_level;

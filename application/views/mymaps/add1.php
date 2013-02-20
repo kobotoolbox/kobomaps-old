@@ -142,7 +142,6 @@
 	echo '</td><td>';
 	echo Form::select('zoom', array(1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9,10=>10,11=>11,12=>12,13=>13,14=>14,15=>15,16=>16,17=>17,18=>18),$data['zoom'], array('id'=>'zoom', 'style'=>'width:300px;'));
 	
-	
 	echo '</td></tr><tr><td>';
 	echo Form::label('advanced_options', __('Show advanced options').": ");
 	echo '</td><td>';
@@ -180,6 +179,40 @@
 	echo Form::select('value_label_font', $label_font_options, $data['value_label_font']);
 	echo Form::label('show_region_font', __('  Font size of the data values as seen in maps, in pixels.'));
 	
+	
+	//region border color picker
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('border_color_description', __('<br/>Color of region borders').": ");
+	echo '</td><td></br>';
+	echo '<input id="border_color_pick" class="color {valueElement: '.'border_color'.', pickerClosable:true}" style="width:30px"><input id="border_color" name="border_color" value='.$data['border_color'].' style="display:none">';
+	
+	//region color picker
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('region_color', __('<br/>Default Color of regions').": ");
+	echo '</td><td></br>';
+	echo '<input id="region_color_pick" class="color {valueElement: '.'region_color'.', pickerClosable:true}" style="width:30px"><input id="region_color" name="region_color" value='.$data['region_color'].' style="display:none">';
+
+	
+	//polygon color picker
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('polygon_color_shade', __('<br/>Color of region shading').": ");
+	echo '</td><td></br>';
+	echo '<input id="polygon_color_pick" class="color {valueElement: '.'polygon_color'.', pickerClosable:true, minS:0.8}" style="width:30px"><input id="polygon_color" name="polygon_color" value='.$data['polygon_color'].' style="display:none">';
+	
+	
+	//graph bar color picker
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('bar_color_description', __('<br/>Color of bars in graphs').": ");
+	echo '</td><td></br>';
+	echo '<input id="bar_color_pick" class="color {valueElement: '.'graph_bar_color'.', pickerClosable:true}" style="width:30px"><input id="graph_bar_color" name="graph_bar_color" value='.$data['graph_bar_color'].' style="display:none">';
+	
+	//bar selected color picker
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('region_color', __('<br/>Color of selected </br>regions in graphs').": ");
+	echo '</td><td></br>';
+	echo '<input id="bar_select_color_pick" class="color {valueElement: '.'graph_select_color'.', pickerClosable:true}" style="width:30px"><input id="graph_select_color" name="graph_select_color" value='.$data['graph_select_color'].' style="display:none">';
+	
+	//map CSS text box
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
 	echo Form::label('CSS', __('Map CSS').": ");
 	echo '</td><td>';
@@ -188,6 +221,7 @@
 	echo Form::textarea('CSS', $data['CSS'], array('id'=>'CSS', 'style'=>'width:600px;'));
 	
 	
+	//map style box
 	echo '</td></tr><tr class="advanced"  style="display:none"><td>';
 	echo Form::label('map_style', __('Map Style').": ");
 	echo '</td><td>';

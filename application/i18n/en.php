@@ -123,7 +123,7 @@ return array
 		//add1 errors
 		'register/map.slug.unique'=>'Your slug is not unique, please pick another one',
 		'Your slug had illegal characters, they have been replaced.' => 'Your slug had illegal characters, they have been replaced.',
-		'You slug has already been used. Please choose another.' => 'You slug has already been used. Please choose another.',
+		'You slug has already been used. Please choose another.' => 'Your slug has already been used. Please choose another.',
 		
 		//add 2 page
 		'Add Map - Data Structure'=>'Add Map - Data Structure',

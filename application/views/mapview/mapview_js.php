@@ -61,6 +61,15 @@ var map;
  */
 var mapData;
 
+
+/**
+ * global variables that hold the map color choices, just replaces previous values in code
+ */
+var border_color = '#<?php echo $map->border_color ?>';
+var region_color = '#<?php echo $map->region_color ?>';
+var polygon_color = '#<?php echo $map->polygon_color ?>';
+var graph_color = '#<?php echo $map->graph_bar_color ?>';
+var graph_select_color = '#<?php echo $map->graph_select_color ?>';
 /**
  *  gives us a list of names for geographicAreas
  */
@@ -664,10 +673,10 @@ function parseJsonToGmap(jsonUrl, jsonDataUrl)
 			//creates the polygon
 			areaGPolygons[areaName] = new google.maps.Polygon({
 				paths: points,
-				strokeColor: "#00CC00", //sets the line color to red
+				strokeColor: border_color, //sets the line color to defined color
 				strokeOpacity: 0.8, //sets the line color opacity to 0.8
 				strokeWeight: 2, //sets the width of the line to 3
-				fillColor: "#aaaaaa", //sets the fill color
+				fillColor: region_color, //sets the fill color
 				fillOpacity: 0.75 //sets the opacity of the fill color
 			});
 			areaGPolygons[areaName].setMap(map); //places the polygon on the map
@@ -719,12 +728,111 @@ function formatAreaOpacityColor(name, opacityValue, colorValue)
 function calculateColor(percentage, min, spread)
 {
 	//calculate the color
-	var red = 255;
-	var blue = 255 - ((percentage-min)*(1/spread)*255);
-	var green = 255 - ((percentage-min)*(1/spread)*255);
-	var color = "#"+decimalToHex(red,2)+decimalToHex(green,2)+decimalToHex(blue,2);
+	console.log(polygon_color);
+	var red = hexToR(polygon_color);
+	var blue = hexToB(polygon_color); //255 - ((percentage-min)*(1/spread)*255);
+	var green = hexToG(polygon_color);; //255 - ((percentage-min)*(1/spread)*255);
+
+	var colorPerct = (percentage-min)*(1/spread);
+	
+	var hsvArray = rgb2hsv(red,green,blue);
+
+	console.log(hsvArray);
+	
+	hsvArray[1] *= colorPerct;
+
+	var rgbArray = hsv2rgb(hsvArray);
+
+	//console.log(rgbArray);
+	
+	var color = "#"+decimalToHex(rgbArray[0],2)+decimalToHex(rgbArray[1],2)+decimalToHex(rgbArray[2],2);
+	//console.log(color);
 	
 	return color;
+}
+
+function hexToR(h) {
+	return parseInt((cutHex(h)).substring(0,2),16);
+}
+function hexToG(h) {
+	return parseInt((cutHex(h)).substring(2,4),16);
+}
+function hexToB(h) {
+	return parseInt((cutHex(h)).substring(4,6),16);
+}
+function cutHex(h) {
+	return (h.charAt(0)=="#") ? h.substring(1,7):h;
+}
+
+//from HSV values to RGB, takes an array of HSV values
+function hsv2rgb (HSV) {
+	var h = HSV[0]/360;
+	var s = HSV[1]; 
+	var v = HSV[2];
+	var rgbArray = new Array();
+	if (s == 0) {
+		rgbArray[0] = v * 255;
+		rgbArray[1] = v * 255;
+		rgbArray[2] = v * 255;
+	} else {
+		var_h = h * 6;
+		var_i = Math.floor(var_h);
+		var_1 = v * (1 - s);
+		var_2 = v * (1 - s * (var_h - var_i));
+		var_3 = v * (1 - s * (1 - (var_h - var_i)));
+		
+		if (var_i == 0) {var_r = v; var_g = var_3; var_b = var_1}
+		else if (var_i == 1) {var_r = var_2; var_g = v; var_b = var_1}
+		else if (var_i == 2) {var_r = var_1; var_g = v; var_b = var_3}
+		else if (var_i == 3) {var_r = var_1; var_g = var_2; var_b = v}
+		else if (var_i == 4) {var_r = var_3; var_g = var_1; var_b = v}
+		else {var_r = v; var_g = var_1; var_b = var_2};
+
+		var rgbArray = new Array();
+		rgbArray[0] = var_r * 255;
+		rgbArray[1] = var_g * 255;
+		rgbArray[2] = var_b * 255;
+	}
+	return rgbArray;
+}
+
+//returns HSV array from rgb values
+function rgb2hsv (r,g,b) {
+	 var computedH = 0;
+	 var computedS = 0;
+	 var computedV = 0;
+
+	 //remove spaces from input RGB values, convert to int
+	 var r = parseInt( (''+r).replace(/\s/g,''),10 ); 
+	 var g = parseInt( (''+g).replace(/\s/g,''),10 ); 
+	 var b = parseInt( (''+b).replace(/\s/g,''),10 ); 
+
+	 if ( r==null || g==null || b==null ||
+	     isNaN(r) || isNaN(g)|| isNaN(b) ) {
+	   alert ('Please enter numeric RGB values!');
+	   return;
+	 }
+	 if (r<0 || g<0 || b<0 || r>255 || g>255 || b>255) {
+	   alert ('RGB values must be in the range 0 to 255.');
+	   return;
+	 }
+	 r=r/255; g=g/255; b=b/255;
+	 var minRGB = Math.min(r,Math.min(g,b));
+	 var maxRGB = Math.max(r,Math.max(g,b));
+
+	 // Black-gray-white
+	 if (minRGB==maxRGB) {
+	  computedV = minRGB;
+	  return [0,0,computedV];
+	 }
+
+	 // Colors other than black-gray-white:
+	 var d = (r==minRGB) ? g-b : ((b==minRGB) ? r-g : b-r);
+	 var h = (r==minRGB) ? 3 : ((b==minRGB) ? 1 : 5);
+	 computedH = 60*(h - d/(maxRGB - minRGB));
+	 computedS = (maxRGB - minRGB)/maxRGB;
+	 computedV = maxRGB;
+	 return [computedH,computedS,computedV];
 }
 
 
@@ -737,7 +845,7 @@ function UpdateAreaPercentage(name, percentage, min, spread, unit)
 	var color = calculateColor(percentage, min, spread);
 	
 	//update the polygon with this new color
-	formatAreaOpacityColor(name, 0.6, color);
+	formatAreaOpacityColor(name, 0.75, color);
 	
 	//update the labels
 
@@ -907,15 +1015,15 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 	selectedArea = [[selecX, selecY]];
 	 var bothData = [
 	        	  {
-		        	data: graphXData,
-		          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(34,57,83)"} ,
-		          	color: "rgb(34,57,83)"
-	        	  },
-	        	  {
-		        	data: selectedArea,
-		        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(215, 24, 24)"} ,
-	        		color: "rgb(215, 24, 24)"
-	        	  }
+				     data: graphXData,
+				     bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_color} ,
+				     color: graph_color
+			       },
+			      {
+				    data: selectedArea,
+				    bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_select_color} ,
+			        color: graph_select_color
+			      }
 	  ];
 	  
       /*
@@ -988,15 +1096,15 @@ function drawGeneralChart(fullId, dataPath, name){
 	selectedArea = [[selecX, selecY]];
 	var bothData = [
 		        	  {
-			        	data: graphXData,
-			          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(34,57,83)"} ,
-			          	color: "rgb(34,57,83)"
-		        	  },
-		        	  {
-			        	data: selectedArea,
-			        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(215, 24, 24)"} ,
-		        		color: "rgb(215, 24, 24)"
-		        	  }
+				        	data: graphXData,
+				          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_color} ,
+				          	color: graph_color
+			        	  },
+			        	  {
+				        	data: selectedArea,
+				        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_select_color} ,
+			        		color: graph_select_color
+			        	  }
 		  ];
 	  
       /*
@@ -1080,13 +1188,13 @@ function drawTotalChart(indicator){
 		var bothData = [
 			        	  {
 				        	data: graphXData,
-				          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(34,57,83)"} ,
-				          	color: "rgb(34,57,83)"
+				          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_color} ,
+				          	color: graph_color
 			        	  },
 			        	  {
 				        	data: selectedArea,
-				        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(215, 24, 24)"} ,
-			        		color: "rgb(215, 24, 24)"
+				        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_select_color} ,
+			        		color: graph_select_color
 			        	  }
 			  ];
 
@@ -1473,7 +1581,7 @@ function zeroOutMap()
 	for(areaName in areaGPolygons)
 	{
 		//set the polygon back to default colors
-		formatAreaOpacityColor(areaName, 0.75, "#aaaaaa");
+		formatAreaOpacityColor(areaName, 0.75, region_color);
 		//set the label to blank("")
 
 		labels[areaName].set("areaValue", "");

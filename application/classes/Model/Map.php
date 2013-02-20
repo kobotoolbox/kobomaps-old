@@ -117,7 +117,8 @@ class Model_Map extends ORM {
 	{
 	
 		$expected = array('title', 'description', 'slug', 'large_file', 'user_id', 'file', 'map_style', 'CSS', 'lat', 'lon', 'zoom', 
-				'template_id','json_file', 'is_private', 'map_creation_progress', 
+				'template_id','json_file', 'is_private', 'map_creation_progress', 'border_color', 'region_color', 'polygon_color',
+				'graph_bar_color', 'graph_select_color',
 				'show_empty_name', 'label_zoom_level', 'region_label_font', 'value_label_font');
 		
 		//if no slug is set
