@@ -88,7 +88,7 @@
 			<?php if($map->permission == Model_Sharing::$owner) echo Form::checkbox('map_check['.$map->id.']', null, false, array('id'=>'map_check_'.$map->id)); ?>			
 		</td>
 		<td class="mapName">
-			<a href="<?php echo url::base(); ?>public/view/?id=<?php echo $map->id;?>" >
+			<a href="<?php echo url::base(); ?><?php echo $map->slug;?>" >
 				<?php echo substr($map->title, 0, 40); echo strlen($map->title) > 40 ? '...' : '';
 				if($map->permission != Model_Sharing::$owner)
 				{
@@ -100,7 +100,7 @@
 		<td class="mapTasks">
 			<ul>
 			<li>
-				<a href="<?php echo url::base(); ?>public/view/?id=<?php echo $map->id;?>" >
+				<a href="<?php echo url::base(); ?><?php echo $map->slug;?>" >
 					<img class="view" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View');?>
 				</a>
 			</li>

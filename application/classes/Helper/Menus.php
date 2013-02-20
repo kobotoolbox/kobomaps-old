@@ -278,7 +278,7 @@ class Helper_Menus
 					
 					<li class="<?php echo ($pageNumber == 0)? 'active':''; echo ($map_progress < 5 AND $pageNumber != 0)? 'greyedout':'';?>">
 					
-						<?php if($map_progress >= 5 AND $pageNumber != 0){?><a href="<?php echo URL::base();?>public/view?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
+						<?php if($map_progress >= 5 AND $pageNumber != 0){?><a href="<?php echo URL::base();?><?php echo $map->slug;?>"> <?php } else {?><span><?php }?>
 							<div>
 								<img class="genMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View Map');?>
 							</div>

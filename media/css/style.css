@@ -672,7 +672,21 @@ ul.context_menu{
 #googleFileListHolder{
 	max-height:300px;
 	overflow: scroll;
+	overflow-y:scroll;
+	overflow-x:hidden;
+	border-radius: 7px;
+	border: solid 2px #9a9a9a;
 }
+
+#googleFileListHolder table{
+	width:100%;
+}
+
+#googleFileListHolder table tr td{
+	border-left: solid 1px #9a9a9a;
+	padding-left: 5px;
+}
+
 
 a, a:visited, a:link{
 	color:blue;
@@ -794,6 +808,7 @@ div.shareWindow input{
 ul.sharingTasks{
 	list-style-type: none;
 	margin-top:0px;
+	height:32px;
 }
 ul.sharingTasks li{
 	float:left;

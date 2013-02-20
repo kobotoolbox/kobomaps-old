@@ -7,12 +7,16 @@
 *************************************************************/
 ?>
 
+</br>
+<?php if($map->large_file) { ?>
 <div class="slug">
-		<ul>
 	<ul>
-		<li> <?php echo __('Your map has a large data file, loading might be slow.'); ?></li>
-		</ul>
-	</div>
+		<li>
+			<?php echo __('Your map has a large data file, loading might be slow.');?>
+		</li>
+	</ul>
+</div>
+<?php }?>
 
 		
 <h2><?php echo __('Add Map - Validation') . ' - '.$map->title; ?></h2>

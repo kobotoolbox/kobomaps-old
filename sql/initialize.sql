@@ -370,7 +370,7 @@ ALTER TABLE  `maps` ADD UNIQUE (`slug`);
 UPDATE `metadata` SET  `v` =  '1.0.035' WHERE  `metadata`.`k` ='Database Version';
 
 /** Dylan Gillespie -- 2013-02-18 -- Added large_file boolean to maps to give warning on large files **/
-ALTER TABLE  `maps` ADD  `large_file` BOOLEAN NOT NULL DEFAULT FALSE AFTER  `file`
+ALTER TABLE  `maps` ADD  `large_file` BOOLEAN NOT NULL DEFAULT FALSE AFTER  `file`;
 UPDATE `metadata` SET  `v` =  '1.0.036' WHERE  `metadata`.`k` ='Database Version';
 
 

@@ -11,6 +11,16 @@
 <h2><?php echo __('Add Map - Basic Setup'); echo  $data['title'] == '' ? '' : ' - '.$data['title']?></h2>
 <h3><?php echo __('First we will need some basic information for your map');?></h3>
 
+<?php if($data['large_file']) { ?>
+<div class="slug">
+	<ul>
+		<li>
+			<?php echo __('Your map has a large data file, loading might be slow.');?>
+		</li>
+	</ul>
+</div>
+<?php }?>
+
 
 <?php if(count($errors) > 0 )
 {
@@ -97,15 +107,23 @@
 		<img src="<?php echo url::base();?>media/img/loading.gif" id="googlewaiter" style="display:none;"/>
 		<div id="googleFileListHolder">
 			<table id="googleFilesList">
+				<thead>
 				<tr>
-					<th></th><th><?php echo __('Name')?></th><th><?php echo __('Owner')?></th><th><?php echo __('Date')?></th>
+					<th></th><th><?php echo __('Name')?></th><th><?php echo __('Owner')?></th><th><?php echo __('Date Modified')?></th>
 				</tr>
+				</thead>
+				<tbody>
+				<tr id="blankGSrow">
+					<td colspan="4" style="text-align:center;"><span style="color:#9a9a9a;">Empty</span></td>
+				</tr>
+				</tbody>
 			</table>
 		</div>
 	
 	<?php 
 	echo Form::hidden('googleid','',array('id'=>'googleid'));
 	echo Form::hidden('googlelink','',array('id'=>'googlelink'));
+	echo Form::hidden('googletoken','',array('id'=>'googletoken'));
 	echo '</td></tr>';
 	
 	//do we ultimately want to clean this up a bit?

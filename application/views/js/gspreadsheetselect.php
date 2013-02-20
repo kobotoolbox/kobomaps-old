@@ -37,14 +37,30 @@ $client_id = $config['client_id'];
         */ 
 		function displayFileList (data)
 		{
-			for(i in data.items)
-			{
-				var item = data.items[i];
+			//clear out the empty row
+			$("#blankGSrow").hide();
 
-				$("#googleFilesList").append('<tr><td><input type="radio" name="googleFile" value="'+item.id+'" onclick="googleFileSelected(\''+item.id+'\',\''+item.exportLinks["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]+'\');"></td><td>'+item.title+"</td><td>"+item.ownerNames[0]+"</td><td>"+item.modifiedDate+"</td></tr>");
+		
+			for(i in data.items)
+			{ 
+				var item = data.items[i];
+				var d = new Date(item.modifiedDate);
+				var dateString = d.toLocaleString();
+				//do some work to remove the seconds.
+				dateString = dateString.substr(0, dateString.lastIndexOf(":")) + dateString.substr(dateString.lastIndexOf(":") + 3); 
+				$("#googleFilesList").append('<tr><td><input type="radio" name="googleFile" value="'+item.id+'" onclick="googleFileSelected(\''+item.id+'\',\''+item.exportLinks["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]+'\');"></td><td>'+item.title+"</td><td>"+item.ownerNames[0]+"</td><td>"+dateString+"</td></tr>");				
 			}
-			//console.log(data.items);
+						
 			$("#googlewaiter").hide();
+			if(typeof data.nextPageToken != 'undefined')
+			{
+				$("#googlewaiter").show();
+				gapi.client.request({
+					 path: 'drive/v2/files', 
+					 callback:displayFileList,
+					 params: {q:"mimeType='application/vnd.google-apps.spreadsheet'", pageToken:data.nextPageToken}
+				});		
+			}
 		}      
 
 	  /**

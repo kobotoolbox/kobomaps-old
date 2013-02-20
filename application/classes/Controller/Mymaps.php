@@ -149,7 +149,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'show_names' => true,
 			'label_zoom_level' => 0,
 			'region_label_font' => 12,
-			'value_label_font' => 12
+			'value_label_font' => 12,
+			'large_file'=> false,
 			);
 		
 		$map = null;
@@ -185,6 +186,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['label_zoom_level'] = $map->label_zoom_level;
 			$data['region_label_font'] = $map->region_label_font;
 			$data['value_label_font'] = $map->value_label_font;
+			$data['large_file'] = $map->large_file;
 		}
 		else
 		{
@@ -326,6 +328,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 					
 					//determine if spreadsheet is large or not
 					$sheet_names = $excel->getSheetNames();
+					$highestCol = 0;
+					$highestRow = 0;
 					
 					$i = 0;
 					foreach($sheet_names as $sheet_name)
@@ -337,22 +341,20 @@ class Controller_Mymaps extends Controller_Loggedin {
 						$map_sheet->map_id = $map->id;
 						$map_sheet->save(); 
 						$i++;
-					
-						$highestCol = $sheet->getHighestColumn();
-						$highestRow = $sheet->getHighestRow();
-						$large_file = false;
-												
-						//if there are more than 26 columns and 6 rows, would be approximately 200 datapoints
-						if(count($highestCol) > 1 && $highestRow[0] > 6 || $highestRow > 8){
-							$large_file = true;
-						}
-							
-						//set the map big file indicator if it's true
-						if($large_file){
-							$map_file = ORM::factory('Map', $map->id);
-							$map_file->large_file = $large_file;
-							$map_file->save();
-						}
+						$colTemp = PHPExcel_Cell::columnIndexFromString($sheet->getHighestDataColumn());
+						$highestCol = $colTemp > $highestCol ? $colTemp : $highestCol;  
+						$highestRow = intval($sheet->getHighestDataRow()) > $highestRow ? intval($sheet->getHighestDataRow()) : $highestRow;						
+					}
+										
+					//if there are more than 26 columns and 6 rows, would be approximately 200 datapoints
+					if($i * $highestCol * $highestRow > 20000){
+						$map->large_file = TRUE;
+						$map->save();
+					}
+					else //clear the large map file if the size of the data source has dropped
+					{
+						$map->large_file = FALSE;
+						$map->save();
 					}
 				}
 				
@@ -401,11 +403,26 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		exit;
 	 	}
 	 	
-	 	$slug = $_POST['slug'];
 	 	
+	 	$slug = $_POST['slug'];
+	 	$slug_original = $slug;
+	 	
+	 	$slug = Model_Map::clean_slug($slug);
+	 		 	
 	 	if($slug == $map->slug){
 	 		echo '{"status": "true", "slug" :'.$slug.'"}';
 	 		exit;
+	 	}
+	 	
+	 	//also check if the slug is a controller name
+	 	$controllers_array =  Kohana::$config->load('config')->get('controllers');
+	 	foreach($controllers_array as $controller)
+	 	{
+	 		if(strtolower($slug) == strtolower($controller))
+	 		{
+	 			echo '{"status": "notUnique"}';
+	 			exit;
+	 		}
 	 	}
 	 	
 	 	$slug_ids = ORM::factory('Map')->
@@ -416,36 +433,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		echo '{"status": "notUnique"}';
 	 		exit;
 	 	}
+	 	
 
 	 	
-	 	//illegal characters in a url
-	 	$illegalChar = array( 
-	 			"+" => '+',
-	 			"/" => '/', 
-	 			"?" => '?', 
-	 			"%" => '%', 
-	 			"#" => '#', 
-	 			"&" => '&', 
-	 			"<" => '<', 
-	 			">" => '>', 
-	 			'"' => '"', 
-	 			"\'" => '\'', 
-	 			"@" => '@', 
-	 			"\\" => '\\');
 	 	
-	 	//go through the illegal character array and remove any instances of them in the slug
-	 	$hadIllegal = false;
-	 	foreach($illegalChar as $char){
-	 		$pos = strpos($slug, $char);
-	 		if($pos !== false){
-	 			$slug = str_replace($char, '', $slug);
-	 			$hadIllegal = true;
-	 		}
-	 	}
-	 	//replaces spaces with _
-	 	$slug = str_replace(' ', '_', $slug);
 	 	//return the json specifying if the slug is legal
-	 	if($hadIllegal){
+	 	if(strlen($slug_original) != strlen($slug)){
 	 		echo '{"status":"false", "slug":"'.$slug.'"}';
 	 		exit;
 	 	}
@@ -1571,10 +1564,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$dupes = array();
 	 					foreach($sheet as $column=>$region_id)
 	 					{
-	 						if(!isset($dupes[$region_id])){
+	 						$ignore_region = ORM::factory('Templateregion')->where('title','=','ignore_region')->find();
+	 						//make sure it's not the ignore region, we can have more than one of those
+	 						if($region_id != $ignore_region->id AND !isset($dupes[$region_id])){
 	 							$dupes[$region_id] = 0;
 	 						}
-	 						if(++$dupes[$region_id] > 1){
+	 						if(($region_id != $ignore_region->id) AND (++$dupes[$region_id] > 1)){
 	 								$dupe_region_array[$region_id] = $dupes[$region_id];
 	 						}
 							else {$region_id = intval($region_id);
@@ -1855,7 +1850,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$map_array['map_creation_progress'] = 5;
 	 				}
 	 				$map->update_map($map_array);
-	 				HTTP::redirect('public/view?id='.$map_id);
+	 				HTTP::redirect($map->slug);
 	 			}
 	 		}
 	 		catch (ORM_Validation_Exception $e)
