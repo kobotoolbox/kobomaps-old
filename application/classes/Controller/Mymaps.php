@@ -1846,7 +1846,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$map_array['map_creation_progress'] = 5;
 	 				}
 	 				$map->update_map($map_array);
-	 				HTTP::redirect('public/view?id='.$map_id);
+	 				HTTP::redirect($map->slug);
 	 			}
 	 		}
 	 		catch (ORM_Validation_Exception $e)
