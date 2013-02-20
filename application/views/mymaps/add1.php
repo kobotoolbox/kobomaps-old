@@ -107,9 +107,16 @@
 		<img src="<?php echo url::base();?>media/img/loading.gif" id="googlewaiter" style="display:none;"/>
 		<div id="googleFileListHolder">
 			<table id="googleFilesList">
+				<thead>
 				<tr>
-					<th></th><th><?php echo __('Name')?></th><th><?php echo __('Owner')?></th><th><?php echo __('Date')?></th>
+					<th></th><th><?php echo __('Name')?></th><th><?php echo __('Owner')?></th><th><?php echo __('Date Modified')?></th>
 				</tr>
+				</thead>
+				<tbody>
+				<tr id="blankGSrow">
+					<td colspan="4" style="text-align:center;"><span style="color:#9a9a9a;">Empty</span></td>
+				</tr>
+				</tbody>
 			</table>
 		</div>
 	

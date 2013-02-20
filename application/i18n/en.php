@@ -101,6 +101,7 @@ return array
 		'Name'=>'Name',
 		'Owner'=>'Owner',
 		'Date'=>'Date',
+		'Date Modified'=>'Date Modified',
 		'Show advanced options'=>'Show advanced options',
 		'Advanced'=>'Advanced',
 		'Map CSS'=>'Map CSS',
