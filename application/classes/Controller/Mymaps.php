@@ -1615,15 +1615,19 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				
 	 				if(count($dupe_region_array) > 0){
 	 					foreach($dupe_region_array as $region_id=>$num_dupes){
-	 						
 	 						$region = ORM::factory('Templateregion', $region_id);
 	 						if($region->title != 'ignore_region'){
 	 							$error_string = __('You have used region ').$region->title.' '.$num_dupes.__(' times.');
 	 							$this->template->content->errors[] = $error_string;
 	 							}
+	 						else{
+	 							unset($dupe_region_array[$region_id]);	
+	 						}
 	 					}
-	 					$this->template->content->data = $_POST['region'];
-	 					return;
+	 					if(count($dupe_region_array) > 0){
+	 						$this->template->content->data = $_POST['region'];
+	 						return;
+	 					}
 	 				}
 	 				
 	 				
