@@ -123,6 +123,7 @@
 	<?php 
 	echo Form::hidden('googleid','',array('id'=>'googleid'));
 	echo Form::hidden('googlelink','',array('id'=>'googlelink'));
+	echo Form::hidden('googletoken','',array('id'=>'googletoken'));
 	echo '</td></tr>';
 	
 	//do we ultimately want to clean this up a bit?
