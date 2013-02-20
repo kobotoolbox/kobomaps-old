@@ -403,8 +403,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		exit;
 	 	}
 	 	
-	 	$slug = $_POST['slug'];
 	 	
+	 	$slug = $_POST['slug'];
+	 	$slug_original = $slug;
 	 	
 	 	$slug = Model_Map::clean_slug($slug);
 	 		 	
@@ -437,7 +438,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	
 	 	
 	 	//return the json specifying if the slug is legal
-	 	if($hadIllegal){
+	 	if(strlen($slug_original) != strlen($slug)){
 	 		echo '{"status":"false", "slug":"'.$slug.'"}';
 	 		exit;
 	 	}
