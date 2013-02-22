@@ -165,7 +165,7 @@
 			<div class="contentWrap" style="position:relative;padding:30px;">
 				<img src="<?php echo URL::base();?>media/img/big_error.png"/>
 				<h2 >
-					<?php echo __('We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. Please check back soon.');?>
+					<?php echo __('We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner.').'<br/><br/>'.__('Please check back soon.');?>
 				</h2>
 			</div>
 		</div>
