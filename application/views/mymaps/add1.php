@@ -202,13 +202,13 @@
 	
 	//graph bar color picker
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
-	echo Form::label('bar_color_description', __('<br/>Color of bars in graphs').": ");
+	echo Form::label('bar_color_description', __('Color of bars in graphs').": ");
 	echo '</td><td></br>';
 	echo '<input id="bar_color_pick" class="color {valueElement: '.'graph_bar_color'.', pickerClosable:true}" style="width:30px"><input id="graph_bar_color" name="graph_bar_color" value='.$data['graph_bar_color'].' style="display:none">';
 	
 	//bar selected color picker
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
-	echo Form::label('region_color', __('<br/>Color of selected </br>regions in graphs').": ");
+	echo Form::label('region_color', __('<br/>Color of selected regions in graphs').": ");
 	echo '</td><td></br>';
 	echo '<input id="bar_select_color_pick" class="color {valueElement: '.'graph_select_color'.', pickerClosable:true}" style="width:30px"><input id="graph_select_color" name="graph_select_color" value='.$data['graph_select_color'].' style="display:none">';
 	

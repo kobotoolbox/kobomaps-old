@@ -731,7 +731,7 @@ function calculateColor(percentage, min, spread)
 	console.log(polygon_color);
 	var red = hexToR(polygon_color);
 	var blue = hexToB(polygon_color); //255 - ((percentage-min)*(1/spread)*255);
-	var green = hexToG(polygon_color);; //255 - ((percentage-min)*(1/spread)*255);
+	var green = hexToG(polygon_color); //255 - ((percentage-min)*(1/spread)*255);
 
 	var colorPerct = (percentage-min)*(1/spread);
 	
