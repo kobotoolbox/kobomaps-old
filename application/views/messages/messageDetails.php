@@ -27,7 +27,8 @@
 			echo __('No email given.');
 		}
 		else{
-			echo $message->poster_email;
+			$email = trim($message->poster_email);
+			echo '<a href="mailto:'.$email.'?Subject=In%20response%20to%20your%20comment%20on%20my%20map.">'.$email.'</a>';
 		}
 	?>
 	</p>
