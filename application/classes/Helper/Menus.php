@@ -195,7 +195,7 @@ class Helper_Menus
 					</a>
 				</li>				
 				<li>
-					<a href="<?php echo URL::base();?>comment">
+					<a href="<?php echo URL::base();?>message">
 					<div>
 						<img class="message" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Message Center'); ?>
 					</div>

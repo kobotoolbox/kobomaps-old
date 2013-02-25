@@ -67,8 +67,8 @@ var mapData;
  * global variables that hold the map color choices, just replaces previous values in code
  */
 var border_color = '#<?php echo $map->border_color ?>';
-//var region_color = '#<?php echo $map->region_color ?>';
-var polygon_color = '#<?php echo $map->polygon_color ?>';
+var region_color = '#<?php echo $map->region_color ?>';
+var polygon_color = '<?php echo $map->polygon_color ?>';
 var graph_color = '#<?php echo $map->graph_bar_color ?>';
 var graph_select_color = '#<?php echo $map->graph_select_color ?>';
 /**
@@ -666,47 +666,11 @@ function parseJsonToGmap(jsonUrl, jsonDataUrl)
 		
 			
 		}
-
-		   var count = 0;
-		 for (var areaName in areaPoints)
-		{
-				count ++;
-		}
-		var i = 0;
-
-		do{
-			var gradBeg, gradEnd, color;
-			 var gradient = new Rainbow();
-			 var regionOgrad = false;
-			 if(<?php echo strlen($map->region_color) ?> > 7){
-				   color = '<?php echo $map->region_color ?>';  
-				   gradBeg = color.substring(0, 6);
-				   gradEnd = color.substring(7, 13);
-				   gradient.setSpectrum(gradBeg, gradEnd);
-			   }
-			   else{
-				   //color = '<?php echo $map->region_color?>'.sub
-				   //gradient.setSpectrum('<?php echo $map->region_color?>'.substring(0, 6));
-				   region_color = '#<?php echo $map->region_color ?>';
-				   regionOgrad = true;
-			   }
 			//now loops over the array of points and creates polygons
 			for (var areaName in areaPoints)
 			{
 				var points = areaPoints[areaName];
 				//creates the polygon
-				if(!regionOgrad){
-					areaGPolygons[areaName] = new google.maps.Polygon({
-						paths: points,
-						strokeColor: border_color, //sets the line color to defined color
-						strokeOpacity: 0.8, //sets the line color opacity to 0.8
-						strokeWeight: 2, //sets the width of the line to 3
-						fillColor: "'#" + gradient.colourAt(i) + "'", //sets the fill color
-						fillOpacity: 0.75 //sets the opacity of the fill color
-					});
-					i++;
-				}
-				else{
 					areaGPolygons[areaName] = new google.maps.Polygon({
 						paths: points,
 						strokeColor: border_color, //sets the line color to defined color
@@ -714,9 +678,15 @@ function parseJsonToGmap(jsonUrl, jsonDataUrl)
 						strokeWeight: 2, //sets the width of the line to 3
 						fillColor: region_color, //sets the fill color
 						fillOpacity: 0.75 //sets the opacity of the fill color
-					});
-					 i++;
-				}
+				});
+					areaGPolygons[areaName] = new google.maps.Polygon({
+						paths: points,
+						strokeColor: border_color, //sets the line color to defined color
+						strokeOpacity: 0.8, //sets the line color opacity to 0.8
+						strokeWeight: 2, //sets the width of the line to 3
+						fillColor: region_color, //sets the fill color
+						fillOpacity: 0.75 //sets the opacity of the fill color
+				});
 				
 				areaGPolygons[areaName].setMap(map); //places the polygon on the map
 				
@@ -730,8 +700,6 @@ function parseJsonToGmap(jsonUrl, jsonDataUrl)
 					 this.setOptions({fillOpacity: 0.75}); 
 				});
 			}	
-		}
-		while (i <= count);
 
 		parseJsonData(jsonDataUrl);		
 		
@@ -767,22 +735,32 @@ function formatAreaOpacityColor(name, opacityValue, colorValue)
 */
 function calculateColor(percentage, min, spread)
 {
-	//calculate the color
-	var red = hexToR(polygon_color);
-	var blue = hexToB(polygon_color); //255 - ((percentage-min)*(1/spread)*255);
-	var green = hexToG(polygon_color); //255 - ((percentage-min)*(1/spread)*255);
-
+	var gradient = new Rainbow();
+	var color;
 	var colorPerct = (percentage-min)*(1/spread);
-	
-	var hsvArray = rgb2hsv(red,green,blue);
+	var first = polygon_color.substring(0,6);
+	var second = polygon_color.substring(7, 13);
 
-	
-	hsvArray[1] *= colorPerct;
 
-	var rgbArray = hsv2rgb(hsvArray);
+	if(second == 'FFFFFF' || second == ''){
+		//calculate the color
+		var red = hexToR(first);
+		var blue = hexToB(first); //255 - ((percentage-min)*(1/spread)*255);
+		var green = hexToG(first); //255 - ((percentage-min)*(1/spread)*255);
+		
+		var hsvArray = rgb2hsv(red,green,blue);
+		
+		hsvArray[1] *= colorPerct;
 	
-	var color = "#"+decimalToHex(rgbArray[0],2)+decimalToHex(rgbArray[1],2)+decimalToHex(rgbArray[2],2);
-	
+		var rgbArray = hsv2rgb(hsvArray);
+		
+		color = "#"+decimalToHex(rgbArray[0],2)+decimalToHex(rgbArray[1],2)+decimalToHex(rgbArray[2],2);
+	}
+	else{
+		gradient.setSpectrum(second, first);
+		gradient.setNumberRange(min, min+spread);
+		color = "#" + gradient.colourAt(colorPerct * 100);
+	}
 	return color;
 }
 
@@ -1601,6 +1579,7 @@ function updateKey(min, span, title, unit)
 	}
 	else
 	{
+		$("#legend_canvas").attr('style', 'none');
 		$("#percentleft").attr("title", addCommas(min)+" "+htmlDecode(unit));
 		$("#percentleft").text(addCommas(min)+" "+htmlDecode(unit));
 		
@@ -1619,37 +1598,10 @@ and their charts and so forth
 */
 function zeroOutMap()
 {
-	var count = 0;
-	for (var areaName in areaGPolygons)
-	{
-				count ++;
-	}
-	var i = 0;
-	do{
-		var gradBeg, gradEnd, color;
-		 var gradient = new Rainbow();
-		 var regionOgrad = false;
-		 if(<?php echo strlen($map->region_color) ?> > 7){
-			   color = '<?php echo $map->region_color ?>';  
-			   gradBeg = color.substring(0, 6);
-			   gradEnd = color.substring(7, 13);
-			   gradient.setSpectrum(gradBeg, gradEnd);
-		   }
-		   else{
-			   //color = '<?php echo $map->region_color?>'.sub
-			   //gradient.setSpectrum('<?php echo $map->region_color?>'.substring(0, 6));
-			   region_color = '#<?php echo $map->region_color ?>';
-			   regionOgrad = true;
-		   }
 		//loop over the polygons and set the colors to not-set
 		for(areaName in areaGPolygons)
 		{
-			if(!regionOgrad){
-				//set the polygon back to default colors
-				formatAreaOpacityColor(areaName, 0.75, gradient.colourAt(i));
-				i++;
-			}
-			else {formatAreaOpacityColor(areaName, 0.75, region_color); i++;}
+			formatAreaOpacityColor(areaName, 0.75, region_color);
 			//set the label to blank("")
 	
 			labels[areaName].set("areaValue", "");
@@ -1663,8 +1615,6 @@ function zeroOutMap()
 			google.maps.event.clearListeners(areaGPolygons[areaName], 'click');
 			
 		}
-	}
-	while (i < count);
 }
 
 /**

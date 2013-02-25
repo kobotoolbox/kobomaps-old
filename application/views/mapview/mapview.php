@@ -127,6 +127,7 @@
 			</div>
 			<div id="legendMinDiv">
 			<div id="legend_gradient">
+				<!-- <canvas id="legend_canvas"></canvas> -->
 				<div id="percentleft">
 					
 				</div>

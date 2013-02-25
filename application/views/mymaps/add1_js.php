@@ -15,13 +15,25 @@
 function toggle_id(elem_id)
 {
 	$('#'+elem_id).toggle('slow');
-		$(".gradient_explain").toggle('slow');
+
+	if(!($("#gradient").val() == 'on')){
+		$(".gradient_explain").show('slow');
+	}
+	else {
+		$(".gradient_explain").hide();}
+	
 }
 
 function toggle_class(elem_class)
 {
 	$('.'+elem_class).toggle('slow');
-	$(".gradient_explain").toggle('slow');
+	
+	if(!($("#gradient").val() == 'on')){
+		$(".gradient_explain").show('slow');
+	}
+	else {
+		$(".gradient_explain").hide();}
+
 }
 
 
@@ -32,13 +44,7 @@ function set_default_map_style(elem_id)
 }
 
 function openGradient(){
-	if($("#gradient").val() == 'on'){
-		$(".gradient_explain").toggle('slow');
-	}
-	else {
-		$("#regionTwo").val('FFFFFF');
-		$(".gradient_explain").toggle('slow');
-	}
+	$(".gradient_explain").toggle('slow');
 }
 
 

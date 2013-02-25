@@ -184,54 +184,54 @@
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
 	echo Form::label('border_color_description', '<br/>'.__('Color of region borders').": ");
 	echo '</td><td></br>';
-	echo '<input id="border_color_pick" class="color {valueElement: '.'border_color'.', pickerClosable:true}" style="width:30px"><input id="border_color" name="border_color" value='.$data['border_color'].' style="display:none">';
+	echo '<input id="border_color_pick" class="color {valueElement: border_color, pickerClosable:true}" style="width:30px"><input id="border_color" name="border_color" value="'.$data['border_color'].'" style="display:none">';
 	echo Form::label('border_color_explain', '    '.__('Will change the color of the borders between regions.'));
+	
+	//region color picker
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('region_color', '<br/>'.__('Default color of regions').": ");
+	echo '</td><td></br>';
+	echo '<input id="region_color_pick" class="color {valueElement: region_color, pickerClosable:true}" style="width:30px"><input id="region_color" name="region_color" value="'.substr($data['region_color'], 0, 6).'" style="display:none">';
+	echo Form::label('region_color_explain', '    '.__('Color of regions that are not being affected by an indicator.'));
 	
 	//gradient check box
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
 	echo Form::label('gradient_label', '<br/>'.__('Make regions have a gradient?'));
 	echo '</td><td></br>';
 	echo Form::checkbox('gradient', null, $data['gradient']==1, array('id' => 'gradient', 'onclick' => 'openGradient()', 'value' => '"'.$data['gradient'].'"'));
-	
-	//region color picker
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
-	echo Form::label('region_color', '<br/>'.__('Default color of regions').": ");
-	echo '</td><td></br>';
-	echo '<input id="region_color_pick" class="color {valueElement: '.'region_color'.', pickerClosable:true}" style="width:30px"><input id="region_color" name="region_color" value='.substr($data['region_color'], 0, 6).' style="display:none">';
-	echo Form::label('region_color_explain', '    '.__('Color of regions that are not being affected by an indicator.'));
-	
-	echo '</td></tr><td></td><td class="gradient_explain" style="display:none">';
-	$secondColor = '';
-	if(strlen($data['region_color']) < 8){
-		$secondColor = 'FFFFFF';
-	}
-	else{
-		$secondColor = substr($data['region_color'], 7, 13);
-	}
-	echo '<input id="region_two_picker" class="color {valueElement: '.'regionTwo'.', pickerClosable:true}" style="width:30px"><input id="regionTwo" name="regionTwo" value='.$secondColor.' style="display:none">';
-	echo  '  '.__('Regions will gradient into this color from the default color.');
 
 	
 	//polygon color picker
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
 	echo Form::label('polygon_color_shade', '<br/>'.__('Color of region shading').": ");
 	echo '</td><td></br>';
-	echo '<input id="polygon_color_pick" class="color {valueElement: '.'polygon_color'.', pickerClosable:true, minS:0.8}" style="width:30px"><input id="polygon_color" name="polygon_color" value='.$data['polygon_color'].' style="display:none">';
+	echo '<input id="polygon_color_pick" class="color {valueElement: polygon_color, pickerClosable:true, minS:0.8}" style="width:30px"><input id="polygon_color" name="polygon_color" value="'.substr($data['polygon_color'], 0, 6).'" style="display:none">';
 	echo Form::label('polygon_color_explain', '    '.__('Color of regions that are being affected by an indicator.'));
+	
+	echo '</td></tr><td></td><td class="gradient_explain advanced" style="display:none">';
+	$secondColor = '';
+	if(strlen($data['polygon_color']) < 8){
+		$secondColor = 'FFFFFF';
+	}
+	else{
+		$secondColor = substr($data['polygon_color'], 7, 13);
+	}
+	echo '<input id="region_two_picker" class="color {valueElement: regionTwo, pickerClosable:true}" style="width:30px"><input id="regionTwo" name="regionTwo" value="'.$secondColor.'" style="display:none">';
+	echo  '  '.__('Regions will gradient into this color from the default color.');
 	
 	
 	//graph bar color picker
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
 	echo Form::label('bar_color_description', '<br/>'.__('Color of bars in graphs').": ");
 	echo '</td><td></br>';
-	echo '<input id="bar_color_pick" class="color {valueElement: '.'graph_bar_color'.', pickerClosable:true}" style="width:30px"><input id="graph_bar_color" name="graph_bar_color" value='.$data['graph_bar_color'].' style="display:none">';
+	echo '<input id="bar_color_pick" class="color {valueElement: graph_bar_color, pickerClosable:true}" style="width:30px"><input id="graph_bar_color" name="graph_bar_color" value='.$data['graph_bar_color'].' style="display:none">';
 	echo Form::label('graph_color_explain', '    '.__('Color of bars in all graphs.'));
 	
 	//bar selected color picker
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
 	echo Form::label('region_color', '<br/>'.__('Color of selected regions in graphs').": ");
 	echo '</td><td></br>';
-	echo '<input id="bar_select_color_pick" class="color {valueElement: '.'graph_select_color'.', pickerClosable:true}" style="width:30px"><input id="graph_select_color" name="graph_select_color" value='.$data['graph_select_color'].' style="display:none">';
+	echo '<input id="bar_select_color_pick" class="color {valueElement: graph_select_color, pickerClosable:true}" style="width:30px"><input id="graph_select_color" name="graph_select_color" value='.$data['graph_select_color'].' style="display:none">';
 	echo Form::label('selected_color_explain', '    '.__('Color of bars in graphs that indicate the region selected currently.'));
 	
 	//map CSS text box

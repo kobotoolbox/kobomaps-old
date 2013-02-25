@@ -144,6 +144,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'zoom'=>'1',
 			'border_color' => '',
 			'region_color' => '',
+			'polygon_color' => '',
 			'map_style'=>Model_Map::$style_default,
 			'user_id'=>$this->user->id,
 			'is_private'=>0,
@@ -290,11 +291,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 				$_POST['gradient'] = isset($_POST['gradient']) ? 1 : 0;
 				
 				if($data['gradient'] == 1){
-					$_POST['region_color'] = $data['region_color'].' '.$_POST['regionTwo'];
+					$_POST['polygon_color'] = $_POST['polygon_color'].' '.$_POST['regionTwo'];
+					$data['polygon_color'] = $_POST['polygon_color'];
 				}
 				else {
-					$data['region_color'] = $_POST['region_color'];
-					$_POST['regionTwo'] = 'FFFFFF';
+					$data['polygon_color'] = $_POST['polygon_color'].' FFFFFF';
 				}
 
 				//handle the status
