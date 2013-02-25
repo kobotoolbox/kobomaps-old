@@ -26,6 +26,7 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/label.js"> </script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/RainbowVis-JS-master/rainbowvis.js"></script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.navigate.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.tools.min.js"> </script>
@@ -66,7 +67,7 @@ var mapData;
  * global variables that hold the map color choices, just replaces previous values in code
  */
 var border_color = '#<?php echo $map->border_color ?>';
-var region_color = '#<?php echo $map->region_color ?>';
+//var region_color = '#<?php echo $map->region_color ?>';
 var polygon_color = '#<?php echo $map->polygon_color ?>';
 var graph_color = '#<?php echo $map->graph_bar_color ?>';
 var graph_select_color = '#<?php echo $map->graph_select_color ?>';
@@ -665,33 +666,72 @@ function parseJsonToGmap(jsonUrl, jsonDataUrl)
 		
 			
 		}
-		
-		//now loops over the array of points and creates polygons
-		for (var areaName in areaPoints)
-		{
-			var points = areaPoints[areaName];
-			//creates the polygon
-			areaGPolygons[areaName] = new google.maps.Polygon({
-				paths: points,
-				strokeColor: border_color, //sets the line color to defined color
-				strokeOpacity: 0.8, //sets the line color opacity to 0.8
-				strokeWeight: 2, //sets the width of the line to 3
-				fillColor: region_color, //sets the fill color
-				fillOpacity: 0.75 //sets the opacity of the fill color
-			});
-			areaGPolygons[areaName].setMap(map); //places the polygon on the map
-			
-			//add mouse in
-			google.maps.event.addListener(areaGPolygons[areaName], 'mouseover', function(event) {
-				 this.setOptions({fillOpacity: 0.95}); 
-			});
-			
-			//add mouse out
-			google.maps.event.addListener(areaGPolygons[areaName], 'mouseout', function(event) {
-				 this.setOptions({fillOpacity: 0.75}); 
-			});
-		}	
 
+		   var count = 0;
+		 for (var areaName in areaPoints)
+		{
+				count ++;
+		}
+		var i = 0;
+
+		do{
+			var gradBeg, gradEnd, color;
+			 var gradient = new Rainbow();
+			 var regionOgrad = false;
+			 if(<?php echo strlen($map->region_color) ?> > 7){
+				   color = '<?php echo $map->region_color ?>';  
+				   gradBeg = color.substring(0, 6);
+				   gradEnd = color.substring(7, 13);
+				   gradient.setSpectrum(gradBeg, gradEnd);
+			   }
+			   else{
+				   //color = '<?php echo $map->region_color?>'.sub
+				   //gradient.setSpectrum('<?php echo $map->region_color?>'.substring(0, 6));
+				   region_color = '#<?php echo $map->region_color ?>';
+				   regionOgrad = true;
+			   }
+			//now loops over the array of points and creates polygons
+			for (var areaName in areaPoints)
+			{
+				var points = areaPoints[areaName];
+				//creates the polygon
+				if(!regionOgrad){
+					areaGPolygons[areaName] = new google.maps.Polygon({
+						paths: points,
+						strokeColor: border_color, //sets the line color to defined color
+						strokeOpacity: 0.8, //sets the line color opacity to 0.8
+						strokeWeight: 2, //sets the width of the line to 3
+						fillColor: "'#" + gradient.colourAt(i) + "'", //sets the fill color
+						fillOpacity: 0.75 //sets the opacity of the fill color
+					});
+					i++;
+				}
+				else{
+					areaGPolygons[areaName] = new google.maps.Polygon({
+						paths: points,
+						strokeColor: border_color, //sets the line color to defined color
+						strokeOpacity: 0.8, //sets the line color opacity to 0.8
+						strokeWeight: 2, //sets the width of the line to 3
+						fillColor: region_color, //sets the fill color
+						fillOpacity: 0.75 //sets the opacity of the fill color
+					});
+					 i++;
+				}
+				
+				areaGPolygons[areaName].setMap(map); //places the polygon on the map
+				
+				//add mouse in
+				google.maps.event.addListener(areaGPolygons[areaName], 'mouseover', function(event) {
+					 this.setOptions({fillOpacity: 0.95}); 
+				});
+				
+				//add mouse out
+				google.maps.event.addListener(areaGPolygons[areaName], 'mouseout', function(event) {
+					 this.setOptions({fillOpacity: 0.75}); 
+				});
+			}	
+		}
+		while (i <= count);
 
 		parseJsonData(jsonDataUrl);		
 		
@@ -728,7 +768,6 @@ function formatAreaOpacityColor(name, opacityValue, colorValue)
 function calculateColor(percentage, min, spread)
 {
 	//calculate the color
-	console.log(polygon_color);
 	var red = hexToR(polygon_color);
 	var blue = hexToB(polygon_color); //255 - ((percentage-min)*(1/spread)*255);
 	var green = hexToG(polygon_color); //255 - ((percentage-min)*(1/spread)*255);
@@ -737,34 +776,37 @@ function calculateColor(percentage, min, spread)
 	
 	var hsvArray = rgb2hsv(red,green,blue);
 
-	console.log(hsvArray);
 	
 	hsvArray[1] *= colorPerct;
 
 	var rgbArray = hsv2rgb(hsvArray);
-
-	//console.log(rgbArray);
 	
 	var color = "#"+decimalToHex(rgbArray[0],2)+decimalToHex(rgbArray[1],2)+decimalToHex(rgbArray[2],2);
-	//console.log(color);
 	
 	return color;
 }
 
+//converts a Hex value color and returns the R value
 function hexToR(h) {
 	return parseInt((cutHex(h)).substring(0,2),16);
 }
+//converts a Hex value color and returns the G value
 function hexToG(h) {
 	return parseInt((cutHex(h)).substring(2,4),16);
 }
+//converts a Hex value color and returns the B value
 function hexToB(h) {
 	return parseInt((cutHex(h)).substring(4,6),16);
 }
+//will convert a Hex value and remove the # if within
 function cutHex(h) {
 	return (h.charAt(0)=="#") ? h.substring(1,7):h;
 }
 
-//from HSV values to RGB, takes an array of HSV values
+/*
+ * takes in ['degrees', 'percentage', 'percentage'] array of HSV values to convert to RGB
+ * returns [R, G, B] array
+ */
 function hsv2rgb (HSV) {
 	var h = HSV[0]/360;
 	var s = HSV[1]; 
@@ -796,7 +838,9 @@ function hsv2rgb (HSV) {
 	return rgbArray;
 }
 
-//returns HSV array from rgb values
+/**	returns HSV array from rgb values
+ * 	r between 0-255, g between 0-255, b between 0-255
+ **/
 function rgb2hsv (r,g,b) {
 	 var computedH = 0;
 	 var computedS = 0;
@@ -809,11 +853,9 @@ function rgb2hsv (r,g,b) {
 
 	 if ( r==null || g==null || b==null ||
 	     isNaN(r) || isNaN(g)|| isNaN(b) ) {
-	   alert ('Please enter numeric RGB values!');
 	   return;
 	 }
 	 if (r<0 || g<0 || b<0 || r>255 || g>255 || b>255) {
-	   alert ('RGB values must be in the range 0 to 255.');
 	   return;
 	 }
 	 r=r/255; g=g/255; b=b/255;
@@ -1577,24 +1619,52 @@ and their charts and so forth
 */
 function zeroOutMap()
 {
-	//loop over the polygons and set the colors to not-set
-	for(areaName in areaGPolygons)
+	var count = 0;
+	for (var areaName in areaGPolygons)
 	{
-		//set the polygon back to default colors
-		formatAreaOpacityColor(areaName, 0.75, region_color);
-		//set the label to blank("")
-
-		labels[areaName].set("areaValue", "");
-		<?php if($map->show_empty_name == 1){?>
-		labels[areaName].set('show_empty_name'	, true);
-		<?php }else{ ?>
-		labels[areaName].set('show_empty_name', false);
-		<?php }?>
-		labels[areaName].draw();
-		//remove any old listeners pop-up listeners
-		google.maps.event.clearListeners(areaGPolygons[areaName], 'click');
-		
+				count ++;
 	}
+	var i = 0;
+	do{
+		var gradBeg, gradEnd, color;
+		 var gradient = new Rainbow();
+		 var regionOgrad = false;
+		 if(<?php echo strlen($map->region_color) ?> > 7){
+			   color = '<?php echo $map->region_color ?>';  
+			   gradBeg = color.substring(0, 6);
+			   gradEnd = color.substring(7, 13);
+			   gradient.setSpectrum(gradBeg, gradEnd);
+		   }
+		   else{
+			   //color = '<?php echo $map->region_color?>'.sub
+			   //gradient.setSpectrum('<?php echo $map->region_color?>'.substring(0, 6));
+			   region_color = '#<?php echo $map->region_color ?>';
+			   regionOgrad = true;
+		   }
+		//loop over the polygons and set the colors to not-set
+		for(areaName in areaGPolygons)
+		{
+			if(!regionOgrad){
+				//set the polygon back to default colors
+				formatAreaOpacityColor(areaName, 0.75, gradient.colourAt(i));
+				i++;
+			}
+			else {formatAreaOpacityColor(areaName, 0.75, region_color); i++;}
+			//set the label to blank("")
+	
+			labels[areaName].set("areaValue", "");
+			<?php if($map->show_empty_name == 1){?>
+			labels[areaName].set('show_empty_name'	, true);
+			<?php }else{ ?>
+			labels[areaName].set('show_empty_name', false);
+			<?php }?>
+			labels[areaName].draw();
+			//remove any old pop-up listeners
+			google.maps.event.clearListeners(areaGPolygons[areaName], 'click');
+			
+		}
+	}
+	while (i < count);
 }
 
 /**

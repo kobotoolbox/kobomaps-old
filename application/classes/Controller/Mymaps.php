@@ -153,6 +153,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'region_label_font' => 12,
 			'value_label_font' => 12,
 			'large_file'=> false,
+			'gradient' => false,
 			);
 		
 		$map = null;
@@ -194,6 +195,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['region_label_font'] = $map->region_label_font;
 			$data['value_label_font'] = $map->value_label_font;
 			$data['large_file'] = $map->large_file;
+			$data['gradient'] = $map->gradient;
 		}
 		else
 		{
@@ -285,6 +287,15 @@ class Controller_Mymaps extends Controller_Loggedin {
 				//this handles is private
 				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;
 				$_POST['show_empty_name'] = isset($_POST['show_empty_name']) ? 1 : 0;
+				$_POST['gradient'] = isset($_POST['gradient']) ? 1 : 0;
+				
+				if($data['gradient'] == 1){
+					$_POST['region_color'] = $data['region_color'].' '.$_POST['regionTwo'];
+				}
+				else {
+					$data['region_color'] = $_POST['region_color'];
+					$_POST['regionTwo'] = 'FFFFFF';
+				}
 
 				//handle the status
 				if($map->map_creation_progress != null)

@@ -8,17 +8,20 @@
 	
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jscolor/jscolor.js"> </script>
 
+
 <script type="text/javascript">
 
 
 function toggle_id(elem_id)
 {
 	$('#'+elem_id).toggle('slow');
+		$(".gradient_explain").toggle('slow');
 }
 
 function toggle_class(elem_class)
 {
 	$('.'+elem_class).toggle('slow');
+	$(".gradient_explain").toggle('slow');
 }
 
 
@@ -27,6 +30,17 @@ function set_default_map_style(elem_id)
 	$('#'+elem_id).val("<?php echo Model_Map::get_style_default_js(); ?>");
 	
 }
+
+function openGradient(){
+	if($("#gradient").val() == 'on'){
+		$(".gradient_explain").toggle('slow');
+	}
+	else {
+		$("#regionTwo").val('FFFFFF');
+		$(".gradient_explain").toggle('slow');
+	}
+}
+
 
 $(document).ready(function(){
 	$("#slug").change(function(){
@@ -50,7 +64,6 @@ $(document).ready(function(){
 					}
 				});
 	});
-	
 });	
 	
 

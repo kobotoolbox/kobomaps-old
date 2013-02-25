@@ -127,6 +127,11 @@ return array
 		'Color of region shading' =>'Color of region shading',
 		'Color of bars in graphs' => 'Color of bars in graphs',
 		'Color of selected regions in graphs' => 'Color of selected regions in graphs',
+		'Will change the color of the borders between regions.' => 'Will change the color of the borders between regions.',
+		'Color of regions that are not being affected by an indicator.' => 'Color of regions that are not being affected by an indicator.',
+		'Color of regions that are being affected by an indicator.' => 'Color of regions that are being affected by an indicator.',
+		'Color of bars in all graphs.' => 'Color of bars in all graphs.',
+		'Color of bars in graphs that indicate the region selected currently.' => 'Color of bars in graphs that indicate the region selected currently.',
 		//add1 errors
 		'register/map.slug.unique'=>'Your slug is not unique, please pick another one',
 		'Your slug had illegal characters, they have been replaced.' => 'Your slug had illegal characters, they have been replaced.',
