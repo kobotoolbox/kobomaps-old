@@ -15,20 +15,13 @@
 function toggle_id(elem_id)
 {
 	$('#'+elem_id).toggle('slow');
-
-	if(!($("#gradient").val() == 'on')){
-		$(".gradient_explain").show('slow');
-	}
-	else {
-		$(".gradient_explain").hide();}
 	
 }
 
 function toggle_class(elem_class)
 {
 	$('.'+elem_class).toggle('slow');
-	
-	if(!($("#gradient").val() == 'on')){
+	if($("#gradient").prop('checked')){
 		$(".gradient_explain").show('slow');
 	}
 	else {

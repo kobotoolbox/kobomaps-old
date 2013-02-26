@@ -741,119 +741,14 @@ function calculateColor(percentage, min, spread)
 	var first = polygon_color.substring(0,6);
 	var second = polygon_color.substring(7, 13);
 
-
-	if(second == 'FFFFFF' || second == ''){
-		//calculate the color
-		var red = hexToR(first);
-		var blue = hexToB(first); //255 - ((percentage-min)*(1/spread)*255);
-		var green = hexToG(first); //255 - ((percentage-min)*(1/spread)*255);
-		
-		var hsvArray = rgb2hsv(red,green,blue);
-		
-		hsvArray[1] *= colorPerct;
+	gradient.setSpectrum(second, first);
+	gradient.setNumberRange(min, min+spread);
+	//return the hex color of the percentage from min -> spread
+	color = "#" + gradient.colourAt(colorPerct * (min + spread));
 	
-		var rgbArray = hsv2rgb(hsvArray);
-		
-		color = "#"+decimalToHex(rgbArray[0],2)+decimalToHex(rgbArray[1],2)+decimalToHex(rgbArray[2],2);
-	}
-	else{
-		gradient.setSpectrum(second, first);
-		gradient.setNumberRange(min, min+spread);
-		color = "#" + gradient.colourAt(colorPerct * 100);
-	}
 	return color;
 }
 
-//converts a Hex value color and returns the R value
-function hexToR(h) {
-	return parseInt((cutHex(h)).substring(0,2),16);
-}
-//converts a Hex value color and returns the G value
-function hexToG(h) {
-	return parseInt((cutHex(h)).substring(2,4),16);
-}
-//converts a Hex value color and returns the B value
-function hexToB(h) {
-	return parseInt((cutHex(h)).substring(4,6),16);
-}
-//will convert a Hex value and remove the # if within
-function cutHex(h) {
-	return (h.charAt(0)=="#") ? h.substring(1,7):h;
-}
-
-/*
- * takes in ['degrees', 'percentage', 'percentage'] array of HSV values to convert to RGB
- * returns [R, G, B] array
- */
-function hsv2rgb (HSV) {
-	var h = HSV[0]/360;
-	var s = HSV[1]; 
-	var v = HSV[2];
-	var rgbArray = new Array();
-	if (s == 0) {
-		rgbArray[0] = v * 255;
-		rgbArray[1] = v * 255;
-		rgbArray[2] = v * 255;
-	} else {
-		var_h = h * 6;
-		var_i = Math.floor(var_h);
-		var_1 = v * (1 - s);
-		var_2 = v * (1 - s * (var_h - var_i));
-		var_3 = v * (1 - s * (1 - (var_h - var_i)));
-		
-		if (var_i == 0) {var_r = v; var_g = var_3; var_b = var_1}
-		else if (var_i == 1) {var_r = var_2; var_g = v; var_b = var_1}
-		else if (var_i == 2) {var_r = var_1; var_g = v; var_b = var_3}
-		else if (var_i == 3) {var_r = var_1; var_g = var_2; var_b = v}
-		else if (var_i == 4) {var_r = var_3; var_g = var_1; var_b = v}
-		else {var_r = v; var_g = var_1; var_b = var_2};
-
-		var rgbArray = new Array();
-		rgbArray[0] = var_r * 255;
-		rgbArray[1] = var_g * 255;
-		rgbArray[2] = var_b * 255;
-	}
-	return rgbArray;
-}
-
-/**	returns HSV array from rgb values
- * 	r between 0-255, g between 0-255, b between 0-255
- **/
-function rgb2hsv (r,g,b) {
-	 var computedH = 0;
-	 var computedS = 0;
-	 var computedV = 0;
-
-	 //remove spaces from input RGB values, convert to int
-	 var r = parseInt( (''+r).replace(/\s/g,''),10 ); 
-	 var g = parseInt( (''+g).replace(/\s/g,''),10 ); 
-	 var b = parseInt( (''+b).replace(/\s/g,''),10 ); 
-
-	 if ( r==null || g==null || b==null ||
-	     isNaN(r) || isNaN(g)|| isNaN(b) ) {
-	   return;
-	 }
-	 if (r<0 || g<0 || b<0 || r>255 || g>255 || b>255) {
-	   return;
-	 }
-	 r=r/255; g=g/255; b=b/255;
-	 var minRGB = Math.min(r,Math.min(g,b));
-	 var maxRGB = Math.max(r,Math.max(g,b));
-
-	 // Black-gray-white
-	 if (minRGB==maxRGB) {
-	  computedV = minRGB;
-	  return [0,0,computedV];
-	 }
-
-	 // Colors other than black-gray-white:
-	 var d = (r==minRGB) ? g-b : ((b==minRGB) ? r-g : b-r);
-	 var h = (r==minRGB) ? 3 : ((b==minRGB) ? 1 : 5);
-	 computedH = 60*(h - d/(maxRGB - minRGB));
-	 computedS = (maxRGB - minRGB)/maxRGB;
-	 computedV = maxRGB;
-	 return [computedH,computedS,computedV];
-}
 
 
 /**
@@ -1562,7 +1457,8 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator, to
 	//updates the key
 	////////////////////////////////////////////////////////////////
 	//set the color
-	var color = calculateColor(nationalAverage, min, spread);	
+	var color = calculateColor(nationalAverage, min, spread);
+    
 	$("#nationalaveragediv").css("background-color", color);
 	$("#nationalaverageimg").text(addCommas(nationalAverage)+" "+htmlDecode(unit));
 
@@ -1579,7 +1475,19 @@ function updateKey(min, span, title, unit)
 	}
 	else
 	{
-		$("#legend_canvas").attr('style', 'none');
+		var canvas = document.getElementById('legend_canvas');
+	    var context = canvas.getContext('2d');
+	    context.rect(0, 0, 298, 140);
+
+	    // add linear gradient
+	    var grd = context.createLinearGradient(0, 0, 298, 19);
+	    var first = '#' + polygon_color.substring(0, 6);
+	    var second = '#' + polygon_color.substring(7,13);
+	    grd.addColorStop(0, second);   
+	    grd.addColorStop(1, first);
+	    context.fillStyle = grd;
+	    context.fill();
+	      
 		$("#percentleft").attr("title", addCommas(min)+" "+htmlDecode(unit));
 		$("#percentleft").text(addCommas(min)+" "+htmlDecode(unit));
 		

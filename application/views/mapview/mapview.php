@@ -126,29 +126,26 @@
 				<span id="spanLegendText"><?php echo __('Please select an indicator to display its data.')?></span>
 			</div>
 			<div id="legendMinDiv">
-			<div id="legend_gradient">
-				<!-- <canvas id="legend_canvas"></canvas> -->
-				<div id="percentleft">
-					
+			
+				<div id="legend_gradient">
+					<canvas id="legend_canvas" style="width:121px; height:20px"></canvas>
+					<div id="percentleft"></div>
+					<div id="percentright"></div>
 				</div>
-				<div id="percentright">
-					
+				<div id="nationalaveragediv">
+					<span id="nationalaveragelabel"></span>
+					<span id="nationalaverageimg" ></span>
 				</div>
-			</div>
-			<div id="nationalaveragediv">
-				<span id="nationalaveragelabel"></span>
-				<span id="nationalaverageimg" ></span>
-			</div>
-			</br>
-			<div id="nationalChartScrollDiv"  style=" width:320px; overflow-y: auto; overflow-x: hidden">
-		       	<div id="nationalIndicatorChart" style="width: 300px"></div>		
-		       </div>
-		       <div id="sourcetext">
-				<span id="sourcetextspan" style="display:none;"> Data Source:  
-					<a id="sourceURL" href="" title=""></a>
-					<span id="sourceNoURL"></span>
-				</span>
-		       </div>
+				</br>
+				<div id="nationalChartScrollDiv"  style=" width:320px; overflow-y: auto; overflow-x: hidden">
+			       	<div id="nationalIndicatorChart" style="width: 300px"></div>		
+			    </div>
+			       <div id="sourcetext">
+					<span id="sourcetextspan" style="display:none;"> Data Source:  
+						<a id="sourceURL" href="" title=""></a>
+						<span id="sourceNoURL"></span>
+					</span>
+		    	</div>
 	        
 		
 			<?php

@@ -11,10 +11,11 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 #legendtext span {}
 #legend_gradient, #nationalaveragediv {height:19px;border:1px solid #ffffff;display:none;/*Only visible if indicator is selected*/}
 
-#legend_gradient {clear:left;float:left;background:url(../img/whiteredgradient120.png) repeat-y;width:120px;}
+#legend_gradient {float:left;width:120px; position:relative;}
 #percentleft, #percentright, #nationalaveragelabel, #nationalaverageimg {line-height:14px;font-weight:bold;}
-#percentleft, #nationalaveragelabel {float:left;margin:3px 0 0 2px;height:13px;text-shadow:0 0 2px #fff;color:#000000;}
+#nationalaveragelabel {float:left;margin:3px 0 0 2px;height:13px;text-shadow:0 0 2px #fff;color:#000000;}
 #percentright, #nationalaverageimg {text-align:right;float:right;margin:3px 2px 0 0;height:13px;color:#fff;text-shadow:0 0 2px #000;}
+#percentleft {top:20px; position:absolute;}
 
 #nationalaveragediv {width:167px;float:right;}
 #nationalaveragelabelxx {}
@@ -28,6 +29,7 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 	color: #000;
 	font-size: 23px;
 }
+
 
 #twitterbutton {float:left;margin:4px 0 0 0;clear:both;}
 

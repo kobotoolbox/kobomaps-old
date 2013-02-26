@@ -441,7 +441,7 @@ table.list_table tr td a:hover
 	width:31px;
 	}			
 .mapTasks img.delete, .templateTasks img.delete, .messageTable img.delete{
-	background: url('../img/tasksSprite.png') -130px 0px;	
+	background: url('../img/tasksSprite.png') -129px 0px;	
 	width:32px;
 	}
 .templateTasks img.viewTemplate{

@@ -208,7 +208,7 @@
 	echo '<input id="polygon_color_pick" class="color {valueElement: polygon_color, pickerClosable:true, minS:0.8}" style="width:30px"><input id="polygon_color" name="polygon_color" value="'.substr($data['polygon_color'], 0, 6).'" style="display:none">';
 	echo Form::label('polygon_color_explain', '    '.__('Color of regions that are being affected by an indicator.'));
 	
-	echo '</td></tr><td></td><td class="gradient_explain advanced" style="display:none">';
+	echo '</td></tr><td></td><td class="gradient_explain" style="display:none;">';
 	$secondColor = '';
 	if(strlen($data['polygon_color']) < 8){
 		$secondColor = 'FFFFFF';
@@ -224,7 +224,7 @@
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
 	echo Form::label('bar_color_description', '<br/>'.__('Color of bars in graphs').": ");
 	echo '</td><td></br>';
-	echo '<input id="bar_color_pick" class="color {valueElement: graph_bar_color, pickerClosable:true}" style="width:30px"><input id="graph_bar_color" name="graph_bar_color" value='.$data['graph_bar_color'].' style="display:none">';
+	echo '<input id="bar_color_pick" class="color {valueElement: graph_bar_color, pickerClosable:true}" style="width:30px"><input id="graph_bar_color" name="graph_bar_color" value="'.$data['graph_bar_color'].'" style="display:none">';
 	echo Form::label('graph_color_explain', '    '.__('Color of bars in all graphs.'));
 	
 	//bar selected color picker
