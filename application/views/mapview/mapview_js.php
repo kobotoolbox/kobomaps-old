@@ -1711,6 +1711,13 @@ function initialize_buttons()
 	$("#turnOffLabelsButton").click(function(){
 		Label.renderLabelNames = !Label.renderLabelNames; 
 		$("#turnOffLabelsButton").toggleClass("active");
+
+		if($("#turnOffLabelsButton").text() == 'Hide Labels'){
+			$("#turnOffLabelsButton").text("<?php echo __("Display Labels"); ?>");
+		}
+		else{
+			$("#turnOffLabelsButton").text("<?php echo __("Hide Labels"); ?>");
+		}
 		//redraw all the labels 
 		for(i in labels)
 		{
@@ -1723,6 +1730,13 @@ function initialize_buttons()
 	$("#turnOffValuesButton").click(function(){
 		Label.renderLabelVals = !Label.renderLabelVals; 
 		$("#turnOffValuesButton").toggleClass("active");
+		
+		if($("#turnOffValuesButton").text() == 'Hide Values'){
+			$("#turnOffValuesButton").text("<?php echo __("Display Values"); ?>");
+		}
+		else{
+			$("#turnOffValuesButton").text("<?php echo __("Hide Values"); ?>");
+		}
 		//redraw all the labels 
 		for(i in labels)
 		{

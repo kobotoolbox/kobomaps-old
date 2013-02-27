@@ -97,10 +97,10 @@
 				<img class="toggleLabels" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
 				<ul id="toggleTextButtons">
 					<li>
-						<a href="" id="turnOffLabelsButton" title="<?php echo __('Toggles the region names.')?>"><?php echo __('Toggle Labels')?></a>
+						<a href="" id="turnOffLabelsButton" title="<?php echo __('Turns on or off the region names.')?>"><?php echo __('Hide Labels')?></a>
 					</li>
 					<li>
-						<a href="" id="turnOffValuesButton" title="<?php echo __('Toggles the data values.')?>"><?php echo __('Toggle Values')?></a>
+						<a href="" id="turnOffValuesButton" title="<?php echo __('Turns on or off the data values.')?>"><?php echo __('Hide Values')?></a>
 					</li>
 				</ul>
 			</li>
