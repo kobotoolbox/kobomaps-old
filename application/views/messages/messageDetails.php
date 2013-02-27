@@ -35,10 +35,12 @@
 	<p><strong><?php echo __('Comment')?>:</strong> </br></br> <?php echo nl2br($message->message);?></p>
 	
 	</br>
-	<div class="replyToComment"> <a
-		href="mailto:<?php echo $message->poster_email?>?Subject=In%20response%20to%20your%20comment%20on%20my%20map." 
-		id="replyButton"><?php echo __('Reply')?> </a></div>
 	
+	<?php if(!($message->poster_email == "")){
+		echo '<div class="replyToComment"> <a
+			href="mailto:'.$message->poster_email.'?Subject=In%20response%20to%20your%20comment%20on%20my%20map." 
+			id="replyButton">'.__('Reply').'</a></div>';
+	}?>
 
 </div>
 
