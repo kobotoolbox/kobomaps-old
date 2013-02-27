@@ -14,8 +14,9 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 #legend_gradient {float:left;width:120px; position:relative;}
 #percentleft, #percentright, #nationalaveragelabel, #nationalaverageimg {line-height:14px;font-weight:bold;}
 #nationalaveragelabel {float:left;margin:3px 0 0 2px;height:13px;text-shadow:0 0 2px #fff;color:#000000;}
-#percentright, #nationalaverageimg {text-align:right;float:right;margin:3px 2px 0 0;height:13px;color:#fff;text-shadow:0 0 2px #000;}
-#percentleft {top:20px; position:absolute;}
+#nationalaverageimg {text-align:right;float:right;margin:3px 2px 0 0;height:13px;color:#fff;text-shadow:0 0 2px #000;}
+#percentleft {top:0px; position:absolute; float:left;margin:3px 0 0 2px;height:13px;text-shadow:2px 2px 4px #fff;color:#000000;}
+#percentright {top: 0px; right:0px; text-align:right;float:right;margin:3px 2px 0 0;height:13px;color:#fff;text-shadow:2px 2px 4px #000; position:absolute; }
 
 #nationalaveragediv {width:167px;float:right;}
 #nationalaveragelabelxx {}
