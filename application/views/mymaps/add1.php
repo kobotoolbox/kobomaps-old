@@ -69,7 +69,7 @@
 	echo '<table><tr><td>';
 	echo Form::label('title', __('Map Title').": ");
 	echo '</td><td>';
-	echo Form::input('title', $data['title'], array('id'=>'title', 'style'=>'width:300px;'));
+	echo Form::input('title', $data['title'], array('id'=>'title', 'style'=>'width:300px;', 'maxlength' => '128'));
 	echo '</td></tr><tr><td>';
 	echo Form::label('slug', __('Map Slug').": ");
 	echo '</td><td>';

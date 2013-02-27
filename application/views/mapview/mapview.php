@@ -47,7 +47,22 @@
 //Bar at the bottom to select between different sheets
 ?>
 <div id="sheetlinks">
-	<div id="mapName"><?php echo $map->title;?></div>
+	<div id="mapName"
+		<?php 
+		if(strlen($map->title) > 28 && strlen($map->title) < 58){
+			echo 'style="font-size:10px; padding:10px 30px 10px 30px;">';
+			echo $map->title;
+		}
+		else if(strlen($map->title) > 58){
+			echo 'style="font-size:9px; padding: 0px 0px 0px 0px">';
+			echo substr($map->title, 0, 64).' '.substr($map->title, 64);
+		}
+		else{
+			echo '>';
+			echo $map->title;
+		}
+	?>
+	</div>
 	<div id="sheetnamesStartControl" class="sheetScrollerControll"><a href="">&lt;&lt;</a></div>
 	<div id="sheetnamesLeftControl" class="sheetScrollerControll"><a href="">&lt;</a></div>
 	<div id="sheetnamesWrapper">		
