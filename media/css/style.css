@@ -898,7 +898,26 @@ select.needstobemapped{
 #statChartWrapper p{
 	text-align: center;
 }
-
+.replyToComment {
+   background: #c9c9c9;
+   padding: 5px 10px;
+   border-radius: 8px;
+   vertical-align: middle;
+   width: 50px
+   }
+.replyToComment:hover {
+   border-top-color: #919191;
+   background: #919191;
+   color: #ccc;
+   }
+.replyToComment:active {
+   border-top-color: #969696;
+   background: #969696;
+   }
+.replyToComment a{
+	text-decoration:none;
+	font-size: 8px;
+}
 
 
 /*********************************************************

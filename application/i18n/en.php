@@ -320,6 +320,7 @@ return array
 		'New alert from KoboMaps'=>'New alert from KoboMaps',
 		'You have recieved a new message'=> 'You have recieved a new message. Click <a href="'.URL::base().'message">here</a> to view it.',
 		'New warning from KoboMaps'=>'New warning from KoboMaps',
+		'Reply' => 'Reply',
 		
 		
 		
