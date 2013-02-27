@@ -73,6 +73,21 @@
 			
 		</tr>
 		
+		<tr>
+			<td>
+				<?php echo Form::label('email_alerts', __('Receive email alerts'));  ?>
+			</td>
+			<td>
+				<?php echo Form::checkbox('email_alerts', '1', 1==intval($data['email_alerts'])); ?>
+			</td>
+			<td>
+				<?php echo Form::label('email_warnings', __('Receive email warnings'));  ?>
+			</td>
+			<td>
+				<?php echo Form::checkbox('email_warnings','1', 1==intval($data['email_warnings'])); ?>
+			</td>
+		</tr>
+		
 	</table>
 	<br/>
 	<?php  echo Form::checkbox('terms'); echo Form::label('read_terms_of_use', __('Agree to terms of use'));  ?>
