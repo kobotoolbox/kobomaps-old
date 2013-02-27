@@ -33,7 +33,7 @@
 		var myEmail = $("#emailField").val();
 		var myComment = $("#commentField").val();
 
-		myComment = '<?php echo __('From map:');?> <a href="<?php echo URL::base().'public/view?id='.$map->id?>"><?php echo $map->title;?></a><br/><br/>' + myComment;
+		myComment = '<?php echo __('From map:');?> <a href="<?php echo URL::base().$map->slug?>"><?php echo $map->title;?></a><br/><br/>' + myComment;
 
 		$.post("<?php echo URL::base(); ?>message/submitmessage", 
 
