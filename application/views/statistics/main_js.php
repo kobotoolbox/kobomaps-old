@@ -9,6 +9,7 @@
 ?>
 	
 <script type="text/javascript">
+var globaldata;
 	$(function(){
 		$("#startDate").datepicker();
 		$("#endDate").datepicker();
@@ -38,9 +39,25 @@
 		
 		$.post("<?php echo URL::base(); ?>statistics/getdata", { "map": maps, "start": startDate, "end": endDate }).done(
 		function(data) {
-			drawGraph(parseData(data));
+			globaldata = parseData(data);
+			drawGraph(globaldata);
 		});	
 
+	}
+
+	function createCSV(){
+		var startDate = $("#startDate").val();
+		var endDate = $("#endDate").val();
+		var maps = $("#maps").val();
+		var dates = [];
+
+		$.post("<?php echo URL::base(); ?>statistics/getdata", { "map": maps, "start": startDate, "end": endDate }).done(
+			function(data) {
+				console.log(parseData(data));
+				$("#csvdata").val(JSON.stringify(parseData(data)));
+				$("#csvform").submit();
+		});	
+		
 	}
 
 

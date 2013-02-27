@@ -96,6 +96,50 @@ class Controller_Statistics extends Controller_Loggedin {
 		echo ']';
 	}
 	
+	/**
+	 * AJAX call to create CSV file from the data that is contained within the 'csvform'
+	 */
+	
+	function action_csvexport(){
+		$this->auto_render = false;
+		$this->response->headers('Content-Type','text/csv');
+		$this->response->headers('Content-Disposition','attachment;filename=Statistics.csv');
+	
+		$data = json_decode($_POST['data']);
+		
+		//print the column names, starting with Map Name going through the dates
+		echo '"'.__('Map Name').'",';
+		if($data != '{}'){
+			$dateFinder = $data[0]->data;
+			
+			//for all the dates in the first Map, create Date variables to account for timezones, since Datetime requires a string as a date
+			foreach($dateFinder as $date){
+				$smallDate = date('F j, Y, g:i a', $date[0]/1000);
+				$pulledDate = DateTime::createFromFormat(
+						'U',
+						strtotime($smallDate),
+						new DateTimeZone('UTC'));;
+				echo $pulledDate->format('m/d/Y');
+				echo ',';
+			}
+			
+			echo "\n";
+			//then get the label of the map, print it and then for every date, print out the statistics
+			foreach($data as $map){
+				echo '"'.$map->label.'",';
+				foreach($map->data as $date){
+					echo $date[1].',';
+				}
+				echo "\n";
+			}
+		}
+		else{
+			return;
+		}
+		
+		
+	}
+	
 		 
 	
 }//end of class

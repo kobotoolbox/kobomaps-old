@@ -26,6 +26,9 @@ else {?>
 	</p>
 	<p><?php echo __('End Date')?>: <input type="text" id="endDate" value="<?php echo date('m/d/Y', time());?>" /></p>
 	<input type="button" value="<?php echo __('Submit')?>" onclick="updateGraph()"/>
+	<input type="button" value="<?php echo __('Export to CSV')?>" onclick="createCSV()"/>
 </div>
 
+<form method=POST action="<?php echo URL::base()?>/statistics/csvexport" id="csvform">
+	<input type="hidden" name="data" id="csvdata"/></form>
 <?php }?>

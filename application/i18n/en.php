@@ -298,6 +298,8 @@ return array
 		'You have no maps to view statistics for.' => 'You have no maps to view statistics for.',
 		'was visited' => 'was visited',
 		'times on' => 'times on',
+		'Export to CSV' => 'Export to CSV',
+		'Map Name' => 'Map Name',
 		
 		//Comment error
 		'Your comment is empty, please try again.' => 'Your comment is empty, please try again.',
@@ -372,6 +374,9 @@ return array
 		'We cannot find that'=>'We cannot find that',
 		'Go home'=>'Go home',
 		'Sorry, but we couldn\'t find'=>'Sorry, but we couldn\'t find',
+		'Please make sure you have spelled the slug correctly.' => 'Please make sure you have spelled the slug correctly.',
+		'Please be aware that this map may have been deleted by you or the owner.' => 'Please be aware that this map may have been deleted by you or the owner.',
+		
 		
 );
 
