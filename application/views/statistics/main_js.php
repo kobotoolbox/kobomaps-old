@@ -45,6 +45,7 @@ var globaldata;
 
 	}
 
+	//does AJAX call to function that already spreads the dates between the start and end dates and then stores it in the hidden form
 	function createCSV(){
 		var startDate = $("#startDate").val();
 		var endDate = $("#endDate").val();
@@ -91,9 +92,13 @@ var globaldata;
 			},
 	    	grid: {hoverable: true, autoHighlight: true, markings: weekendAreas},
 	    	yaxis:{position: "left", labelWidth: 60, labelHeight: 20, min:0},
-	    	xaxis: {mode: 'time', timezone: 'browser'}
+	    	xaxis: {mode: 'time', timezone: 'browser'},
+	    	legend:{
+		    	show:true, container: $("#legend")
+	    		}
 			}
 		);
+		$("#legend_holder").show('slow');
 		
 		bindHoverTip("#statChart");
 	}

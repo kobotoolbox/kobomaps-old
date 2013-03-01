@@ -8,7 +8,7 @@
 *************************************************************/
 ?>
 	
-<h1> <?php echo __('Statistics')?></h1>
+<h1 style="font-size: 20px"> <?php echo __('Statistics')?></h1>
 
 <?php if($maps == null) {
 	echo __('You have no maps to view statistics for.');
@@ -18,7 +18,7 @@ else {?>
 <div id="statChart" style= "width:700px; height:500px"></div></div>
 <div id="statsControls">
 	<?php echo __('Select Maps')?> <br/>
-	<?php echo Form::select('maps',$maps,null, array('id'=>'maps', 'multiple'=>'multiple'));?>
+	<?php echo Form::select('maps',$maps,null, array('id'=>'maps', 'multiple'=>'multiple', 'style' => 'width: 175px; height: 100px'));?>
 	
 	<p><?php echo __('Start Date')?>: <input type="text" id="startDate" value="<?php 
 			echo date('m/d/Y', time() - (24 * 60 * 60 * 30));
@@ -27,6 +27,10 @@ else {?>
 	<p><?php echo __('End Date')?>: <input type="text" id="endDate" value="<?php echo date('m/d/Y', time());?>" /></p>
 	<input type="button" value="<?php echo __('Submit')?>" onclick="updateGraph()"/>
 	<input type="button" value="<?php echo __('Export to CSV')?>" onclick="createCSV()"/>
+</div>
+</br>
+<div id="legend_holder" style="display:none"> <h3><?php echo __('Legend').':'?> </h3>
+	<div id="legend"></div>
 </div>
 
 <form method=POST action="<?php echo URL::base()?>/statistics/csvexport" id="csvform">

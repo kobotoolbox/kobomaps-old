@@ -49,6 +49,7 @@ var playback = (function(){
 		{
 			currentPlaybackIndex = 0;
 			$("#playButton").removeClass('active');
+			clearTimer();
 			return;
 		}
 		currentPlaybackIndex = index;
@@ -66,7 +67,7 @@ var playback = (function(){
 	}
 		 
 	//stops timers
-	function clearTimer (){
+	function clearTimer(){
 		clearInterval(sheetTimer);
 		sheetTimer = null;
 	}

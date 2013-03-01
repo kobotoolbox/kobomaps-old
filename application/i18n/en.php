@@ -302,6 +302,7 @@ return array
 		'times on' => 'times on',
 		'Export to CSV' => 'Export to CSV',
 		'Map Name' => 'Map Name',
+		'Legend' => 'Legend',
 		
 		//Comment error
 		'Your comment is empty, please try again.' => 'Your comment is empty, please try again.',
