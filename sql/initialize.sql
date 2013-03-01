@@ -375,10 +375,10 @@ UPDATE `metadata` SET  `v` =  '1.0.036' WHERE  `metadata`.`k` ='Database Version
 
 /** Dylan Gillespie -- 2013-02-20 -- Added default colors to map for style **/
 ALTER TABLE  `maps` ADD  `border_color` CHAR( 6 ) NOT NULL DEFAULT  '06D40D' AFTER  `CSS` ;
-ADD  `region_color` CHAR( 6 ) NOT NULL DEFAULT  'AAAAAA' AFTER  `border_color`;
+ALTER TABLE  `maps` ADD  `region_color` CHAR( 6 ) NOT NULL DEFAULT  'AAAAAA' AFTER  `border_color`;
 ALTER TABLE  `maps` ADD  `polygon_color` CHAR( 13 ) NOT NULL DEFAULT  'FF0000 FFFFFF' AFTER  `region_color`;
 ALTER TABLE  `maps` ADD  `graph_bar_color` CHAR( 6 ) NOT NULL DEFAULT  '223953' AFTER  `polygon_color` ;
-ADD  `graph_select_color` CHAR( 6 ) NOT NULL DEFAULT  'D71818' AFTER  `graph_bar_color`;
+ALTER TABLE  `maps` ADD  `graph_select_color` CHAR( 6 ) NOT NULL DEFAULT  'D71818' AFTER  `graph_bar_color`;
 UPDATE `metadata` SET  `v` =  '1.0.037' WHERE  `metadata`.`k` ='Database Version';
 
 /** Dylan Gillespie -- 2013-02-22 -- Added gradient bool to maps **/
@@ -402,5 +402,5 @@ CREATE TABLE oid_associations (
             assoc_type VARCHAR(64) NOT NULL,
             PRIMARY KEY (server_url(255), handle)
             ) ENGINE=InnoDB;
-UPDATE `metadata` SET  `v` =  '1.0.037' WHERE  `metadata`.`k` ='Database Version';
+UPDATE `metadata` SET  `v` =  '1.0.039' WHERE  `metadata`.`k` ='Database Version';
 
