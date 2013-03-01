@@ -91,23 +91,13 @@ class Controller_Login extends Controller_Main {
 			set_include_path(get_include_path() . PATH_SEPARATOR . MODPATH.'vendor/php-openid/');
 			
 			require_once Kohana::find_file('php-openid', 'Auth/OpenID/Consumer');
-			require_once Kohana::find_file('php-openid', 'Auth/OpenID/FileStore');
-			require_once Kohana::find_file('php-openid', 'Auth/OpenID/MySQLStore');
+			require_once Kohana::find_file('php-openid', 'Auth/OpenID/MySQLiStore');
 			require_once Kohana::find_file('php-openid', 'Auth/OpenID/DatabaseConnectionMysqli');
 			require_once Kohana::find_file('php-openid', 'Auth/OpenID/SReg');
 			require_once Kohana::find_file('php-openid', 'Auth/OpenID/PAPE');
 			
-			$server = Kohana::$config->load('database.default.connection.hostname');
-			$user_name = Kohana::$config->load('database.default.connection.username');
-			$password = Kohana::$config->load('database.default.connection.password');
-			$database = Kohana::$config->load('database.default.connection.database');
 			
-			$database = new mysqli($server, $user_name, $password, $database);
-			
-			$openIdDb = new Auth_OpenID_DatabaseConnectionMysqli($database);
-			
-			$s = new Auth_OpenID_MySQLStore($openIdDb);
-			
+			$s = $this->getStore();
 								        
 		    $consumer = new Auth_OpenID_Consumer($s);
 		    
@@ -184,41 +174,17 @@ class Controller_Login extends Controller_Main {
 	
 	
 	protected function &getStore() {
-		/**
-		 * This is where the example will store its OpenID information.
-		 * You should change this path if you want the example store to be
-		 * created elsewhere.  After you're done playing with the example
-		 * script, you'll have to remove this directory manually.
-		 */
-		$store_path = null;
-		if (function_exists('sys_get_temp_dir')) {
-			$store_path = sys_get_temp_dir();
-		}
-		else {
-			if (strpos(PHP_OS, 'WIN') === 0) {
-				$store_path = $_ENV['TMP'];
-				if (!isset($store_path)) {
-					$dir = 'C:\Windows\Temp';
-				}
-			}
-			else {
-				$store_path = @$_ENV['TMPDIR'];
-				if (!isset($store_path)) {
-					$store_path = '/tmp';
-				}
-			}
-		}
-		$store_path .= DIRECTORY_SEPARATOR . '_php_consumer_test';
-	
-		if (!file_exists($store_path) &&
-				!mkdir($store_path)) {
-			print "Could not create the FileStore directory '$store_path'. ".
-			" Please check the effective permissions.";
-			exit(0);
-		}
-		$r = new Auth_OpenID_FileStore($store_path);
-	
-		return $r;
+		$server = Kohana::$config->load('database.default.connection.hostname');
+		$user_name = Kohana::$config->load('database.default.connection.username');
+		$password = Kohana::$config->load('database.default.connection.password');
+		$database = Kohana::$config->load('database.default.connection.database');
+		
+		$database = new mysqli($server, $user_name, $password, $database);
+		
+		$openIdDb = new Auth_OpenID_DatabaseConnectionMysqli($database);
+		
+		$s = new Auth_OpenID_MySQLiStore($openIdDb);
+		return $s;
 	}
 	
 	/**
@@ -353,7 +319,8 @@ class Controller_Login extends Controller_Main {
 		set_include_path(get_include_path() . PATH_SEPARATOR . MODPATH.'vendor/php-openid/');
 			
 		require_once Kohana::find_file('php-openid', 'Auth/OpenID/Consumer');
-		require_once Kohana::find_file('php-openid', 'Auth/OpenID/FileStore');
+		require_once Kohana::find_file('php-openid', 'Auth/OpenID/MySQLiStore');
+		require_once Kohana::find_file('php-openid', 'Auth/OpenID/DatabaseConnectionMysqli');
 		require_once Kohana::find_file('php-openid', 'Auth/OpenID/SReg');
 		require_once Kohana::find_file('php-openid', 'Auth/OpenID/PAPE');
 		

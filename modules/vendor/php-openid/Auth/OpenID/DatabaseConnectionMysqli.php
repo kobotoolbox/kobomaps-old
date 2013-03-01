@@ -91,14 +91,14 @@ class Auth_OpenID_DatabaseConnectionMysqli extends Auth_OpenID_DatabaseConnectio
 	    	}
     	}
     	
-    	echo "<h1>here</h1>";    	
+    	//echo "<h1>here</h1>";    	
     	//move the type to the front of the array    	
     	array_unshift($params, $type);
-    	echo "<br/>-------------------------------------------<br/>";
-    	echo $sql;
-    	echo "<br/>-------------------------------------------<br/>";
-    	print_r($params);
-    	echo "<br/>-------------------------------------------<br/>";
+    	//echo "<br/>-------------------------------------------<br/>";
+    	//echo $sql;
+    	//echo "<br/>-------------------------------------------<br/>";
+    	//print_r($params);
+    	//echo "<br/>-------------------------------------------<br/>";
     	
     	//fancy way of calling with an array as a list of params
     	call_user_func_array(array($statement, 'bind_param'), refValues($params));
@@ -108,7 +108,7 @@ class Auth_OpenID_DatabaseConnectionMysqli extends Auth_OpenID_DatabaseConnectio
     	
     	$retVal = fetch($statement);
     	
-    	print_r($retVal);
+    	//print_r($retVal);
     	$statement->close();
     	return $retVal;
     	
@@ -236,6 +236,10 @@ function fetch($result)
 		$data = array();
 		$meta = $result->result_metadata();
 
+		if ($meta == null)
+		{
+			return array();
+		}
 		while($field = $meta->fetch_field())
 			$variables[] = &$data[$field->name]; // pass by reference
 
