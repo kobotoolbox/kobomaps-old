@@ -182,10 +182,7 @@ div#mainMenu
 
 #mainMenu li a:hover
 {
-		
-	box-shadow: none;
-	top:2px;
-	right:-2px;
+	box-shadow: 2px 2px 5px #292929;
 	position:relative;
 }
 
