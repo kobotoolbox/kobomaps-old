@@ -26,6 +26,7 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/label.js"> </script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/RainbowVis-JS-master/rainbowvis.js"></script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.navigate.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.tools.min.js"> </script>
@@ -61,6 +62,15 @@ var map;
  */
 var mapData;
 
+
+/**
+ * global variables that hold the map color choices, just replaces previous values in code
+ */
+var border_color = '#<?php echo $map->border_color ?>';
+var region_color = '#<?php echo $map->region_color ?>';
+var polygon_color = '<?php echo $map->polygon_color ?>';
+var graph_color = '#<?php echo $map->graph_bar_color ?>';
+var graph_select_color = '#<?php echo $map->graph_select_color ?>';
 /**
  *  gives us a list of names for geographicAreas
  */
@@ -656,33 +666,40 @@ function parseJsonToGmap(jsonUrl, jsonDataUrl)
 		
 			
 		}
-		
-		//now loops over the array of points and creates polygons
-		for (var areaName in areaPoints)
-		{
-			var points = areaPoints[areaName];
-			//creates the polygon
-			areaGPolygons[areaName] = new google.maps.Polygon({
-				paths: points,
-				strokeColor: "#00CC00", //sets the line color to red
-				strokeOpacity: 0.8, //sets the line color opacity to 0.8
-				strokeWeight: 2, //sets the width of the line to 3
-				fillColor: "#aaaaaa", //sets the fill color
-				fillOpacity: 0.75 //sets the opacity of the fill color
-			});
-			areaGPolygons[areaName].setMap(map); //places the polygon on the map
-			
-			//add mouse in
-			google.maps.event.addListener(areaGPolygons[areaName], 'mouseover', function(event) {
-				 this.setOptions({fillOpacity: 0.95}); 
-			});
-			
-			//add mouse out
-			google.maps.event.addListener(areaGPolygons[areaName], 'mouseout', function(event) {
-				 this.setOptions({fillOpacity: 0.75}); 
-			});
-		}	
-
+			//now loops over the array of points and creates polygons
+			for (var areaName in areaPoints)
+			{
+				var points = areaPoints[areaName];
+				//creates the polygon
+					areaGPolygons[areaName] = new google.maps.Polygon({
+						paths: points,
+						strokeColor: border_color, //sets the line color to defined color
+						strokeOpacity: 0.8, //sets the line color opacity to 0.8
+						strokeWeight: 2, //sets the width of the line to 3
+						fillColor: region_color, //sets the fill color
+						fillOpacity: 0.75 //sets the opacity of the fill color
+				});
+					areaGPolygons[areaName] = new google.maps.Polygon({
+						paths: points,
+						strokeColor: border_color, //sets the line color to defined color
+						strokeOpacity: 0.8, //sets the line color opacity to 0.8
+						strokeWeight: 2, //sets the width of the line to 3
+						fillColor: region_color, //sets the fill color
+						fillOpacity: 0.75 //sets the opacity of the fill color
+				});
+				
+				areaGPolygons[areaName].setMap(map); //places the polygon on the map
+				
+				//add mouse in
+				google.maps.event.addListener(areaGPolygons[areaName], 'mouseover', function(event) {
+					 this.setOptions({fillOpacity: 0.95}); 
+				});
+				
+				//add mouse out
+				google.maps.event.addListener(areaGPolygons[areaName], 'mouseout', function(event) {
+					 this.setOptions({fillOpacity: 0.75}); 
+				});
+			}	
 
 		parseJsonData(jsonDataUrl);		
 		
@@ -718,14 +735,20 @@ function formatAreaOpacityColor(name, opacityValue, colorValue)
 */
 function calculateColor(percentage, min, spread)
 {
-	//calculate the color
-	var red = 255;
-	var blue = 255 - ((percentage-min)*(1/spread)*255);
-	var green = 255 - ((percentage-min)*(1/spread)*255);
-	var color = "#"+decimalToHex(red,2)+decimalToHex(green,2)+decimalToHex(blue,2);
+	var gradient = new Rainbow();
+	var color;
+	var colorPerct = (percentage-min)*(1/spread);
+	var first = polygon_color.substring(0,6);
+	var second = polygon_color.substring(7, 13);
+
+	gradient.setSpectrum(second, first);
+	gradient.setNumberRange(min, min+spread);
+	//return the hex color of the percentage from min -> spread
+	color = "#" + gradient.colourAt(colorPerct * (min + spread));
 	
 	return color;
 }
+
 
 
 /**
@@ -737,7 +760,7 @@ function UpdateAreaPercentage(name, percentage, min, spread, unit)
 	var color = calculateColor(percentage, min, spread);
 	
 	//update the polygon with this new color
-	formatAreaOpacityColor(name, 0.6, color);
+	formatAreaOpacityColor(name, 0.75, color);
 	
 	//update the labels
 
@@ -907,15 +930,15 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 	selectedArea = [[selecX, selecY]];
 	 var bothData = [
 	        	  {
-		        	data: graphXData,
-		          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(34,57,83)"} ,
-		          	color: "rgb(34,57,83)"
-	        	  },
-	        	  {
-		        	data: selectedArea,
-		        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(215, 24, 24)"} ,
-	        		color: "rgb(215, 24, 24)"
-	        	  }
+				     data: graphXData,
+				     bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_color} ,
+				     color: graph_color
+			       },
+			      {
+				    data: selectedArea,
+				    bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_select_color} ,
+			        color: graph_select_color
+			      }
 	  ];
 	  
       /*
@@ -988,15 +1011,15 @@ function drawGeneralChart(fullId, dataPath, name){
 	selectedArea = [[selecX, selecY]];
 	var bothData = [
 		        	  {
-			        	data: graphXData,
-			          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(34,57,83)"} ,
-			          	color: "rgb(34,57,83)"
-		        	  },
-		        	  {
-			        	data: selectedArea,
-			        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(215, 24, 24)"} ,
-		        		color: "rgb(215, 24, 24)"
-		        	  }
+				        	data: graphXData,
+				          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_color} ,
+				          	color: graph_color
+			        	  },
+			        	  {
+				        	data: selectedArea,
+				        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_select_color} ,
+			        		color: graph_select_color
+			        	  }
 		  ];
 	  
       /*
@@ -1080,13 +1103,13 @@ function drawTotalChart(indicator){
 		var bothData = [
 			        	  {
 				        	data: graphXData,
-				          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(34,57,83)"} ,
-				          	color: "rgb(34,57,83)"
+				          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_color} ,
+				          	color: graph_color
 			        	  },
 			        	  {
 				        	data: selectedArea,
-				        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: "rgb(215, 24, 24)"} ,
-			        		color: "rgb(215, 24, 24)"
+				        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_select_color} ,
+			        		color: graph_select_color
 			        	  }
 			  ];
 
@@ -1434,7 +1457,8 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator, to
 	//updates the key
 	////////////////////////////////////////////////////////////////
 	//set the color
-	var color = calculateColor(nationalAverage, min, spread);	
+	var color = calculateColor(nationalAverage, min, spread);
+    
 	$("#nationalaveragediv").css("background-color", color);
 	$("#nationalaverageimg").text(addCommas(nationalAverage)+" "+htmlDecode(unit));
 
@@ -1451,6 +1475,19 @@ function updateKey(min, span, title, unit)
 	}
 	else
 	{
+		var canvas = document.getElementById('legend_canvas');
+	    var context = canvas.getContext('2d');
+	    context.rect(0, 0, 298, 140);
+
+	    // add linear gradient
+	    var grd = context.createLinearGradient(0, 0, 298, 19);
+	    var first = '#' + polygon_color.substring(0, 6);
+	    var second = '#' + polygon_color.substring(7,13);
+	    grd.addColorStop(0, second);   
+	    grd.addColorStop(1, first);
+	    context.fillStyle = grd;
+	    context.fill();
+	      
 		$("#percentleft").attr("title", addCommas(min)+" "+htmlDecode(unit));
 		$("#percentleft").text(addCommas(min)+" "+htmlDecode(unit));
 		
@@ -1469,24 +1506,23 @@ and their charts and so forth
 */
 function zeroOutMap()
 {
-	//loop over the polygons and set the colors to not-set
-	for(areaName in areaGPolygons)
-	{
-		//set the polygon back to default colors
-		formatAreaOpacityColor(areaName, 0.75, "#aaaaaa");
-		//set the label to blank("")
-
-		labels[areaName].set("areaValue", "");
-		<?php if($map->show_empty_name == 1){?>
-		labels[areaName].set('show_empty_name'	, true);
-		<?php }else{ ?>
-		labels[areaName].set('show_empty_name', false);
-		<?php }?>
-		labels[areaName].draw();
-		//remove any old listeners pop-up listeners
-		google.maps.event.clearListeners(areaGPolygons[areaName], 'click');
-		
-	}
+		//loop over the polygons and set the colors to not-set
+		for(areaName in areaGPolygons)
+		{
+			formatAreaOpacityColor(areaName, 0.75, region_color);
+			//set the label to blank("")
+	
+			labels[areaName].set("areaValue", "");
+			<?php if($map->show_empty_name == 1){?>
+			labels[areaName].set('show_empty_name'	, true);
+			<?php }else{ ?>
+			labels[areaName].set('show_empty_name', false);
+			<?php }?>
+			labels[areaName].draw();
+			//remove any old pop-up listeners
+			google.maps.event.clearListeners(areaGPolygons[areaName], 'click');
+			
+		}
 }
 
 /**
@@ -1675,6 +1711,13 @@ function initialize_buttons()
 	$("#turnOffLabelsButton").click(function(){
 		Label.renderLabelNames = !Label.renderLabelNames; 
 		$("#turnOffLabelsButton").toggleClass("active");
+
+		if($("#turnOffLabelsButton").text() == 'Hide Labels'){
+			$("#turnOffLabelsButton").text("<?php echo __("Display Labels"); ?>");
+		}
+		else{
+			$("#turnOffLabelsButton").text("<?php echo __("Hide Labels"); ?>");
+		}
 		//redraw all the labels 
 		for(i in labels)
 		{
@@ -1687,6 +1730,13 @@ function initialize_buttons()
 	$("#turnOffValuesButton").click(function(){
 		Label.renderLabelVals = !Label.renderLabelVals; 
 		$("#turnOffValuesButton").toggleClass("active");
+		
+		if($("#turnOffValuesButton").text() == 'Hide Values'){
+			$("#turnOffValuesButton").text("<?php echo __("Display Values"); ?>");
+		}
+		else{
+			$("#turnOffValuesButton").text("<?php echo __("Hide Values"); ?>");
+		}
 		//redraw all the labels 
 		for(i in labels)
 		{

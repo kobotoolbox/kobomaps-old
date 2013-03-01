@@ -445,7 +445,7 @@ table.list_table tr td a:hover
 	width:31px;
 	}			
 .mapTasks img.delete, .templateTasks img.delete, .messageTable img.delete{
-	background: url('../img/tasksSprite.png') -130px 0px;	
+	background: url('../img/tasksSprite.png') -129px 0px;	
 	width:32px;
 	}
 .templateTasks img.viewTemplate{
@@ -902,7 +902,26 @@ select.needstobemapped{
 #statChartWrapper p{
 	text-align: center;
 }
-
+.replyToComment {
+   background: #c9c9c9;
+   padding: 5px 10px;
+   border-radius: 8px;
+   vertical-align: middle;
+   width: 50px
+   }
+.replyToComment:hover {
+   border-top-color: #919191;
+   background: #919191;
+   color: #ccc;
+   }
+.replyToComment:active {
+   border-top-color: #969696;
+   background: #969696;
+   }
+.replyToComment a{
+	text-decoration:none;
+	font-size: 8px;
+}
 
 
 /*********************************************************

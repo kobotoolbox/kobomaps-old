@@ -142,6 +142,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'lat'=>'0',
 			'lon'=>'0',
 			'zoom'=>'1',
+			'border_color' => '06D40D',
+			'region_color' => 'AAAAAA',
+			'polygon_color' => 'FF0000 FFFFFF',
+			'graph_bar_color' => '223953',
+			'graph_select_color' => 'D71818',
 			'map_style'=>Model_Map::$style_default,
 			'user_id'=>$this->user->id,
 			'is_private'=>0,
@@ -151,6 +156,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'region_label_font' => 12,
 			'value_label_font' => 12,
 			'large_file'=> false,
+			'gradient' => false,
 			);
 		
 		$map = null;
@@ -181,12 +187,18 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['zoom'] = $map->zoom;
 			$data['map_style'] = $map->map_style;
 			$data['user_id'] = $map->user_id;
+			$data['border_color'] = $map->border_color;
+			$data['region_color'] = $map->region_color;
+			$data['polygon_color'] = $map->polygon_color;
+			$data['graph_bar_color'] = $map->graph_bar_color;
+			$data['graph_select_color'] = $map->graph_select_color;
 			$data['is_private'] = $map->is_private;
 			$data['show_names'] = $map->show_empty_name;
 			$data['label_zoom_level'] = $map->label_zoom_level;
 			$data['region_label_font'] = $map->region_label_font;
 			$data['value_label_font'] = $map->value_label_font;
 			$data['large_file'] = $map->large_file;
+			$data['gradient'] = $map->gradient;
 		}
 		else
 		{
@@ -278,6 +290,15 @@ class Controller_Mymaps extends Controller_Loggedin {
 				//this handles is private
 				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;
 				$_POST['show_empty_name'] = isset($_POST['show_empty_name']) ? 1 : 0;
+				$_POST['gradient'] = isset($_POST['gradient']) ? 1 : 0;
+				
+				if($data['gradient'] == 1){
+					$_POST['polygon_color'] = $_POST['polygon_color'].' '.$_POST['regionTwo'];
+					$data['polygon_color'] = $_POST['polygon_color'];
+				}
+				else {
+					$data['polygon_color'] = $_POST['polygon_color'].' FFFFFF';
+				}
 
 				//handle the status
 				if($map->map_creation_progress != null)
@@ -1610,15 +1631,19 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				
 	 				if(count($dupe_region_array) > 0){
 	 					foreach($dupe_region_array as $region_id=>$num_dupes){
-	 						
 	 						$region = ORM::factory('Templateregion', $region_id);
 	 						if($region->title != 'ignore_region'){
 	 							$error_string = __('You have used region ').$region->title.' '.$num_dupes.__(' times.');
 	 							$this->template->content->errors[] = $error_string;
 	 							}
+	 						else{
+	 							unset($dupe_region_array[$region_id]);	
+	 						}
 	 					}
-	 					$this->template->content->data = $_POST['region'];
-	 					return;
+	 					if(count($dupe_region_array) > 0){
+	 						$this->template->content->data = $_POST['region'];
+	 						return;
+	 					}
 	 				}
 	 				
 	 				

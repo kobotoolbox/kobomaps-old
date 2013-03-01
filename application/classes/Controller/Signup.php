@@ -21,7 +21,9 @@ class Controller_Signup extends Controller_Main {
 				'first_name'=>'',
 				'last_name'=>'',
 				'password'=>'',
-				'password_confirm'=>''
+				'password_confirm'=>'',
+				'email_alerts'=>0,
+				'email_warnings'=>0
 				);
 		//turn set focus to first UI form element
 		$this->template->html_head->script_views[] = '<script type="text/javascript">$(document).ready(function() {$("input:text:visible:first").focus();});</script>';
@@ -54,7 +56,7 @@ class Controller_Signup extends Controller_Main {
 				}
 				//conver the DOB to a format mysql recognizes
 				$user = ORM::factory("User");
-				$user->create_user($_POST, array('username','password','email', 'first_name','last_name'));
+				$user->create_user($_POST, array('username','password','email', 'first_name','last_name', 'email_alerts', 'email_warnings'));
 				// Add the login role to the user (add a row to the db)
 				$login_role = new Model_Role(array('name' =>'login'));
             	$user->add('roles', $login_role);

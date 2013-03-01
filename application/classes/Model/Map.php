@@ -31,7 +31,7 @@ class Model_Map extends ORM {
 		return array(
 				'title' => array(
 						array('not_empty'),
-						array('max_length', array(':value', 254)),
+						array('max_length', array(':value', 255)),
 						array('min_length', array(':value', 1))
 				),
 				'lat' => array(
@@ -61,12 +61,12 @@ class Model_Map extends ORM {
 				),
 				'file' => array(
 						array('not_empty'),
-						array('max_length', array(':value', 254)),
+						array('max_length', array(':value', 255)),
 						array('min_length', array(':value', 1))
 				),
 				'json_file' => array(
 						array('not_empty'),
-						array('max_length', array(':value', 254)),
+						array('max_length', array(':value', 255)),
 						array('min_length', array(':value', 1))
 				),
 				'CSS' => array(
@@ -117,7 +117,8 @@ class Model_Map extends ORM {
 	{
 	
 		$expected = array('title', 'description', 'slug', 'large_file', 'user_id', 'file', 'map_style', 'CSS', 'lat', 'lon', 'zoom', 
-				'template_id','json_file', 'is_private', 'map_creation_progress', 
+				'template_id','json_file', 'is_private', 'map_creation_progress', 'border_color', 'region_color', 'polygon_color',
+				'graph_bar_color', 'graph_select_color', 'gradient',
 				'show_empty_name', 'label_zoom_level', 'region_label_font', 'value_label_font');
 		
 		//if no slug is set

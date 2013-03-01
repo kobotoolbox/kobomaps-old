@@ -105,25 +105,37 @@ return array
 		'Show advanced options'=>'Show advanced options',
 		'Advanced'=>'Advanced',
 		'Map CSS'=>'Map CSS',
-		'<br/>CSS can be used to edit the style of the map menubar and legend. <br /> To learn more about the use of CSS see: '=>'<br/>CSS can be used to edit the style of the map menubar and legend. <br /> To learn more about the use of CSS see: ',
+		'CSS can be used to edit the style of the map menubar and legend. '=>'CSS can be used to edit the style of the map menubar and legend. ',
+		'To learn more about the use of CSS see:' => 'To learn more about the use of CSS see: ',
 		'Map Style'=>'Map Style',
-		'<br/>The map styles can be used to edit the style of the background map. <br /> To learn more about the use of map styles see: '=>'<br/>The map styles can be used to edit the style of the background map. <br /> To learn more about the use of map styles see: ',
+		'The map styles can be used to edit the style of the background map. '=>'The map styles can be used to edit the style of the background map. ',
+		'To learn more about the use of map styles see: ' => 'To learn more about the use of map styles see: ',
 		'Revert to default map style'=>'Revert to default map style',
 		'Default'=>'Default',
 		'Continue'=>'Continue',
-		'<br/>Show All Labels' => '<br/>Show All Labels',
+		'Show All Labels' => 'Show All Labels',
 		'Maps will show region names with no data.' => 'Maps will show region names with no data.',
-		'  Level at which labels will begin to appear.' => '  Level at which labels will begin to appear.',
-		'<br/>Zoom level to show labels' => '<br/>Zoom level to show labels',
-		'<br/>Font size of region names' => '<br/>Font size of region names',
-		'  Font size of the region titles as seen in maps, in pixels.' => '  Font size of the region titles as seen in maps, in pixels.',
-		'<br/>Font size of data values' => '<br/>Font size of data values',
-		'  Font size of the data values as seen in maps, in pixels.' => '  Font size of the data values as seen in maps, in pixels.',
+		'Level at which labels will begin to appear.' => 'Level at which labels will begin to appear.',
+		'Zoom level to show labels' => 'Zoom level to show labels',
+		'Font size of region names' => 'Font size of region names',
+		'Font size of the region titles as seen in maps, in pixels.' => 'Font size of the region titles as seen in maps, in pixels.',
+		'Font size of data values' => 'Font size of data values',
+		'Font size of the data values as seen in maps, in pixels.' => 'Font size of the data values as seen in maps, in pixels.',
 		'This will be the URL to access this map. It should be short and sweet'=>'This will be the URL to access this map. It should be short and sweet',
+		'Color of region borders' => 'Color of region borders',
+		'Default color of regions' => 'Default color of regions',
+		'Color of region shading' =>'Color of region shading',
+		'Color of bars in graphs' => 'Color of bars in graphs',
+		'Color of selected regions in graphs' => 'Color of selected regions in graphs',
+		'Will change the color of the borders between regions.' => 'Will change the color of the borders between regions.',
+		'Color of regions that are not being affected by an indicator.' => 'Color of regions that are not being affected by an indicator.',
+		'Color of regions that are being affected by an indicator.' => 'Color of regions that are being affected by an indicator.',
+		'Color of bars in all graphs.' => 'Color of bars in all graphs.',
+		'Color of bars in graphs that indicate the region selected currently.' => 'Color of bars in graphs that indicate the region selected currently.',
 		//add1 errors
 		'register/map.slug.unique'=>'Your slug is not unique, please pick another one',
 		'Your slug had illegal characters, they have been replaced.' => 'Your slug had illegal characters, they have been replaced.',
-		'You slug has already been used. Please choose another.' => 'You slug has already been used. Please choose another.',
+		'You slug has already been used. Please choose another.' => 'Your slug has already been used. Please choose another.',
 		
 		//add 2 page
 		'Add Map - Data Structure'=>'Add Map - Data Structure',
@@ -169,10 +181,9 @@ return array
 		'Regions in sheet'=>'Regions in sheet',
 		'Indicators in sheet'=>'Indicators in sheet',
 		'If the indicators above are not correct please check the rows that you set as data and the columns you set as denoting indicators.'=>'If the indicators above are not correct please check the rows that you set as data and the columns you set as denoting indicators.',
-		'The following unit values in this sheet are large, we recommend that you condense the units or your maps will look cluttered. </br>
-				Such as use "%" instead of "Percentage." Thank you.'
-			=> 'The following unit values in this sheet are large, we recommend that you condense the units or your maps will look cluttered. </br>
-				Such as use "%" instead of "Percentage." Thank you.',
+		'The following unit values in this sheet are large, we recommend that you condense the units or your maps will look cluttered.'
+			=> 'The following unit values in this sheet are large, we recommend that you condense the units or your maps will look cluttered. ',
+		'Such as use "%" instead of "Percentage." Thank you.' => 'Such as use "%" instead of "Percentage." Thank you.',
 		
 		//add 4 page
 		'Add Map - Geo Set-up'=>'Add Map - Geo Set-up',
@@ -208,11 +219,14 @@ return array
 		'Please be patient while the map is loading.'=>'Please be patient while the map is loading.',
 		'powered by KoboToolbox'=>'powered by KoboToolbox',
 		'Please select an indicator to display its data.'=>'Please select an indicator to display its data.',
-		'Toggle Labels' => 'Toggle Labels',
-		'Toggle Values' => 'Toggle Values',
-		'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. Please check back soon.'=>'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. <br/><br/>Please check back soon.',
-		'Toggles the region names.' => 'Toggles the region names.',
-		'Toggles the data values.' => 'Toggles the data values.',
+		'Hide  Labels' => 'Hide  Labels',
+		'Hide  Values' => 'Hide  Values',
+		'Display Labels' => 'Display Labels',
+		'Display Values' => 'Display Values',
+		'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. Please check back soon.'=>'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner.',
+		'Please check back soon.' =>  'Please check back soon.',
+		'Turns on or off the region names.' => 'Turns on or off the region names.',
+		'Turns on or off the data values.' => 'Turns on or off the data values.',
 		'Message sent successfully!' =>'Message sent successfully!',
 		'Name (Optional)' => 'Name (Optional)',
 		'Email address (Optional)' => 'Email address (Optional)',
@@ -275,7 +289,7 @@ return array
 		'can'=>'can',
 		'Delete Colaborator'=>'Delete Colaborator',
 		'You have been granted permission to map'=>'You have been granted <strong>:permission</strong> permissions to the map <a href="'.URL::base().'public/view?id=:map_id">:map_title</a>',
-		'The template your map used has been delete. Please fix'=>'The template your map <strong>:title</strong> used has been delete. <br/><br/>Please fix this by clicking <a href="'.URL::base().'mymaps/add4?id=:id">here</a>.',
+		'The template your map used has been deleted. Please fix'=>'The template your map <strong>:title</strong> used has been deleted. <br/><br/>Please fix this by clicking <a href="'.URL::base().'mymaps/add4?id=:id">here</a>.',
 		
 		//statistics
 		'Select Maps' => 'Select Maps',
@@ -286,6 +300,8 @@ return array
 		'You have no maps to view statistics for.' => 'You have no maps to view statistics for.',
 		'was visited' => 'was visited',
 		'times on' => 'times on',
+		'Export to CSV' => 'Export to CSV',
+		'Map Name' => 'Map Name',
 		
 		//Comment error
 		'Your comment is empty, please try again.' => 'Your comment is empty, please try again.',
@@ -306,6 +322,7 @@ return array
 		'New alert from KoboMaps'=>'New alert from KoboMaps',
 		'You have recieved a new message'=> 'You have recieved a new message. Click <a href="'.URL::base().'message">here</a> to view it.',
 		'New warning from KoboMaps'=>'New warning from KoboMaps',
+		'Reply' => 'Reply',
 		
 		
 		
@@ -360,6 +377,9 @@ return array
 		'We cannot find that'=>'We cannot find that',
 		'Go home'=>'Go home',
 		'Sorry, but we couldn\'t find'=>'Sorry, but we couldn\'t find',
+		'Please make sure you have spelled the slug correctly.' => 'Please make sure you have spelled the slug correctly.',
+		'Please be aware that this map may have been deleted by you or the owner.' => 'Please be aware that this map may have been deleted by you or the owner.',
+		
 		
 );
 

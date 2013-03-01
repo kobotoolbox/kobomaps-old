@@ -47,7 +47,22 @@
 //Bar at the bottom to select between different sheets
 ?>
 <div id="sheetlinks">
-	<div id="mapName"><?php echo $map->title;?></div>
+	<div id="mapName"
+		<?php 
+		if(strlen($map->title) > 28 && strlen($map->title) < 58){
+			echo 'style="font-size:10px; padding:10px 30px 10px 30px;">';
+			echo $map->title;
+		}
+		else if(strlen($map->title) > 58){
+			echo 'style="font-size:9px; padding: 0px 0px 0px 0px">';
+			echo substr($map->title, 0, 64).' '.substr($map->title, 64);
+		}
+		else{
+			echo '>';
+			echo $map->title;
+		}
+	?>
+	</div>
 	<div id="sheetnamesStartControl" class="sheetScrollerControll"><a href="">&lt;&lt;</a></div>
 	<div id="sheetnamesLeftControl" class="sheetScrollerControll"><a href="">&lt;</a></div>
 	<div id="sheetnamesWrapper">		
@@ -97,10 +112,10 @@
 				<img class="toggleLabels" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
 				<ul id="toggleTextButtons">
 					<li>
-						<a href="" id="turnOffLabelsButton" title="<?php echo __('Toggles the region names.')?>"><?php echo __('Toggle Labels')?></a>
+						<a href="" id="turnOffLabelsButton" title="<?php echo __('Turns on or off the region names.')?>"><?php echo __('Hide Labels')?></a>
 					</li>
 					<li>
-						<a href="" id="turnOffValuesButton" title="<?php echo __('Toggles the data values.')?>"><?php echo __('Toggle Values')?></a>
+						<a href="" id="turnOffValuesButton" title="<?php echo __('Turns on or off the data values.')?>"><?php echo __('Hide Values')?></a>
 					</li>
 				</ul>
 			</li>
@@ -126,28 +141,26 @@
 				<span id="spanLegendText"><?php echo __('Please select an indicator to display its data.')?></span>
 			</div>
 			<div id="legendMinDiv">
-			<div id="legend_gradient">
-				<div id="percentleft">
-					
+			
+				<div id="legend_gradient">
+					<canvas id="legend_canvas" style="width:121px; height:20px"></canvas>
+					<div id="percentleft"></div>
+					<div id="percentright"></div>
 				</div>
-				<div id="percentright">
-					
+				<div id="nationalaveragediv">
+					<span id="nationalaveragelabel"></span>
+					<span id="nationalaverageimg" ></span>
 				</div>
-			</div>
-			<div id="nationalaveragediv">
-				<span id="nationalaveragelabel"></span>
-				<span id="nationalaverageimg" ></span>
-			</div>
-			</br>
-			<div id="nationalChartScrollDiv"  style=" width:320px; overflow-y: auto; overflow-x: hidden">
-		       	<div id="nationalIndicatorChart" style="width: 300px"></div>		
-		       </div>
-		       <div id="sourcetext">
-				<span id="sourcetextspan" style="display:none;"> Data Source:  
-					<a id="sourceURL" href="" title=""></a>
-					<span id="sourceNoURL"></span>
-				</span>
-		       </div>
+				</br>
+				<div id="nationalChartScrollDiv"  style=" width:320px; overflow-y: auto; overflow-x: hidden">
+			       	<div id="nationalIndicatorChart" style="width: 300px"></div>		
+			    </div>
+			       <div id="sourcetext">
+					<span id="sourcetextspan" style="display:none;"> Data Source:  
+						<a id="sourceURL" href="" title=""></a>
+						<span id="sourceNoURL"></span>
+					</span>
+		    	</div>
 	        
 		
 			<?php
@@ -165,7 +178,7 @@
 			<div class="contentWrap" style="position:relative;padding:30px;">
 				<img src="<?php echo URL::base();?>media/img/big_error.png"/>
 				<h2 >
-					<?php echo __('We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. Please check back soon.');?>
+					<?php echo __('We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner.').'<br/><br/>'.__('Please check back soon.');?>
 				</h2>
 			</div>
 		</div>

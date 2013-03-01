@@ -69,7 +69,7 @@
 	echo '<table><tr><td>';
 	echo Form::label('title', __('Map Title').": ");
 	echo '</td><td>';
-	echo Form::input('title', $data['title'], array('id'=>'title', 'style'=>'width:300px;'));
+	echo Form::input('title', $data['title'], array('id'=>'title', 'style'=>'width:300px;', 'maxlength' => '128'));
 	echo '</td></tr><tr><td>';
 	echo Form::label('slug', __('Map Slug').": ");
 	echo '</td><td>';
@@ -142,7 +142,6 @@
 	echo '</td><td>';
 	echo Form::select('zoom', array(1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9,10=>10,11=>11,12=>12,13=>13,14=>14,15=>15,16=>16,17=>17,18=>18),$data['zoom'], array('id'=>'zoom', 'style'=>'width:300px;'));
 	
-	
 	echo '</td></tr><tr><td>';
 	echo Form::label('advanced_options', __('Show advanced options').": ");
 	echo '</td><td>';
@@ -151,47 +150,104 @@
 
 	//show empty region names
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
-	echo Form::label('show_label', __('<br/>Show All Labels').": ");
+	echo Form::label('show_label', '<br/>'.__('Show All Labels').": ");
 	echo '</td><td></br>';
 	echo Form::checkbox('show_empty_name', null, $data['show_names']==1);
 	echo Form::label('show_label_description', __('Maps will show region names with no data.'));
 	
 	//label zoom box
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
-	echo Form::label('label_zoom_level', __('<br/>Zoom level to show labels').": ");
+	echo Form::label('label_zoom_level', '</br>'.__('Zoom level to show labels').': ');
 	$label_zoom_options = array('-1'=>'Always Visible', 0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9, 10=>10, 11=>11, 12=>12, 13=>13, 14=>14, 15=>15, 16=>16, 17=>17, 18=>18, 19=>19);
 	echo '</td><td></br>';
 	echo Form::select('label_zoom_level', $label_zoom_options, $data['label_zoom_level']);
-	echo Form::label('show_label_description', __('  Level at which labels will begin to appear.'));
+	echo Form::label('show_label_description', __('Level at which labels will begin to appear.'));
 	
 	//region font size area
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
-	echo Form::label('region_label', __('<br/>Font size of region names').": ");
+	echo Form::label('region_label', '</br>'.__('Font size of region names').": ");
 	$label_font_options = array(8=>'8 px', 10=>'10 px', 12=>'12 px', 14=>'14 px', 16=>'16 px', 18=>'18 px', 20=>'20 px', 22=>'22 px', 24=>'24 px', 26=>'26 px', 28=>'28 px', 
 			30=>'30 px', 32=>'32 px', 34=>'34 px', 36=>'36 px', 38=>'38 px', 40=>'40 px', 42=>'42 px', 44=>'44 px', 46=>'46 px', 48=>'48 px');
 	echo '</td><td></br>';
 	echo Form::select('region_label_font', $label_font_options, $data['region_label_font']);
-	echo Form::label('show_region_font', __('  Font size of the region titles as seen in maps, in pixels.'));
+	echo Form::label('show_region_font', __('Font size of the region titles as seen in maps, in pixels.'));
 	
 	//data font size area
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
-	echo Form::label('data_label', __('<br/>Font size of data values').": ");
+	echo Form::label('data_label', '<br/>'.__('Font size of data values').": ");
 	echo '</td><td></br>';
 	echo Form::select('value_label_font', $label_font_options, $data['value_label_font']);
-	echo Form::label('show_region_font', __('  Font size of the data values as seen in maps, in pixels.'));
+	echo Form::label('show_region_font', __('Font size of the data values as seen in maps, in pixels.'));
 	
+	
+	//region border color picker
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('border_color_description', '<br/>'.__('Color of region borders').": ");
+	echo '</td><td></br>';
+	echo '<input id="border_color_pick" class="color {valueElement: border_color, pickerClosable:true}" style="width:30px"><input id="border_color" name="border_color" value="'.$data['border_color'].'" style="display:none">';
+	echo Form::label('border_color_explain', '    '.__('Will change the color of the borders between regions.'));
+	
+	//region color picker
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('region_color', '<br/>'.__('Default color of regions').": ");
+	echo '</td><td></br>';
+	echo '<input id="region_color_pick" class="color {valueElement: region_color, pickerClosable:true}" style="width:30px"><input id="region_color" name="region_color" value="'.substr($data['region_color'], 0, 6).'" style="display:none">';
+	echo Form::label('region_color_explain', '    '.__('Color of regions that are not being affected by an indicator.'));
+	
+	//gradient check box
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('gradient_label', '<br/>'.__('Make regions have a gradient?'));
+	echo '</td><td></br>';
+	echo Form::checkbox('gradient', null, $data['gradient']==1, array('id' => 'gradient', 'onclick' => 'openGradient()', 'value' => '"'.$data['gradient'].'"'));
+
+	
+	//polygon color picker
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('polygon_color_shade', '<br/>'.__('Color of region shading').": ");
+	echo '</td><td></br>';
+	echo '<input id="polygon_color_pick" class="color {valueElement: polygon_color, pickerClosable:true, minS:0.8}" style="width:30px"><input id="polygon_color" name="polygon_color" value="'.substr($data['polygon_color'], 0, 6).'" style="display:none">';
+	echo Form::label('polygon_color_explain', '    '.__('Color of regions that are being affected by an indicator.'));
+	
+	echo '</td></tr><td></td><td class="gradient_explain" style="display:none;">';
+	$secondColor = '';
+	if(strlen($data['polygon_color']) < 8){
+		$secondColor = 'FFFFFF';
+	}
+	else{
+		$secondColor = substr($data['polygon_color'], 7, 13);
+	}
+	echo '<input id="region_two_picker" class="color {valueElement: regionTwo, pickerClosable:true}" style="width:30px"><input id="regionTwo" name="regionTwo" value="'.$secondColor.'" style="display:none">';
+	echo  '  '.__('Regions will gradient into this color from the default color.');
+	
+	
+	//graph bar color picker
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('bar_color_description', '<br/>'.__('Color of bars in graphs').": ");
+	echo '</td><td></br>';
+	echo '<input id="bar_color_pick" class="color {valueElement: graph_bar_color, pickerClosable:true}" style="width:30px"><input id="graph_bar_color" name="graph_bar_color" value="'.$data['graph_bar_color'].'" style="display:none">';
+	echo Form::label('graph_color_explain', '    '.__('Color of bars in all graphs.'));
+	
+	//bar selected color picker
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('region_color', '<br/>'.__('Color of selected regions in graphs').": ");
+	echo '</td><td></br>';
+	echo '<input id="bar_select_color_pick" class="color {valueElement: graph_select_color, pickerClosable:true}" style="width:30px"><input id="graph_select_color" name="graph_select_color" value='.$data['graph_select_color'].' style="display:none">';
+	echo Form::label('selected_color_explain', '    '.__('Color of bars in graphs that indicate the region selected currently.'));
+	
+	//map CSS text box
 	echo '</td></tr><tr class="advanced" style="display:none"><td>';
 	echo Form::label('CSS', __('Map CSS').": ");
 	echo '</td><td>';
-	echo Form::label('CSS_description', __('<br/>CSS can be used to edit the style of the map menubar and legend. <br /> To learn more about the use of CSS see: '));
+	echo Form::label('CSS_description', '<br/>'.__('CSS can be used to edit the style of the map menubar and legend.').'<br/>'.__('To learn more about the use of CSS see: '));
 	echo Form::label('CSS_description','<a href="http://www.w3schools.com/css/">http://www.w3schools.com/css/</a> <br />');
 	echo Form::textarea('CSS', $data['CSS'], array('id'=>'CSS', 'style'=>'width:600px;'));
 	
 	
+	//map style box
 	echo '</td></tr><tr class="advanced"  style="display:none"><td>';
 	echo Form::label('map_style', __('Map Style').": ");
 	echo '</td><td>';
-	echo Form::label('map_style_description', __('<br/>The map styles can be used to edit the style of the background map. <br /> To learn more about the use of map styles see: '));
+	echo Form::label('map_style_description', '<br/>'.__('The map styles can be used to edit the style of the background map.').'<br/>'.__('To learn more about the use of map styles see: '));
 	echo Form::label('map_style_description', '<br/><a href="https://developers.google.com/maps/documentation/javascript/styling">https://developers.google.com/maps/documentation/javascript/styling</a> <br />');
 	echo Form::textarea('map_style', $data['map_style'], array('id'=>'map_style', 'style'=>'width:600px;'));
 	

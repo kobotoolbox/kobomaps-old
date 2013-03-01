@@ -6,6 +6,8 @@
 *************************************************************/
 ?>
 	
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jscolor/jscolor.js"> </script>
+
 
 <script type="text/javascript">
 
@@ -13,11 +15,18 @@
 function toggle_id(elem_id)
 {
 	$('#'+elem_id).toggle('slow');
+	
 }
 
 function toggle_class(elem_class)
 {
 	$('.'+elem_class).toggle('slow');
+	if($("#gradient").prop('checked')){
+		$(".gradient_explain").show('slow');
+	}
+	else {
+		$(".gradient_explain").hide();}
+
 }
 
 
@@ -26,6 +35,11 @@ function set_default_map_style(elem_id)
 	$('#'+elem_id).val("<?php echo Model_Map::get_style_default_js(); ?>");
 	
 }
+
+function openGradient(){
+	$(".gradient_explain").toggle('slow');
+}
+
 
 $(document).ready(function(){
 	$("#slug").change(function(){

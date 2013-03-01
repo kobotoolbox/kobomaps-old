@@ -27,12 +27,20 @@
 			echo __('No email given.');
 		}
 		else{
-			echo $message->poster_email;
+			echo '<a href="mailto:'.$message->poster_email.'?Subject=In%20response%20to%20your%20comment%20on%20my%20map.">'.$message->poster_email.'</a>';
 		}
 	?>
 	</p>
 	</br>
 	<p><strong><?php echo __('Comment')?>:</strong> </br></br> <?php echo nl2br($message->message);?></p>
+	
+	</br>
+	
+	<?php if(!($message->poster_email == "")){
+		echo '<div class="replyToComment"> <a
+			href="mailto:'.$message->poster_email.'?Subject=In%20response%20to%20your%20comment%20on%20my%20map." 
+			id="replyButton">'.__('Reply').'</a></div>';
+	}?>
 
 </div>
 

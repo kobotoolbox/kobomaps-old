@@ -11,10 +11,12 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 #legendtext span {}
 #legend_gradient, #nationalaveragediv {height:19px;border:1px solid #ffffff;display:none;/*Only visible if indicator is selected*/}
 
-#legend_gradient {clear:left;float:left;background:url(../img/whiteredgradient120.png) repeat-y;width:120px;}
+#legend_gradient {float:left;width:120px; position:relative;}
 #percentleft, #percentright, #nationalaveragelabel, #nationalaverageimg {line-height:14px;font-weight:bold;}
-#percentleft, #nationalaveragelabel {float:left;margin:3px 0 0 2px;height:13px;text-shadow:0 0 2px #fff;color:#000000;}
-#percentright, #nationalaverageimg {text-align:right;float:right;margin:3px 2px 0 0;height:13px;color:#fff;text-shadow:0 0 2px #000;}
+#nationalaveragelabel {float:left;margin:3px 0 0 2px;height:13px;text-shadow:0 0 2px #fff;color:#000000;}
+#nationalaverageimg {text-align:right;float:right;margin:3px 2px 0 0;height:13px;color:#fff;text-shadow:0 0 2px #000;}
+#percentleft {top:0px; position:absolute; float:left;margin:3px 0 0 2px;height:13px;text-shadow:2px 2px 4px #fff;color:#000000;}
+#percentright {top: 0px; right:0px; text-align:right;float:right;margin:3px 2px 0 0;height:13px;color:#fff;text-shadow:2px 2px 4px #000; position:absolute; }
 
 #nationalaveragediv {width:167px;float:right;}
 #nationalaveragelabelxx {}
@@ -28,6 +30,7 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 	color: #000;
 	font-size: 23px;
 }
+
 
 #twitterbutton {float:left;margin:4px 0 0 0;clear:both;}
 
@@ -82,7 +85,7 @@ div#sheetlinks li.sheet2 span {margin:0px; padding:0px 0px;padding-top:10px;heig
 div#sheetlinks li.sheet2 span.active {background: #444444;}
 div#sheetlinks li.sheet2 span:hover {background: #555555;}
 div#sheetlinks a, div#sheetlinks span {color:white;}
-div#sheetlinks div#mapName {float:left;padding:10px 30px 10px 30px;font-weight:bold;font-size:20px;color:white;width:280px;}
+div#sheetlinks div#mapName {float:left; padding:10px 30px 10px 30px;font-weight:bold;font-size:20px;color:white;width:280px;}
 div#sheetlinks div.sheetScrollerControll{float:left;font-size:40px;font-weight:bold;padding:10px 10px;color:white;width:auto;margin-left:auto;}
 div#sheetlinks div.sheetScrollerControll a.inactive{color:gray;cursor:default}
 div#sheetlinks div#mapSocialShare{float:right;width:90px;}

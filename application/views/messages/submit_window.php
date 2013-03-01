@@ -13,7 +13,7 @@
 	<h2> <?php echo __('Send a comment to the owner of: ');?> <?php echo $map->title;?></h2>
 	
 	<?php echo __('Name (Optional)')?></br>
-	<input type="text" id="nameField" maxlength=255/></br></br>
+	<input type="text" id="nameField" maxlength="255"/></br></br>
 	
 	<?php echo __('Email address (Optional)')?></br>
 	<input type="text" id="emailField" style="width:250px" maxlength=255/></br></br>
@@ -33,7 +33,7 @@
 		var myEmail = $("#emailField").val();
 		var myComment = $("#commentField").val();
 
-		myComment = '<?php echo __('From map:');?> <a href="<?php echo URL::base().'public/view?id='.$map->id?>"><?php echo $map->title;?></a><br/><br/>' + myComment;
+		myComment = '<?php echo __('From map:');?> <a href="<?php echo URL::base().$map->slug?>"><?php echo $map->title;?></a><br/><br/>' + myComment;
 
 		$.post("<?php echo URL::base(); ?>message/submitmessage", 
 

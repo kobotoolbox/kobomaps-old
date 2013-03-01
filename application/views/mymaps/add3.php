@@ -114,8 +114,8 @@
 		if(count($longUnit[$sheet->id]) > 0)
 		{
 			echo '<div class="longUnits">';
-			echo '<h4>'.__('The following unit values in this sheet are large, we recommend that you condense the units or your maps will look cluttered. </br>
-					Such as use "%" instead of "Percentage." Thank you.').'</h4>';			
+			echo '<h4>'.__('The following unit values in this sheet are large, we recommend that you condense the units or your maps will look cluttered.').'</br>'.
+					__('Such as use "%" instead of "Percentage." Thank you.').'</h4>';			
 			foreach($longUnit[$sheet->id] as $unit)
 			{
 				echo '<li>'.$unit.'</li>';

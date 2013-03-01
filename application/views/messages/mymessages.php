@@ -46,6 +46,7 @@
 					echo Form::checkbox('message_check['.$message->id.']', null, false, array('id'=>'message_check_'.$message->id));
 					echo '</td><td style="width: 175px">';
 					
+					echo '<a class="messageData" rel="#overlay" href="'.url::base().'message/messageDetails?id='.$message->id.'">';
 					
 					echo date('Y-m-d H:i',strtotime($message->date));
 					echo '</td><td style="width: 300px">';
