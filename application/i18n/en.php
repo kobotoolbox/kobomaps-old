@@ -221,8 +221,8 @@ return array
 		'Please select an indicator to display its data.'=>'Please select an indicator to display its data.',
 		'Hide  Labels' => 'Hide  Labels',
 		'Hide  Values' => 'Hide  Values',
-		'Display Labels' => 'Display Labels',
-		'Display Values' => 'Display Values',
+		'Show Labels' => 'Show Labels',
+		'Show Values' => 'Show Values',
 		'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner. Please check back soon.'=>'We\'re sorry, but the template for this map is missing. We have alerted the map\'s owner.',
 		'Please check back soon.' =>  'Please check back soon.',
 		'Turns on or off the region names.' => 'Turns on or off the region names.',
@@ -302,6 +302,7 @@ return array
 		'times on' => 'times on',
 		'Export to CSV' => 'Export to CSV',
 		'Map Name' => 'Map Name',
+		'Legend' => 'Legend',
 		
 		//Comment error
 		'Your comment is empty, please try again.' => 'Your comment is empty, please try again.',

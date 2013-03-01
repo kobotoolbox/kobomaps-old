@@ -7,7 +7,7 @@ body
 	background-repeat:repeat-x;
 	background-position:left top;
 	font-family:Arial,sans-serif;
-	font-size:16px;
+	font-size:14px;
 }
 
 img {
@@ -55,7 +55,7 @@ a#headerImage img{
 div#userMenu{
 	float:right;
 	font-family: Arial,sans-serif;
-	font-size:16px;
+	font-size:14px;
 }
 
 div#userMenu ul {
@@ -150,7 +150,7 @@ div#mainMenu
 
 #mainMenu li a
 {
-	font-size: 18px;
+	font-size: 17px;
 	color: white;
 	background: #6e6e6e;
 	padding:10px;
@@ -163,7 +163,7 @@ div#mainMenu
 }
 #mainMenu li.adminmenu a
 {
-	font-size: 18px;
+	font-size: 17px;
 	color: white;
 	background: #6e2e2e;
 	padding:10px;
@@ -182,10 +182,7 @@ div#mainMenu
 
 #mainMenu li a:hover
 {
-		
-	box-shadow: none;
-	top:2px;
-	right:-2px;
+	box-shadow: 2px 2px 5px #292929;
 	position:relative;
 }
 
@@ -220,7 +217,7 @@ div#subMenu
 
 #subMenu li a, #subMenu li span 
 {
-	font-size: 12px;	
+	font-size: 11px;	
 	line-height:12px;
 	color: black;
 	background: none;
@@ -338,7 +335,7 @@ table.list_table tbody
 	width: 100%;	
 }
 table.list_table thead{
-	
+	font-size:15px;
 }
 
 table.list_table tr td, table.list_table tr th{
@@ -420,7 +417,7 @@ table.list_table tr td a:hover
 	padding:3px;
 	}
 .mapTasks ul li a, .templateTasks ul li a, .messageTasks ul li a{
-	font-size: 12px;
+	font-size: 11px;
 	}
 
 .mapTasks img, .templateTasks img, .messageTable img{
@@ -593,7 +590,7 @@ ul.context_menu{
 ********************************************************/
 .errors{
 	text-align:center;
-	font-size:20px;
+	font-size:18px;
 	background:rgb(231, 143, 143);
 	padding:10px;
 	margin:10px;
@@ -608,7 +605,7 @@ ul.context_menu{
 	}
 .errors li{
 	text-align:left;
-	font-size:16px;
+	font-size:14px;
 	background:rgb(221, 45, 45);
 	padding:10px;
 	margin:10px;
@@ -622,7 +619,7 @@ ul.context_menu{
 ********************************************************/
 .messages{
 	text-align:center;
-	font-size:20px;
+	font-size:16px;
 	background:rgb(143, 231, 143);
 	padding:10px;
 	margin:10px;
@@ -637,7 +634,7 @@ ul.context_menu{
 	}
 .messages li{
 	text-align:left;
-	font-size:16px;
+	font-size:14px;
 	background:rgb(45, 221, 45);
 	padding:10px;
 	margin:10px;
@@ -648,7 +645,7 @@ ul.context_menu{
 
 .slug{
 	text-align:center;
-	font-size:20px;
+	font-size:16px;
 	background:rgb(245, 201, 90);
 	padding:10px;
 	margin:10px;
@@ -663,7 +660,7 @@ ul.context_menu{
 	}
 .slug li{
 	text-align:left;
-	font-size:16px;
+	font-size:14px;
 	background:rgb(241, 176, 60);
 	padding:10px;
 	margin:10px;
@@ -884,7 +881,7 @@ select.needstobemapped{
 }
 .longUnits li {
 	font-weight: bold;
-	font-size: 15px;
+	font-size: 14px;
 }
 
 /************************************************************
@@ -947,12 +944,12 @@ select.needstobemapped{
 	text-decoration:underline;
 }
 .messageDetails p{
-	font-size: 20px;
+	font-size: 15px;
 }
 .messageDetails a{
 	font-weight: bold;
 	color: black;
-	font-size: 18px;
+	font-size: 15px;
 }
 table .unread{
 	background: #aebcce;
