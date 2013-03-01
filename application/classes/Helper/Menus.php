@@ -211,10 +211,8 @@ class Helper_Menus
 					$pageNumber = Request::initial()->action();
 					$pageNumber = intval(str_replace('add', '', $pageNumber));
 
-					echo " page number ". $pageNumber;
 					//$end_div = false;
 					$controller = Request::initial()->controller();
-					echo " controller ". $controller;
 					$map_id = 0;
 					if($controller == "Mymaps")
 					{
