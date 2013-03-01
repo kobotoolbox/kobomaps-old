@@ -1713,7 +1713,7 @@ function initialize_buttons()
 		$("#turnOffLabelsButton").toggleClass("active");
 
 		if($("#turnOffLabelsButton").text() == 'Hide Labels'){
-			$("#turnOffLabelsButton").text("<?php echo __("Display Labels"); ?>");
+			$("#turnOffLabelsButton").text("<?php echo __("Show Labels"); ?>");
 		}
 		else{
 			$("#turnOffLabelsButton").text("<?php echo __("Hide Labels"); ?>");
@@ -1732,7 +1732,7 @@ function initialize_buttons()
 		$("#turnOffValuesButton").toggleClass("active");
 		
 		if($("#turnOffValuesButton").text() == 'Hide Values'){
-			$("#turnOffValuesButton").text("<?php echo __("Display Values"); ?>");
+			$("#turnOffValuesButton").text("<?php echo __("Show Values"); ?>");
 		}
 		else{
 			$("#turnOffValuesButton").text("<?php echo __("Hide Values"); ?>");

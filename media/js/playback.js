@@ -52,7 +52,15 @@ var playback = (function(){
 			return;
 		}
 		currentPlaybackIndex = index;
-		sheetSelect(sheetArray[currentPlaybackIndex]);
+		//the indicators somehow start at -1 sometimes and this prevents 
+		//an null error when hitting the play button on the first sheet without clicking any previous sheets
+		if(currentPlaybackIndex == -1){
+			sheetSelect(sheetArray[currentPlaybackIndex + 1]);
+			currentPlaybackIndex ++;
+		}
+		else{
+			sheetSelect(sheetArray[currentPlaybackIndex]);
+		}
 		sheetTimer = setTimeout(function(){progressSheet(index+1);}, sheetSpeed);
 		return false;
 	}
