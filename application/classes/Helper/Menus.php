@@ -153,6 +153,16 @@ class Helper_Menus
 				}					
 				echo '<a href="'.url::base().'message">'.__("Messages").$unread.'</a></li>';
 				
+				
+				if($page == "custompage")
+				{
+					echo '<li class="selected">';
+				}
+				else
+				{
+					echo '<li>';
+				}
+				echo '<a href="'.url::base().'custompage">'.__("Custom Page").'</a></li>';
 			}
 		
 		

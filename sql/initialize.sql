@@ -404,3 +404,14 @@ CREATE TABLE oid_associations (
             ) ENGINE=InnoDB;
 UPDATE `metadata` SET  `v` =  '1.0.039' WHERE  `metadata`.`k` ='Database Version';
 
+/** Dylan Gillespie -- 2013-03-01 -- Added table for custom html pages **/
+CREATE TABLE IF NOT EXISTS `custompage` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `slug_id` char(130) NOT NULL,
+  `content` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug_id` (`slug_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+UPDATE `metadata` SET  `v` =  '1.0.040' WHERE  `metadata`.`k` ='Database Version';
+

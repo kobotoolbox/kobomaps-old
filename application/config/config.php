@@ -15,5 +15,7 @@ return array(
 			'share',
 			'signup',
 			'statistics',
-			'templates',),
+			'templates',
+			'custompage',
+			),
 );
