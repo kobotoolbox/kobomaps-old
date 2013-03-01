@@ -291,8 +291,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;
 				$_POST['show_empty_name'] = isset($_POST['show_empty_name']) ? 1 : 0;
 				$_POST['gradient'] = isset($_POST['gradient']) ? 1 : 0;
-				
-				if($data['gradient'] == 1){
+
+				if($_POST['gradient'] == 1){
 					$_POST['polygon_color'] = $_POST['polygon_color'].' '.$_POST['regionTwo'];
 					$data['polygon_color'] = $_POST['polygon_color'];
 				}
