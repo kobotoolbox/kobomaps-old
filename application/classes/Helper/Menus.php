@@ -222,11 +222,26 @@ class Helper_Menus
 					$pageNumber = intval(str_replace('add', '', $pageNumber));
 
 					//$end_div = false;
-					$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-					$share = Model_Sharing::get_share($map_id, $user);
+					$controller = Request::initial()->controller();
+					$map_id = 0;
+					if($controller == "Mymaps")
+					{
+						$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+						$map = ORM::factory('Map', $map_id);
+					}
+					elseif($controller == "Dynamic")
+					{
+						$slug = Request::initial()->param('slug');
+						//see if this correlates to a map
+						$map = ORM::factory('Map')
+						->where('slug','=',$slug)
+						->find();
+						$map_id = $map->id;
+					}
+					
+					$share = Model_Sharing::get_share($map->id, $user);
 					if($map_id != 0)
 					{
-						$map = ORM::factory('Map', $map_id);
 						$map_progress = $map->map_creation_progress;
 						//make sure the user is the owner, otherwise don't show the edit stuff
 						if($share->permission != Model_Sharing::$owner AND $share->permission != Model_Sharing::$edit)

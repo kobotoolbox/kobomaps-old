@@ -29,9 +29,9 @@ function run() {
 
     $sreg_request = Auth_OpenID_SRegRequest::build(
                                      // Required
-                                     array('nickname'),
+                                     array('email'),
                                      // Optional
-                                     array('fullname', 'email'));
+                                     array('fullname' ));
 
     if ($sreg_request) {
         $auth_request->addExtension($sreg_request);

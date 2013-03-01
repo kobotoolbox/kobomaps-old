@@ -31,7 +31,8 @@
 				<?php echo Form::input('username', null, array('id'=>'username'));?>
 			</td>
 			<td colspan="2" style="border-left: solid 1px #aaa;padding-left:15px;text-align:center;">
-				<h3><?php echo __('OpenID Login')?></h3>				
+				<h3><?php echo __('OpenID Login')?></h3>
+				<h3 style="color:red;">BETA</h3>					
 			</td>
 		</tr>
 		<tr>
