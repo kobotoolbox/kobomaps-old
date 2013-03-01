@@ -132,7 +132,7 @@ div#userMenu ul li:hover ul{
 *************************************************************/
 div#mainMenu
 {
-	top: 138px;
+	top: 142px;
 	position: absolute;
 	height:32px;
 }
@@ -145,7 +145,7 @@ div#mainMenu
 #mainMenu li{
 	
 	float:left;
-	margin-right: 20px;
+	margin-right: 15px;
 }
 
 #mainMenu li a
@@ -153,7 +153,7 @@ div#mainMenu
 	font-size: 17px;
 	color: white;
 	background: #6e6e6e;
-	padding:10px;
+	padding:6px;
 	text-decoration:none;
 	
 	
@@ -182,8 +182,7 @@ div#mainMenu
 
 #mainMenu li a:hover
 {
-	box-shadow: 2px 2px 5px #292929;
-	position:relative;
+	background: #8b8b8b;
 }
 
 
