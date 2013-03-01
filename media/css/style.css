@@ -101,6 +101,10 @@ div#userMenu ul li.loginMenu
 	border:none;
 }
 
+#logintable tr td{
+	padding-right:15px;
+}
+
 div#userMenu ul li ul{
 	list-style:none;
     position:absolute;

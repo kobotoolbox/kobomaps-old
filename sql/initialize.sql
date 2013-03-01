@@ -374,3 +374,22 @@ ALTER TABLE  `maps` ADD  `large_file` BOOLEAN NOT NULL DEFAULT FALSE AFTER  `fil
 UPDATE `metadata` SET  `v` =  '1.0.036' WHERE  `metadata`.`k` ='Database Version';
 
 
+/** John Etherton -- 2013-02-28 -- Added tables for tracking OpenID logins use the DB**/
+CREATE TABLE oid_nonces (
+            server_url VARCHAR(2047) NOT NULL,
+            timestamp INTEGER NOT NULL,
+            salt CHAR(40) NOT NULL,
+            UNIQUE (server_url(255), timestamp, salt)
+            ) ENGINE=InnoDB;
+
+CREATE TABLE oid_associations (
+            server_url VARCHAR(2047) NOT NULL,
+            handle VARCHAR(255) NOT NULL,
+            secret BLOB NOT NULL,
+            issued INTEGER NOT NULL,
+            lifetime INTEGER NOT NULL,
+            assoc_type VARCHAR(64) NOT NULL,
+            PRIMARY KEY (server_url(255), handle)
+            ) ENGINE=InnoDB;
+UPDATE `metadata` SET  `v` =  '1.0.037' WHERE  `metadata`.`k` ='Database Version';
+

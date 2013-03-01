@@ -24,7 +24,7 @@ class Controller_Login extends Controller_Main {
 		}
 		 
 		$this->template->html_head->title = __("login");
-		$this->template->content = View::factory('login');
+		$this->template->content = View::factory('login/login');
 		$this->template->header->menu_page = 'login';
 		$this->template->content->errors = array();
 		
@@ -33,18 +33,27 @@ class Controller_Login extends Controller_Main {
 		
 		$this->template->html_head->script_files[] = 'media/js/jquery.tools.min.js';		
 		//main JS view
-		$this->template->html_head->script_views[] = view::factory('login_js');
+		$this->template->html_head->script_views[] = view::factory('login/login_js');
 		
-		if(!empty($_POST)) // They've submitted their registration form
+		if(!empty($_POST)) // They've submitted their login form
 		{
-			$auth->login($_POST['username'], $_POST['password'], true);
-			if($auth->logged_in())
+			//check if they're using open id
+			if(strlen($_POST['email']) != 0) //they're using openID
 			{
-				HTTP::redirect(Session::instance()->get_once('returnUrl','mymaps'));	
+				//do open id
+				$this->detect_open_id();
 			}
-			else
+			else //traditional login
 			{
-				$this->template->content->errors[] = __("incorrect login");					
+				$auth->login($_POST['username'], $_POST['password'], true);
+				if($auth->logged_in())
+				{
+					HTTP::redirect(Session::instance()->get_once('returnUrl','mymaps'));	
+				}
+				else
+				{
+					$this->template->content->errors[] = __("incorrect login");					
+				}
 			}
 	
 		}
@@ -53,6 +62,164 @@ class Controller_Login extends Controller_Main {
 		
 		}
 	}//end index action
+	
+	
+	
+	/**
+	 * this function is called by the login function
+	 * to handle open id stuff
+	 * @return string Null if there's no error, else returns an error string
+	 */
+	protected function detect_open_id()
+	{
+		$email = $_POST['email'];
+		//check if it's a gmail address
+		$domain = explode('@', $email);
+		$domain = $domain[1];
+		
+		$auth_url = null;
+		switch($domain)
+		{
+			case 'gmail.com':
+				$auth_url = 'https://www.google.com/accounts/o8/id';
+				break;
+		}
+		
+		if($auth_url != null)
+		{
+			
+			set_include_path(get_include_path() . PATH_SEPARATOR . MODPATH.'vendor/php-openid/');
+			
+			require_once Kohana::find_file('php-openid', 'Auth/OpenID/Consumer');
+			require_once Kohana::find_file('php-openid', 'Auth/OpenID/FileStore');
+			require_once Kohana::find_file('php-openid', 'Auth/OpenID/MySQLStore');
+			require_once Kohana::find_file('php-openid', 'Auth/OpenID/DatabaseConnectionMysqli');
+			require_once Kohana::find_file('php-openid', 'Auth/OpenID/SReg');
+			require_once Kohana::find_file('php-openid', 'Auth/OpenID/PAPE');
+			
+			$server = Kohana::$config->load('database.default.connection.hostname');
+			$user_name = Kohana::$config->load('database.default.connection.username');
+			$password = Kohana::$config->load('database.default.connection.password');
+			$database = Kohana::$config->load('database.default.connection.database');
+			
+			$database = new mysqli($server, $user_name, $password, $database);
+			
+			$openIdDb = new Auth_OpenID_DatabaseConnectionMysqli($database);
+			
+			$s = new Auth_OpenID_MySQLStore($openIdDb);
+			
+								        
+		    $consumer = new Auth_OpenID_Consumer($s);
+		    
+		 	// Begin the OpenID authentication process.
+		    $auth_request = $consumer->begin($auth_url);
+		
+		    // No auth request means we can't begin OpenID.
+		    if (!$auth_request) {
+		        Echo "Authentication error; not a valid OpenID.";
+		    }
+		
+		    $sreg_request = Auth_OpenID_SRegRequest::build(
+		                                     // Required
+		                                     array('nickname','fullname', 'email'),
+		                                     // Optional
+		                                     array());
+		
+		    if ($sreg_request) {
+		        $auth_request->addExtension($sreg_request);
+		    }
+		
+			$policy_uris = null;
+			if (isset($_GET['policies'])) {
+		    	$policy_uris = $_GET['policies'];
+			}
+		
+		    $pape_request = new Auth_OpenID_PAPE_Request($policy_uris);
+		    if ($pape_request) {
+		        $auth_request->addExtension($pape_request);
+		    }
+		
+		    // Redirect the user to the OpenID server for authentication.
+		    // Store the token for this authentication so we can verify the
+		    // response.
+		
+		    // For OpenID 1, send a redirect.  For OpenID 2, use a Javascript
+		    // form to send a POST request to the server.
+		    if ($auth_request->shouldSendRedirect()) {
+		        $redirect_url = $auth_request->redirectURL(getTrustRoot(),
+		                                                   getReturnTo());			
+		        // If the redirect URL can't be built, display an error
+		        // message.
+		        if (Auth_OpenID::isFailure($redirect_url)) {
+		            echo "Could not redirect to server: " . $redirect_url->message;
+		        } else {
+		            // Send redirect.
+		            HTTP::redirect($redirect_url);
+		            
+		        }
+		    } else {
+		        // Generate form markup and render it.
+		     
+		        $form_id = 'openid_message';
+		        $url = URL::site(null, TRUE);
+		        $return_url = URL::site('/login/openid', TRUE);
+		        $form_html = $auth_request->htmlMarkup($url, $return_url, false, array('id' => $form_id));
+		        
+		        
+		
+		        // Display an error if the form markup couldn't be generated;
+		        // otherwise, render the HTML.
+		        if (Auth_OpenID::isFailure($form_html)) {
+		            displayError("Could not redirect to server: " . $form_html->message);
+		        } else {
+		            print $form_html;
+		            exit;
+		        }
+		    }
+		}
+	}
+		
+	
+	
+	
+	
+	protected function &getStore() {
+		/**
+		 * This is where the example will store its OpenID information.
+		 * You should change this path if you want the example store to be
+		 * created elsewhere.  After you're done playing with the example
+		 * script, you'll have to remove this directory manually.
+		 */
+		$store_path = null;
+		if (function_exists('sys_get_temp_dir')) {
+			$store_path = sys_get_temp_dir();
+		}
+		else {
+			if (strpos(PHP_OS, 'WIN') === 0) {
+				$store_path = $_ENV['TMP'];
+				if (!isset($store_path)) {
+					$dir = 'C:\Windows\Temp';
+				}
+			}
+			else {
+				$store_path = @$_ENV['TMPDIR'];
+				if (!isset($store_path)) {
+					$store_path = '/tmp';
+				}
+			}
+		}
+		$store_path .= DIRECTORY_SEPARATOR . '_php_consumer_test';
+	
+		if (!file_exists($store_path) &&
+				!mkdir($store_path)) {
+			print "Could not create the FileStore directory '$store_path'. ".
+			" Please check the effective permissions.";
+			exit(0);
+		}
+		$r = new Auth_OpenID_FileStore($store_path);
+	
+		return $r;
+	}
 	
 	/**
 	 * Called when a user wants to reset their password
@@ -93,7 +260,7 @@ class Controller_Login extends Controller_Main {
 	  * Called when a user has received the password reset key and wants
 	  * to now reset their password.
 	  */
-	 public function action_resetpassword()
+	public function action_resetpassword()
 	 {
 	 	//make sure there's a key
 	 	$hash = isset($_GET['key']) ? $_GET['key'] : '';
@@ -175,5 +342,110 @@ class Controller_Login extends Controller_Main {
 
 	}
 	
+	
+	
+	/** 
+	 * used to handle income open id replies.
+	 */
+	public function action_openid()
+	{
+		
+		set_include_path(get_include_path() . PATH_SEPARATOR . MODPATH.'vendor/php-openid/');
+			
+		require_once Kohana::find_file('php-openid', 'Auth/OpenID/Consumer');
+		require_once Kohana::find_file('php-openid', 'Auth/OpenID/FileStore');
+		require_once Kohana::find_file('php-openid', 'Auth/OpenID/SReg');
+		require_once Kohana::find_file('php-openid', 'Auth/OpenID/PAPE');
+		
+		
+		$store = $this->getStore();
+		$consumer = new Auth_OpenID_Consumer($store);
+
+		
+		// Complete the authentication process using the server's
+		// response.
+		$return_to = URL::site('/login/openid', TRUE);
+		$response = $consumer->complete($return_to);
+		
+		// Check the response status.
+		if ($response->status == Auth_OpenID_CANCEL) {
+			// This means the authentication was cancelled.
+			$msg = 'Verification cancelled.';
+			echo $msg;
+		} else if ($response->status == Auth_OpenID_FAILURE) {
+			// Authentication failed; display the error message.
+			$msg = "OpenID authentication failed: " . $response->message;
+			echo $msg;
+		} else if ($response->status == Auth_OpenID_SUCCESS) {
+			// This means the authentication succeeded; extract the
+			// identity URL and Simple Registration data (if it was
+			// returned).
+			$openid = $response->getDisplayIdentifier();
+			$esc_identity = htmlentities($openid);
+		
+			$success = sprintf('You have successfully verified ' .
+					'<a href="%s">%s</a> as your identity.',
+					$esc_identity, $esc_identity);
+		
+			if ($response->endpoint->canonicalID) {
+				$escaped_canonicalID = htmlentities($response->endpoint->canonicalID);
+				$success .= '  (XRI CanonicalID: '.$escaped_canonicalID.') ';
+			}
+		
+			$sreg_resp = Auth_OpenID_SRegResponse::fromSuccessResponse($response);
+		
+			$sreg = $sreg_resp->contents();
+		
+			if (@$sreg['email']) {
+				$success .= "  You also returned '".htmlentities($sreg['email']).
+				"' as your email.";
+			}
+		
+			if (@$sreg['nickname']) {
+				$success .= "  Your nickname is '".htmlentities($sreg['nickname']).
+				"'.";
+			}
+		
+			if (@$sreg['fullname']) {
+				$success .= "  Your fullname is '".htmlentities($sreg['fullname']).
+				"'.";
+			}
+		
+			$pape_resp = Auth_OpenID_PAPE_Response::fromSuccessResponse($response);
+		
+			if ($pape_resp) {
+				if ($pape_resp->auth_policies) {
+					$success .= "<p>The following PAPE policies affected the authentication:</p><ul>";
+		
+					foreach ($pape_resp->auth_policies as $uri) {
+						$escaped_uri = htmlentities($uri);
+						$success .= "<li><tt>$escaped_uri</tt></li>";
+					}
+		
+					$success .= "</ul>";
+				} else {
+					$success .= "<p>No PAPE policies affected the authentication.</p>";
+				}
+		
+				if ($pape_resp->auth_age) {
+					$age = htmlentities($pape_resp->auth_age);
+					$success .= "<p>The authentication age returned by the " .
+							"server is: <tt>".$age."</tt></p>";
+				}
+		
+				if ($pape_resp->nist_auth_level) {
+					$auth_level = htmlentities($pape_resp->nist_auth_level);
+					$success .= "<p>The NIST auth level returned by the " .
+							"server is: <tt>".$auth_level."</tt></p>";
+				}
+		
+			} else {
+				$success .= "<p>No PAPE response was sent by the provider.</p>";
+			}
+			echo $success;
+		}
+		
+		exit;
+	}
 	
 } // End Welcome

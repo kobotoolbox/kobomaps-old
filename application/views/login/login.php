@@ -22,13 +22,16 @@
 ?>
 
 <?php echo Kohana_Form::open(); ?>
-	<table>
+	<table id="logintable">
 		<tr>
 			<td>
 				<?php echo __('user name');  ?>
 			</td>
 			<td>
 				<?php echo Form::input('username', null, array('id'=>'username'));?>
+			</td>
+			<td colspan="2" style="border-left: solid 1px #aaa;padding-left:15px;text-align:center;">
+				<h3><?php echo __('OpenID Login')?></h3>				
 			</td>
 		</tr>
 		<tr>
@@ -38,6 +41,13 @@
 			<td>
 				<?php echo Form::password('password', null, array('id'=>'password'));?>
 			</td>
+			<td  style="border-left: solid 1px #aaa;padding-left:15px;">
+				<?php echo __('Email');  ?>
+			</td>
+			<td>
+				<?php echo Form::input('email', null, array('id'=>'email'));?>
+			</td>
+			
 		</tr>
 		<tr>
 			<td>
