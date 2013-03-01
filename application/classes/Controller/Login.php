@@ -111,7 +111,7 @@ class Controller_Login extends Controller_Main {
 		
 		    $sreg_request = Auth_OpenID_SRegRequest::build(
 		                                     // Required
-		                                     array('nickname','fullname', 'email'),
+		                                     array('email'),
 		                                     // Optional
 		                                     array());
 		
