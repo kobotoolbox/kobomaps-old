@@ -34,12 +34,53 @@
 	<div style="height:60px;width:10px;"></div>
 	<p id="mapHelpText"><?php echo __('Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.')?></p>
 	<?php if(strlen($map->description) > 0){?>
-	<p id="descriptionText"><?php echo $map->description;?></p>
+	<div id="descriptionText"><p ><?php echo $map->description;?></p>
+	</div>
 	<?php }?>
 		<ul id="questionsindicators" class="questionsindicators" >	</ul>
+		
 	<p id="loadingtext">
 	<?php echo __('Please be patient while the map is loading.')?>  
 	</p>
+	
+	<div id="legend">
+		<a id="minButtonLegend" > - </a>
+		
+			<div id="legendtext">
+				<span id="spanLegendText"><?php echo __('Please select an indicator to display its data.')?></span>
+			</div>
+			<div id="legendMinDiv">
+			
+				<div id="legend_gradient">
+					<canvas id="legend_canvas" style="width:121px; height:20px"></canvas>
+					<div id="percentleft"></div>
+					<div id="percentright"></div>
+				</div>
+				<div id="nationalaveragediv">
+					<span id="nationalaveragelabel"></span>
+					<span id="nationalaverageimg" ></span>
+				</div>
+				</br>
+				<div id="nationalChartScrollDiv"  style=" width:320px; overflow-y: auto; overflow-x: hidden">
+			       	<div id="nationalIndicatorChart" style="width: 300px"></div>		
+			    </div>
+			       <div id="sourcetext">
+					<span id="sourcetextspan" style="display:none;"> Data Source:  
+						<a id="sourceURL" href="" title=""></a>
+						<span id="sourceNoURL"></span>
+					</span>
+		    	</div>
+	        
+		
+			<?php
+			//Powered by KoBoToolbox - Please be kind and leave a reference with a link to our website.
+			?>
+				<div id="poweredby">
+				<a href="http://www.kobotoolbox.org" title="KoBoToolbox.org"><?php echo __('powered by KoboToolbox')?></a>
+				</div>
+			</div>
+		</div>
+	
 </div>
 
 
@@ -132,46 +173,7 @@
 <?php
 //The legend
 ?>
-<div id="topbar" class="drsElement drsMoveHandle" style="left:355px; top: 400px;">
-	 
-	<div id="legend">
-		<a id="minButtonLegend" style="float: right"> - </a>
-		
-			<div id="legendtext">
-				<span id="spanLegendText"><?php echo __('Please select an indicator to display its data.')?></span>
-			</div>
-			<div id="legendMinDiv">
-			
-				<div id="legend_gradient">
-					<canvas id="legend_canvas" style="width:121px; height:20px"></canvas>
-					<div id="percentleft"></div>
-					<div id="percentright"></div>
-				</div>
-				<div id="nationalaveragediv">
-					<span id="nationalaveragelabel"></span>
-					<span id="nationalaverageimg" ></span>
-				</div>
-				</br>
-				<div id="nationalChartScrollDiv"  style=" width:320px; overflow-y: auto; overflow-x: hidden">
-			       	<div id="nationalIndicatorChart" style="width: 300px"></div>		
-			    </div>
-			       <div id="sourcetext">
-					<span id="sourcetextspan" style="display:none;"> Data Source:  
-						<a id="sourceURL" href="" title=""></a>
-						<span id="sourceNoURL"></span>
-					</span>
-		    	</div>
-	        
-		
-			<?php
-			//Powered by KoBoToolbox - Please be kind and leave a reference with a link to our website.
-			?>
-				<div id="poweredby">
-				<a href="http://www.kobotoolbox.org" title="KoBoToolbox.org"><?php echo __('powered by KoboToolbox')?></a>
-				</div>
-			</div>
-		</div>
-	</div>
+
 	
 	<?php if(!$template->loaded()){?>
 		<div class="apple_overlay" id="missingTemplate">
