@@ -88,7 +88,7 @@ div#sheetlinks a, div#sheetlinks span {color:white;}
 div#sheetlinks div#mapName {float:left; padding:10px 30px 10px 30px;font-weight:bold;font-size:20px;color:white;width:280px;}
 div#sheetlinks div.sheetScrollerControll{float:left;font-size:40px;font-weight:bold;padding:10px 10px;color:white;width:auto;margin-left:auto;}
 div#sheetlinks div.sheetScrollerControll a.inactive{color:gray;cursor:default}
-div#sheetlinks div#mapSocialShare{float:right;width:90px;}
+div#sheetlinks div#mapSocialShare{float:right;width:260px;background:#6e6e6e;height:40px;}
 div#sheetlinks div#sheetnamesWrapper{float:left;width:400px;height:40px;overflow:hidden;}
 
 /***************************************
@@ -105,6 +105,7 @@ div#sheetlinks div#sheetnamesWrapper{float:left;width:400px;height:40px;overflow
  	float:left;
  	padding:2px;
  	margin:0px;
+ 	margin-right:15px;
  } 
 
 div#sheetlinks div#mapSocialShare img.share{

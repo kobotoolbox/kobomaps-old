@@ -70,7 +70,7 @@
 	</div>
 	<div id="sheetnamesRightControl" class="sheetScrollerControll"><a href="">&gt;</a></div>
 	<div id="sheetnamesEndControl" class="sheetScrollerControll"><a href="">&gt;&gt;</a></div>
-	<div id="mapSocialShare" style="width: 170px">
+	<div id="mapSocialShare">
 		<ul>
 			<li>
 				<img class="playbackLabels" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
