@@ -90,11 +90,23 @@
 <div id="sheetlinks">
 	<div id="mapName"
 		<?php 
-		if(strlen($map->title) > 28 && strlen($map->title) < 58){
-			echo 'style="font-size:10px; padding:10px 30px 10px 30px;">';
+		if(strlen($map->title) > 24 && strlen($map->title) <= 30){
+			echo 'style="font-size:17px;">';
 			echo $map->title;
 		}
-		else if(strlen($map->title) > 58){
+		elseif(strlen($map->title) > 30 && strlen($map->title) <= 40){
+			echo 'style="font-size:11px;">';
+			echo $map->title;
+		}
+		elseif(strlen($map->title) > 40 && strlen($map->title) <= 50){
+			echo 'style="font-size:10px;  padding: 0px 0px 0px 0px">';
+			echo $map->title;
+		}
+		elseif(strlen($map->title) > 50 && strlen($map->title) <= 58){
+			echo 'style="font-size:10px;  padding: 0px 0px 0px 0px">';
+			echo $map->title;
+		}
+		elseif(strlen($map->title) > 58){
 			echo 'style="font-size:9px; padding: 0px 0px 0px 0px">';
 			echo substr($map->title, 0, 64).' '.substr($map->title, 64);
 		}

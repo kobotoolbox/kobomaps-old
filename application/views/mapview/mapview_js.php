@@ -33,6 +33,7 @@
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery-ui.min.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.address-1.4.min.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/playback.js"> </script>
+
 <script type="text/javascript">
 
 
@@ -126,30 +127,6 @@ var round = true;
 function initialize_map() {
 
 	  
-	  //setup drag stuff for the key
-	  /*
-	  var dragresize = new DragResize('dragresize',
-			  { allow_resize: false, minLeft: 350, minTop:40});
-	  
-	  
-	  dragresize.isElement = function(elm)
-	  {
-	   if (elm.className && elm.className.indexOf('drsElement') > -1) return true;
-	  };
-	  dragresize.isHandle = function(elm)
-	  {
-	   if (elm.className && elm.className.indexOf('drsMoveHandle') > -1) return true;
-	  };
-	  
-	  dragresize.apply(document);
-	  
-	  //set the key to be 48 pixels from the bottom like it used to be. 
-	  //we can't use bottom when dragging. We can only use top
-	  var height = $("#topbar").height();
-	  var screenHeight = $(window).height();
-	   var top = screenHeight - (height + 48); 
-	   $("#topbar").css("top", top+"px");
-	   */
 	  
 	//creates the options for defining the zoom level, map type, and center of the google map
 	var myOptions = {
