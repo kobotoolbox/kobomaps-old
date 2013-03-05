@@ -297,6 +297,7 @@ return array
 		'End Date' => 'End Date',
 		'Start Date' => 'Start Date',
 		'Dates on the graph that are shaded grey correspond to weekends.' => 'Dates on the graph that are shaded grey correspond to weekends.',
+		'This does not count map views by the map\'s owner.'=>'This does not count map views by the map\'s owner.',
 		'You have no maps to view statistics for.' => 'You have no maps to view statistics for.',
 		'was visited' => 'was visited',
 		'times on' => 'times on',

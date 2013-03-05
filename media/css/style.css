@@ -134,7 +134,7 @@ div#userMenu ul li:hover ul{
 *************************************************************/
 div#mainMenu
 {
-	top: 142px;
+	top: 144px;
 	position: absolute;
 	height:32px;
 }
@@ -178,8 +178,9 @@ div#mainMenu
 }
 
 #mainMenu li.selected a{	
-	background: #9a9a9a;
+	background: #9a9a9b;
 	color:black;
+	box-shadow: none;
 }
 
 #mainMenu li a:hover
@@ -199,7 +200,7 @@ div#subMenu
 	top: 168px;
 	position: absolute;
 	height:80px;
-	background-image: url('../img/submenu_background');
+	/*background-image: url('../img/submenu_background');*/
 }
 #subMenu ul
 {
