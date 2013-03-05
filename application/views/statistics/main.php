@@ -15,6 +15,7 @@
 }
 else {?>
 <div id="statChartWrapper"> <p> <?php echo __('Dates on the graph that are shaded grey correspond to weekends.')?> </p> 
+<p> <?php echo __('This does not count map views by the map\'s owner.')?> </p>
 <div id="statChart" style= "width:700px; height:500px"></div></div>
 <div id="statsControls">
 	<?php echo __('Select Maps')?> <br/>
