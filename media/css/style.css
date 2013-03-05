@@ -3,11 +3,13 @@
 body
 {
 	background-color: white;
+	font-family:Arial,sans-serif;
+	font-size:14px;
+}
+body.main{
 	background-image: url('../img/background.png');
 	background-repeat:repeat-x;
 	background-position:left top;
-	font-family:Arial,sans-serif;
-	font-size:14px;
 }
 
 img {

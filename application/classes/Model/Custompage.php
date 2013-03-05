@@ -69,5 +69,7 @@ class Model_Custompage extends ORM {
 		}
 	
 		$page->save();
+		
+		return $page;
 	}
 }

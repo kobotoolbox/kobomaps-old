@@ -306,12 +306,10 @@ class Model_Map extends ORM {
 				"\\" => '\\');
 		
 		//go through the illegal character array and remove any instances of them in the slug
-		$hadIllegal = false;
 		foreach($illegalChar as $char){
 			$pos = strpos($slug, $char);
 			if($pos !== false){
 				$slug = str_replace($char, '', $slug);
-				$hadIllegal = true;
 			}
 		}
 		//replaces spaces with _

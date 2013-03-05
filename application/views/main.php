@@ -3,7 +3,7 @@
     <head>
         <?php echo $html_head; ?>
     </head>
-    <body>
+    <body class="main">
 	<div id="page">
 		<?php echo $header; ?>
 		
