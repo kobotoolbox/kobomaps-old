@@ -229,6 +229,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 		
 		//$js = view::factory('add1_js/form_edit_js');
 		$js = view::factory('mymaps/add1_js');
+		$js->map_id = $map_id;
 		//$js->is_add = $is_add;
 		$this->template->html_head->script_views[] = $js;		
 		$this->template->html_head->script_views[] = view::factory('js/messages');
@@ -415,61 +416,20 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 public function action_checkslug(){
 	 	$this->auto_render = false;
 	 	$this->response->headers('Content-Type','application/json');
-	 	
-	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-	 	$map = ORM::factory('Map', $map_id);
+	 	 
 	 	
 	 	if(!isset($_POST['slug'])){
 	 		echo '{}';
 	 		exit;
 	 	}
-	 	
-	 	
-	 	$slug = $_POST['slug'];
-	 	$slug_original = $slug;
-	 	
-	 	$slug = Model_Map::clean_slug($slug);
-	 		 	
-	 	if($slug == $map->slug){
-	 		echo '{"status": "true", "slug" :'.$slug.'"}';
-	 		exit;
+	 	if($_POST['id'] == 0){
+	 		$db_obj = ORM::factory('Map');
+	 	 }
+	 	else {
+	 		$db_obj = ORM::factory('Map')->where('slug', '=', $_POST['slug'])->find();
 	 	}
-	 	
-	 	//also check if the slug is a controller name
-	 	$controllers_array =  Kohana::$config->load('config')->get('controllers');
-	 	foreach($controllers_array as $controller)
-	 	{
-	 		if(strtolower($slug) == strtolower($controller))
-	 		{
-	 			echo '{"status": "notUnique"}';
-	 			exit;
-	 		}
-	 	}
-	 	
-	 	$slug_ids = ORM::factory('Map')->
-	 	where('slug', '=', $slug)->
-	 	find_all();
-
- 		if(count($slug_ids) > 0){
-	 		echo '{"status": "notUnique"}';
-	 		exit;
-	 	}
-	 	
-
-	 	
-	 	
-	 	//return the json specifying if the slug is legal
-	 	if(strlen($slug_original) != strlen($slug)){
-	 		echo '{"status":"false", "slug":"'.$slug.'"}';
-	 		exit;
-	 	}
-	 	else{
-	 		echo '{"status":"true", "slug":"'.$slug.'"}';
-	 		exit;
-	 	}
+	 	Helper_Slugs::check_slug($_POST['slug'], $db_obj);
 	 }
-	 
-	 
 	
 	 
 	 

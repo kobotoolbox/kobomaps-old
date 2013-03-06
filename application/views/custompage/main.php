@@ -58,14 +58,14 @@
 	echo '<div id="pageTable" style="float:left; width:200px; height:500px;">';
 	echo Form::label('page_descr', __('This is the list of your current pages.'));
 	echo '</br></br>';
-	echo Form::select('pages', $pages, null, array('id'=>'pages', 'style' => 'width: 175px; height: 22px'));
+	echo Form::select('pages', $pages, $data['id'], array('id'=>'pages', 'style' => 'width: 175px; height: 22px'));
 	
 	echo '</div>';
 	
 	echo'<div id="customWork" style="width: 700px; float:right">';
 	
 	echo __('Title of page: ');
-	echo Form::input('slug_id', $data['slug'], array('id'=>'slug_id', 'style'=>'width:300px;', 'maxlength' => '128', 'onchange' => 'checkSlug()'));
+	echo Form::input('slug', $data['slug'], array('id'=>'slug', 'style'=>'width:300px;', 'maxlength' => '128', 'onchange' => 'checkSlug()'));
 		
 	echo '</br></br>';
 	echo __('Content of page: This is what will be displayed on the page. There are advanced options available.');

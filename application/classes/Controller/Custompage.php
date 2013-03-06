@@ -16,7 +16,8 @@ class Controller_Custompage extends Controller_Loggedin {
 	{
 		$data = array(
 				'slug' => '',
-				'content' => ''
+				'content' => '',
+				'id' => isset($_GET['id']) ? intval($_GET['id']) : 0,
 		);
 		
 		$pages = ORM::factory('Custompage')->
@@ -24,7 +25,7 @@ class Controller_Custompage extends Controller_Loggedin {
 		find_all();
 		
 		$page_array = array();
-		$page_array[0] = __('Select a page to edit:');
+		$page_array[0] = __('New Page');
 		foreach($pages as $page){
 			$page_array[$page->id] = $page->slug;
 		}
@@ -44,35 +45,42 @@ class Controller_Custompage extends Controller_Loggedin {
 		
 
 		if(!empty($_POST)){
-			if($_POST['pages'] == 0){
-				//new page
-			}
-			$data['slug'] = $_POST['slug_id'];
+			$data['slug'] = $_POST['slug'];
 			$data['content'] = $_POST['content'];
-			
-			$page = ORM::factory('Custompage')->
-			where('slug', '=', $data['slug'])->
-			where('user_id', '=', $this->user->id)->
-			find();
-			
+
 			if($data['slug'] == '' || $data['content'] == ''){
-				$this->template->content->errors[] = __('The title or the content was empty.'); 
+				$this->template->content->errors[] = __('The title or the content was empty.');
 				$this->template->content->data = $data;
 				return;
 			}
 			
-			//if the page already exists, update the content
-			if($page->loaded()){
-				$page->user_id = $this->user->id;
-				$page->content = $data['content'];
-				$page->save();
-			}
-			else{
+			if($_POST['pages'] == 0){
 				$newPage = Model_Custompage::create_page($this->user->id, $data['slug'], $data['content']);
-				$this->template->content->pages[$newPage->id] = $newPage->slug_id; 
+				$this->template->content->pages[$newPage->id] = $newPage->slug;
+				$data['id'] = $newPage->id;
+				$this->template->content->data = $data;
+				$this->template->content->messages[] = __('Saved page').' '.$data['slug'];
 			}
-			$this->template->content->data = $data;
-			$this->template->content->messages[] = __('Saved page').' '.$data['slug'];
+			
+			else{
+				$page = ORM::factory('Custompage')->
+				where('id', '=', $_POST['pages'])->
+				where('user_id', '=', $this->user->id)->
+				find();
+				
+				//if the page already exists, update the content
+				if($page->loaded()){
+					$page->user_id = $this->user->id;
+					$page->content = $data['content'];
+					$page->slug = $data['slug'];
+					$page->save();
+					
+					$data['id'] = $page->id;
+					$this->template->content->pages[$page->id] = $page->slug;
+					$this->template->content->data = $data;
+					$this->template->content->messages[] = __('Saved page').' '.$data['slug'];
+				}
+			}
 			return;
 		}
 	}//end action_index
@@ -81,9 +89,26 @@ class Controller_Custompage extends Controller_Loggedin {
 	public function action_getpage(){
 		$this->auto_render = false;
 		
-		$page = ORM::factory('Custompage', $_POST['pages']);
+		$page = ORM::factory('Custompage', $_POST['page']);
 
 		echo $page->content;
+	}
+	
+	public function action_checkslug(){
+		$this->auto_render = false;
+		$this->response->headers('Content-Type','application/json');
+		
+		if(!isset($_POST['slug'])){
+			echo '{}';
+			exit;
+		}
+		if($_POST['id'] == 0){
+			$db_obj = ORM::factory('Custompage');
+		}
+		else {
+			$db_obj = ORM::factory('Custompage')->where('id', '=', $_POST['id'])->find();
+		}
+		Helper_Slugs::check_slug($_POST['slug'], $db_obj);
 	}
 	
 }//end of class
