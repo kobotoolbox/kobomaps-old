@@ -62,7 +62,7 @@
 	
 	echo '</div>';
 	
-	echo'<div id="customWork" style="width: 700px; float:right">';
+	echo '<div id="customWork" style="width: 700px; float:right">';
 	
 	echo __('Title of page: ');
 	echo Form::input('slug', $data['slug'], array('id'=>'slug', 'style'=>'width:300px;', 'maxlength' => '128', 'onchange' => 'checkSlug()'));
@@ -73,6 +73,7 @@
 	echo Form::textarea('content', $data['content'], array('id'=>'htmlContent', 'style' => 'height: 650px', 'class' => 'tinymce'));
 	echo '</br>';
 	echo Form::submit('edit', __('Save'), array('id'=>'edit_button'));
+	echo '<div id ="delete_button" style ="float:right">'.__('Delete').'</div>';
 	echo '</div>';
 
 	echo Form::close();

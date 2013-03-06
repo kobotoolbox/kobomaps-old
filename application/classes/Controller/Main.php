@@ -79,7 +79,6 @@ class Controller_Main extends Controller_Template {
 	{
 		if ($this->auto_render)
 		{			
-			
 			$this->template->header->user = $this->user;
 		}
 		parent::after();

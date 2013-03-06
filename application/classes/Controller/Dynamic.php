@@ -16,38 +16,54 @@ class Controller_Dynamic extends Controller_Main {
 	 handles all requests
 	 */
 	public function action_index()
-	{
-		$this->auto_render = false;
-		
+	{		
 		$slug = $this->request->param('slug');
+		
+		$page = ORM::factory('Custompage')
+			->where('slug', '=', $slug)
+			->find();
+		
+		if($page->loaded()){
+			$this->viewPage($page);
+		}
 		//see if this correlates to a map
 		$map = ORM::factory('Map')
 			->where('slug','=',$slug)
 			->find();
-		
-		//if we coudln't find it bounce.
-		if(!$map->loaded())
+			
+		if($map->loaded()){
+			$this->viewMap($map);
+		}
+			
+		//if we couldn't find it bounce.
+		if(!$map->loaded() && !$page->loaded())
 		{
 			throw new HTTP_Exception_404();
 		}
 		
-		$this->view($map);
-
-		
 	}//end action_index
 	
+	
+	/**
+	 * Use this to render Custom created pages
+	 * @param ORM_obj $page ORM object of the page from the database
+	 */
+	public function viewPage($page){
+		$this->auto_render = true;
+		
+		$this->template->content = $page->content;
+	}
 	
 	
 	/**
 	 * Use this to render the map view page
 	 * @param ORM_obj $map ORM object of the map from the database
 	 */
-	public function view($map)
+	public function viewMap($map)
 	{
-	
+		$this->auto_render = false;
 	
 		$user = null;
-	
 	
 		//if the map isn't ready send it back to where it needs to go
 		if(intval($map->map_creation_progress) != 5)

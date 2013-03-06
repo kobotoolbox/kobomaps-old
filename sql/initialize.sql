@@ -416,3 +416,6 @@ CREATE TABLE IF NOT EXISTS `custompage` (
 ALTER TABLE  `custompage` ADD INDEX (  `user_id` );
 UPDATE `metadata` SET  `v` =  '1.0.040' WHERE  `metadata`.`k` ='Database Version';
 
+/** Dylan Gillespie -- 2013-03-06 -- Added special in table for custom html pages **/
+ALTER TABLE  `custompage` ADD  `special` BOOLEAN NOT NULL DEFAULT FALSE;
+

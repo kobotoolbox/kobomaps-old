@@ -13,6 +13,13 @@ class Helper_Menus
 		$end_div = false;
 		echo '<ul>';
 		
+		$auth = Auth::instance();
+		$logged_in = $auth->logged_in() OR $auth->auto_login();
+		if($logged_in)
+		{
+			$user = ORM::factory('user',$auth->get_user());
+		}
+		
 		//Don't show the register link if the user is logged in
 		if($user == null)
 		{
@@ -154,6 +161,14 @@ class Helper_Menus
 				echo '<a href="'.url::base().'message">'.__("Messages").$unread.'</a></li>';
 				
 				
+				
+			}
+		
+		
+			//see if the given user is an admin, if so they can do super cool stuff
+			$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
+			if($user->has('roles', $admin_role))
+			{
 				if($page == "custompage")
 				{
 					echo '<li class="selected">';
@@ -162,19 +177,7 @@ class Helper_Menus
 				{
 					echo '<li>';
 				}
-				echo '<a href="'.url::base().'custompage">'.__("Custom Page").'</a></li>';
-			}
-		
-		
-		
-			
-			//see if the given user is an admin, if so they can do super cool stuff
-			$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
-			if($user->has('roles', $admin_role))
-			{
-				
-				
-					
+				echo '<a href="'.url::base().'custompage">'.__("Custom Page").'</a></li>';		
 									
 				
 			}

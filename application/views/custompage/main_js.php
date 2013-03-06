@@ -50,6 +50,17 @@ function checkSlug(){
 			});
 }
 
+function deletePage(){
+	var page_id = $("#pages").val();
+	if(page_id != 0){
+		if (confirm("<?php echo __('Are you sure you want to delete this page');?>"))
+		{
+			$("#action").val('delete');
+			$("#edit_custompage_form").submit();
+		}
+	}
+}
+
 $(document).ready(function(){
 	$("#slug").change(function(){
 		checkSlug();
@@ -69,7 +80,7 @@ $(function() {
         plugins : "pdw, pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
 
         // Theme options
-        theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect, |,|, pdw_toggle,|,fullscreen",
+        theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect, |,|, pdw_toggle,|,fullscreen",
         theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,forecolor,backcolor, fontselect,fontsizeselect,",
         theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl, ",
         theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,pagebreak, | ,insertdate,inserttime,preview, |,link,unlink,anchor,image,cleanup,help,code,",
@@ -104,6 +115,9 @@ $(function() {
    if($("#pages").val() != 0){
 	   updatePageInfo();
    }
+   $('#delete_button').click(function(){
+		deletePage();
+   });
 });
 
 </script>

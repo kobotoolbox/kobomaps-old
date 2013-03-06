@@ -9,79 +9,117 @@
 
 class Controller_Custompage extends Controller_Loggedin {
 
+	
+	public function before()
+	{
+		parent::before();	
+		
+		$auth = Auth::instance();
+		//is the user logged in?
+		if($auth->logged_in('admin'))
+		{
+			$this->session = Session::instance();
+			//if auto rendere set this up
+			if ($this->auto_render)
+			{
+				$data = array(
+						'slug' => '',
+						'content' => '',
+						'id' => isset($_GET['id']) ? intval($_GET['id']) : 0,
+				);
+				
+				$pages = ORM::factory('Custompage')->
+				where('user_id', '=', $this->user->id)->
+				find_all();
+				
+				$page_array = array();
+				$page_array[0] = __('New Page');
+				foreach($pages as $page){
+					$page_array[$page->id] = $page->slug;
+				}
+				
+				$this->template->header->menu_page = "custompage";
+				//make messages roll up when done
+				$this->template->html_head->messages_roll_up = true;
+				$this->template->html_head->script_views[] = view::factory('js/messages');
+				$this->template->content = new View('custompage/main');
+				$this->template->html_head->title = __("Custom Page");
+				$this->template->html_head->script_files[] = 'media/js/tiny_mce/jquery.tinymce.js';
+				$this->template->html_head->script_views[] = new View('custompage/main_js');
+				$this->template->content->errors = array();
+				$this->template->content->messages = array();
+				$this->template->content->data = $data;
+				$this->template->content->pages = $page_array;
+			}
+		}
+	}
 	/**
 	* where users go to edit custom html
 	*/
 	public function action_index()
 	{
-		$data = array(
-				'slug' => '',
-				'content' => '',
-				'id' => isset($_GET['id']) ? intval($_GET['id']) : 0,
-		);
+		$auth = Auth::instance();
 		
-		$pages = ORM::factory('Custompage')->
-		where('user_id', '=', $this->user->id)->
-		find_all();
-		
-		$page_array = array();
-		$page_array[0] = __('New Page');
-		foreach($pages as $page){
-			$page_array[$page->id] = $page->slug;
+		if(!$auth->logged_in('admin'))
+		{
+			HTTP::redirect('mymaps');
 		}
-		
-		$this->template->header->menu_page = "custompage";
-		//make messages roll up when done
-		$this->template->html_head->messages_roll_up = true;
-		$this->template->html_head->script_views[] = view::factory('js/messages');
-		$this->template->content = new View('custompage/main');
-		$this->template->html_head->title = __("Custom Page");
-		$this->template->html_head->script_files[] = 'media/js/tiny_mce/jquery.tinymce.js';
-		$this->template->html_head->script_views[] = new View('custompage/main_js');
-		$this->template->content->errors = array();
-		$this->template->content->messages = array();
-		$this->template->content->data = $data;
-		$this->template->content->pages = $page_array;
-		
 
 		if(!empty($_POST)){
-			$data['slug'] = $_POST['slug'];
-			$data['content'] = $_POST['content'];
 
-			if($data['slug'] == '' || $data['content'] == ''){
-				$this->template->content->errors[] = __('The title or the content was empty.');
-				$this->template->content->data = $data;
-				return;
+			if($_POST['action'] == 'delete'){
+				$response = Model_Custompage::delete_page($_POST['pages']);
+				if($response == __('That page cannot be deleted.')){
+					$this->template->content->errors[] = $response;
+					$data['id'] = $_POST['pages'];
+					$data['slug'] = $_POST['slug'];
+					$data['content'] = $_POST['content'];
+					$this->template->content->data = $data;
+				}
+				else{
+					$this->template->content->messages[] = __('Deleted the page ').$_POST['slug'];
+					unset($this->template->content->pages[$_POST['pages']]);
+				}
 			}
-			
-			if($_POST['pages'] == 0){
-				$newPage = Model_Custompage::create_page($this->user->id, $data['slug'], $data['content']);
-				$this->template->content->pages[$newPage->id] = $newPage->slug;
-				$data['id'] = $newPage->id;
-				$this->template->content->data = $data;
-				$this->template->content->messages[] = __('Saved page').' '.$data['slug'];
-			}
-			
 			else{
-				$page = ORM::factory('Custompage')->
-				where('id', '=', $_POST['pages'])->
-				where('user_id', '=', $this->user->id)->
-				find();
+				$data['slug'] = $_POST['slug'];
+				$data['content'] = $_POST['content'];
+	
+				if($data['slug'] == '' || $data['content'] == ''){
+					$this->template->content->errors[] = __('The title or the content was empty.');
+					$this->template->content->data = $data;
+					return;
+				}
 				
-				//if the page already exists, update the content
-				if($page->loaded()){
-					$page->user_id = $this->user->id;
-					$page->content = $data['content'];
-					$page->slug = $data['slug'];
-					$page->save();
-					
-					$data['id'] = $page->id;
-					$this->template->content->pages[$page->id] = $page->slug;
+				if($_POST['pages'] == 0){
+					$newPage = Model_Custompage::create_page($this->user->id, $data['slug'], $data['content']);
+					$this->template->content->pages[$newPage->id] = $newPage->slug;
+					$data['id'] = $newPage->id;
 					$this->template->content->data = $data;
 					$this->template->content->messages[] = __('Saved page').' '.$data['slug'];
 				}
+				
+				else{
+					$page = ORM::factory('Custompage')->
+					where('id', '=', $_POST['pages'])->
+					where('user_id', '=', $this->user->id)->
+					find();
+					
+					//if the page already exists, update the content
+					if($page->loaded()){
+						$page->user_id = $this->user->id;
+						$page->content = $data['content'];
+						$page->slug = $data['slug'];
+						$page->save();
+						
+						$data['id'] = $page->id;
+						$this->template->content->pages[$page->id] = $page->slug;
+						$this->template->content->data = $data;
+						$this->template->content->messages[] = __('Saved page').' '.$data['slug'];
+					}
+				}
+				return;
 			}
-			return;
 		}
 	}//end action_index
 	
@@ -94,6 +132,7 @@ class Controller_Custompage extends Controller_Loggedin {
 		echo $page->content;
 	}
 	
+	//call the generic slug checker function
 	public function action_checkslug(){
 		$this->auto_render = false;
 		$this->response->headers('Content-Type','application/json');

@@ -57,7 +57,7 @@ class Model_Custompage extends ORM {
 		$this->save();
 	}//end function
 	
-	
+	//creates a page with the user(creator), slug, and content of the page
 	public static function create_page($user_id, $slug_id, $content){
 		
 		$page = ORM::factory('Custompage');
@@ -71,5 +71,16 @@ class Model_Custompage extends ORM {
 		$page->save();
 		
 		return $page;
+	}
+	
+	public static function delete_page($page_id){
+		$page = ORM::factory('Custompage', $page_id);
+		if(!$page->special){
+			$page->delete();
+			return __('Deleted');
+		}
+		else{
+			return __('That page cannot be deleted.');
+		}
 	}
 }
