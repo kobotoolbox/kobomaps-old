@@ -135,7 +135,7 @@ return array
 		//add1 errors
 		'register/map.slug.unique'=>'Your slug is not unique, please pick another one',
 		'Your slug had illegal characters, they have been replaced.' => 'Your slug had illegal characters, they have been replaced.',
-		'You slug has already been used. Please choose another.' => 'Your slug has already been used. Please choose another.',
+		'You slug has already been used. Please choose another.' => 'This slug has already been used. Please choose another.',
 		
 		//add 2 page
 		'Add Map - Data Structure'=>'Add Map - Data Structure',
@@ -357,6 +357,14 @@ return array
 		'Center point latitude'=>'Center point latitude',
 		'Center point longitude'=>'Center point longitude',
 		'Default zoom level'=>'Default zoom level',
+		
+		//custom page
+		'Save' => 'Save',
+		'Create your own custom HTML Page' => 'Create your own custom HTML Page',
+		'New Page' => 'New Page',
+		'Content of page: This is what will be displayed on the page. There are advanced options available.' => 'Content of page: This is what will be displayed on the page. There are advanced options available.',
+		'This is the list of your current pages.' => 'This is the list of your current pages.',
+		'Title of page: ' => 'Title of page: ',
 		
 		//limits exceeded
 		'Map Limit Exceeded'=>'Map Limit Exceeded',

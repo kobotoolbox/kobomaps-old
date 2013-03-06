@@ -1,41 +1,43 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /***********************************************************
-* Excel.php - Helper
-* Used to open Excel files for speady reading
+* Slugs.php - Helper
+* Used to parse and check slugs entered and check against all other slugs in database
 * This software is copy righted by Kobo 2012
-* Writen by John Etherton <john@ethertontech.com>, Etherton Technologies <http://ethertontech.com>
-* Started on 2012-11-08
+* Writen by Dylan Gillespie <dylan@ethertontech.com>, Etherton Technologies <http://ethertontech.com>
+* Started on 2013-03-04
 *************************************************************/
 
 
 
-class Helper_Slug
+class Helper_Slugs
 {
 
 	/**
-	 * Used to open files for reading data only. This reduces memory usage,
-	 * but means we can't write or read formatting
-	 * @param string $file_name fully qualified path to the Excel file to be read
-	 * @return PHPExcel object for the Excel file
+	 * Used to check if slugs
+	 * @param string $slug to be the name of the slug, object $db_obj from which the slug is originating, currently a Map or Custompage
+	 * @return JSON string that tells the javascript if the slug is valid or not
 	 */
 	public static function check_slug($slug, $db_obj)
-	{
-		$this->auto_render = false;
-		$this->response->headers('Content-Type','application/json');
-		
-		if(!isset($_POST['slug'])){
+	{		
+		if(!isset($slug)){
 			echo '{}';
 			exit;
 		}
-		 
-		 
-		$slug = $_POST['slug'];
+		//used to compare the length of the original and end slug
 		$slug_original = $slug;
-		 
+		
+		//parses illegal characters out of the slug
 		$slug = Model_Map::clean_slug($slug);
 		
+		if(strlen($slug_original) != strlen($slug)){
+			echo '{"status":"illegal", "slug":"'.$slug.'"}';
+			exit;
+		}
+		
+		
+		//basically if the slug has been renamed to be the same as the original, return true that the slug is valid
 		if($slug == $db_obj->slug){
-			echo '{"status": "true", "slug" :'.$slug.'"}';
+			echo '{"status": "valid", "slug" :"'.$slug.'"}';
 			exit;
 		}
 		 
@@ -50,6 +52,7 @@ class Helper_Slug
 			}
 		}
 		 
+		//create a map to compare the slug to, if there are any slugs in the map database is the same
 		$slug_ids = ORM::factory('Map')->
 		where('slug', '=', $slug)->
 		find_all();
@@ -59,24 +62,19 @@ class Helper_Slug
 			exit;
 		}
 		 	
-		$slug_ids = ORM::factory('Custompage')->
+		//create a Custompage to compare the slugs, if there are any similar
+		$slug_page = ORM::factory('Custompage')->
 		where('slug', '=', $slug)->
 		find_all();
 		
-		if(count($slug_ids) > 0){
+		if(count($slug_page) > 0){
 			echo '{"status": "notUnique"}';
 			exit;
 		}
 		 
 		//return the json specifying if the slug is legal
-		if(strlen($slug_original) != strlen($slug)){
-			echo '{"status":"false", "slug":"'.$slug.'"}';
-			exit;
-		}
-		else{
-			echo '{"status":"true", "slug":"'.$slug.'"}';
-			exit;
-		}	
+		echo '{"status": "valid", "slug" :"'.$slug.'"}';
+		exit;
 		
 	}
 }//end class

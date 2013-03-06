@@ -12,19 +12,51 @@
 
 function updatePageInfo(){
 	var page_id = $("#pages").val();
-	console.log("Page id", page_id);
-	var name = $('#pages option:selected').text();
-	$.post("<?php echo URL::base(); ?>custompage/getpage", { 'page': page_id }).done(
-			function(data) {
-				$('#slug_id').val(name);
-				$('textarea.tinymce').val(data);
-			});	
+	if(page_id != 0){
+		var name = $('#pages option:selected').text();
+		$.post("<?php echo URL::base(); ?>custompage/getpage", { 'page': page_id }).done(
+				function(data) {
+					$("#slug").css('border-color', '');
+					$('#slug').val(name);
+					$('textarea.tinymce').val(data);
+				});
+	}	
+	else{
+		$("#slug").css('border-color', '');
+		$("#slug").val('');
+		$('textarea.tinymce').val('');
+	}
 }
 
 function checkSlug(){
-	console.log('checking');
+	$("#slug").css('border-color', '');
+	$.post("<?php echo URL::base(); ?>custompage/checkslug", { "slug": $("#slug").val(), 'id': $("#pages").val() }).done(
+			function(response) {
+				response = JSON.parse(response);
+
+				if(response.status == 'valid'){
+					$("#slug").css('border-color', 'green');
+					$("#slug").val(response.slug);
+				}
+				else if(response.status == 'illegal'){
+					$("#slug").css('border-color', 'red');
+					alert('<?php echo __('Your slug had illegal characters, they have been replaced.')?>');
+					$("#slug").val(response.slug);
+				}
+				else if(response.status == 'notUnique'){
+					$("#slug").css('border-color', 'red');
+					alert('<?php echo __('You slug has already been used. Please choose another.')?>');
+				}
+			});
 }
 
+$(document).ready(function(){
+	$("#slug").change(function(){
+		checkSlug();
+	});
+});
+
+//all options for the tinymce editor in the textarea
 $(function() {
     $('textarea.tinymce').tinymce({
     	
@@ -65,10 +97,13 @@ $(function() {
 
   	//writing the onchange prevents it from being called when typing a new slug, which was calling it for some reason
    $('#pages').change(function(){
-		if(!$('#pages option:selected').val() == 0){
-			updatePageInfo();
-		}
+		updatePageInfo();
    });
+
+  	//loading may perhaps be on a different page than the default, find the data for the loaded page
+   if($("#pages").val() != 0){
+	   updatePageInfo();
+   }
 });
 
 </script>

@@ -64,7 +64,7 @@ class Model_Custompage extends ORM {
 	
 		if(!$page->loaded()){
 			$page->user_id = $user_id;
-			$page->slug_id = $slug_id;
+			$page->slug = $slug_id;
 			$page->content = $content;
 		}
 	
