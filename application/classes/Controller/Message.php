@@ -116,6 +116,7 @@ class Controller_Message extends Controller_Loggedin {
 		
 		$messages = ORM::factory('Message')
 			->where('user_id','=',$this->user->id)
+			->order_by('date', 'DESC')
 			->find_all();
 		
 		$view->messages = $messages;
