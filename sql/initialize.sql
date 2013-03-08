@@ -411,7 +411,7 @@ CREATE TABLE IF NOT EXISTS `custompage` (
   `slug` char(130) NOT NULL,
   `content` longtext NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `slug_id` (`slug_id`)
+  UNIQUE KEY `slug` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 ALTER TABLE  `custompage` ADD INDEX (  `user_id` );
 UPDATE `metadata` SET  `v` =  '1.0.040' WHERE  `metadata`.`k` ='Database Version';
@@ -440,5 +440,6 @@ NULL ,  '0',  '__ABOUT__',  '<p><strong>This is the template for the About page.
 NULL ,  '0',  '__SUPPORT__',  '<p><strong>This is the template for the Support page.</strong></p>
 <p><strong>Owners will be able to edit this with their own information.</strong></p>',  '1'
 );
+UPDATE `metadata` SET  `v` =  '1.0.042' WHERE  `metadata`.`k` ='Database Version';
 
 
