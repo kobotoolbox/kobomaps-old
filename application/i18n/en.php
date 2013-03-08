@@ -288,7 +288,7 @@ return array
 		'can now'=>'can now',
 		'can'=>'can',
 		'Delete Colaborator'=>'Delete Colaborator',
-		'You have been granted permission to map'=>'You have been granted <strong>:permission</strong> permissions to the map <a href="'.URL::base().'public/view?id=:map_id">:map_title</a>',
+		'You have been granted permission to map'=>'You have been granted <strong>:permission</strong> permissions to the map <a href="'.URL::base().':map_slug">:map_title</a>',
 		'The template your map used has been deleted. Please fix'=>'The template your map <strong>:title</strong> used has been deleted. <br/><br/>Please fix this by clicking <a href="'.URL::base().'mymaps/add4?id=:id">here</a>.',
 		
 		//statistics

@@ -63,6 +63,7 @@ class Controller_Share extends Controller_Main {
 			->where('sharing.map_id','=',$map_id)
 			->find_all();
 		
+		
 		$permissions = array();
 		foreach(Model_Sharing::$allowed_permissions as $p)
 		{
@@ -107,9 +108,13 @@ class Controller_Share extends Controller_Main {
 		$this->auto_render = false;
 		$this->response->headers('Content-Type','application/json');
 	
-		$map = $this->checkMapAndUser();
-		if($map == false)
+		$map = $this->checkMapValid();
+		$mapOwner = $this->checkMapAndUser($map);
+		$mapEditor = $this->checkMapAndEditor($map);
+			
+		if($mapOwner == false && $mapEditor == false)
 		{
+			echo '{"status":"error", "message":'.json_encode(__('You dont have permission.')).'}';
 			return;
 		}
 		
@@ -139,9 +144,22 @@ class Controller_Share extends Controller_Main {
 		$this->auto_render = false;
 		$this->response->headers('Content-Type','application/json');
 		
-		$map = $this->checkMapAndUser();
-		if($map == false)
-		{
+		//call database and check if the map is valid
+		$validMap = $this->checkMapValid();
+		
+		if($validMap != false){
+			//check if either editor or owner
+			$mapOwner = $this->checkMapAndUser($validMap);
+			$mapEditor = $this->checkMapAndEditor($validMap);
+			
+			if($mapOwner == false && $mapEditor == false)
+			{
+				echo '{"status":"error", "message":'.json_encode(__('You dont have permission.')).'}';
+				return;
+			}
+			$map = $validMap;
+		}
+		else{
 			return;
 		}
 		//first is the name not empty?
@@ -180,54 +198,86 @@ class Controller_Share extends Controller_Main {
 			return;
 		}
 		
-		//finally, we can add the user as a colaborator.
+		//check to see if the user already has a column in the sharing table
+		$userTest = ORM::factory('Sharing')->
+		where('user_id', '=', $user_to_add->id)->
+		where('map_id', '=', $map->id)->
+		find();
+		//if user does exist, do they have the same permission
+		if($userTest->permission == Model_Sharing::$owner && $this->user->id == $user_to_add->id){
+			echo '{"status":"error", "message":'.json_encode(__('You are the owner, you can already do everything.')).'}';
+			return;
+		}
 
-		$share = ORM::factory('Sharing');
-		$share->map_id = $map->id;
-		$share->user_id = $user_to_add->id;
-		$share->permission = $permission;
-		$share->save();
+		if($userTest->loaded()){
+			if($userTest->permission != $permission){
+				$userTest->permission = $permission;
+				$userTest->save();
+				
+				$this->permissionsUpdated($map, $user_to_add, $permission);
+			}
+			else{
+				echo '{"status":"error", "message":'.json_encode(__($user_to_add->username.' '.'already has those permissions.')).'}';
+				return;
+			}
+		}
+		else{
+			//finally, we can add the user as a colaborator.
+			$share = ORM::factory('Sharing');
+			$share->map_id = $map->id;
+			$share->user_id = $user_to_add->id;
+			$share->permission = $permission;
+			$share->save();
+			
+			$this->permissionsUpdated($map, $user_to_add, $permission);
+		}
 		
-		//notify the user they've been given access to a map		
-		$message = __('You have been granted permission to map', array(':permission'=>$permission, ':map_id'=>$map->id, ':map_title'=>$map->title));
+	}
+	
+	/**
+	 * 
+	 * If a user was created or updated within the database, this will send messages and return successful message
+	 * 
+	 * @param ORM::map $map
+	 * @param ORM::user $user_to_add
+	 * @param Model_Sharing $permission
+	 */
+	protected function permissionsUpdated($map, $user_to_add, $permission){
+		$this->response->headers('Content-Type','application/json');
+		//notify the user they've been given access to a map
+		
+		$message = __('You have been granted permission to map', array(':permission'=>$permission, ':map_slug'=>$map->slug, ':map_title'=>$map->title));
 		Model_Message::add_message($user_to_add, $message, __('KoboMaps System'), 'noreply@kobomaps.org');
-		
+			
 		//get the current list of colaborators
 		$colaborators = ORM::factory('Sharing')
-			->select('users.*')
-			->join('users')
-			->on('sharing.user_id','=','users.id')
-			->where('sharing.map_id','=',$map->id)
-			->find_all();
-		
+		->select('users.*')
+		->join('users')
+		->on('sharing.user_id','=','users.id')
+		->where('sharing.map_id','=',$map->id)
+		->find_all();
+			
 		$permissions = array();
 		foreach(Model_Sharing::$allowed_permissions as $p)
 		{
 			$permissions[$p] = __($p);
 		}
-		
+			
 		$view = new View('share/map_colaborators');
 		$view->colaborators = $colaborators;
 		$view->permissions = $permissions;
-		
+			
 		echo '{"status":"success", "message":'.json_encode($user_to_add->username . ' '. __('can now'). ' '. __($permission). ' ' .__('this map.'));
 		echo ',"html":';
 		echo json_encode($view->render());
 		echo '}';
-		
-		
 	}
 	
-	
 	/**
-	 * Use this to check that the $_POST['id'] specified
-	 * is a valid map and is owned by the current user.
-	 * If all is good returns the map object. If all is not good it returns
-	 * false and echos out a JSON error messages
+	 * Calls database once per load to see if requested map is valid
+	 * @return boolean|ORM
 	 */
-	protected function checkMapAndUser()
-	{
-		
+	protected function checkMapValid(){
 		//get the map id
 		$map_id = isset($_POST['id']) ? intval($_POST['id']) : 0;
 		if($map_id == 0)
@@ -237,13 +287,42 @@ class Controller_Share extends Controller_Main {
 		}
 		//get the map
 		$map = ORM::factory('Map', $map_id);
+		return $map;
+	}
+	
+	/**
+	 * Use this to check that the $_POST['id'] specified
+	 * is a valid map and is owned by the current user.
+	 * If all is good returns true. If all is not good it returns
+	 * false and echos out a JSON error messages
+	 */
+	protected function checkMapAndUser($map)
+	{	
 		//is this your map
 		if($map->user_id != $this->user->id)
 		{
-			echo '{"status":"error", "message":'.json_encode(__('You dont have permission.')).'}';
 			return false;
 		}
-		return $map;	
+		
+		return true;
+		
+	}
+	
+	/**
+	 * checks to see if this user is an editor for the map
+	 * @param ORM::map $map
+	 */
+	protected function checkMapAndEditor($map){
+		$share = ORM::factory('Sharing')->
+		where('user_id', '=', $this->user->id)->
+		where('map_id', '=', $map->id)->
+		find();
+		
+		if($share->permission != Model_Sharing::$edit){
+			return false;
+		}
+		
+		return true;
 	}
 	
 	/**
@@ -266,11 +345,16 @@ class Controller_Share extends Controller_Main {
 		$share = ORM::factory('Sharing', $share_id);
 		//get the map
 		$map = ORM::factory('Map',$share->map_id);
-		//is this your map
-		if($map->user_id != $this->user->id)
-		{
-			echo '{"status":"error", "message":'.json_encode(__('You dont have permission.')).'}';
-			return false;
+		if($map->loaded()){
+			//check if either editor or owner
+			$mapOwner = $this->checkMapAndUser($map);
+			$mapEditor = $this->checkMapAndEditor($map);
+			
+			if($mapOwner == false && $mapEditor == false)
+			{
+				echo '{"status":"error", "message":'.json_encode(__('You dont have permission.')).'}';
+				return false;
+			}
 		}
 		return $share;
 	}

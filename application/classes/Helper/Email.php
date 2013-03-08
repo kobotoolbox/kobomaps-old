@@ -23,19 +23,20 @@ class Helper_Email
 	 */
 	public static function send_email($to, $from, $subject, $body)
 	{	
-			
-		require Kohana::find_file('swiftmailer', 'classes/lib/swift_required');
-		//Create the Transport
-		$transport = Swift_SmtpTransport::newInstance($_SERVER['HTTP_HOST'], 25);
-		//Create the Mailer using your created Transport
-		$mailer = Swift_Mailer::newInstance($transport);
-		//Create a message
-		$message = Swift_Message::newInstance('Email')
-		->setSubject($subject)
-		->setFrom($from)
-		->setTo($to)
-		->setBody($body, 'text/html');
-		//Send the message
-		$result = $mailer->send($message);
+		if($_SERVER["SERVER_NAME"] != 'localhost'){
+			require Kohana::find_file('swiftmailer', 'classes/lib/swift_required');
+			//Create the Transport
+			$transport = Swift_SmtpTransport::newInstance($_SERVER['HTTP_HOST'], 25);
+			//Create the Mailer using your created Transport
+			$mailer = Swift_Mailer::newInstance($transport);
+			//Create a message
+			$message = Swift_Message::newInstance('Email')
+			->setSubject($subject)
+			->setFrom($from)
+			->setTo($to)
+			->setBody($body, 'text/html');
+			//Send the message
+			$result = $mailer->send($message);
+		}
 	}
 }//end class
