@@ -94,6 +94,7 @@ class Controller_Login extends Controller_Main {
 			require_once Kohana::find_file('php-openid', 'Auth/OpenID/MySQLiStore');
 			require_once Kohana::find_file('php-openid', 'Auth/OpenID/DatabaseConnectionMysqli');
 			require_once Kohana::find_file('php-openid', 'Auth/OpenID/SReg');
+			require_once Kohana::find_file('php-openid', 'Auth/OpenID/AX');
 			require_once Kohana::find_file('php-openid', 'Auth/OpenID/PAPE');
 			
 			
@@ -103,6 +104,25 @@ class Controller_Login extends Controller_Main {
 		    
 		 	// Begin the OpenID authentication process.
 		    $auth_request = $consumer->begin($auth_url);
+		    
+		    
+		    //for Google, might also need for Yahoo.
+		    $attribute[] = Auth_OpenID_AX_AttrInfo::make('http://axschema.org/contact/email',2,1, 'email');
+		    $attribute[] = Auth_OpenID_AX_AttrInfo::make('http://axschema.org/namePerson/first',1,1, 'firstname');
+		    $attribute[] = Auth_OpenID_AX_AttrInfo::make('http://axschema.org/namePerson/last',1,1, 'lastname');
+		    
+		    // Create AX fetch request
+		    $ax = new Auth_OpenID_AX_FetchRequest;
+		    
+		    // Add attributes to AX fetch request
+		    foreach($attribute as $attr){
+		    	$ax->add($attr);
+		    }
+		    
+		    // Add AX fetch request to authentication request
+		    $auth_request->addExtension($ax);
+		    
+		    
 		
 		    // No auth request means we can't begin OpenID.
 		    if (!$auth_request) {
@@ -322,6 +342,7 @@ class Controller_Login extends Controller_Main {
 		require_once Kohana::find_file('php-openid', 'Auth/OpenID/MySQLiStore');
 		require_once Kohana::find_file('php-openid', 'Auth/OpenID/DatabaseConnectionMysqli');
 		require_once Kohana::find_file('php-openid', 'Auth/OpenID/SReg');
+		require_once Kohana::find_file('php-openid', 'Auth/OpenID/AX');
 		require_once Kohana::find_file('php-openid', 'Auth/OpenID/PAPE');
 		
 		
@@ -377,6 +398,13 @@ class Controller_Login extends Controller_Main {
 				$success .= "  Your fullname is '".htmlentities($sreg['fullname']).
 				"'.";
 			}
+			
+			//look for AX items
+			$ax = new Auth_OpenID_AX_FetchResponse();
+			$ax_response = $ax->fromSuccessResponse($response);
+			echo '<pre>';
+			print_r($ax_response->data);
+			echo '</pre>';
 		
 			$pape_resp = Auth_OpenID_PAPE_Response::fromSuccessResponse($response);
 		
