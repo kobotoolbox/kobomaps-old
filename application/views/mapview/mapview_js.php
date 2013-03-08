@@ -719,6 +719,9 @@ function calculateColor(percentage, min, spread)
 	var colorPerct = (percentage-min)*(1/spread);
 	var first = polygon_color.substring(0,6);
 	var second = polygon_color.substring(7, 13);
+	if(second == ''){
+		second = '#FFFFFF';
+	}
 
 	gradient.setSpectrum(second, first);
 	gradient.setNumberRange(min, min+spread);
@@ -1462,6 +1465,9 @@ function updateKey(min, span, title, unit)
 	    var grd = context.createLinearGradient(0, 0, 298, 19);
 	    var first = '#' + polygon_color.substring(0, 6);
 	    var second = '#' + polygon_color.substring(7,13);
+	    if(second == '#'){
+			second = '#FFFFFF';
+	    }
 	    grd.addColorStop(0, second);   
 	    grd.addColorStop(1, first);
 	    context.fillStyle = grd;
@@ -1812,5 +1818,7 @@ function init_legend_listener(){
 	
 <?php 
 	$facebook_js = new View('js/facebook');
+	$shareCenter = new View('js/shareEdit');
 	echo $facebook_js; 
+	echo $shareCenter;
 ?>

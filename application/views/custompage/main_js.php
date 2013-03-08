@@ -19,6 +19,13 @@ function updatePageInfo(){
 					$("#slug").css('border-color', '');
 					$('#slug').val(name);
 					$('textarea.tinymce').val(data);
+					//don't allow changing of the slugs for the default template pages
+					if(name == '__ABOUT__' || name == '__HELP__' || name == '__SUPPORT__' || name == '__MAIN__'){
+						$('#slug').attr('readonly', 'readonly');
+					}
+					else{
+						$('#slug').attr('readonly', false);
+					}
 				});
 	}	
 	else{

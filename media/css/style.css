@@ -902,24 +902,18 @@ select.needstobemapped{
 	text-align: center;
 }
 .replyToComment {
-   background: #c9c9c9;
-   padding: 5px 10px;
-   border-radius: 8px;
-   vertical-align: middle;
-   width: 50px
-   }
-.replyToComment:hover {
-   border-top-color: #919191;
-   background: #919191;
-   color: #ccc;
-   }
-.replyToComment:active {
-   border-top-color: #969696;
-   background: #969696;
-   }
-.replyToComment a{
-	text-decoration:none;
-	font-size: 8px;
+   -webkit-box-align: center;
+   padding: 1px 6px;
+   text-align: center;
+   cursor: default;
+   coor: buttontext;
+   border: 2px outset buttonface;
+   background-color: buttonface;
+   box-sizing: border-box;
+   -webkit-appearance: push-button;
+   white-space: pre;
+   width: 60px;
+   text-decoration: none;
 }
 
 
@@ -970,4 +964,16 @@ table.list_table tr.unread.odd_row  td {
 /*********************************************************
                Custom Page Center
 *********************************************************/
+#delete_button {
+   -webkit-box-align: center;
+   padding: 1px 6px;
+   text-align: center;
+   cursor: default;
+   coor: buttontext;
+   border: 2px outset buttonface;
+   background-color: buttonface;
+   box-sizing: border-box;
+   -webkit-appearance: push-button;
+   white-space: pre;
+}
 
