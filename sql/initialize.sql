@@ -418,4 +418,27 @@ UPDATE `metadata` SET  `v` =  '1.0.040' WHERE  `metadata`.`k` ='Database Version
 
 /** Dylan Gillespie -- 2013-03-06 -- Added special in table for custom html pages **/
 ALTER TABLE  `custompage` ADD  `special` BOOLEAN NOT NULL DEFAULT FALSE;
+UPDATE `metadata` SET  `v` =  '1.0.041' WHERE  `metadata`.`k` ='Database Version';
+
+/** Dylan Gillespie -- 2013-03-08 -- Added hardcoded main, support, help, and about pages **/
+INSERT INTO  `custompage` (
+`id` ,
+`user_id` ,
+`slug` ,
+`content` ,
+`special`
+);
+VALUES (
+NULL ,  '0',  '__MAIN__',  '<h1>Welcome to Kobo Maps</h1> <p>KoBoMap is the latest KoBo product and is currently in development. The idea of KoBoMap is to facilitate the geospatial presentation of survey data. Survey data are typically available at national or sub-national levels. Few organizations have the capability to produce maps, yet, the ability to represent geographically various indicators can yield important information about the spatial distribution of events and population characteristics. Maps also provide an easy way to share information without having to release raw data. </p><p>KoBoMap is currently being developed using results from a survey conducted in 2010 among 4,501 adult Liberians randomly selected throughout the country. Results can be seen here. </p>',  '1'
+), (
+NULL ,  '0',  '__HELP__',  '<p><strong>This is the template for the Help page.</strong></p>
+<p><strong>Owners will be able to edit this with their own information.</strong></p>',  '1'
+), (
+NULL ,  '0',  '__ABOUT__',  '<p><strong>This is the template for the About page.</strong></p>
+<p><strong>Owners will be able to edit this with their own information.</strong></p>',  '1'
+), (
+NULL ,  '0',  '__SUPPORT__',  '<p><strong>This is the template for the Support page.</strong></p>
+<p><strong>Owners will be able to edit this with their own information.</strong></p>',  '1'
+);
+
 

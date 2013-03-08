@@ -32,8 +32,15 @@ class Controller_Custompage extends Controller_Loggedin {
 				where('user_id', '=', $this->user->id)->
 				find_all();
 				
+				$default = ORM::factory('Custompage')->
+				where('user_id', '=', 0)->
+				find_all();
+				
 				$page_array = array();
 				$page_array[0] = __('New Page');
+				foreach($default as $main){
+					$page_array[$main->id] = $main->slug;
+				}
 				foreach($pages as $page){
 					$page_array[$page->id] = $page->slug;
 				}
@@ -114,6 +121,21 @@ class Controller_Custompage extends Controller_Loggedin {
 						
 						$data['id'] = $page->id;
 						$this->template->content->pages[$page->id] = $page->slug;
+						$this->template->content->data = $data;
+						$this->template->content->messages[] = __('Saved page').' '.$data['slug'];
+					}
+					else{
+						$default = ORM::factory('Custompage')->
+						where('user_id', '=', 0)->
+						where('id', '=', $_POST['pages'])->
+						find();
+						
+						$default->content = $data['content'];
+						$default->slug = $data['slug'];
+						$default->save();
+						
+						$data['id'] = $default->id;
+						$this->template->content->pages[$default->id] = $default->slug;
 						$this->template->content->data = $data;
 						$this->template->content->messages[] = __('Saved page').' '.$data['slug'];
 					}

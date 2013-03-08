@@ -19,6 +19,20 @@ class Controller_Dynamic extends Controller_Main {
 	{		
 		$slug = $this->request->param('slug');
 		
+		//handle the default page requests
+		if($slug == __('main')){
+			$slug = '__MAIN__';
+		}
+		if($slug == __('about')){
+			$slug = '__ABOUT__';
+		}
+		if($slug == __('support')){
+			$slug = '__SUPPORT__';
+		}
+		if($slug == __('help')){
+			$slug = '__HELP__';
+		}
+		
 		$page = ORM::factory('Custompage')
 			->where('slug', '=', $slug)
 			->find();
