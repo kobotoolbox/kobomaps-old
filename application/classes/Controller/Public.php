@@ -33,6 +33,7 @@ class Controller_Public extends Controller_Main {
 		//set the JS
 		$js = view::factory('public/maps_js');
 		$this->template->html_head->script_views[] = $js;
+		$this->template->html_head->script_views[] = view::factory('js/shareEdit');
 		$this->template->html_head->script_views[] = view::factory('js/messages');
 		$this->template->html_head->script_views[] = view::factory('js/facebook');
 	

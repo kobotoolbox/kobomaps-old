@@ -40,6 +40,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 		$js = view::factory('mymaps/mymaps_js');
 		$this->template->html_head->script_views[] = $js;
 		$this->template->html_head->script_views[] = view::factory('js/messages');
+		$this->template->html_head->script_views[] = view::factory('js/shareEdit');
 		$this->template->html_head->script_views[] = view::factory('js/facebook');
 		
 		
