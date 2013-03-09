@@ -27,6 +27,7 @@ class Controller_Login extends Controller_Main {
 		$this->template->content = View::factory('login/login');
 		$this->template->header->menu_page = 'login';
 		$this->template->content->errors = array();
+
 		
 		//set the focus on the username input box
 		$this->template->html_head->script_views[] = '<script type="text/javascript">$(document).ready(function() {  $("#username").focus();});</script>';
@@ -34,28 +35,28 @@ class Controller_Login extends Controller_Main {
 		$this->template->html_head->script_files[] = 'media/js/jquery.tools.min.js';		
 		//main JS view
 		$this->template->html_head->script_views[] = view::factory('login/login_js');
-		
-		if(!empty($_POST)) // They've submitted their login form
+		if(!empty($_GET))
 		{
-			//check if they're using open id
-			if(strlen($_POST['email']) != 0) //they're using openID
+			if(strlen($_GET['url']) != 0) //they're using openID
 			{
 				//do open id
 				$this->detect_open_id();
 			}
-			else //traditional login
+		}
+		if(!empty($_POST)) // They've submitted their login form
+		{
+			//check if they're using open id
+			
+			$auth->login($_POST['username'], $_POST['password'], true);
+			if($auth->logged_in())
 			{
-				$auth->login($_POST['username'], $_POST['password'], true);
-				if($auth->logged_in())
-				{
-					HTTP::redirect(Session::instance()->get_once('returnUrl','mymaps'));	
-				}
-				else
-				{
-					$this->template->content->errors[] = __("incorrect login");					
-				}
+				HTTP::redirect(Session::instance()->get_once('returnUrl','mymaps'));	
 			}
-	
+			else
+			{
+				$this->template->content->errors[] = __("incorrect login");					
+			}
+		
 		}
 		else 
 		{	//They're visiting for the first time		
@@ -72,18 +73,8 @@ class Controller_Login extends Controller_Main {
 	 */
 	protected function detect_open_id()
 	{
-		$email = $_POST['email'];
-		//check if it's a gmail address
-		$domain = explode('@', $email);
-		$domain = $domain[1];
+		$auth_url = $_GET['url'];
 		
-		$auth_url = null;
-		switch($domain)
-		{
-			case 'gmail.com':
-				$auth_url = 'https://www.google.com/accounts/o8/id';
-				break;
-		}
 		
 		if($auth_url != null)
 		{
@@ -368,44 +359,52 @@ class Controller_Login extends Controller_Main {
 			// This means the authentication succeeded; extract the
 			// identity URL and Simple Registration data (if it was
 			// returned).
-			$openid = $response->getDisplayIdentifier();
-			$esc_identity = htmlentities($openid);
+			$open_id = $response->getDisplayIdentifier();
+
 		
-			$success = sprintf('You have successfully verified ' .
-					'<a href="%s">%s</a> as your identity.',
-					$esc_identity, $esc_identity);
-		
+			/*
 			if ($response->endpoint->canonicalID) {
 				$escaped_canonicalID = htmlentities($response->endpoint->canonicalID);
 				$success .= '  (XRI CanonicalID: '.$escaped_canonicalID.') ';
 			}
+			*/
 		
 			$sreg_resp = Auth_OpenID_SRegResponse::fromSuccessResponse($response);
-		
 			$sreg = $sreg_resp->contents();
 		
-			if (@$sreg['email']) {
-				$success .= "  You also returned '".htmlentities($sreg['email']).
-				"' as your email.";
+			$email = null;
+			if(isset($sreg['email']))
+			{
+				$email = $sreg['email'];
 			}
-		
-			if (@$sreg['nickname']) {
-				$success .= "  Your nickname is '".htmlentities($sreg['nickname']).
-				"'.";
+			
+			$fullname = null;
+			if(isset($sreg['fullname']))
+			{
+				$fullname = $sreg['fullname'];
 			}
-		
-			if (@$sreg['fullname']) {
-				$success .= "  Your fullname is '".htmlentities($sreg['fullname']).
-				"'.";
-			}
+			
 			
 			//look for AX items
 			$ax = new Auth_OpenID_AX_FetchResponse();
 			$ax_response = $ax->fromSuccessResponse($response);
-			echo '<pre>';
-			print_r($ax_response->data);
-			echo '</pre>';
-		
+			//grab the email via AX if we haven't set it already and if we have it
+			if($email == null AND isset($ax_response->data['http://axschema.org/contact/email']))
+			{
+				$email = $ax_response->data['http://axschema.org/contact/email'][0];
+			}
+			
+			//grab the name if we can and haven't already
+			$first_name = null;
+			$last_name = null;
+			if(isset($ax_response->data['http://axschema.org/namePerson/first']) AND
+					isset($ax_response->data['http://axschema.org/namePerson/last']))
+			{
+				$first_name = $ax_response->data['http://axschema.org/namePerson/first'][0];
+				$last_name = $ax_response->data['http://axschema.org/namePerson/last'][0];
+			}
+			
+			/*		
 			$pape_resp = Auth_OpenID_PAPE_Response::fromSuccessResponse($response);
 		
 			if ($pape_resp) {
@@ -437,7 +436,27 @@ class Controller_Login extends Controller_Main {
 			} else {
 				$success .= "<p>No PAPE response was sent by the provider.</p>";
 			}
-			echo $success;
+			*/
+			
+			//first check if there's a user already with this username, which is the email address
+			$user = ORM::factory('User')
+				->where('username', '=',$email)
+				->find();
+			if($user->loaded()) //if a user does exists then log them in
+			{
+				$_POST['username'] = $email;
+				$_POST['password'] = $open_id;
+				$this->action_index();				
+			}
+			else //takie them to create a new user
+			{
+				Session::instance()->set('open_id_sign_up','1');
+				Session::instance()->set('email',$email);
+				Session::instance()->set('password',$open_id);
+				Session::instance()->set('first_name',$first_name);
+				Session::instance()->set('last_name',$last_name);
+				HTTP::redirect('/signup');
+			}
 		}
 		
 		exit;

@@ -977,3 +977,17 @@ table.list_table tr.unread.odd_row  td {
    white-space: pre;
 }
 
+.openid_large_btn {
+	width: 100px;
+	height: 60px;
+	_width: 102px;
+	_height: 62px;
+	border: 1px solid #DDD;
+	margin: 3px;
+	float: left;
+}
+#openid_btns{
+	margin:0px auto;
+	width: 432px;
+	text-align:center;
+}

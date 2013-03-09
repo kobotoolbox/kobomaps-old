@@ -1,5 +1,5 @@
 <h2><?php echo __('Log In'); ?></h2>
-<p><?php echo __('Enter your password and username below to log in');?></p>
+
 
 <?php if(count($errors) > 0 )
 {
@@ -30,9 +30,8 @@
 			<td>
 				<?php echo Form::input('username', null, array('id'=>'username'));?>
 			</td>
-			<td colspan="2" style="border-left: solid 1px #aaa;padding-left:15px;text-align:center;">
-				<h3><?php echo __('OpenID Login')?></h3>
-				<h3 style="color:red;">BETA</h3>					
+			<td rowspan="2" style="border-left: solid 1px #aaa;padding-left:15px;text-align:center;">
+				<input type="button" value="<?php echo __('OpenID Login')?>" onclick="toggleOpenId(); return false;"/>
 			</td>
 		</tr>
 		<tr>
@@ -42,12 +41,8 @@
 			<td>
 				<?php echo Form::password('password', null, array('id'=>'password'));?>
 			</td>
-			<td  style="border-left: solid 1px #aaa;padding-left:15px;">
-				<?php echo __('Email');  ?>
-			</td>
-			<td>
-				<?php echo Form::input('email', null, array('id'=>'email'));?>
-			</td>
+			
+			
 			
 		</tr>
 		<tr>
@@ -59,6 +54,29 @@
 			</td>
 		</tr>
 	</table>
+	<div id="openIDTable" style="display:none;">
+		<fieldset>
+            <legend><?php echo __('OpenID - Sign-in using'); ?></legend>
+            <div id="openid_choice" style="display: block; ">
+               
+                <div id="openid_btns">
+                	<a title="log in with Google" href="<?php echo URL::base()?>login?url=<?php echo urlencode('https://www.google.com/accounts/o8/id')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: 0px 0px" class="google openid_large_btn"></a>
+                	<a title="log in with Yahoo" href="<?php echo URL::base()?>login?url=<?php echo urlencode('http://me.yahoo.com/')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: -100px 0px" class="yahoo openid_large_btn"></a>
+                	<a title="log in with Facebook" href="<?php echo URL::base()?>login?url=<?php echo urlencode('https://www.facebook.com')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: -500px 0px" class="facebook openid_large_btn"></a>
+                	<a title="log in with Twitter" href="<?php echo URL::base()?>login?url=<?php echo urlencode('https://www.twitter.com')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: -600px 0px" class="twitter openid_large_btn"></a>
+                	<br/>
+                	<div style="clear:both;">
+                		<input type="button" value="<?php echo __('Traditional Login')?>" onclick="toggleOpenId(); return false;"/>
+                	</div>
+                </div>
+            </div>
+            <div id="openid_input_area"></div>
+            <noscript>
+                &lt;p&gt;OpenID is service that allows you to log-on to many different websites using a single indentity.
+				Find out &lt;a href="http://openid.net/what/"&gt;more about OpenID&lt;/a&gt; and &lt;a href="http://openid.net/get/"&gt;how to get an OpenID enabled account&lt;/a&gt;.&lt;/p&gt;
+            </noscript>
+        </fieldset>
+	</div>
 	<br/>
 	<br/>
 	<?php echo Form::submit("login_form",  __("Log In")); ?>

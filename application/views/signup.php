@@ -22,9 +22,16 @@
 }
 ?>
 
-<?php echo Kohana_Form::open(); ?>
+<?php echo Kohana_Form::open(); 
+//calculate disabled status
+$attributes = array();
+if($data['open_id_call'] != 0)
+{
+	$attributes['readonly'] = 1;
+}
+?>
 	<table>
-		<tr>
+		<tr <?php if($data['open_id_call'] != 0){echo 'style="display:none;"';}?>>
 			<td>
 				<?php echo Form::label('email_address', __('email address'));  ?>
 			</td>
@@ -56,7 +63,7 @@
 			</td>
 					
 		</tr>
-		<tr>
+		<tr <?php if($data['open_id_call'] != 0){echo 'style="display:none;"';}?>>
 			<td>
 				<?php echo Form::label('password', __('password'));  ?>
 			</td>
@@ -91,6 +98,7 @@
 	</table>
 	<br/>
 	<?php  echo Form::checkbox('terms'); echo Form::label('read_terms_of_use', __('Agree to terms of use'));  ?>
+	<?php  echo Form::hidden('open_id_call', $data['open_id_call']); ?>
 	<br/>
 	<br/>
 	<?php echo Form::submit("registration_form",  __('Sign Up')); ?>

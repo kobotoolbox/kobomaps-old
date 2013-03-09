@@ -23,8 +23,22 @@ class Controller_Signup extends Controller_Main {
 				'password'=>'',
 				'password_confirm'=>'',
 				'email_alerts'=>0,
-				'email_warnings'=>0
+				'email_warnings'=>0,
+				'open_id_call'=>0
 				);
+		
+		//check if this is being called as a result of a open id call
+		$sesh  = Session::instance(); 
+		if($sesh->get_once('open_id_sign_up','0') == '1')
+		{
+			$data['open_id_call'] = 1;
+			$data['email'] = $data['username'] = $sesh->get_once('email','');
+			$data['password'] = $data['password_confirm'] = $sesh->get_once('password','');
+			$data['last_name'] = $sesh->get_once('last_name','');
+			$data['first_name'] = $sesh->get_once('first_name','');
+		}
+		
+			
 		//turn set focus to first UI form element
 		$this->template->html_head->script_views[] = '<script type="text/javascript">$(document).ready(function() {$("input:text:visible:first").focus();});</script>';
 		
@@ -47,8 +61,19 @@ class Controller_Signup extends Controller_Main {
 		if(!empty($_POST)) // They've submitted their registration form
 		{
 			try 
-			{
+			{			
+				//handle check boxes
+				if(!isset($_POST['email_alerts']))
+				{
+					$_POST['email_alerts'] = 0;
+				}
+				if(!isset($_POST['email_warnings']))
+				{
+					$_POST['email_warnings'] = 0;
+				}
+				
 				$this->template->content->data = $_POST;
+			
 				if(!isset($_POST['terms']))
 				{
 					$this->template->content->errors[] = __('must agree to terms of use');
@@ -84,7 +109,7 @@ class Controller_Signup extends Controller_Main {
 					{
 						if(is_string($error))
 						{
-							$this->template->content->errors[] = $error;							
+							$this->template->content->errors[] = $error;		
 						}
 					}
 				}

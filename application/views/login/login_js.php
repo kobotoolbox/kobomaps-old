@@ -23,4 +23,11 @@
 		});
 		
 	}
+
+	function toggleOpenId()
+	{
+		$("#logintable").toggle('slow','linear');
+		$("#openIDTable").toggle('slow','linear');
+	}
+	
 </script>
