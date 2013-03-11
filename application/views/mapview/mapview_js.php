@@ -1062,7 +1062,6 @@ function drawTotalChart(indicator){
 
 	else{
 		$("#nationalChartScrollDiv").show();
-		$("#nationalChartScrollDiv").height(130);
 	//fill temp arrays with data
 		for(i in totalData.indicators){
 			var total = parseFloat(totalData.indicators[i].total);
@@ -1094,7 +1093,6 @@ function drawTotalChart(indicator){
 		//add in a new chart
 		$("#nationalIndicatorChart").empty();
 		$("#nationalIndicatorChart").height(kmapInfochartHeight);
-	
 	
 		
 		selectedArea = [[selecX, selecY]];
@@ -1707,13 +1705,13 @@ function resizeMaplinks(){
 		$("#nationalChartScrollDiv").height(parseInt(height * .20));
 		$("#questionsindicators").height(parseInt(height * .19));
 		if(<?php echo strlen($map->description)?> > 0){
-			$("#descriptionText").height(parseInt(height * .15));
+			$("#descriptionText").height(parseInt(height * .10));
 		}
 	}
 	else{
 		$("#maplinks").height(height);
-		$("#nationalChartScrollDiv").height(parseInt(height * .20));
-		$("#questionsindicators").height(parseInt(height * .45));
+		$("#nationalChartScrollDiv").height(parseInt(height * .30));
+		$("#questionsindicators").height(parseInt(height * .33));
 		if(<?php echo strlen($map->description)?> > 0){
 			$("#descriptionText").height(parseInt(height * .15));
 		}

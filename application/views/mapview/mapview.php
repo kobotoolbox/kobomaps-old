@@ -30,57 +30,60 @@
 	echo '</div>';
  
 ?>		
+<div id="mapLinksContainer">
 <div id="maplinks"	style="overflow-y:auto">
-	<div style="height:60px;width:10px;"></div>
-	<p id="mapHelpText" position="relative"><?php echo __('Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.')?></p>
-	<?php if(strlen($map->description) > 0){?>
-	<div id="descriptionText" position="relative"><p ><?php echo $map->description;?></p>
-	</div>
-	<?php }?>
-		<ul id="questionsindicators" class="questionsindicators" >	</ul>
-		
-	<p id="loadingtext">
-	<?php echo __('Please be patient while the map is loading.')?>  
-	</p>
 	
-	<div id="legend" position="relative">
-		<a id="minButtonLegend" > - </a>
-		
-			<div id="legendtext">
-				<span id="spanLegendText"><?php echo __('Please select an indicator to display its data.')?></span>
-			</div>
-			<div id="legendMinDiv">
-			
-				<div id="legend_gradient">
-					<canvas id="legend_canvas" style="width:121px; height:20px"></canvas>
-					<div id="percentleft"></div>
-					<div id="percentright"></div>
-				</div>
-				<div id="nationalaveragediv">
-					<span id="nationalaveragelabel"></span>
-					<span id="nationalaverageimg" ></span>
-				</div>
-				</br>
-				<div id="nationalChartScrollDiv"  style=" width:320px; overflow-y: auto; overflow-x: hidden">
-			       	<div id="nationalIndicatorChart" style="width: 300px"></div>		
-			    </div>
-			       <div id="sourcetext">
-					<span id="sourcetextspan" style="display:none;"> Data Source:  
-						<a id="sourceURL" href="" title=""></a>
-						<span id="sourceNoURL"></span>
-					</span>
-		    	</div>
-	        
-		
-			<?php
-			//Powered by KoBoToolbox - Please be kind and leave a reference with a link to our website.
-			?>
-				<div id="poweredby">
-				<a href="http://www.kobotoolbox.org" title="KoBoToolbox.org"><?php echo __('powered by KoboToolbox')?></a>
-				</div>
-			</div>
+		<div style="height:60px;width:10px;"></div>
+		<p id="mapHelpText"><?php echo __('Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.')?></p>
+		<?php if(strlen($map->description) > 0){?>
+		<div id="descriptionText" position="relative"><p ><?php echo $map->description;?></p>
 		</div>
-	
+		<?php }?>
+			<ul id="questionsindicators" class="questionsindicators" >	</ul>
+			
+		<p id="loadingtext">
+		<?php echo __('Please be patient while the map is loading.')?>  
+		</p>
+		
+		<div id="legend" >
+			<a id="minButtonLegend" > - </a>
+			
+				<div id="legendtext">
+					<span id="spanLegendText"><?php echo __('Please select an indicator to display its data.')?></span>
+				</div>
+				<div id="legendMinDiv">
+				
+					<div id="legend_gradient">
+						<canvas id="legend_canvas" style="width:121px; height:20px"></canvas>
+						<div id="percentleft"></div>
+						<div id="percentright"></div>
+					</div>
+					<div id="nationalaveragediv">
+						<span id="nationalaveragelabel"></span>
+						<span id="nationalaverageimg" ></span>
+					</div>
+					</br>
+					<div id="nationalChartScrollDiv"  style=" width:320px; overflow-y: auto; overflow-x: hidden">
+				       	<div id="nationalIndicatorChart" style="width: 300px"></div>		
+				    </div>
+				       <div id="sourcetext">
+						<span id="sourcetextspan" style="display:none;"> Data Source:  
+							<a id="sourceURL" href="" title=""></a>
+							<span id="sourceNoURL"></span>
+						</span>
+			    	</div>
+		        
+			
+				<?php
+				//Powered by KoBoToolbox - Please be kind and leave a reference with a link to our website.
+				?>
+					<div id="poweredby">
+					<a href="http://www.kobotoolbox.org" title="KoBoToolbox.org"><?php echo __('powered by KoboToolbox')?></a>
+					</div>
+				</div>
+			</div>
+		
+	</div>
 </div>
 
 
@@ -121,6 +124,17 @@
 	<div id="sheetnamesEndControl" class="sheetScrollerControll"><a href="">&gt;&gt;</a></div>
 	<div id="mapSocialShare">
 		<ul>
+			
+			<li>
+				<a id="commentButton" rel="#overlay" href="<?php echo url::base(); ?>message/submit?id=<?php echo $map->id;?>" >
+					<img class="comment" title="<?php echo __('Comment on this map.')?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
+				</a>
+			</li>
+			<li>
+				<a id="shareButton" rel="#overlay" href="<?php echo url::base(); ?>share/window?id=<?php echo $map->id;?>" >
+					<img class="share" title="<?php echo __('Share this map.')?>"  src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
+				</a>
+			</li>
 			<li>
 				<img class="playbackLabels" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
 				<ul id="playBackButtons">
@@ -142,16 +156,6 @@
 					</li>
 				</ul>
 			</li>		
-			<li>
-				<a id="commentButton" rel="#overlay" href="<?php echo url::base(); ?>message/submit?id=<?php echo $map->id;?>" >
-					<img class="comment" title="<?php echo __('Comment on this map.')?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
-				</a>
-			</li>
-			<li>
-				<a id="shareButton" rel="#overlay" href="<?php echo url::base(); ?>share/window?id=<?php echo $map->id;?>" >
-					<img class="share" title="<?php echo __('Share this map.')?>"  src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>		
-				</a>
-			</li>
 			<li>
 				<a id="fullScreenButton" href="">
 					<img class="fullscreen" title="<?php echo __('Make this map fullscreen.')?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
