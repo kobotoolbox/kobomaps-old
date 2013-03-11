@@ -1698,6 +1698,28 @@ function scrollSheets(delta)
 
 }
 
+//will change the heights of the maplinks div on the left side of the map page
+function resizeMaplinks(){
+	var height = $(window).height();
+
+	if($("#siteHeader").is(':visible')){
+		$("#maplinks").height(parseInt(height - 235));
+		$("#nationalChartScrollDiv").height(parseInt(height * .20));
+		$("#questionsindicators").height(parseInt(height * .19));
+		if(<?php echo strlen($map->description)?> > 0){
+			$("#descriptionText").height(parseInt(height * .15));
+		}
+	}
+	else{
+		$("#maplinks").height(height);
+		$("#nationalChartScrollDiv").height(parseInt(height * .20));
+		$("#questionsindicators").height(parseInt(height * .45));
+		if(<?php echo strlen($map->description)?> > 0){
+			$("#descriptionText").height(parseInt(height * .15));
+		}
+	}
+}
+
 /**
  * This function is called to initialize the event handlers for the buttons on this page,
  * like the share button and the fullscreen button
@@ -1706,7 +1728,11 @@ function scrollSheets(delta)
 function initialize_buttons()
 {	
 	//handle toggling between full screen and normal view
-	$("#fullScreenButton").click(function(){$("#siteHeader").toggle(); return false;});
+	$("#fullScreenButton").click(function(){
+			$("#siteHeader").toggle();
+			resizeMaplinks();
+			return false;
+		});
 
 	//handle turning off and on the labels on the map
 	$("#turnOffLabelsButton").click(function(){
@@ -1814,6 +1840,7 @@ function initialize_buttons()
             wrap.load(this.getTrigger().attr("href"));
         }
 	});
+	
 }
 
 
@@ -1828,6 +1855,11 @@ function init_legend_listener(){
 			$("#minButtonLegend").html("-");
 		}
 	});	
+	$(window).resize(function(){
+		resizeMaplinks();
+	});
+	
+	resizeMaplinks();
 }
 
 </script>

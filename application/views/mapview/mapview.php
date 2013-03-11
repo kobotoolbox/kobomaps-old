@@ -30,11 +30,11 @@
 	echo '</div>';
  
 ?>		
-<div id="maplinks"	>
+<div id="maplinks"	style="overflow-y:auto">
 	<div style="height:60px;width:10px;"></div>
-	<p id="mapHelpText"><?php echo __('Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.')?></p>
+	<p id="mapHelpText" position="relative"><?php echo __('Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.')?></p>
 	<?php if(strlen($map->description) > 0){?>
-	<div id="descriptionText"><p ><?php echo $map->description;?></p>
+	<div id="descriptionText" position="relative"><p ><?php echo $map->description;?></p>
 	</div>
 	<?php }?>
 		<ul id="questionsindicators" class="questionsindicators" >	</ul>
@@ -43,7 +43,7 @@
 	<?php echo __('Please be patient while the map is loading.')?>  
 	</p>
 	
-	<div id="legend">
+	<div id="legend" position="relative">
 		<a id="minButtonLegend" > - </a>
 		
 			<div id="legendtext">
@@ -98,11 +98,7 @@
 			echo 'style="font-size:11px;">';
 			echo $map->title;
 		}
-		elseif(strlen($map->title) > 40 && strlen($map->title) <= 50){
-			echo 'style="font-size:10px;  padding: 0px 0px 0px 0px">';
-			echo $map->title;
-		}
-		elseif(strlen($map->title) > 50 && strlen($map->title) <= 58){
+		elseif(strlen($map->title) > 40 && strlen($map->title) <= 58){
 			echo 'style="font-size:10px;  padding: 0px 0px 0px 0px">';
 			echo $map->title;
 		}
