@@ -171,11 +171,11 @@ class Helper_Menus
 			{
 				if($page == "custompage")
 				{
-					echo '<li class="selected">';
+					echo '<li class="selected adminmenu">';
 				}
 				else
 				{
-					echo '<li>';
+					echo '<li class="adminmenu">';
 				}
 				echo '<a href="'.url::base().'custompage">'.__("Custom Page").'</a></li>';		
 									

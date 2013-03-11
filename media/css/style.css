@@ -168,13 +168,16 @@ div#mainMenu
 	font-size: 17px;
 	color: white;
 	background: #6e2e2e;
-	padding:10px;
+	padding:6px;
 	text-decoration:none;
 	
 	
 	border-top-right-radius:7px;
 	border-top-left-radius:7px;
 	box-shadow: 2px 2px 5px #884444;
+}
+#mainMenu li.adminmenu a:hover{
+	background: #962828;
 }
 
 #mainMenu li.selected a{	
