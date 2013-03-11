@@ -51,6 +51,11 @@ class Helper_Slugs
 				exit;
 			}
 		}
+		
+		if($slug == __('about') || $slug == __('help') || $slug == __('support') || $slug == __('main')){
+			echo '{"status": "notUnique"}';
+			exit;
+		}
 		 
 		//create a map to compare the slug to, if there are any slugs in the map database is the same
 		$slug_ids = ORM::factory('Map')->
