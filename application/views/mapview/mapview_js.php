@@ -809,6 +809,22 @@ function DrawDataGraph(id, name){
 		}
 	}
 
+	//this will account if there is only one level of indicator on the map and just pass in the original array instead of finding the lowest indicators
+	var oneLevel = false;
+	for(i in mapData.sheets[+idArray[0]].indicators){
+		if(mapData.sheets[+idArray[0]].indicators[i].indicators.length == 0){
+			oneLevel = true;
+		}
+		else{
+			oneLevel = false;
+			break;
+		}
+	}
+
+	//make regionData the original arrray
+	if(oneLevel){
+		regionData = mapData.sheets[+idArray[0]];
+	}
 	
 	
 	//contains the path given by the id to access the data
@@ -827,8 +843,6 @@ function DrawDataGraph(id, name){
 	}
 }
 
-/* Default setting for tooltips: not showing */
-//var toolTipShow = false;
 
 /*
  * Controls the information that appears when clicking on a bar within the pop-up graph
