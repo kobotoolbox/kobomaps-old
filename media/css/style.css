@@ -704,7 +704,7 @@ a, a:visited, a:link{
 /************************************************************
 							inputs
 *************************************************************/
-input[type="text"], input[type="password"]{
+input[type="text"], input[type="password"], #terms_of_use{
 	-webkit-border-radius: 7px;
 	-moz-border-radius: 7px;
 	border-radius: 7px;

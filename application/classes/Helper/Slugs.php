@@ -19,6 +19,7 @@ class Helper_Slugs
 	 */
 	public static function check_slug($slug, $db_obj)
 	{		
+		$slug = strtolower($slug);
 		if(!isset($slug)){
 			echo '{}';
 			exit;
