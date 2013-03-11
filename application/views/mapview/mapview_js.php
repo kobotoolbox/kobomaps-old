@@ -311,6 +311,8 @@ function parseJsonData(jsonDataUrl)
 		}
 		else
 		{
+			$('.playbackLabels').hide();
+			$('#playBackButtons').hide();
 			$('#sheetnamesStartControl').hide();
 			$('#sheetnamesLeftControl').hide();
 			$('#sheetnamesWrapper').hide();
