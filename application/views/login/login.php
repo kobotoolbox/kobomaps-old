@@ -60,10 +60,10 @@
             <div id="openid_choice" style="display: block; ">
                
                 <div id="openid_btns">
-                	<a title="log in with Google" href="<?php echo URL::base()?>login?url=<?php echo urlencode('https://www.google.com/accounts/o8/id')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: 0px 0px" class="google openid_large_btn"></a>
-                	<a title="log in with Yahoo" href="<?php echo URL::base()?>login?url=<?php echo urlencode('http://me.yahoo.com/')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: -100px 0px" class="yahoo openid_large_btn"></a>
-                	<a title="log in with Facebook" href="<?php echo URL::base()?>login?url=<?php echo urlencode('https://www.facebook.com')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: -500px 0px" class="facebook openid_large_btn"></a>
-                	<a title="log in with Twitter" href="<?php echo URL::base()?>login?url=<?php echo urlencode('https://www.twitter.com')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: -600px 0px" class="twitter openid_large_btn"></a>
+                	<a title="log in with Google" href="<?php echo URL::base()?>login?openidurl=<?php echo urlencode('https://www.google.com/accounts/o8/id')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: 0px 0px" class="google openid_large_btn"></a>
+                	<a title="log in with Yahoo" href="<?php echo URL::base()?>login?openidurl=<?php echo urlencode('http://me.yahoo.com/')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: -100px 0px" class="yahoo openid_large_btn"></a>
+                	<a title="log in with Facebook" href="<?php echo URL::base()?>login?openidurl=<?php echo urlencode('https://www.facebook.com')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: -500px 0px" class="facebook openid_large_btn"></a>
+                	<a title="log in with Twitter" href="<?php echo URL::base()?>login?openidurl=<?php echo urlencode('https://www.twitter.com')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: -600px 0px" class="twitter openid_large_btn"></a>
                 	<br/>
                 	<div style="clear:both;">
                 		<input type="button" value="<?php echo __('Traditional Login')?>" onclick="toggleOpenId(); return false;"/>

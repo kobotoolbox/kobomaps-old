@@ -35,14 +35,24 @@ class Controller_Login extends Controller_Main {
 		$this->template->html_head->script_files[] = 'media/js/jquery.tools.min.js';		
 		//main JS view
 		$this->template->html_head->script_views[] = view::factory('login/login_js');
-		if(!empty($_GET))
+		if(isset($_GET['openidurl']))
 		{
-			if(strlen($_GET['url']) != 0) //they're using openID
+			if(strlen($_GET['openidurl']) != 0) //they're using openID
 			{
 				//do open id
 				$this->detect_open_id();
 			}
 		}
+		
+		//check if this is the result of an open id login
+		$sesh  = Session::instance();
+		if($sesh->get_once('open_id_login','0') == '1')
+		{
+			$_POST['username'] = $sesh->get_once('email','');
+			$_POST['password'] = $sesh->get_once('password','');
+		}
+		
+		
 		if(!empty($_POST)) // They've submitted their login form
 		{
 			//check if they're using open id
@@ -73,7 +83,7 @@ class Controller_Login extends Controller_Main {
 	 */
 	protected function detect_open_id()
 	{
-		$auth_url = $_GET['url'];
+		$auth_url = $_GET['openidurl'];
 		
 		
 		if($auth_url != null)
@@ -101,6 +111,7 @@ class Controller_Login extends Controller_Main {
 		    $attribute[] = Auth_OpenID_AX_AttrInfo::make('http://axschema.org/contact/email',2,1, 'email');
 		    $attribute[] = Auth_OpenID_AX_AttrInfo::make('http://axschema.org/namePerson/first',1,1, 'firstname');
 		    $attribute[] = Auth_OpenID_AX_AttrInfo::make('http://axschema.org/namePerson/last',1,1, 'lastname');
+		    
 		    
 		    // Create AX fetch request
 		    $ax = new Auth_OpenID_AX_FetchRequest;
@@ -130,53 +141,11 @@ class Controller_Login extends Controller_Main {
 		        $auth_request->addExtension($sreg_request);
 		    }
 		
-			$policy_uris = null;
-			if (isset($_GET['policies'])) {
-		    	$policy_uris = $_GET['policies'];
-			}
-		
-		    $pape_request = new Auth_OpenID_PAPE_Request($policy_uris);
-		    if ($pape_request) {
-		        $auth_request->addExtension($pape_request);
-		    }
-		
-		    // Redirect the user to the OpenID server for authentication.
-		    // Store the token for this authentication so we can verify the
-		    // response.
-		
-		    // For OpenID 1, send a redirect.  For OpenID 2, use a Javascript
-		    // form to send a POST request to the server.
-		    if ($auth_request->shouldSendRedirect()) {
-		        $redirect_url = $auth_request->redirectURL(getTrustRoot(),
-		                                                   getReturnTo());			
-		        // If the redirect URL can't be built, display an error
-		        // message.
-		        if (Auth_OpenID::isFailure($redirect_url)) {
-		            echo "Could not redirect to server: " . $redirect_url->message;
-		        } else {
-		            // Send redirect.
-		            HTTP::redirect($redirect_url);
-		            
-		        }
-		    } else {
-		        // Generate form markup and render it.
-		     
-		        $form_id = 'openid_message';
-		        $url = URL::site(null, TRUE);
-		        $return_url = URL::site('/login/openid', TRUE);
-		        $form_html = $auth_request->htmlMarkup($url, $return_url, false, array('id' => $form_id));
-		        
-		        
-		
-		        // Display an error if the form markup couldn't be generated;
-		        // otherwise, render the HTML.
-		        if (Auth_OpenID::isFailure($form_html)) {
-		            displayError("Could not redirect to server: " . $form_html->message);
-		        } else {
-		            print $form_html;
-		            exit;
-		        }
-		    }
+
+		    $realm = URL::site(null, TRUE);
+		    $return_url = URL::site('/login/openid', TRUE);
+		    $redirect_url = $auth_request->redirectURL($realm,$return_url);
+		    HTTP::redirect($redirect_url);
 		}
 	}
 		
@@ -185,6 +154,16 @@ class Controller_Login extends Controller_Main {
 	
 	
 	protected function &getStore() {
+		/************************************************************************************
+		 * 
+		 * 
+		 * 
+		 *  PROBLEM IS THE DATABASE DRIVER, NOT STORING THE SIGNATURE CORRECTLY
+		 * 
+		 * 
+		 * 
+		 * 
+		 */
 		$server = Kohana::$config->load('database.default.connection.hostname');
 		$user_name = Kohana::$config->load('database.default.connection.username');
 		$password = Kohana::$config->load('database.default.connection.password');
@@ -196,6 +175,13 @@ class Controller_Login extends Controller_Main {
 		
 		$s = new Auth_OpenID_MySQLiStore($openIdDb);
 		return $s;
+		
+		require_once Kohana::find_file('php-openid', 'Auth/OpenID/FileStore');
+		$STORE_PATH = "/tmp/_php_consumer_test";
+		$store = new Auth_OpenID_FileStore($STORE_PATH);
+		return $store;
+		
+		
 	}
 	
 	/**
@@ -360,14 +346,7 @@ class Controller_Login extends Controller_Main {
 			// identity URL and Simple Registration data (if it was
 			// returned).
 			$open_id = $response->getDisplayIdentifier();
-
 		
-			/*
-			if ($response->endpoint->canonicalID) {
-				$escaped_canonicalID = htmlentities($response->endpoint->canonicalID);
-				$success .= '  (XRI CanonicalID: '.$escaped_canonicalID.') ';
-			}
-			*/
 		
 			$sreg_resp = Auth_OpenID_SRegResponse::fromSuccessResponse($response);
 			$sreg = $sreg_resp->contents();
@@ -444,9 +423,10 @@ class Controller_Login extends Controller_Main {
 				->find();
 			if($user->loaded()) //if a user does exists then log them in
 			{
-				$_POST['username'] = $email;
-				$_POST['password'] = $open_id;
-				$this->action_index();				
+				Session::instance()->set('open_id_login','1');
+				Session::instance()->set('email',$email);
+				Session::instance()->set('password',$open_id);				
+				HTTP::redirect('/login');
 			}
 			else //takie them to create a new user
 			{
