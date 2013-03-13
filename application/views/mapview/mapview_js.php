@@ -313,6 +313,7 @@ function parseJsonData(jsonDataUrl)
 		{
 			$('.playbackLabels').hide();
 			$('#playBackButtons').hide();
+			$('#mapSocialShare').width(206);
 			$('#sheetnamesStartControl').hide();
 			$('#sheetnamesLeftControl').hide();
 			$('#sheetnamesWrapper').hide();
@@ -1701,7 +1702,7 @@ function resizeMaplinks(){
 	var height = $(window).height();
 
 	if($("#siteHeader").is(':visible')){
-		$("#maplinks").height(parseInt(height - 235));
+		$("#maplinks").height(parseInt(height - 280));
 		$("#nationalChartScrollDiv").height(parseInt(height * .20));
 		$("#questionsindicators").height(parseInt(height * .19));
 		if(<?php echo strlen($map->description)?> > 0){
