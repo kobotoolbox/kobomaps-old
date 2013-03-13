@@ -442,4 +442,22 @@ NULL ,  '0',  '__SUPPORT__',  '<p><strong>This is the template for the Support p
 );
 UPDATE `metadata` SET  `v` =  '1.0.042' WHERE  `metadata`.`k` ='Database Version';
 
+/** Dylan Gillespie -- 2013-03-13 -- Added menus table for menu system **/
+CREATE TABLE IF NOT EXISTS `menus` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` char(128) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+CREATE TABLE IF NOT EXISTS `menu_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `menu` int(11) NOT NULL,
+  `text` char(128) NOT NULL,
+  `image_url` text NOT NULL,
+  `item_url` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `menu` (`menu`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+ALTER TABLE  `menu_items` ADD INDEX (`menu`);
+ALTER TABLE  `menu_items` ADD FOREIGN KEY (`menu`) REFERENCES  `menus` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION ;
+UPDATE `metadata` SET  `v` =  '1.0.043' WHERE  `metadata`.`k` ='Database Version';
 

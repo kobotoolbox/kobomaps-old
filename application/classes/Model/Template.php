@@ -116,16 +116,15 @@ class Model_Template extends ORM {
 		$original_title = $copy_array['title'];
 		//check the database until a new copy(count) isn't loaded, and then make the map title the title(copy)($count)
 		while(!$unique){
+			$copy_array['title'] = $original_title.'('.__('Copy').')('.$count.')';
 			$checkTitle = ORM::factory('Template')->
 			where('title', '=', $copy_array['title'])->
 			find();
 			if(!$checkTitle->loaded()){
-				$copy_array['title'] = $original_title.'('.__('Copy').')('.$count.')';
 				$unique = true;
 			}
 			else{
 				$count ++;
-				$copy_array['title'] = $original_title.'('.__('Copy').')('.$count.')';
 			}
 		}
 		

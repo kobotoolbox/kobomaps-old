@@ -224,6 +224,13 @@ class Model_Map extends ORM {
 	 */
 	public function copy($user_id)
 	{
+		/*/create tables real quick in database for menu_items
+		Model_Menuitem::create_menuitem(1, 'All Templates', 'http://localhost/Dylan/kobomaps/img/submenuSprite.png', URL::base(TRUE, TRUE).'templates');
+		Model_Menuitem::create_menuitem(1, 'My Templates', 'http://localhost/Dylan/kobomaps/img/submenuSprite.png', URL::base(TRUE, TRUE).'templates/mine');
+		Model_Menuitem::create_menuitem(2, 'All Templates', 'http://localhost/Dylan/kobomaps/img/submenuSprite.png', URL::base(TRUE, TRUE).'templates');
+		Model_Menuitem::create_menuitem(2, 'My Templates', 'http://localhost/Dylan/kobomaps/img/submenuSprite.png', URL::base(TRUE, TRUE).'templates/mine');
+		Model_Menuitem::create_menuitem(2, 'Create Templates', 'http://localhost/Dylan/kobomaps/img/submenuSprite.png', URL::base(TRUE, TRUE).'templates/edit');
+		*/
 		//copy the map database entry.
 		$copy_array = $this->as_array();
 		$new_map = ORM::factory('Map');
@@ -245,18 +252,16 @@ class Model_Map extends ORM {
 
 		//check the database until a new copy(count) isn't loaded, and then make the map title and slug the title/slug.(copy)($count)
 		while(!$unique){
+			$copy_array['title'] = $original_title.'('.__('Copy').')('.$count.')';
+			$copy_array['slug'] = $original_slug.'_'.__('Copy').'('.$count.')';
 			$checkSlug = ORM::factory('Map')->
 			where('slug', '=', $copy_array['slug'])->
 			find();
 			if(!$checkSlug->loaded()){
-				$copy_array['title'] = $original_title.'('.__('Copy').')('.$count.')';
-				$copy_array['slug'] = $original_slug.'_'.__('Copy').'('.$count.')';
 				$unique = true;
 			}
 			else{
 				$count ++;
-				$copy_array['title'] = $original_title.'('.__('Copy').')('.$count.')';
-				$copy_array['slug'] = $original_slug.'_'.__('Copy').'('.$count.')';
 			}
 		}
 

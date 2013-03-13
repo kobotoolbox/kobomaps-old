@@ -20,7 +20,7 @@ class Controller_Dynamic extends Controller_Main {
 		$slug = $this->request->param('slug');
 		
 		//handle the default page requests
-		if($slug == __('main')){
+		if($slug == __('main') || ''){
 			$slug = '__MAIN__';
 		}
 		if($slug == __('about')){
