@@ -106,7 +106,29 @@ class Model_Template extends ORM {
 		$new_template = ORM::factory('Template');
 		$copy_array = $this->as_array();
 		$copy_array['user_id'] = $user_id;
-		$copy_array['title'] = $copy_array['title']. ' ('.__('Copy').')'; 
+		
+		//these loops check to see if the title and slug contain __('Copy') already, if they do, take them out
+		$unique = false;
+		$count = 1;
+		if(strrpos($copy_array['title'], '('.__('Copy')) !== false){
+			$copy_array['title'] = substr($copy_array['title'], 0, strrpos($copy_array['title'], '('.__('Copy')));
+		}
+		$original_title = $copy_array['title'];
+		//check the database until a new copy(count) isn't loaded, and then make the map title the title(copy)($count)
+		while(!$unique){
+			$checkTitle = ORM::factory('Template')->
+			where('title', '=', $copy_array['title'])->
+			find();
+			if(!$checkTitle->loaded()){
+				$copy_array['title'] = $original_title.'('.__('Copy').')('.$count.')';
+				$unique = true;
+			}
+			else{
+				$count ++;
+				$copy_array['title'] = $original_title.'('.__('Copy').')('.$count.')';
+			}
+		}
+		
 		$new_template->update_template($copy_array);
 		
 		//now copy the regions
