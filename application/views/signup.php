@@ -97,6 +97,22 @@ if($data['open_id_call'] != 0)
 		
 	</table>
 	<br/>
+	<?php echo __('Terms of use').':'?>
+	<div id="terms_of_use" readonly="readonly" style="height:300px; width:700px; overflow:auto; border-style:solid">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in urna in lectus pretium ultrices quis ut diam. 
+				Aliquam imperdiet purus sit amet ante venenatis venenatis ornare quam imperdiet. Nullam tempus adipiscing tempus. Morbi erat leo, rhoncus cursus pellentesque ullamcorper, lacinia sit amet justo. In sed pellentesque libero. 
+				Nullam rutrum turpis quis tellus fringilla imperdiet vitae ut lorem. Mauris tempus felis a justo malesuada tempor nec a enim. 
+				Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut in nunc odio.
+				Maecenas iaculis pharetra massa, id cursus mauris porta sit amet. Fusce elementum nisi vitae nibh interdum blandit vitae sed quam. Sed ornare lorem vitae ante hendrerit sit amet sollicitudin leo egestas. Integer lacinia dolor vel leo tincidunt tristique. 
+				Nullam arcu ligula, consectetur et pretium eu, aliquam id nulla. Nulla et neque quis massa dapibus varius in vitae felis. Quisque varius lorem massa. Phasellus pellentesque ligula quis est sodales posuere. 
+				Phasellus orci urna, dictum quis ultrices nec, imperdiet eu turpis. Nullam sit amet est enim, at convallis dolor. Nulla nec dolor turpis, vel euismod nibh. Proin interdum ligula in erat posuere tincidunt. Integer commodo pulvinar euismod. Vivamus vitae porttitor erat.
+				 Vestibulum mollis volutpat massa at elementum. Nullam vitae justo sit amet orci imperdiet dictum nec et leo. Etiam eget dui a enim vehicula scelerisque. Proin interdum metus eu libero venenatis imperdiet. 
+				Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+				Sed vel massa neque, vel consectetur ligula. Etiam et felis metus, sed vehicula tortor. Nullam sed tellus ligula. Donec et erat massa, a dignissim leo. Vestibulum sit amet elit sed magna fringilla viverra. 
+				Maecenas eleifend, risus tristique placerat mattis, tellus nunc molestie augue, eget aliquet odio odio id augue. Maecenas commodo justo consectetur eros viverra venenatis.
+				Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce suscipit consectetur ante vel ullamcorper. Morbi pretium fringilla dignissim. Suspendisse sodales sagittis nunc vel egestas. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+				Quisque est tellus, sagittis id sagittis vel, bibendum eu ligula. Morbi malesuada nibh vel tellus tempor laoreet. Ut sagittis sodales blandit.
+				</div>
 	<?php  echo Form::checkbox('terms'); echo Form::label('read_terms_of_use', __('Agree to terms of use'));  ?>
 	<?php  echo Form::hidden('open_id_call', $data['open_id_call']); ?>
 	<br/>

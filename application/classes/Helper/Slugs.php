@@ -19,6 +19,7 @@ class Helper_Slugs
 	 */
 	public static function check_slug($slug, $db_obj)
 	{		
+		$slug = strtolower($slug);
 		if(!isset($slug)){
 			echo '{}';
 			exit;
@@ -50,6 +51,11 @@ class Helper_Slugs
 				echo '{"status": "notUnique"}';
 				exit;
 			}
+		}
+		
+		if($slug == __('about') || $slug == __('help') || $slug == __('support') || $slug == __('main')){
+			echo '{"status": "notUnique"}';
+			exit;
 		}
 		 
 		//create a map to compare the slug to, if there are any slugs in the map database is the same

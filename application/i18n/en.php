@@ -37,6 +37,10 @@ return array
 		'profile'=>'profile',
 		'Log Out'=>'Log Out',
 		'Login, Signup'=>'Login, Signup',
+		'about' => 'about',
+		'support' => 'support',
+		'main' => 'main',
+		'help' => 'help',
 		
 		
 		//main page
@@ -70,6 +74,7 @@ return array
 		'last name'=>'last name',
 		'password again'=>'password again',
 		'Agree to terms of use'=>'Agree to terms of use',
+		'Terms of use' => 'Terms of use',
 		
 		//my maps main page
 		'Select a map to edit or create a new one'=>'Select a map to edit or create a new one',
@@ -290,7 +295,7 @@ return array
 		'can'=>'can',
 		'Delete Colaborator'=>'Delete Colaborator',
 		'You have been granted permission to map'=>'You have been granted <strong>:permission</strong> permissions to the map <a href="'.URL::base().':map_slug">:map_title</a>',
-		'The template your map used has been deleted. Please fix'=>'The template your map <strong>:title</strong> used has been deleted. <br/><br/>Please fix this by clicking <a href="'.URL::base().'mymaps/add4?id=:id">here</a>.',
+		'The template your map used has been deleted. Please fix'=>'The template your map <strong>:title</strong> used has been deleted. <br/><br/>Please fix this by clicking <a href="'.URL::base(TRUE, TRUE).'mymaps/add4?id=:id">here</a>.',
 		
 		//statistics
 		'Select Maps' => 'Select Maps',

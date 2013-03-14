@@ -311,6 +311,9 @@ function parseJsonData(jsonDataUrl)
 		}
 		else
 		{
+			$('.playbackLabels').hide();
+			$('#playBackButtons').hide();
+			$('#mapSocialShare').width(206);
 			$('#sheetnamesStartControl').hide();
 			$('#sheetnamesLeftControl').hide();
 			$('#sheetnamesWrapper').hide();
@@ -807,6 +810,22 @@ function DrawDataGraph(id, name){
 		}
 	}
 
+	//this will account if there is only one level of indicator on the map and just pass in the original array instead of finding the lowest indicators
+	var oneLevel = false;
+	for(i in mapData.sheets[+idArray[0]].indicators){
+		if(mapData.sheets[+idArray[0]].indicators[i].indicators.length == 0){
+			oneLevel = true;
+		}
+		else{
+			oneLevel = false;
+			break;
+		}
+	}
+
+	//make regionData the original arrray
+	if(oneLevel){
+		regionData = mapData.sheets[+idArray[0]];
+	}
 	
 	
 	//contains the path given by the id to access the data
@@ -825,8 +844,6 @@ function DrawDataGraph(id, name){
 	}
 }
 
-/* Default setting for tooltips: not showing */
-//var toolTipShow = false;
 
 /*
  * Controls the information that appears when clicking on a bar within the pop-up graph
@@ -1046,7 +1063,6 @@ function drawTotalChart(indicator){
 
 	else{
 		$("#nationalChartScrollDiv").show();
-		$("#nationalChartScrollDiv").height(130);
 	//fill temp arrays with data
 		for(i in totalData.indicators){
 			var total = parseFloat(totalData.indicators[i].total);
@@ -1078,7 +1094,6 @@ function drawTotalChart(indicator){
 		//add in a new chart
 		$("#nationalIndicatorChart").empty();
 		$("#nationalIndicatorChart").height(kmapInfochartHeight);
-	
 	
 		
 		selectedArea = [[selecX, selecY]];
@@ -1682,6 +1697,28 @@ function scrollSheets(delta)
 
 }
 
+//will change the heights of the maplinks div on the left side of the map page
+function resizeMaplinks(){
+	var height = $(window).height();
+
+	if($("#siteHeader").is(':visible')){
+		$("#maplinks").height(parseInt(height - 280));
+		$("#nationalChartScrollDiv").height(parseInt(height * .20));
+		$("#questionsindicators").height(parseInt(height * .19));
+		if(<?php echo strlen($map->description)?> > 0){
+			$("#descriptionText").height(parseInt(height * .10));
+		}
+	}
+	else{
+		$("#maplinks").height(height);
+		$("#nationalChartScrollDiv").height(parseInt(height * .30));
+		$("#questionsindicators").height(parseInt(height * .33));
+		if(<?php echo strlen($map->description)?> > 0){
+			$("#descriptionText").height(parseInt(height * .15));
+		}
+	}
+}
+
 /**
  * This function is called to initialize the event handlers for the buttons on this page,
  * like the share button and the fullscreen button
@@ -1690,7 +1727,11 @@ function scrollSheets(delta)
 function initialize_buttons()
 {	
 	//handle toggling between full screen and normal view
-	$("#fullScreenButton").click(function(){$("#siteHeader").toggle(); return false;});
+	$("#fullScreenButton").click(function(){
+			$("#siteHeader").toggle();
+			resizeMaplinks();
+			return false;
+		});
 
 	//handle turning off and on the labels on the map
 	$("#turnOffLabelsButton").click(function(){
@@ -1798,6 +1839,7 @@ function initialize_buttons()
             wrap.load(this.getTrigger().attr("href"));
         }
 	});
+	
 }
 
 
@@ -1812,6 +1854,11 @@ function init_legend_listener(){
 			$("#minButtonLegend").html("-");
 		}
 	});	
+	$(window).resize(function(){
+		resizeMaplinks();
+	});
+	
+	resizeMaplinks();
 }
 
 </script>

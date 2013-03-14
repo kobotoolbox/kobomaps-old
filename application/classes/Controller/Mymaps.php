@@ -2252,7 +2252,13 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//they aren't allowed to be here, or this isn't a valid id
 	 	if(!$map->loaded() OR $map->user_id != $this->user->id)
 	 	{
-	 		HTTP::redirect('mymaps');
+	 		$edit = ORM::factory('Sharing')->
+	 		where('map_id', '=', $map->id)->
+	 		where('user_id', '=', $this->user->id)->
+	 		find();
+	 		if(!$edit->loaded()){
+	 			HTTP::redirect('mymaps');
+	 		}
 	 	}
 	 	
 	 	$new_map = $map->copy($this->user->id);

@@ -6,7 +6,7 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 /* Legend */
 #topbar, #bottombar {background: url("../img/b40.png") repeat scroll 0 0 transparent;padding:5px}
 #topbar {left: 355px;position: absolute; /*top:448px*/; z-index: 999;width:325px;}
-#legend {padding:3px; width:343px;text-align:left;}
+#legend {padding:3px; width:333px;text-align:left;}
 #legendtext {margin:0 0 4px;}
 #legendtext span {}
 #legend_gradient, #nationalaveragediv {height:19px;border:1px solid #ffffff;display:none;/*Only visible if indicator is selected*/}
@@ -35,6 +35,7 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 	text-align:center;
 	border-radius:5px;
 }
+
 
 
 #twitterbutton {float:left;margin:4px 0 0 0;clear:both;}
@@ -202,7 +203,7 @@ div#descriptionText{height:100px; overflow-y:auto;border-bottom:2px solid #333;}
 li.indicator {margin: 0.15em 0 0.8em 1.2em;list-style: none outside none;color:#000000;font-weight:bold;text-transform:none}
 ul.indicator {margin: 0.5em 0 0.3em;padding: 0;list-style:none;}
 
-ul.questionsindicators {font:normal 0.8em/1.4 Verdana, sans-serif;margin:1.5em 0 0;padding:0;overflow-x:auto;max-height:150px; border-bottom:2px solid #333;}
+ul.questionsindicators {font:normal 0.8em/1.4 Verdana, sans-serif;margin:1.5em 0 0;padding:0;overflow-x:auto;border-bottom:2px solid #333;}
 li.indicatorLevel_1 {margin: 0.15em 0 0.15em 0.5em;padding: 0;font:bold 1em/1 Verdana,sans-serif;color:#919191;list-style:none;cursor:pointer;}
 ul.indicatorLevel_1 {margin: 0.3em 0 1em;padding: 0;cursor:default;} /* hidden by default using the js file */
 li.indicatorLevel_2 {margin: 0.15em 0 0.8em 1.2em;list-style: none outside none;color:#000000;font-weight:bold;text-transform:none}

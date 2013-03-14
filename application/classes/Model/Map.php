@@ -118,7 +118,7 @@ class Model_Map extends ORM {
 	
 		$expected = array('title', 'description', 'slug', 'large_file', 'user_id', 'file', 'map_style', 'CSS', 'lat', 'lon', 'zoom', 
 				'template_id','json_file', 'is_private', 'map_creation_progress', 'border_color', 'region_color', 'polygon_color',
-				'graph_bar_color', 'graph_select_color', 'gradient',
+				'graph_bar_color', 'graph_select_color', 'gradient', 'id',
 				'show_empty_name', 'label_zoom_level', 'region_label_font', 'value_label_font');
 		
 		//if no slug is set
@@ -137,7 +137,10 @@ class Model_Map extends ORM {
 				$map = ORM::factory('Map')->where('slug','=',$hash)->find();
 			}			
 		}
-	
+		
+		//print_r($values);
+		//print_r($expected);
+		//exit;
 		$this->values($values, $expected);
 		$this->check();
 		$this->save();
@@ -221,11 +224,48 @@ class Model_Map extends ORM {
 	 */
 	public function copy($user_id)
 	{
+		/*/create tables real quick in database for menu_items
+		Model_Menuitem::create_menuitem(1, 'All Templates', 'http://localhost/Dylan/kobomaps/img/submenuSprite.png', URL::base(TRUE, TRUE).'templates');
+		Model_Menuitem::create_menuitem(1, 'My Templates', 'http://localhost/Dylan/kobomaps/img/submenuSprite.png', URL::base(TRUE, TRUE).'templates/mine');
+		Model_Menuitem::create_menuitem(2, 'All Templates', 'http://localhost/Dylan/kobomaps/img/submenuSprite.png', URL::base(TRUE, TRUE).'templates');
+		Model_Menuitem::create_menuitem(2, 'My Templates', 'http://localhost/Dylan/kobomaps/img/submenuSprite.png', URL::base(TRUE, TRUE).'templates/mine');
+		Model_Menuitem::create_menuitem(2, 'Create Templates', 'http://localhost/Dylan/kobomaps/img/submenuSprite.png', URL::base(TRUE, TRUE).'templates/edit');
+		*/
 		//copy the map database entry.
 		$copy_array = $this->as_array();
 		$new_map = ORM::factory('Map');
 		$copy_array['user_id'] = $user_id;
-		$copy_array['title'] = $copy_array['title'] .'('.__('Copy').')';
+		$copy_array['id'] = null;
+
+		
+		//these loops check to see if the title and slug contain __('Copy') already, if they do, take them out
+		$unique = false;
+		$count = 1;
+		if(strrpos($copy_array['title'], '('.__('Copy')) !== false){
+			$copy_array['title'] = substr($copy_array['title'], 0, strrpos($copy_array['title'], '('.__('Copy')));
+		}
+		if(strrpos($copy_array['slug'], '_'.__('Copy')) !== false){
+			$copy_array['slug'] = substr($copy_array['slug'], 0, strrpos($copy_array['slug'], '_'.__('Copy')));
+		}
+		$original_title = $copy_array['title'];
+		$original_slug = $copy_array['slug'];
+
+		//check the database until a new copy(count) isn't loaded, and then make the map title and slug the title/slug.(copy)($count)
+		while(!$unique){
+			$copy_array['title'] = $original_title.'('.__('Copy').')('.$count.')';
+			$copy_array['slug'] = $original_slug.'_'.__('Copy').'('.$count.')';
+			$checkSlug = ORM::factory('Map')->
+			where('slug', '=', $copy_array['slug'])->
+			find();
+			if(!$checkSlug->loaded()){
+				$unique = true;
+			}
+			else{
+				$count ++;
+			}
+		}
+
+		
 		$new_map->update_map($copy_array);
 		
 		//copy the map files
@@ -256,6 +296,17 @@ class Model_Map extends ORM {
 		foreach($map_sheets as $map_sheet)
 		{
 			$map_sheet->copy($new_map->id);
+		}
+		
+		$template = ORM::factory('Template')->
+		where('id', '=', $copy_array['template_id'])->
+		find();
+		
+		//if the template for this map cannot be used at all, create a copy for it
+		if(!$template->is_official){
+			$myTemplate = ORM::factory('Template');
+			$myTemplate = $template->copy($user_id);
+			$copy_array['template_id'] = $myTemplate->id;
 		}
 		
 		//create a new owner entry

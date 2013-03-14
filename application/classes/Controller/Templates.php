@@ -70,7 +70,7 @@ class Controller_Templates extends Controller_Loggedin {
 						{
 							$this->template->content->errors[] = '<a href="'.URL::base().'mymaps/add4?id='.$m->id.'">'.$m->title.'</a> '.__('is now missing its template.');
 							//create messages for the owners of maps that lost their templates
-							$message = __('The template your map used has been delete. Please fix',array(':title'=>$m->title, ':id'=>$m->id));
+							$message = __('The template your map used has been deleted. Please fix', array(':title'=>$m->title, ':id'=>$m->id));
 							$share = ORM::factory('Sharing')
 								->where('map_id','=',$m->id)
 								->where('permission','=', Model_Sharing::$owner)
