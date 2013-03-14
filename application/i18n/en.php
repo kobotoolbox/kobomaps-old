@@ -61,6 +61,7 @@ return array
 		'no user found with email'=>'No user found with that email.',
 		'Password Reset'=>'Password Reset',
 		'Your passwords don\'t match'=>'Your passwords don\'t match',
+		'Facebook login failed.'=>'Facebook login failed.',
 		
 		
 		//sign up page

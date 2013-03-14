@@ -26,6 +26,7 @@ require_once "Auth/OpenID/DatabaseConnection.php";
  */
 class Auth_OpenID_DatabaseConnectionMysqli extends Auth_OpenID_DatabaseConnection {
 	
+	public static $i = 0;
 	private $connection = null;
 	
 	function __construct($connection)
@@ -102,7 +103,24 @@ class Auth_OpenID_DatabaseConnectionMysqli extends Auth_OpenID_DatabaseConnectio
     	
     	//fancy way of calling with an array as a list of params
     	call_user_func_array(array($statement, 'bind_param'), refValues($params));
-    	    	
+    
+
+    	if(($pos = strpos($type,'b')) !== false)
+    	{
+    		$statement->send_long_data($pos, base64_decode($params[$pos+1]));
+    	}
+    	
+    	
+    	print_r($params);
+    	
+    	echo '<br/>';
+    	echo $sql;
+    	echo '<br/>';
+    	echo '<br/>';
+    	self::$i++;
+    	
+    	//if(self::$i > 2)    		
+			//exit;
     	$statement->execute();
     	
     	

@@ -399,8 +399,8 @@ class Auth_OpenID_SQLiStore extends Auth_OpenID_OpenIDStore {
     function getAssociation($server_url, $handle = null)
     {
         if ($handle !== null) {
-            $assoc = $this->_get_assoc($server_url, $handle);
-
+            $assoc = $this->_get_assoc($server_url, $handle);			
+			
             $assocs = array();
             if ($assoc) {
                 $assocs[] = $assoc;
@@ -415,6 +415,10 @@ class Auth_OpenID_SQLiStore extends Auth_OpenID_OpenIDStore {
             $associations = array();
 
             foreach ($assocs as $assoc_row) {
+            	echo  $assoc_row['secret'];
+            	echo "<br/>";
+            	echo  base64_encode($assoc_row['secret']);
+            	
                 $assoc = new Auth_OpenID_Association($assoc_row['handle'],
                                                      $assoc_row['secret'],
                                                      $assoc_row['issued'],

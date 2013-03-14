@@ -91,9 +91,7 @@ class Controller_Login extends Controller_Main {
 			
 			set_include_path(get_include_path() . PATH_SEPARATOR . MODPATH.'vendor/php-openid/');
 			
-			require_once Kohana::find_file('php-openid', 'Auth/OpenID/Consumer');
-			require_once Kohana::find_file('php-openid', 'Auth/OpenID/MySQLiStore');
-			require_once Kohana::find_file('php-openid', 'Auth/OpenID/DatabaseConnectionMysqli');
+			require_once Kohana::find_file('php-openid', 'Auth/OpenID/Consumer');			
 			require_once Kohana::find_file('php-openid', 'Auth/OpenID/SReg');
 			require_once Kohana::find_file('php-openid', 'Auth/OpenID/AX');
 			require_once Kohana::find_file('php-openid', 'Auth/OpenID/PAPE');
@@ -154,16 +152,13 @@ class Controller_Login extends Controller_Main {
 	
 	
 	protected function &getStore() {
-		/************************************************************************************
-		 * 
-		 * 
-		 * 
-		 *  PROBLEM IS THE DATABASE DRIVER, NOT STORING THE SIGNATURE CORRECTLY
-		 * 
-		 * 
-		 * 
-		 * 
-		 */
+		
+		
+		//require_once Kohana::find_file('php-openid', 'Auth/OpenID/MySQLiStore');
+		//require_once Kohana::find_file('php-openid', 'Auth/OpenID/DatabaseConnectionMysqli');
+		require_once Kohana::find_file('php-openid', 'Auth/OpenID/FileStore');
+		
+		/*
 		$server = Kohana::$config->load('database.default.connection.hostname');
 		$user_name = Kohana::$config->load('database.default.connection.username');
 		$password = Kohana::$config->load('database.default.connection.password');
@@ -174,6 +169,35 @@ class Controller_Login extends Controller_Main {
 		$openIdDb = new Auth_OpenID_DatabaseConnectionMysqli($database);
 		
 		$s = new Auth_OpenID_MySQLiStore($openIdDb);
+		*/
+		
+		
+		$store_path = null;
+		if (function_exists('sys_get_temp_dir')) {
+			$store_path = sys_get_temp_dir();
+		}
+		else {
+			if (strpos(PHP_OS, 'WIN') === 0) {
+				$store_path = $_ENV['TMP'];
+				if (!isset($store_path)) {
+					$dir = 'C:\Windows\Temp';
+				}
+			}
+			else {
+				$store_path = @$_ENV['TMPDIR'];
+				if (!isset($store_path)) {
+					$store_path = '/tmp';
+				}
+			}
+		}
+		$store_path .= DIRECTORY_SEPARATOR . 'kobo_open_id';
+		
+		$store_path = substr($_SERVER['SCRIPT_FILENAME'], 0, strlen($_SERVER['SCRIPT_FILENAME'])-9);
+		$store_path .= 'uploads/openid';
+		
+		
+		$s = new Auth_OpenID_FileStore($store_path);
+		
 		return $s;
 		
 		require_once Kohana::find_file('php-openid', 'Auth/OpenID/FileStore');
