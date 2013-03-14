@@ -461,3 +461,10 @@ ALTER TABLE  `menu_items` ADD INDEX (`menu`);
 ALTER TABLE  `menu_items` ADD FOREIGN KEY (`menu`) REFERENCES  `menus` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION ;
 UPDATE `metadata` SET  `v` =  '1.0.043' WHERE  `metadata`.`k` ='Database Version';
 
+
+/** John Etherton -- 2013-03-14 -- Added a place for Open ID ids in the user table**/
+ALTER TABLE  `users` ADD  `open_id` CHAR( 255 ) NULL DEFAULT NULL AFTER  `password`;
+ALTER TABLE  `users` ADD INDEX  `open_id_index` (  `open_id` );
+ALTER TABLE  `users` CHANGE  `password`  `password` CHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+UPDATE `metadata` SET  `v` =  '1.0.044' WHERE  `metadata`.`k` ='Database Version';
+

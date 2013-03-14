@@ -25,7 +25,8 @@ class Controller_Profile extends Controller_Loggedin {
 				'password'=>'',
 				'password_confirm'=>'',
 				'email_alerts'=>$user->email_alerts,
-				'email_warnings'=>$user->email_warnings
+				'email_warnings'=>$user->email_warnings,
+				'open_id'=>$user->open_id,
 				);
 		//turn set focus to first UI form element
 		$this->template->html_head->script_views[] = '<script type="text/javascript">$(document).ready(function() {$("input:text:visible:first").focus();});</script>';

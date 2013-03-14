@@ -24,7 +24,8 @@ class Controller_Signup extends Controller_Main {
 				'password_confirm'=>'',
 				'email_alerts'=>0,
 				'email_warnings'=>0,
-				'open_id_call'=>0
+				'open_id_call'=>0,
+				'open_id'=>''
 				);
 		
 		//check if this is being called as a result of a open id call
@@ -36,6 +37,8 @@ class Controller_Signup extends Controller_Main {
 			$data['password'] = $data['password_confirm'] = $sesh->get_once('password','');
 			$data['last_name'] = $sesh->get_once('last_name','');
 			$data['first_name'] = $sesh->get_once('first_name','');
+			$data['open_id']= $sesh->get_once('open_id','');
+			
 		}
 		
 			
@@ -81,7 +84,7 @@ class Controller_Signup extends Controller_Main {
 				}
 				//conver the DOB to a format mysql recognizes
 				$user = ORM::factory("User");
-				$user->create_user($_POST, array('username','password','email', 'first_name','last_name', 'email_alerts', 'email_warnings'));
+				$user->create_user($_POST, array('username','password','email', 'first_name','last_name', 'email_alerts', 'email_warnings', 'open_id'));
 				// Add the login role to the user (add a row to the db)
 				$login_role = new Model_Role(array('name' =>'login'));
             	$user->add('roles', $login_role);

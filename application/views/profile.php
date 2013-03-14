@@ -42,6 +42,7 @@
 ?>
 
 <?php echo Kohana_Form::open(); ?>
+	<?php echo Form::hidden('open_id', $data['open_id']);?>
 	<table>
 		<tr>
 			<td>
@@ -75,6 +76,7 @@
 			</td>
 					
 		</tr>
+		<?php if($data['open_id'] == null OR $data['open_id'] == ''){?>
 		<tr>
 			<td>
 				<?php echo Form::label('password', __("password"));  ?>
@@ -91,6 +93,7 @@
 			</td>
 			
 		</tr>
+		<?php }?>
 		<tr>
 			<td></td>
 			<td></td>

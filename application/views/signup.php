@@ -30,8 +30,9 @@ if($data['open_id_call'] != 0)
 	$attributes['readonly'] = 1;
 }
 ?>
+<input type="hidden" name="open_id" value="<?php echo $data['open_id'];?>"/>
 	<table>
-		<tr <?php if($data['open_id_call'] != 0){echo 'style="display:none;"';}?>>
+		<tr <?php if($data['open_id_call'] != 0 AND $data['email'] != ''){echo 'style="display:none;"';}?>>
 			<td>
 				<?php echo Form::label('email_address', __('email address'));  ?>
 			</td>

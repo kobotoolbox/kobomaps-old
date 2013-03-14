@@ -21,9 +21,10 @@
 }
 ?>
 
-<?php echo Kohana_Form::open(); ?>
-<form action method="post" accept-charset="utf-8" id="loginForm">
+
+<form action method="post" accept-charset="utf-8" id="loginForm" name="loginForm">
 	<input type="hidden" id="open_id" name="open_id"/>
+	<input type="hidden" id="open_id_url" name="open_id_url"/>
 	<table id="logintable">
 		<tr>
 			<td>
@@ -114,8 +115,13 @@
 
     FB.getLoginStatus(function(response) {
     	  if (response.status === 'connected') {
+    		  <?php if(count($errors) == 0 AND FALSE ){?>
     		  $("#open_id").val(response.authResponse.userID);
     		  $("#password").val(response.authResponse.accessToken);
+    		  $("#open_id_url").val('facebook.com');
+    		  $("#loginForm").submit();
+    		  return true;
+    		  <?php } ?>
     	  } else if (response.status === 'not_authorized') {
     	    //do nothing
     	  } else {
@@ -131,6 +137,8 @@
 	        if (response.authResponse) {
 	        	$("#open_id").val(response.authResponse.userID);
 	    		$("#password").val(response.authResponse.accessToken);
+	    		$("#open_id_url").val('facebook.com');
+	    		$("#loginForm").submit();
 	        } else {
 	            alert("<?php echo __('Facebook login failed.');?>");
 	        }

@@ -55,6 +55,29 @@ class Controller_Login extends Controller_Main {
 		
 		if(!empty($_POST)) // They've submitted their login form
 		{
+			//check if it's a facebook style login
+			if(isset($_POST['open_id']) AND $_POST['open_id']!='' AND isset($_POST['open_id_url']) AND $_POST['open_id_url']!='')
+			{
+				//does such a person exists
+				$user = ORM::factory('User')
+					->where('open_id', '=', $_POST['open_id'] . $_POST['open_id_url'])
+					->find();
+				if(!$user->loaded())
+				{
+					Session::instance()->set('open_id_sign_up','1');
+					Session::instance()->set('email','');
+					Session::instance()->set('password',$_POST['password']);
+					Session::instance()->set('first_name','');
+					Session::instance()->set('last_name','');
+					Session::instance()->set('open_id',$_POST['open_id'] . $_POST['open_id_url']);
+					HTTP::redirect('/signup');
+				}
+				else
+				{ //they do exist
+					$_POST['username'] = $user->username;		
+				}
+			}
+			
 			//check if they're using open id
 			
 			$auth->login($_POST['username'], $_POST['password'], true);
@@ -63,7 +86,7 @@ class Controller_Login extends Controller_Main {
 				HTTP::redirect(Session::instance()->get_once('returnUrl','mymaps'));	
 			}
 			else
-			{
+			{				
 				$this->template->content->errors[] = __("incorrect login");					
 			}
 		
@@ -443,7 +466,7 @@ class Controller_Login extends Controller_Main {
 			
 			//first check if there's a user already with this username, which is the email address
 			$user = ORM::factory('User')
-				->where('username', '=',$email)
+				->where('open_id', '=',$email)
 				->find();
 			if($user->loaded()) //if a user does exists then log them in
 			{
@@ -459,6 +482,7 @@ class Controller_Login extends Controller_Main {
 				Session::instance()->set('password',$open_id);
 				Session::instance()->set('first_name',$first_name);
 				Session::instance()->set('last_name',$last_name);
+				Session::instance()->set('open_id',$email);
 				HTTP::redirect('/signup');
 			}
 		}
