@@ -6,6 +6,9 @@
 * Started on 2012-11-08
 *************************************************************/
 
+/**
+* This class sets up the default menus and will handle the dynamic menus that admins can create
+*/
 class Helper_Menus
 {
 	public static function make_menu($page, $user)
@@ -34,7 +37,7 @@ class Helper_Menus
 			}
 			echo '<a href="'.url::base().'public/maps">'.__("Public Maps").'</a></li>';
 			
-			//register page
+			//signup page
 			if($page == "signup")
 			{
 				echo '<li class="selected">';
@@ -45,7 +48,7 @@ class Helper_Menus
 			}
 			echo '<a href="'.url::base().'signup">'.__("Sign Up").'</a></li>';
 			
-			//register page
+			//login page
 			if($page == "login")
 			{
 				echo '<li class="selected">';
@@ -165,7 +168,6 @@ class Helper_Menus
 				echo '<a href="'.url::base().'message">'.__("Messages").$unread.'</a></li>';
 				
 				
-				
 			}
 		
 	
@@ -180,7 +182,7 @@ class Helper_Menus
 					echo '<li class="adminmenu">';
 				}
 				echo '<a href="'.url::base().'custompage">'.__("Custom Page").'</a></li>';		
-									
+								
 				
 			}
 		}//end is logged in
@@ -192,7 +194,11 @@ class Helper_Menus
 		
 	}//end function
 	
-	
+  
+  
+	/**
+  * contains the submenus for the pages, contained on the second line of menus, dynamically creates the ones created by admins using the database
+  */
 	public static function make_submenu($page, $user)
 	{
 		
@@ -365,8 +371,8 @@ class Helper_Menus
 		}		
 		
 		echo '</ul>';
+    //this helps make the divs float correctly
 		echo '<p style="clear:both;"></p>';
-	
 	
 	
 	}//end function
@@ -401,7 +407,6 @@ class Helper_Menus
 		}
 		else
 		{
-
 			echo ' <li class="loginMenu">';
 			echo '<a href="'.url::base().'login">'.__('Login, Signup') .'</a>';
 			echo '<ul>';

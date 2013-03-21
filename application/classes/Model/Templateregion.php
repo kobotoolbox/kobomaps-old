@@ -95,4 +95,4 @@ class Model_Templateregion extends ORM {
 	
 	
 	
-} // End User Model
+} // End Templateregion Model

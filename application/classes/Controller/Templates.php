@@ -24,12 +24,11 @@ class Controller_Templates extends Controller_Loggedin {
 
   	
 	/**
-	where users go to change their profiel
+	where users go to add templates
 	*/
 	public function action_index()
 	{
-		
-	
+
 		/***** initialize stuff****/
 		//The title to show on the browser
 		$this->template->html_head->title = __("Templates");
@@ -417,7 +416,7 @@ class Controller_Templates extends Controller_Loggedin {
 	 
 	 
 	 /**
-	  * the function for view a template
+	  * the function to view a template
 	  * super exciting
 	  */
 	 public function action_view()
@@ -519,9 +518,6 @@ class Controller_Templates extends Controller_Loggedin {
 	 
 	 
 	 
-	 
-	 
-	 
 	 /**
 	  * This function copies an existing template
 	  * The template to copy is referenced via $_GET['id']
@@ -563,8 +559,8 @@ class Controller_Templates extends Controller_Loggedin {
 	 
 	 /**
 	  * Used to make the auto complete work on the templates page
-	  * expets there to be a GET param of 'term' of type String
-	  * there could also be a GET param of 'mine'
+	  * expects there to be $_GET['term'] of type String
+	  * there could also be $_GET['mine']
 	  */
 	 public function action_search()
 	 {
@@ -579,7 +575,8 @@ class Controller_Templates extends Controller_Loggedin {
 	 	}
 	 
 	 	//if you're an admin and you can do whatever you want then you see all templates
-		$templates = ORM::factory("Template");		//if there is a search term
+		$templates = ORM::factory("Template");		
+		//if there is a search term
 		if(isset($_GET['term']) AND $_GET['term'] != "")
 		{
 			$query = '%'.$_GET['term'].'%';
@@ -596,10 +593,7 @@ class Controller_Templates extends Controller_Loggedin {
 		}
 		else
 		{
-			if($this->is_admin)
-			{							
-			}
-			else //you're a regular user and can only see your own templates
+			if(!$this->is_admin) //you're a regular user and can only see your own templates
 			{
 				$templates = $templates->where_open()
 					->where_open()
@@ -649,7 +643,7 @@ class Controller_Templates extends Controller_Loggedin {
 	 		$this->deleted_regions = $kml_converter->deleted_regions;	 		
 	 		return $json_file;
 	 	}
-	 	//Now deal with the case whe we're creating a new templae and just uploaded a file
+	 	//Now deal with the case whe we're creating a new template and just uploaded a file
 	 	else
 	 	{	 		
 		 	if (! Upload::valid($upload_file) OR ! Upload::not_empty($upload_file))
@@ -688,6 +682,7 @@ class Controller_Templates extends Controller_Loggedin {
 	  * Checks to see if the user has exceeded thier
 	  * maximum number of maps and if so
 	  * sends them to an error page
+	  * @return boolean if user can add another map
 	  */
 	 protected function check_max_items()
 	 {

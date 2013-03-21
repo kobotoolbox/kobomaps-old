@@ -110,7 +110,7 @@ class Model_Map extends ORM {
 	 * $form = ORM::factory('Map', $id)->update_map($_POST);
 	 * ~~~
 	 *
-	 * @param array $values
+	 * @param array $values, should contain all the data to be with $expected
 	 * @throws ORM_Validation_Exception
 	 */
 	public function update_map($values)
@@ -167,7 +167,9 @@ class Model_Map extends ORM {
 		$map->delete();
 	}
 
-	
+	/**
+	* default variable for the map style used in Googlemaps
+	*/
 	public static  $style_default = '[
 	  {
 		featureType: "administrative.province",
@@ -279,7 +281,6 @@ class Model_Map extends ORM {
 		}
 		
 		
-		
 		//copy the .xls file
 		$new_map->json_file = $new_json;
 		$extention = pathinfo($this->file, PATHINFO_EXTENSION);
@@ -315,10 +316,12 @@ class Model_Map extends ORM {
 		return $new_map;
 	}
 	
+
 	/**
 	 * Custom function to make sure that the slug isn't a
 	 * controller
 	 * @param string $value Slug value as a string
+	 * @return boolean if slug is a controller
 	 */
 	public static function slug_no_controller($value)
 	{
@@ -369,4 +372,4 @@ class Model_Map extends ORM {
 		return $slug;
 	}
 	
-} // End User Model
+} // End Map Model

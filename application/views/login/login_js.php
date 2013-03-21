@@ -1,13 +1,13 @@
 <script type="text/javascript">
+  
 	$(document).ready(function() 
 	{
+		  $("a[rel]").overlay({
+			  mask: 'grey',
+			  effect: 'apple'
+		  });
 		
-		$("a[rel]").overlay({
-			mask: 'grey',
-			effect: 'apple'
-		});
-		
-    });
+   });
     
     
     function submit_reset()

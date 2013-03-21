@@ -12,14 +12,12 @@
 class Helper_Email
 {
 
-	
-	
 	/**
 	 * Used to send emails to people
 	 * @param array $to something like array('jsmith@email.com'=>'Jimmy Smith', 'ksmith@email.com'=>'Kelly Smith');
 	 * @param array $from something like array('admin@kobomap.com'=>'Kobo Maps Admin')
 	 * @param string $subject you know like "you've excited your usage limit"
-	 * @param string $body This can be HTML "<h1>Warning</h1> You've blown way past your limi."
+	 * @param string $body This can be HTML "<h1>Warning</h1> You've blown way past your limit."
 	 */
 	public static function send_email($to, $from, $subject, $body)
 	{	

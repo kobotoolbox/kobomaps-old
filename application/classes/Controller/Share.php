@@ -30,7 +30,7 @@ class Controller_Share extends Controller_Main {
 
 
 	/**
-	where users go to change their profiel
+	* The window that is shown when users click on share throughout the website
 	*/
 	public function action_window()
 	{
@@ -84,6 +84,7 @@ class Controller_Share extends Controller_Main {
 		
 	}//end action_index
 	
+
 	/**
 	 * what's called when a user is finished posting to facebook
 	 */
@@ -97,11 +98,11 @@ class Controller_Share extends Controller_Main {
 	
 	
 	
-	
 	/**
 	 * this function is used to process ajax requests
 	 * to toggle the privacy state of a map. This method expects there to be
 	 * a $_POST['id'] to know which map we're trying to change.
+	 * echoes out a JSON string with the status of the action
 	 */
 	public function action_changestateajax()
 	{
@@ -138,6 +139,7 @@ class Controller_Share extends Controller_Main {
 	 * $_POST['id'] Int ID of the map you're adding the colaborator to
 	 * $_POST['name'] String username or email address of the user in question
 	 * $_POST['permission'] String level of access to the map the user will have 
+	 * echoes JSON string with the status of the input
 	 */
 	public function action_adduserajax()
 	{
@@ -241,6 +243,7 @@ class Controller_Share extends Controller_Main {
 	 * @param ORM::map $map
 	 * @param ORM::user $user_to_add
 	 * @param Model_Sharing $permission
+	 * echoes out JSON string with the status that the user was added as a collaborator
 	 */
 	protected function permissionsUpdated($map, $user_to_add, $permission){
 		$this->response->headers('Content-Type','application/json');
@@ -275,7 +278,8 @@ class Controller_Share extends Controller_Main {
 	
 	/**
 	 * Calls database once per load to see if requested map is valid
-	 * @return boolean|ORM
+	 * @return boolean||ORM
+	 * also echoes out JSON string as an error if map is not valid
 	 */
 	protected function checkMapValid(){
 		//get the map id
@@ -293,7 +297,7 @@ class Controller_Share extends Controller_Main {
 	/**
 	 * Use this to check that the $_POST['id'] specified
 	 * is a valid map and is owned by the current user.
-	 * If all is good returns true. If all is not good it returns
+	 * @return boolean If all is good returns true. If all is not good it returns
 	 * false and echos out a JSON error messages
 	 */
 	protected function checkMapAndUser($map)
@@ -311,6 +315,7 @@ class Controller_Share extends Controller_Main {
 	/**
 	 * checks to see if this user is an editor for the map
 	 * @param ORM::map $map
+	 * @return boolean if user has access to map
 	 */
 	protected function checkMapAndEditor($map){
 		$share = ORM::factory('Sharing')->
@@ -324,11 +329,12 @@ class Controller_Share extends Controller_Main {
 		
 		return true;
 	}
+
 	
 	/**
 	 * Use this to check that the $_POST['id'] specified
 	 * is a valid share entry in the DB and that the map is owned by the current user.
-	 * If all is good returns the share object. If all is not good it returns
+	 * @return boolean If all is good returns the share object. If all is not good it returns
 	 * false and echos out a JSON error messages
 	 */
 	protected function checkShare()
@@ -361,10 +367,11 @@ class Controller_Share extends Controller_Main {
 	
 	
 	/**
-	 * This function is used to update the permission of a colaborator via AJAX
+	 * This function is used to update the permission of a collaborator via AJAX
 	 * 
 	 * $_POST['id'] Int ID of the sharing row in the DB
 	 * $_POST['permission'] String level of access to the map the user will have
+	 * echoes out JSON string with the status that the user was added as a collaborator
 	 */
 	public function action_updateuserajax()
 	{
@@ -396,16 +403,15 @@ class Controller_Share extends Controller_Main {
 		echo '{"status":"success", "message":""';
 	
 		echo '}';
-	
-	
 	}
 	
 	
 	
 	/**
-	 * This function is used to remove users as colaborators from a map.
+	 * This function is used to remove users as collaborators from a map.
 	 * This requires
-	 * $_POST['id'] Int ID of the share column in the DB that we're about to remove	 
+	 * $_POST['id'] Int ID of the share column in the DB that we're about to remove	
+	 * echoes out JSON string with the status that the user was removed as a collaborator 
 	 */
 	public function action_deluserajax()
 	{
@@ -420,7 +426,7 @@ class Controller_Share extends Controller_Main {
 		
 		$map_id = $share->map_id;
 	
-		//finally, we can remove the user as a colaborator.
+		//finally, we can remove the user as a collaborator.
 	
 		$share->delete();
 	

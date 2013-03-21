@@ -9,7 +9,7 @@
 
 <script type="text/javascript">
 /*
- * Created/split to 2013-03-8
+ * Created/split to 2013-03-08
  * Dylan Gillespie
  * functions that should only be called when the share window is open, as all the divs are only in those pages
  * 
@@ -115,7 +115,7 @@
 	}
 
 	/**
-	 * This will remove a colaborator from a map
+	 * This will remove a collaborator from a map
 	 */
 	function delColab(id)
 	{

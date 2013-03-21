@@ -79,6 +79,7 @@ class Model_Template extends ORM {
 	
 	/**
 	 * Delete a template
+	 * @param int $id of the template
 	 */
 	public static function delete_template($id)
 	{

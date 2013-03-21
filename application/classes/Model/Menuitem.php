@@ -29,7 +29,10 @@ class Model_Menuitem extends ORM {
 		return array();
 	}//end function
 	
-	
+	/**
+	* updates the menuitem
+	* @param array $values that contains the info for the menuitem
+	*/
 	public function update_menuitem($values)
 	{
 	
@@ -40,7 +43,15 @@ class Model_Menuitem extends ORM {
 		$this->save();
 	}//end function
 	
-	//creates a menu item
+
+	/**
+	* Used to create menuitems from the custompage
+	* @param int $menu
+	* @param string $text
+	* @param string $image_url
+	* @param string $item_url
+	* @return ORM::Menuitem that was created
+	*/
 	public static function create_menuitem($menu, $text, $image_url, $item_url){
 		
 		$item = ORM::factory('Menuitem');
@@ -57,6 +68,11 @@ class Model_Menuitem extends ORM {
 		return $item;
 	}
 	
+	/**
+	* Deletes the menuitem with the id
+	* @param int $item_id
+	* @return string deleted
+	*/
 	public static function delete_menuitem($item_id){
 		$item = ORM::factory('Menuitem', $item_id);
 			$item->delete();

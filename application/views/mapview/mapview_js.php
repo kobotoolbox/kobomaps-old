@@ -43,7 +43,7 @@
 
 /*Todo: Make all these setings on the website:*/
 var kmapInfodivHeight = 280;
-//modify the base setting for the Google chart here (if necessary)
+//modifiers for the flot graphs
 var kmapInfochartWidth = 315; //if this number is changed, the legend div (which contains the national graph) also needs to be adjusted 
 var kmapInfochartBarHeight = 40; //these are numbers, not strings
 var kmapInfochartXAxisMargin = 35;
@@ -72,29 +72,35 @@ var region_color = '#<?php echo $map->region_color ?>';
 var polygon_color = '<?php echo $map->polygon_color ?>';
 var graph_color = '#<?php echo $map->graph_bar_color ?>';
 var graph_select_color = '#<?php echo $map->graph_select_color ?>';
+
 /**
  *  gives us a list of names for geographicAreas
  */
 var geographicAreaNames = new Array();
+
 /**
  * global variable holding an array of points for each area so areaPoints["bomi"] 
  * would return an array of all the points for Bomi
  */
-var areaPoints = new Array();   
+var areaPoints = new Array(); 
+  
 /**
  * global variable holding the polygons for each area. areaGPolygons["bomi"] 
  * would return the polygon for Bomi
  */
 var areaGPolygons = new Array();
+
 /**
  * global variable holding the center point lat,lon for each area, this is 
  * where the marker will go
  */
 var areaCenterPoints = new Array(); 
+
 /**
  * global variable holding all the Labels for each area
  */
 var labels = new Array();
+
 /**
  * global variable that holds all of the info windows
  */
@@ -113,7 +119,7 @@ var indicatorsToUpdateParams = new Array();
  */
 var round = true;
 
-//add a title to the map 
+//add a title to the map and start the listeners and buttons
 	$(document).ready(function() {
 	   $("#kmapTitle").html(<?php echo json_encode($map->title);?>);
 	   
@@ -125,8 +131,6 @@ var round = true;
 
 //itintializes everything, both the mandatory google maps stuff, and our totally awesome json to gPolygon code
 function initialize_map() {
-
-	  
 	  
 	//creates the options for defining the zoom level, map type, and center of the google map
 	var myOptions = {
@@ -258,6 +262,10 @@ function parseIndicators(elementId, indicators, level)
 	return newLevel;
 }
 
+/**
+* used to create the sheet arrows and ability to scroll through them
+* @param jsonDataUrl location of json data
+*/
 function parseJsonData(jsonDataUrl)
 {
 	//initiates a HTTP get request for the csv file
@@ -301,8 +309,6 @@ function parseJsonData(jsonDataUrl)
 
 		//mark the last sheet so we use it in measurement later on
 		$("#sheetSelector_"+lastSheetId).addClass('lastSheetSelector');
-
-		
 
 		if(sheetCount > 1)
 		{

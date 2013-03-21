@@ -10,7 +10,7 @@
 class Controller_Statistics extends Controller_Loggedin {
 
 	/**
-	 * 
+	 * Creates the statistic page where view usage of maps are seen
 	*/
 	public function action_index()
 	{
@@ -38,7 +38,10 @@ class Controller_Statistics extends Controller_Loggedin {
 
 	/**
 	 * AJAX call for getting JSON data for a specific set of maps and time frame
-	 * POST variables for this are start, end, and map. 
+	 * $_POST['start'] string for the start date to grab data
+	 * $_POST['end'] string for the end date to end data
+	 * $_POST['map'] ORM::map from which to grab view data
+	 * echoes JSON string of the array for the maps or is blank if data does not fulfill the requirements
 	 */
 	public function action_getData(){
 		
@@ -92,11 +95,12 @@ class Controller_Statistics extends Controller_Loggedin {
 		}
 		echo ']';
 	}
+
 	
 	/**
 	 * AJAX call to create CSV file from the data that is contained within the 'csvform'
+	 * creates the actual info that is printed to the file and echoes it
 	 */
-	
 	function action_csvexport(){
 		$this->auto_render = false;
 		$this->response->headers('Content-Type','text/csv');
@@ -133,10 +137,7 @@ class Controller_Statistics extends Controller_Loggedin {
 		else{
 			return;
 		}
-		
-		
 	}
 	
 		 
-	
 }//end of class
