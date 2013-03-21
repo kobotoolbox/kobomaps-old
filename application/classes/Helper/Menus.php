@@ -57,12 +57,15 @@ class Helper_Menus
 			echo '<a href="'.url::base().'login">'.__("Log In").'</a></li>';
 		}
 		
+    //see if the given user is an admin, if so they can do super cool stuff
+		$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
+    
 		//if the user is logged in
 		if($user != null)
 		{
 			$login_role = ORM::factory('Role')->where("name", "=", "login")->find();
 
-			if($user->has('roles', $login_role))
+			if($user->has('roles', $login_role) || $user->has('roles', $admin_role))
 			{
 				
 				// home page
@@ -147,6 +150,7 @@ class Helper_Menus
 				{
 					echo '<li>';
 				}
+        //finds out how many unread messages are in the center and displays them
 				$unread = ORM::factory('Message')					
 					->where('user_id','=',$user->id)
 					->where('unread','=',1)
@@ -164,9 +168,7 @@ class Helper_Menus
 				
 			}
 		
-		
-			//see if the given user is an admin, if so they can do super cool stuff
-			$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
+	
 			if($user->has('roles', $admin_role))
 			{
 				if($page == "custompage")

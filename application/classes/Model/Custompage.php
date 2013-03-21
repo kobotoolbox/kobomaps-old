@@ -74,6 +74,7 @@ class Model_Custompage extends ORM {
 	}
 	
 	public static function delete_page($page_id){
+	//special pages are created upon creation of database and can only be edited by their content
 		$page = ORM::factory('Custompage', $page_id);
 		if(!$page->special){
 			$page->delete();

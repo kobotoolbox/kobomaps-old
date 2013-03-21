@@ -4,7 +4,7 @@
 * This software is copy righted by Kobo 2013
 * Writen by Dylan Gillespie, Etherton Technologies <http://ethertontech.com>
 * Started on 2013-03-01
-* Creating custom html scripts for the site
+* Creating custom html script pages for the site
 *************************************************************/
 
 class Controller_Custompage extends Controller_Loggedin {
@@ -19,7 +19,7 @@ class Controller_Custompage extends Controller_Loggedin {
 		if($auth->logged_in('admin'))
 		{
 			$this->session = Session::instance();
-			//if auto rendere set this up
+			//if auto rendered set this up
 			if ($this->auto_render)
 			{
 				$data = array(
@@ -32,6 +32,7 @@ class Controller_Custompage extends Controller_Loggedin {
 				where('user_id', '=', $this->user->id)->
 				find_all();
 				
+				//grab all of the pages that are in the database from the start, such as main/about/help/support
 				$default = ORM::factory('Custompage')->
 				where('user_id', '=', 0)->
 				find_all();
@@ -66,7 +67,7 @@ class Controller_Custompage extends Controller_Loggedin {
 	public function action_index()
 	{
 		$auth = Auth::instance();
-		
+		//only admins should be allowed to see the page in the first place, and if not, are redirected to mymaps
 		if(!$auth->logged_in('admin'))
 		{
 			HTTP::redirect('mymaps');
@@ -78,6 +79,7 @@ class Controller_Custompage extends Controller_Loggedin {
 				$response = Model_Custompage::delete_page($_POST['pages']);
 				if($response == __('That page cannot be deleted.')){
 					$this->template->content->errors[] = $response;
+					//reload the page with data being set to the page that was attempted to be deleted
 					$data['id'] = $_POST['pages'];
 					$data['slug'] = $_POST['slug'];
 					$data['content'] = $_POST['content'];
@@ -89,15 +91,18 @@ class Controller_Custompage extends Controller_Loggedin {
 				}
 			}
 			else{
+			//if they submitted a save/create page request
 				$data['slug'] = $_POST['slug'];
 				$data['content'] = $_POST['content'];
 	
+			//throw an error of either are empty
 				if($data['slug'] == '' || $data['content'] == ''){
 					$this->template->content->errors[] = __('The title or the content was empty.');
 					$this->template->content->data = $data;
 					return;
 				}
 				
+				//the select page bar on the page has default of 0 for new page
 				if($_POST['pages'] == 0){
 					$newPage = Model_Custompage::create_page($this->user->id, $data['slug'], $data['content']);
 					$this->template->content->pages[$newPage->id] = $newPage->slug;
@@ -146,6 +151,9 @@ class Controller_Custompage extends Controller_Loggedin {
 	}//end action_index
 	
 		 
+	/**
+	* used by the Custompage controller to gather the data on the current page that was selected in the menu
+	*/
 	public function action_getpage(){
 		$this->auto_render = false;
 		

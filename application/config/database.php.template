@@ -19,8 +19,8 @@ return array
 			 * Ports and sockets may be appended to the hostname.
 			 */
 			'hostname'   => 'localhost',
-			'database'   => 'kobodb',
-			'username'   => 'kobouser',
+			'database'   => 'work',
+			'username'   => 'root',
 			'password'   => 'password',
 			'persistent' => FALSE,
 		),

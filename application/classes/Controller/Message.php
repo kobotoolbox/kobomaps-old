@@ -40,6 +40,10 @@ class Controller_Message extends Controller_Loggedin {
 		
 	}//end action_index
 		
+  /**
+  * Reads in the POST data from the form
+  * @return string of JSON if the $message form is empty, else returns string saying success
+  */
 	public function action_submitmessage(){
 		$this->auto_render = false;
 		$this->response->headers('Content-Type','application/json');
@@ -74,16 +78,17 @@ class Controller_Message extends Controller_Loggedin {
 		
 		if(!empty($_POST)) // They've submitted the form to update his/her wish
 		{
+    //try is for if they checked more than one message to delete
 			try
 			{
 				if($_POST['action'] == 'delete')
 				{
 					$message = ORM::factory('Message',$_POST['message_id']);
-					
-					$this->template->content->messages[] = __('Message Deleted');
+          
 					Model_Message::delete_message($_POST['message_id']);
-						
+					$this->template->content->messages[] = __('Message Deleted');
 				}
+        
 				if($_POST['action'] == 'delete_selected' AND isset($_POST['message_check']))
 				{
 					foreach($_POST['message_check'] as $message_id=>$value)
@@ -127,6 +132,9 @@ class Controller_Message extends Controller_Loggedin {
 		$this->template->content = $view;
 	}
 	
+  /**
+  * Creates a new View for the messageDetail popup window, returns blank if that message doesn't exist
+  */
 	public function action_messageDetails(){
 		$this->auto_render = false;
 		

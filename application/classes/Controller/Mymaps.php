@@ -128,11 +128,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	
 	/**
 	 * the function for editing a form
-	 * super exciting
+	 * Creates the map edit/create form that is first seen upon clicking edit/create
 	 */
 	 public function action_add1()
 	 {
 	 	//initialize data
+		//default values that the form displays
 		$data = array(
 			'id'=>'0',
 			'title'=>'',
@@ -289,16 +290,18 @@ class Controller_Mymaps extends Controller_Loggedin {
 					//if the map already exists, keep the same map_creation_progress
 					$_POST['map_creation_progress'] = 1;	//$map->map_creation_progress;
 				}
-				//this handles is private
+				//this handles is private, show gradient, and show empty fields
 				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;
 				$_POST['show_empty_name'] = isset($_POST['show_empty_name']) ? 1 : 0;
 				$_POST['gradient'] = isset($_POST['gradient']) ? 1 : 0;
 
+				//if the gradient has been chosen, put the two color keys together seperated by a space
 				if($_POST['gradient'] == 1){
 					$_POST['polygon_color'] = $_POST['polygon_color'].' '.$_POST['regionTwo'];
 					$data['polygon_color'] = $_POST['polygon_color'];
 				}
 				else {
+				//default gradient is color to white
 					$data['polygon_color'] = $_POST['polygon_color'].' FFFFFF';
 				}
 
