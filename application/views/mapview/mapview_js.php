@@ -365,7 +365,10 @@ function parseJsonData(jsonDataUrl)
 
 
 
-
+/**
+* Allows for the scrolling between different sheets on the map
+* @param int sheetId the id of the sheet that needs to be scrolled to
+*/
 function sheetSelect(sheetId)
 {
 
@@ -390,6 +393,7 @@ function sheetSelect(sheetId)
 		$('#sheetnames li.sheet2 span').removeClass("active");		
 		sheetButton.addClass("active");
 
+		//allows the user to hit play and start at this sheet
 		playback.setSheetStart(sheetId);
 
 		///////////////////////////////////////////////////////
@@ -453,7 +457,11 @@ function sheetSelect(sheetId)
 }//end function
 
 
-
+/**
+* Controls the clicking of the indicators on the left side of the page
+* @param view indicatorItem is the indicator to turn on
+* @param boolean forceOn if the map should be on
+*/
 function midIndicatorClick(indicatorItem, forceOn)
 {
 	if(forceOn != undefined && forceOn == false)
@@ -479,6 +487,10 @@ function midIndicatorClick(indicatorItem, forceOn)
 }
 
   
+/**
+* Highlights this item and makes the sheets go to it
+* @param div dataItem to be turned on
+*/
 function dataIndicatorClick(dataItem)
 {		
 	$('span.dataLevel').removeClass("active"); //removes highlight of any other level3 li element
@@ -490,6 +502,7 @@ function dataIndicatorClick(dataItem)
 /**
  * Takes in an indicator string and then renders the map according to the data for that indicator
  * If the indicator doesn't exist it'll just exit gracefully
+ * @param string indicator is the example (0_0_2) value of an indicator
  */
 function showByIndicator(indicator)
 {
@@ -607,7 +620,10 @@ function showByIndicator(indicator)
 }
 
 
-  
+/**
+* @param string jsonUrl location of the json translator
+* @param string jsonDataUrl location of the json file for the map
+*/
 function parseJsonToGmap(jsonUrl, jsonDataUrl)
 {	
 	//initalizes our global county point array
@@ -690,20 +706,15 @@ function parseJsonToGmap(jsonUrl, jsonDataUrl)
 			}	
 
 		parseJsonData(jsonDataUrl);		
-		
-		
-		
 	});
-	
-
 }
 
 
 /**
 * Function to be called from the HTML to specify a new opacity and/or color value for a county
-* countyName - name of the county as defined in the json file
-* opacityValue - number between 1.0 and 0.0
-* colorValue - html color value, in the form "#RRGGBB" such as "#ff0000" which is red
+* @param string countyName - name of the county as defined in the json file
+* @param double opacityValue - number between 1.0 and 0.0
+* @param string colorValue - html color value, in the form "#RRGGBB" such as "#ff0000" which is red
 */
 function formatAreaOpacityColor(name, opacityValue, colorValue)
 {
@@ -717,9 +728,11 @@ function formatAreaOpacityColor(name, opacityValue, colorValue)
 }
 
 /**
-* Given the percentage in question, the min percentage value, and the spread between
-* the min percentage and the max, this function returns back your color as a
-* string in the form "#RRGGBB"
+* This uses a Library called Rainbow that creates a gradient color scheme
+* @param double percentage is the data of the area looking to be colored
+* @param double min is the lowest value given in the data
+* @param double spread is the spread from lowest to highest data points
+* @return string color in hex format
 */
 function calculateColor(percentage, min, spread)
 {
@@ -743,7 +756,12 @@ function calculateColor(percentage, min, spread)
 
 
 /**
-Used to update the color of an area given a percentage, min and spread
+* Used to update the color of an area given a percentage, min and spread
+* @param string name is the name of the area being colored
+* @param double percentage is the data of the area looking to be colored
+* @param double min is the lowest value given in the data
+* @param double spread is the spread from lowest to highest data points
+* @param string unit is the unit designated by the user when they created the map
 */
 function UpdateAreaPercentage(name, percentage, min, spread, unit)
 {
@@ -757,11 +775,17 @@ function UpdateAreaPercentage(name, percentage, min, spread, unit)
 
 	labels[name].set("areaValue", addCommas(percentage)+" "+unit);
 	labels[name].draw();
-
 }
 
+
 /**
-Used to update the color and info window of an area
+* Used to update the color and create the popup info window for a region
+* @param string name is the name of the area being colored
+* @param double percentage is the data of the area looking to be colored
+* @param double min is the lowest value given in the data
+* @param double spread is the spread from lowest to highest data points
+* @param string unit is the unit designated by the user when they created the map
+* @param string id is the id of the region that was clicked
 */
 function UpdateAreaPercentageMessage(name, percentage, min, spread, message, unit, id)
 {
@@ -791,12 +815,15 @@ function UpdateAreaPercentageMessage(name, percentage, min, spread, message, uni
 		//set up the new info window and open it.
 		infoWindow.setPosition(event.latLng);
 		infoWindow.open(map);
+		//draw the data chart inside the window
 		DrawDataGraph(id, name);		
 	});	
 		
 }
 /**
-Draws graph of data from javascript.flot when user clicks on a location
+* Draws graph of data from javascript.flot when user clicks on a location
+* @param string id is the id of the region that was clicked
+* @param string name is the name of the area being colored
 */
 function DrawDataGraph(id, name){
 	//remove "200_0_0_0_by_area_chart" from the end of the ID
@@ -852,7 +879,12 @@ function DrawDataGraph(id, name){
 
 
 /*
- * Controls the information that appears when clicking on a bar within the pop-up graph
+ * Creates tooltips when hovering over bars on any of the graphs on the map
+ * @param int x is the x coordinate of the tooltip
+ * @param int y is the y coordinate of the tooltip
+ * @param string contents is the message that is displayed
+ * @param string backColor is the background color
+ * @param string fontColor is the font color of the tooltip
  */
 function showTooltip(x, y, contents, backColor, fontColor) {
           $('<div id="tooltip">' + contents + '</div>').css( {
@@ -869,7 +901,13 @@ function showTooltip(x, y, contents, backColor, fontColor) {
           }).appendTo("body").fadeIn(200);
 }
 
-//regionData should be the second to last indicator
+
+/**
+* Draws the chart that is found on the second page of the popup window, showing only the selected regions data
+* @param array regionData parsed from the mapData, contains all the values of the indicators
+* @param string name of the region selected
+* @param int indicatorIdNum to know that this is the region selected
+*/
 function drawRegionChart(regionData, name, indicatorIdNum){
 	var graphYAxis = new Array();
 	var selectedArea = new Array(); //Array to hold changes colors for selected area
@@ -881,7 +919,7 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 	var count = 1;
 	var largest = 0;
 
-	//last indicator level
+	//last indicator level is the one we want the data from
 	for(i in regionData.indicators){
 		//data level
 		for(j in regionData.indicators[i].data){
@@ -925,8 +963,6 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 
 	
 	var kmapInfochartHeight = calculateBarHeight(graphYAxis.length);
-
-
 
 	var dimen = " height: " + kmapInfochartHeight + "px; ";
 	var oldStyle = $("#iChartLocal").attr("style");
@@ -978,6 +1014,12 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 	
 }
 
+/**
+* Draws the graph that is found on the first page of the popup window, detailing the data for all the regions
+* @param string fullId is the indicator path to this indicator
+* @param array dataPath is the parsed Mapdata array that contains the data for the general chart
+* @param string name of the region selected
+*/
 function drawGeneralChart(fullId, dataPath, name){
 	
 	var graphYAxis = new Array();
@@ -1041,6 +1083,10 @@ function drawGeneralChart(fullId, dataPath, name){
 }
 
 
+/**
+* Draws the charts if there are totals present
+* @param string indicator is the path to the indicator selected on the left side of the map
+*/
 //used to draw the national total data chart
 function drawTotalChart(indicator){
 	var id = indicator.split("_");
@@ -1137,7 +1183,11 @@ function drawTotalChart(indicator){
 
 
 
-//used by all charts to create the hover tooltip that finds the bar that is being hovered over
+/**
+* Creates the message and binds a tooltip to the graphs using the name from the array
+* @param int id of the bar to hover over
+* @param array graphYAxis the data that created the y axis on the graphs
+*/
 function bindHoverTip(id, graphYAxis){
 	$(id).unbind("plothover");
 	$(id).bind("plothover", function (event, pos, item) {
@@ -1154,36 +1204,44 @@ function bindHoverTip(id, graphYAxis){
 		});
 }
 
-
-function calculateBarHeight(barCount){
-	var temp = (barCount * (parseInt(kmapInfochartBarHeight))) ;
-	return temp; //(barCount * (parseInt(kmapInfochartBarHeight)));
-}
 /**
-* Name: Area's name as defined in the JSON that defines areas and their bounds
-* Percentage: percentage of X in the given area
-* Min: Minimum value of percentages across all areas for baselining the color scale
-* Spread: Spread from min to max of percentages across all areas for making the ceiling of the color scale
-* Title: Title of the question
-* Data: associative array of the percentages keyed by Area names as defined in the JSON that defines areas and their bounds
+* Returns a created height for the divs that contain the graphs to make bars look uniform
+* @param int barCount
+* @return int what the height should be for the div
+*/
+function calculateBarHeight(barCount){
+	return (barCount * (parseInt(kmapInfochartBarHeight)));
+}
+
+
+/**
+* First step in the process for updating data in the title
+* @param string Name: Area's name as defined in the JSON that defines areas and their bounds
+* @param double Percentage: percentage of X in the given area
+* @param double Min: Minimum value of percentages across all areas for baselining the color scale
+* @param double Spread: Spread from min to max of percentages across all areas for making the ceiling of the color scale
+* @param string Title: Title of the question
+* @param array Data: associative array of the percentages keyed by Area names as defined in the JSON that defines areas and their bounds
+* @param string indicator is the example (0_0_2) string of the indicators
+* @param string unit is the unit designated by the user when the map was created
 */
 function UpdateAreaPercentageTitleData(name, percentage, min, spread, title, data, indicator, unit)
 {
-	//var num
-	
 	var message = '<div class="chartHolder" style="height:'+kmapInfodivHeight+'px">' + createHTMLChart(name, title, data, indicator+"_by_area_chart");
-		
-	//create the chart by for all the indicators of the given question, assuming there's more than one
-	//createChartByIndicators(title, data);
-	
 	message += "</div>";
 	
 	//now call the next method that does work
 	UpdateAreaPercentageMessage(name, percentage, min, spread, message, unit, indicator+"_by_area_chart");
-	
 }
 
-
+/**
+* Creates the html within the popup window that contains the tabs and the graphs
+* @param string Name: Area's name as defined in the JSON that defines areas and their bounds
+* @param string Title: Title of the question
+* @param array Data: associative array of the percentages keyed by Area names as defined in the JSON that defines areas and their bounds
+* @param int id: id of the region currently selected
+* @return string chartStr that contains the html used to create the tabs and graphs
+*/
 function createHTMLChart(name,title, data, id)
 {
 	
@@ -1225,7 +1283,6 @@ function createHTMLChart(name,title, data, id)
 	chartStr += '</div>';
 	//console.log(chartStr);
 	return chartStr;
-	
 }
 
 /**
@@ -1233,7 +1290,8 @@ function createHTMLChart(name,title, data, id)
 * then uses super complex math to figure out the optimal min and max, 
 * like round to nice managable numbers and decide if we should baseline
 * off of zero or not
-* then returns back an array with keys span and min
+* @param array data is the array that contains all the data points for the map
+* @return array that contains the min and span
 */
 function calculateMinSpread(data)
 {
@@ -1340,13 +1398,18 @@ function calculateMinSpread(data)
 	var retVal = new Array();
 	retVal["min"] = min;
 	retVal["spread"] = spread;
-	//console.log("min: "+min + " Spread: "+spread);
+
 	return retVal;
 }
 
 /**
 * Updates all data for all areas
-* Data: associative array of the percentages keyed by Area names as defined in the JSON that defines areas and their bounds
+* @param string Title: Title of the question
+* @param array Data: associative array of the percentages keyed by Area names as defined in the JSON that defines areas and their bounds
+* @param double nationalAverage: average of the values for the selected region
+* @param string indicator is the example (0_0_2) string of the indicator path
+* @param string unit is the unit designated by the user when the map was made
+* @param string totalLabel is the name for the totals that is designated by the user
 * Note: All of this assumes positive numbers. 
 */
 function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel)
@@ -1396,17 +1459,19 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 	//draw the javascript graph of the totals of the selected indicator stack
 	drawTotalChart(indicator);
 	
-	if(title == "Please select an indicator to display its data.")
+	if(title == "<?php __("Please select an indicator to display its data.") ?>" )
 	{
 		$('#sourcetextspan').hide()
 		//Show the gradient div
 		//$('#legend_gradient').show();
 	}
-
-	
-
 }
 
+/**
+* Figures out the magnitude 
+* @param int num number to be calculated
+* @return float magnitude that was calculated
+*/
 function calculateMagnitude(num)
 {
 	if(isNaN(num) || num == Number.POSITIVE_INFINITY || num == Number.NEGATIVE_INFINITY)
@@ -1449,6 +1514,12 @@ function calculateMagnitude(num)
 /**
 * This takes in the min score, the spread between the min and the max, and the national average
 * and then updates the nationalaveragediv element
+* @param double Min: Minimum value of percentages across all areas for baselining the color scale
+* @param double Spread: Spread from min to max of percentages across all areas for making the ceiling of the color scale
+* @param double nationalAverage: average of the values for the selected region
+* @param string unit is the unit designated by the user when the map was made
+* @param string indicator is the example (0_0_2) string of the indicator path
+* @param string totalLabel is the name for the totals that is designated by the user
 */
 function updateNationalAverage(min, spread, nationalAverage, unit, indicator, totalLabel)
 {
@@ -1469,8 +1540,14 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator, to
 
 }
 
-//changed this to take another input 
-//TODO -> make sure this doesn't mess anything up
+
+/**
+* Changes the key bar in the legend to the value of the current total
+* @param double Min: Minimum value of percentages across all areas for baselining the color scale
+* @param double span: Spread from min to max of percentages across all areas for making the ceiling of the color scale
+* @param string Title: Title of the question
+* @param string unit is the unit designated by the user when the map was made
+*/
 function updateKey(min, span, title, unit)
 { 
 	if(isNaN(min) || isNaN(span)){
@@ -1507,8 +1584,8 @@ function updateKey(min, span, title, unit)
 }
 
 /**
-This little function just goes through and whipes clean the areas on the map
-and their charts and so forth
+* This little function just goes through and wipes clean the areas on the map
+* and their charts and so forth
 */
 function zeroOutMap()
 {
@@ -1532,7 +1609,10 @@ function zeroOutMap()
 }
 
 /**
-Used to conver decimal numbers to hex
+* Used to convert decimal numbers to hex
+* @param double d is the decimal to be converted
+* @param int padding to be included
+* @return string hex that was created
 */
 function decimalToHex(d, padding) {
 	d = Math.round(d);
@@ -1546,21 +1626,33 @@ function decimalToHex(d, padding) {
 	return hex;
 }
 
+/**
+* Encodes a string to html
+* @param string value to be encoded
+* @return string of html
+*/
 function htmlEncode(value){
 	var retVal = value;
-	// the .text() method escapes everything nice and neet for us.
+	// the .text() method escapes everything nice and neat for us.
 	return $('<div/>').text(retVal).html();
 }
 
+/**
+* Decodes a string from html
+* @param string value to be decoded
+* @return string text that was decoded
+*/
 function htmlDecode(value){
 	var retVal = value;
-	// the .text() method escapes everything nice and neet for us.
+	// the .text() method escapes everything nice and neat for us.
 	return $('<div/>').html(retVal).text();
 }
 
 //function needs to be escaped to work with Drupal where the $ character is reserved
 
-
+/**
+* Starts upon load and starts the indicator where last seen
+*/
 (function(j) { 
 		j(function() {
 			$.address.externalChange(function(event) {  
@@ -1574,19 +1666,12 @@ function htmlDecode(value){
 		});
 })(jQuery);
 
-/*
-function stripString(str) 
-{
-  return str.replace(/^\s+|\s+$/g, '');
-};
 
-
-function is_array(input)
-{
-	return typeof(input)=='object'&&(input instanceof Array);
-}
+/**
+* Adds commas into strings
+* @param string nStr to be parsed
+* @return new string that has commas
 */
-
 function addCommas(nStr)
 {
 	nStr += '';
@@ -1848,7 +1933,9 @@ function initialize_buttons()
 	
 }
 
-
+/**
+* creates the listener on the +/- sign on the legend to minimize it or not
+*/
 function init_legend_listener(){
 	$("#minButtonLegend").click(function(){
 		if($("#legendMinDiv").is(":visible")){

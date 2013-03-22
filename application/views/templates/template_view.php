@@ -69,38 +69,47 @@
 	echo '<table><tr><td>';
 	echo Form::label('title', __('Template Title').": ");
 	echo '</td><td>';
+  
 	echo $data['title'];
 	echo '</td></tr><tr><td>';
 	echo Form::label('description', __('Template Description').": ");
-	echo '</td><td>';
+	
+  echo '</td><td>';
 	echo $data['description'];
 	echo '</td></tr><tr><td>';
 	echo Form::label('file', __('Visibility').": ");
-	echo '</td><td>';
+	
+  echo '</td><td>';
 	$visbility_options = array('0'=>__('Public'), '1'=>__('Private'));
 	echo $visbility_options[$data['is_private']];	
 	echo '</td></tr><tr><td>';
-	echo Form::label('file', __('Is an official template').": ");
+	
+  echo Form::label('file', __('Is an official template').": ");
 	echo '</td><td>';
 	echo 1==$data['is_official'] ? 'X':'';
-	echo '</td></tr><tr><td>';	
+	
+  echo '</td></tr><tr><td>';	
 	echo Form::label('admin_level', __('Admin Level').": ");
 	echo '</td><td>';
 	echo $data['admin_level'];
-	echo '</td></tr><tr><td>';
+	
+  echo '</td></tr><tr><td>';
 	echo Form::label('decimals', __('Decimal places rounded to').": ");
 	echo '</td><td>';
 	$rounding_options = array('-1'=>'Do not round', 0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8);
 	echo $rounding_options[$data['decimals']];
-	echo '</td></tr><tr><td>';
+	
+  echo '</td></tr><tr><td>';
 	echo Form::label('lat', __('Center point latitude').": ");
 	echo '</td><td>';
 	echo $data['lat'];
-	echo '</td></tr><tr><td>';
+	
+  echo '</td></tr><tr><td>';
 	echo Form::label('lon', __('Center point longitude').": ");
 	echo '</td><td>';
 	echo $data['lon'];
-	echo '</td></tr><tr><td>';
+	
+  echo '</td></tr><tr><td>';
 	echo Form::label('zoom', __('Default zoom level').": ");
 	echo '</td><td>';
 	echo $data['zoom'];

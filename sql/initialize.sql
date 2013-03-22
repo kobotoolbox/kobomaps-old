@@ -145,7 +145,7 @@ ADD  `CSS` LONGTEXT NULL ,
 ADD  `map_style` LONGTEXT NULL;
 
 
-/** Now create a table that maps regions to template regions
+/** Now create a table that maps regions to template regions */
   
 /**Add the table for storing different rows. I had to call it rowss because rows is a reserved word in mysql**/
 CREATE TABLE IF NOT EXISTS `regionmapping` (
@@ -468,3 +468,32 @@ ALTER TABLE  `users` ADD INDEX  `open_id_index` (  `open_id` );
 ALTER TABLE  `users` CHANGE  `password`  `password` CHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 UPDATE `metadata` SET  `v` =  '1.0.044' WHERE  `metadata`.`k` ='Database Version';
 
+/** Dylan Gillespie --2013-03-22 -- Changing main static page to home since main is also a controller
+ also edited the custompage to have a foreign key constraint that deletes pages if the user is deleted **/
+UPDATE  `custompage` SET  `slug` =  '__HOME__' WHERE  `custompage`.`id` =1;
+INSERT INTO `users` (
+`id` ,
+`email` ,
+`username` ,
+`password` ,
+`open_id` ,
+`logins` ,
+`last_login` ,
+`first_name` ,
+`last_name` ,
+`email_alerts` ,
+`email_warnings` ,
+`reset_hash` ,
+`reset_expire`
+)
+VALUES (
+'1',  '',  'ADMIN_PAGE_CREATOR',  'password', NULL ,  '0', NULL ,  'ADMIN',  'For keeping special pages present',  '0',  '1', NULL , NULL
+);
+UPDATE  `custompage` SET  `user_id` =  '1' WHERE  `custompage`.`id` =1;
+UPDATE  `custompage` SET  `user_id` =  '1' WHERE  `custompage`.`id` =2;
+UPDATE  `custompage` SET  `user_id` =  '1' WHERE  `custompage`.`id` =3;
+UPDATE  `custompage` SET  `user_id` =  '1' WHERE  `custompage`.`id` =4;
+
+ALTER TABLE  `custompage` CHANGE  `user_id`  `user_id` INT( 11 ) UNSIGNED;
+ALTER TABLE `custompage` ADD CONSTRAINT `roles_users_ibfk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+UPDATE `metadata` SET  `v` =  '1.0.045' WHERE  `metadata`.`k` ='Database Version';

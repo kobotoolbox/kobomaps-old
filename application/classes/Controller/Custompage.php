@@ -34,7 +34,7 @@ class Controller_Custompage extends Controller_Loggedin {
 				
 				//grab all of the pages that are in the database from the start, such as main/about/help/support
 				$default = ORM::factory('Custompage')->
-				where('user_id', '=', 0)->
+				where('user_id', '=', 1)->
 				find_all();
 				
 				$page_array = array();
@@ -45,6 +45,7 @@ class Controller_Custompage extends Controller_Loggedin {
 				foreach($pages as $page){
 					$page_array[$page->id] = $page->slug;
 				}
+
 				
 				$this->template->header->menu_page = "custompage";
 				//make messages roll up when done

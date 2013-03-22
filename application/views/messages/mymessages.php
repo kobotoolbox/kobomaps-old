@@ -14,12 +14,23 @@
 	<a href="#" class="deleteSelectedBtn"><?php echo __('Delete Selected'); ?></a>
 	<table border="3" class="list_table">
 		<thead>
-		<tr class="header">
-			<th style="width: 60px"> <?php echo __('Select').'</br>'.Form::checkbox('select_all', null, false, array('id'=>'selectAll'));?></th>
-			<th style="width: 167px"> <?php echo __('Sent')?></th>
-			<th style="width: 285px"><?php echo __('Name')?></th> 
-			<th style="width: 285px"> <?php echo __('Email Address')?></th>
-			<th style="width: 90px"> <?php echo __('Tasks')?> </th>
+      <tr class="header">
+        <th style="width: 60px">
+          <?php echo __('Select').'</br>'.Form::checkbox('select_all', null, false, array('id'=>'selectAll'));?>
+        </th>
+        <th style="width: 167px">
+          <?php echo __('Sent')?>
+        </th>
+        <th style="width: 285px">
+          <?php echo __('Name')?>
+        </th>
+        <th style="width: 285px">
+          <?php echo __('Email Address')?>
+        </th>
+        <th style="width: 90px">
+          <?php echo __('Tasks')?>
+        </th>
+      </tr>
 		</thead>
 		<tbody>
 			<?php 

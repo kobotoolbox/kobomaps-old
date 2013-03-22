@@ -156,7 +156,9 @@ var labels = new Array();
 	});
 
 
-	  
+	/**
+	* @param string jsonUrl of the file to be parsed
+	*/
 	function parseJsonToGmap(jsonUrl)
 	 {	
 		//initalizes our global county point array

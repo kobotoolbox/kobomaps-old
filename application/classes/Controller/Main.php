@@ -69,7 +69,7 @@ class Controller_Main extends Controller_Template {
 		
 			HTTP::redirect('mymaps'); //send them to their maps page if they're logged in		
 		}
-		$this->template->content = View::factory('main_content');
+		HTTP::redirect('home');
 	}
 	
 	/**
