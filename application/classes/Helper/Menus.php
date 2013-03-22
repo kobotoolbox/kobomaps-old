@@ -206,18 +206,33 @@ class Helper_Menus
 
 		switch($page)
 		{
-      case "custompage":
+
+      case "help":
+      ?>
+      <li>
+					<a href="<?php echo URL::base();?>mymaps/add1">
+					<div>
+						<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create New Map');?>
+					</div>
+				</a>
+			</li>		
+
+      <?php break;
+      
+        case "custompage":
         $menu = ORM::factory('Menus', 'custompage');
         
         $item = ORM::factory('Menuitem')->
         where('menu', '=', $menu->id)->
         find();
-        <img class="menuCreate" src=<?php echo $item->image_url?> width="50" height="30"/>
+        
         ?>
           <li>
             <a href="<?php echo $item->item_url?>">
-                  <?php echo $item->text;?>
-            </a>
+            <div>
+						  <img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Creat a new menu');?>
+					  </div>
+				  </a>
           </li>
           <?php break;
       case "mymaps":
