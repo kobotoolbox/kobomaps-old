@@ -128,11 +128,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	
 	/**
 	 * the function for editing a form
-	 * super exciting
+	 * Creates the map edit/create form that is first seen upon clicking edit/create
 	 */
 	 public function action_add1()
 	 {
 	 	//initialize data
+		//default values that the form displays
 		$data = array(
 			'id'=>'0',
 			'title'=>'',
@@ -289,16 +290,18 @@ class Controller_Mymaps extends Controller_Loggedin {
 					//if the map already exists, keep the same map_creation_progress
 					$_POST['map_creation_progress'] = 1;	//$map->map_creation_progress;
 				}
-				//this handles is private
+				//this handles is private, show gradient, and show empty fields
 				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;
 				$_POST['show_empty_name'] = isset($_POST['show_empty_name']) ? 1 : 0;
 				$_POST['gradient'] = isset($_POST['gradient']) ? 1 : 0;
 
+				//if the gradient has been chosen, put the two color keys together seperated by a space
 				if($_POST['gradient'] == 1){
 					$_POST['polygon_color'] = $_POST['polygon_color'].' '.$_POST['regionTwo'];
 					$data['polygon_color'] = $_POST['polygon_color'];
 				}
 				else {
+				//default gradient is color to white
 					$data['polygon_color'] = $_POST['polygon_color'].' FFFFFF';
 				}
 
@@ -413,7 +416,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 }//end action_add1
 	 
 	 
-	 
+	 /**
+	 *	Calls the helper slug checker and exits if the slug is not defined
+	 */
 	 public function action_checkslug(){
 	 	$this->auto_render = false;
 	 	$this->response->headers('Content-Type','application/json');
@@ -429,25 +434,21 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	else {
 	 		$db_obj = ORM::factory('Map')->where('slug', '=', $_POST['slug'])->find();
 	 	}
+		//the helper function returns JSON that tells the javascript what to do
 	 	Helper_Slugs::check_slug($_POST['slug'], $db_obj);
 	 }
 	
 	 
 	 
 	 /**
-	  * the function for editing a form
-	  * super exciting
+	  * creates the page for checking the spreadsheet or file submitted and choosing options for the table
 	  */
 	 public function action_add2()
 	 {  	
-
-	 	
-
- 	
-	 	
 	 	//for memory usage debuging
 	 	//echo "Just started - Memory used: ". number_format(memory_get_peak_usage(),0,'.',',')."<br/>";
 	 	//echo "Just started - Memory used: ". number_format(memory_get_usage(),0,'.',',')."<br/>";
+
 	 	//get the id
 	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 	 	//something when wrong, kick them back to add1
@@ -615,8 +616,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 			//if we're editing things
 	 			if($_POST['action'] == 'edit')
 	 			{
-		
-
 	 				//handle the is_ignored value
 	 				if(isset($_POST['is_ignored']))
 	 				{
@@ -638,11 +637,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 		 					$mapsheet->is_ignored = 0;
 		 					$mapsheet->save();
 	 				}
-	 				
-
-	 				
-		
-	 				//hanlde the rows 
+	 			
+	 				//handle the column 
 	 				$sheet_column_data = null;
 	 				foreach($_POST['column'] as $sheet_id=>$sheet)
 	 				{
@@ -695,7 +691,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 						$next_sheet = $sheet_position + 1;
 	 						HTTP::redirect('mymaps/add2?id='.$map->id.'&sheet='.$next_sheet);
 	 					}
-	 					//else move no to add3
+	 					//else move on to add3
 	 					else
 	 					{		 					
 	 						//TODO: We need a way to know if they hide all their sheets, and tell them not to do that.
@@ -776,11 +772,9 @@ class Controller_Mymaps extends Controller_Loggedin {
  			$header_count = 0;
  			$data_count = 0;
  			
-	
  			//create a bunch of insert statements
  			$sql = "INSERT INTO  `rowss` (`id` ,`mapsheet_id` ,`name` ,`type`) VALUES ";
 
- 			
  			$i = 0;
  			foreach($sheet as $row_name=>$row_type) //loop over the column data
  			{
@@ -824,6 +818,7 @@ class Controller_Mymaps extends Controller_Loggedin {
  		}//end if not ignored statement
 	 }
 	 
+
 	 /**
 	  * Helper function to handle the data structure of a sheet's columns
 	  * @param int $sheet_id DB id of a sheet
@@ -976,9 +971,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 
 	 /**
 	  * This after asking the user for the meaning of the 
-	  * rows and columns in the previous controler,
+	  * rows and columns in the previous controller,
 	  * we'll now show them what the data base thinks things are
-	  * and ask them to verify, or go back and chane stuff around
+	  * and ask them to verify, or go back and change stuff around
 	  */
 	 public function action_add3()
 	 {
@@ -1206,7 +1201,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 public function action_add4()
 	 {
 	 	
-	 	
 	 	//get the id
 	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 	 	//something when wrong, kick them back to add1
@@ -1246,8 +1240,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		->find_all();
 	 	 
 	 	 
-	 	 
-	 
 	 	/***Now that we have the form, lets initialize the UI***/
 	 	//The title to show on the browser
 	 	$this->template->html_head->title = __('Add Map - Page 4');
@@ -1475,14 +1467,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		$sheet_data[$sheet->id] = $sheet_excel->toArray(null, true, true, true);
 	 	}
 	 	
-	 	
-
-
-	 	
+	 
 	 	//echo "Finished loading the excel file into arrays: ". (microtime(true) - $time) . "<br/>";
 	 	//$time = microtime(true);
-	 	
-
 	 	 
 	 
 	 	/***Now that we have the form, lets initialize the UI***/
@@ -1867,6 +1854,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	  * Saves a file from the temp upload area to the hard disk
 	  * @param array $upload_file the $_FILES['<name>'] array for the given file
 	  * @param obj $map Kohana ORM object for a map, this is used in naming the file 
+	  * @return boolean or filename
 	  */
 	 protected function _save_file($upload_file, $map)
 	 {
@@ -1896,6 +1884,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	  * Saves the .xls implementation of a google doc
 	  * @param string $link HTTP link to the .xls version of the google doc we're to use as our data source
 	  * @param obj $map Kohana ORM object for a map, this is used in naming the file
+	  * @return string filename
 	  */
 	 protected function _save_google_doc($link, $map)
 	 {
@@ -1921,9 +1910,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	curl_exec($ch);
 	 	curl_close($ch);
 	 	fclose($output);
-	 	
 	 
-	 	
 	 	return $filename;
 	 }
 	 
@@ -2202,6 +2189,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	  * Checks to see if the user has exceeded thier
 	  * maximum number of maps and if so
 	  * sends them to an error page
+	  * @return boolean, true if a new page is allowed
 	  */
 	 protected function check_max_items()
 	 {
@@ -2269,9 +2257,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 
 	 /**
 	  * Checks if a give user can access a give map. True if they can, if they can't
-	  * then they get booted to /myamps
+	  * then they get booted to /mymaps
 	  * @param int $map_id DB ID of a map
 	  * @param int $user_id DB ID of a user
+	  * @return boolean if can't edit the map
 	  */
 	 protected function check_map_permissions($map_id, $user_id)
 	 {

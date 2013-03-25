@@ -88,6 +88,7 @@ return array
 		'Share'=>'Share',
 		'Delete'=>'Delete',
 		'You have no maps'=>'You have no maps',
+		'There are no maps' => 'There are no maps',
 		'Delete Selected'=>'Delete Selected',
 		'are you sure you want to delete the selected maps'=>'are you sure you want to delete the selected maps',
 		'are you sure you want to delete this map'=>'are you sure you want to delete this map',

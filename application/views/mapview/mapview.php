@@ -33,6 +33,7 @@
 
 <?php
 //Bar at the bottom to select between different sheets
+//change the size of the title if it's very large
 ?>
 <div id="sheetlinks">
 	<div id="mapName"
@@ -121,7 +122,6 @@
 	
 </div>
 
-<div id="mapLinksContainer">
 <div style="height:40px;width:10px;"></div>
 <div id="maplinks"	style="overflow-y:auto">
 	
@@ -176,7 +176,7 @@
 			</div>
 		
 	</div>
-</div>
+
 
 
 

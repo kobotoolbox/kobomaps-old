@@ -18,6 +18,7 @@ function fix_latin1_mangled_with_utf8_maybe_hopefully_most_of_the_time($str)
 	return preg_replace_callback('#[\\xA1-\\xFF](?![\\x80-\\xBF]{2,})#', 'utf8_encode_callback', $str);
 }
 
+
 /**
  * Call back function to fix encoding errors
  * @param array $m
@@ -43,6 +44,7 @@ class Helper_Kml2json
 	 * Takes the full path to a KML file creates a json file out of it
 	 * and then returns the name of that json file
 	 * @param string $file_path
+	 * @param ORM::template to get KML file
 	 */
 	public function convert($file_path, $template)
 	{
@@ -92,12 +94,6 @@ class Helper_Kml2json
 				}
 			}
 		
-				
-		
-		
-		
-		
-		
 		
 			//buffer out echo statements
 			ob_start();
@@ -123,6 +119,7 @@ class Helper_Kml2json
 			ob_get_clean();
 			return $fileName.".json";
 		}
+
 		catch(Exception $e)
 		{
 			ob_end_clean();
@@ -154,17 +151,16 @@ class Helper_Kml2json
 	 */
 	public function parseXml($kmlUrl, $template)
 	{
-
 		//set the mb_detect_order
 		/*
-		mb_detect_order('UTF-8, UTF-7, ASCII, EUC-JP,SJIS, eucJP-win, SJIS-win, JIS, ISO-2022-JP');
-		$str = file_get_contents($kmlUrl);
-		if(mb_detect_encoding($str,mb_detect_order(), true) == FALSE)
-		{
-			$str = fix_latin1_mangled_with_utf8_maybe_hopefully_most_of_the_time($str);
-		}
-		
-		$xml = simplexml_load_string($str);
+		*mb_detect_order('UTF-8, UTF-7, ASCII, EUC-JP,SJIS, eucJP-win, SJIS-win, JIS, ISO-2022-JP');
+		*$str = file_get_contents($kmlUrl);
+		*if(mb_detect_encoding($str,mb_detect_order(), true) == FALSE)
+		*{
+		*	$str = fix_latin1_mangled_with_utf8_maybe_hopefully_most_of_the_time($str);
+		*}
+		*
+		*$xml = simplexml_load_string($str);
 		*/
 	
 		
@@ -223,6 +219,9 @@ class Helper_Kml2json
 	
 	/**
 	 * Handles one specific area
+	 * @param placemark to be parsed
+	 * @param ORM::region the region to get placemarks for
+	 * echoes JSON string that contains the placemark
 	 */
 	public static function parsePlacemark ($placemark, $region)
 	{
@@ -234,7 +233,6 @@ class Helper_Kml2json
 		//startup the area, it's name and points
 		$name = $region->title;
 		echo '{"area":"'.strval($name).'","points":[';
-	
 	
 	
 		//loop over all the polygons in the MultiGeometry
@@ -304,7 +302,7 @@ class Helper_Kml2json
 					continue;
 				}
 					
-				//hanlde commas
+				//handle commas
 				$tripletsCount++;
 				if($tripletsCount > 1)
 				{
@@ -318,10 +316,7 @@ class Helper_Kml2json
 				$cumaltive_lon = $cumaltive_lon + $lon;
 				$cumaltive_lat = $cumaltive_lat + $lat;
 					
-					
-					
-					
-					
+
 				echo "[$roundedLat,$roundedLon]";
 			}
 			echo "]";

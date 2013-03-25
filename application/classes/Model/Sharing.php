@@ -80,6 +80,7 @@ class Model_Sharing extends ORM {
 	 * 
 	 * @param int $map_id DB ID of the map
 	 * @param int $user_id DB ID of the owner of the map
+	 * @return ORM::Sharing sharing relation
 	 */
 	public static function create_owner($map_id, $user_id)
 	{
@@ -133,6 +134,6 @@ class Model_Sharing extends ORM {
 	}
 
 	
-} // End User Model
+} // End Sharing Model
 
 Model_Sharing::$allowed_permissions = array(Model_Sharing::$view=>'view',Model_Sharing::$edit=>'edit');

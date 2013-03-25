@@ -51,6 +51,12 @@ class Model_Usagestatistics extends ORM {
 		$this->save();
 	}//end function
 
+
+	/**
+	* increments the visit counter of maps when they are visited
+	* @param int $map_id
+	* @param date $date
+	*/
 	public static function increment_visit($map_id, $date = null){
 		if($date == null){
 			$date = time();
@@ -71,4 +77,4 @@ class Model_Usagestatistics extends ORM {
 	}
 
 	
-} // End User Model
+} // End Usagestatistics Model

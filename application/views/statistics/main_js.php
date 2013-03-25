@@ -83,6 +83,9 @@ var globaldata;
 	}
 
 	    
+  /**
+  * @param array data of the maps to graph
+  */
 	function drawGraph(data){
 		
 		$.plot($("#statChart"), data,  {
@@ -103,12 +106,21 @@ var globaldata;
 		bindHoverTip("#statChart");
 	}
 
+  /**
+  * to set all of the date to the same hour in the UTC timezome
+  * @param date date 
+  */
 	function parseDates(date){
 		var returnVal = new Date(date);
 		returnVal.setUTCHours(0);
 		return returnVal.valueOf();
 	}
 
+  /**
+  * Puts the array into a readable format for the flot.js
+  * @param array data raw array of the map data
+  * @return array of parsed data
+  */
 	function parseData(data){
 		var startDate = parseDates($("#startDate").val());
 		var endDate = parseDates($("#endDate").val());
@@ -146,6 +158,11 @@ var globaldata;
 
 		return data;
 	}
+  
+  /**
+  * Creates the message of the tooltip
+  * @param int id of the point hovered over
+  */
 	function bindHoverTip(id){
 		$(id).unbind("plothover");
 		$(id).bind("plothover", function (event, pos, item) {
@@ -162,6 +179,13 @@ var globaldata;
 			});
 	}
 	
+  /**
+  * Creates the hovertip
+  * @param string color of the point so that the background of the hovertip matches
+  * @param int x is the x coordinate to draw
+  * @param int y is the y coordinate to draw
+  * @param string contents is the message to be displayed in the hovertip
+  */
 	function showTooltip(color, x, y, contents) {
         $('<div id="statsTooltip">' + contents + '</div>').css( {
             position: 'absolute',

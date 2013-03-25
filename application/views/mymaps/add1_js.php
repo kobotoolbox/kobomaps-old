@@ -11,13 +11,19 @@
 
 <script type="text/javascript">
 
-
+/**
+* Used to toggle specific divs
+* @param string elem_id generic id to toggle divs
+*/
 function toggle_id(elem_id)
 {
 	$('#'+elem_id).toggle('slow');
-	
 }
 
+/**
+* Used to toggle all divs of a specific class, and if it's advanced, flip the gradient box
+* @param string elem_class generic id to toggle classes
+*/
 function toggle_class(elem_class)
 {
 	$('.'+elem_class).toggle('slow');
@@ -29,7 +35,9 @@ function toggle_class(elem_class)
 
 }
 
-
+/**
+* @param string elem_id id of the box to include map style
+*/
 function set_default_map_style(elem_id)
 {
 	$('#'+elem_id).val("<?php echo Model_Map::get_style_default_js(); ?>");
@@ -40,7 +48,7 @@ function openGradient(){
 	$(".gradient_explain").toggle('slow');
 }
 
-
+//changes the color of the slug box dependent on the results of the checker
 $(document).ready(function(){
 	$("#slug").change(function(){
 		$("#slug").css('border-color', '');

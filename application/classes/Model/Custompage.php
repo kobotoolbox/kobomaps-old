@@ -26,13 +26,21 @@ class Model_Custompage extends ORM {
 	 */
 	public function rules()
 	{
-		return array();
+		return array(
+		'slug' => array(
+				array('not_empty'),
+				array('max_length', array(':value', 130))
+		)
+		);
 	}//end function
 	
-	
+
+	/**
+	* creates a custompage
+	* @param array of 'user_id', 'slug_id', 'content'
+	*/
 	public function update_custompage($values)
 	{
-	
 		$expected = array('user_id', 'slug_id', 'content');
 		
 		//if no slug is set
@@ -57,7 +65,13 @@ class Model_Custompage extends ORM {
 		$this->save();
 	}//end function
 	
-	//creates a page with the user(creator), slug, and content of the page
+	/**
+	* Creates a Custompage
+	* @param int $user_id is the id of the creator
+	* @param int $slug_id is the title of the custompage
+	* @param string $content is the HTML to create the page
+	* @return ORM::custompage the page that was created
+	*/
 	public static function create_page($user_id, $slug_id, $content){
 		
 		$page = ORM::factory('Custompage');
@@ -73,7 +87,13 @@ class Model_Custompage extends ORM {
 		return $page;
 	}
 	
+	/**
+	* Attempts to delete the given page
+	* @param int $page_id that is trying to be deleted
+	* @return string message, status of deletion
+	*/
 	public static function delete_page($page_id){
+	//special pages are created upon creation of database and can only be edited by their content
 		$page = ORM::factory('Custompage', $page_id);
 		if(!$page->special){
 			$page->delete();

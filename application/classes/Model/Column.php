@@ -54,7 +54,4 @@ class Model_Column extends ORM {
 		return $copy;
 	}
 	
-	
-
-	
 } // End columns Model

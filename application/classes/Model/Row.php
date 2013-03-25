@@ -5,6 +5,7 @@ class Model_Row extends ORM {
 	
 	/**
 	 * Set the name of the table
+	 * in MySQL rows is protected, hence the rowss
 	 */
 	protected  $_table_name = 'rowss';
 	

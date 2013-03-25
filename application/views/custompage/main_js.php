@@ -10,6 +10,9 @@
 
 <script type="text/javascript">
 
+/*
+* Controls the content of the divs by asking for the information for the page that was selected
+*/
 function updatePageInfo(){
 	var page_id = $("#pages").val();
 	if(page_id != 0){
@@ -35,6 +38,9 @@ function updatePageInfo(){
 	}
 }
 
+/*
+* Changes the color of the slug field depended on the results from checkslug()
+*/
 function checkSlug(){
 	$("#slug").css('border-color', '');
 	$.post("<?php echo URL::base(); ?>custompage/checkslug", { "slug": $("#slug").val(), 'id': $("#pages").val() }).done(
@@ -57,6 +63,9 @@ function checkSlug(){
 			});
 }
 
+/*
+* asks the user to confirm deletion and then submits the data
+*/
 function deletePage(){
 	var page_id = $("#pages").val();
 	if(page_id != 0){
@@ -68,6 +77,9 @@ function deletePage(){
 	}
 }
 
+/*
+* activate the listener for the slug box for when it changes
+*/
 $(document).ready(function(){
 	$("#slug").change(function(){
 		checkSlug();

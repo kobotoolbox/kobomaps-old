@@ -39,7 +39,10 @@ var playback = (function(){
 		}
 	 }
 		 
-	//start incrementing the sheets and creating a timer to increment within set speed
+    /**
+    * Start incrementing the sheets and creating a timer to increment within set speed
+    * @param int index value of te sheet to be moved to
+    */
 	function progressSheet(index){
 		if(sheetTimer != null){
 			clearInterval(sheetTimer);
@@ -78,7 +81,10 @@ var playback = (function(){
 		return false;
 	}
 	
-	//listens to the sheet that is auto selected when a map is loaded, or if a user selects a sheet while playback is in effect
+    /**
+    * listens to the sheet that is auto selected when a map is loaded, or if a user selects a sheet while playback is in effect
+    * @param int sheetId sheet that should be the start of the playback
+    */
 	function setSheetStart(sheetId){
 		if(sheetArray.indexOf(sheetId) == currentPlaybackIndex){
 			return;

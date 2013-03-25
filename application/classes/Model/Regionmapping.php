@@ -60,8 +60,4 @@ class Model_Regionmapping extends ORM {
 		$this->save();
 	}//end function
 
-	
-	
-
-	
 } // End User Model

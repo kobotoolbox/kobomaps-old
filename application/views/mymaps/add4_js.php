@@ -17,9 +17,6 @@
 
 
 
-
-
-
 /**
  *  gives us a list of names for geographicAreas
  */
@@ -48,6 +45,12 @@ var labels = new Array();
   var areaGPolygons = new Array();
 
  
+ /**
+ * @param string file template file
+ * @param float lat is the latitude
+ * @param float lon is the longitude
+ * @param int zoom is the default zoom level of the map
+ */
  function renderMap(file, lat, lon, zoom)
  {
 	//remove the polygons from the map
@@ -159,7 +162,9 @@ var labels = new Array();
 	//</Initialize things>
 
 
-	  
+	/**
+	* @param string jsonUrl location of the file to be parsed
+	*/
 	function parseJsonToGmap(jsonUrl)
 	 {	
 		 $("#map_loading").show();

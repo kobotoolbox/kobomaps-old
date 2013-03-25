@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 
-class Model_Menuitem extends ORM {
+class Model_Menus extends ORM {
 
 	
 	
@@ -30,13 +30,13 @@ class Model_Menuitem extends ORM {
 	}//end function
 	
 	/**
-	* updates the menuitem
+	* updates the custom menus
 	* @param array $values that contains the info for the menuitem
 	*/
-	public function update_menuitem($values)
+	public function update_menu($values)
 	{
 	
-		$expected = array('menu', 'text', 'image_url', 'item_url');
+		$expected = array('title');
 	
 		$this->values($values, $expected);
 		$this->check();
@@ -46,23 +46,16 @@ class Model_Menuitem extends ORM {
 
 	/**
 	* Used to create menuitems from the custompage
-	* @param int $menu
-	* @param string $text
-	* @param string $image_url
-	* @param string $item_url
-	* @return ORM::Menuitem that was created
+	* @param string $title
+	* @return ORM::Menu that was created
 	*/
-	public static function create_menuitem($menu, $text, $image_url, $item_url){
+	public static function create_menu($title){
 		
-		$item = ORM::factory('Menuitem');
+		$item = ORM::factory('Menus');
 	
 		if(!$item->loaded()){
-			$item->menu = $menu;
-			$item->text = $text;
-			$item->image_url = $image_url;
-			$item->item_url = $item_url;
+			$item->title = $title;
 		}
-	
 		$item->save();
 		
 		return $item;

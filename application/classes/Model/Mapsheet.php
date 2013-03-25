@@ -49,6 +49,7 @@ class Model_Mapsheet extends ORM {
 	/**
 	 * Make a full on copy of a map sheet for a map
 	 * @param int $map_id - The DB ID of the map who will own the copied sheet
+	 * @return ORM::Mapsheet that has been copied
 	 */
 	public function copy($map_id)
 	{
@@ -81,8 +82,5 @@ class Model_Mapsheet extends ORM {
 	
 		return $copy;
 	}
-	
-	
-
 	
 } // End mapsheet Model

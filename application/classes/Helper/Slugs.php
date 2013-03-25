@@ -8,10 +8,12 @@
 *************************************************************/
 
 
+/**
+*	This class is used to read slugs that have been inserted in the Custompage, add1 pages to check to see if either database contains the slug
+*/
 
 class Helper_Slugs
 {
-
 	/**
 	 * Used to check if slugs
 	 * @param string $slug to be the name of the slug, object $db_obj from which the slug is originating, currently a Map or Custompage
@@ -19,6 +21,7 @@ class Helper_Slugs
 	 */
 	public static function check_slug($slug, $db_obj)
 	{		
+		//check all slugs regardless of capitalization
 		$slug = strtolower($slug);
 		if(!isset($slug)){
 			echo '{}';
@@ -53,6 +56,7 @@ class Helper_Slugs
 			}
 		}
 		
+		//can't be the same name as the default pages
 		if($slug == __('about') || $slug == __('help') || $slug == __('support') || $slug == __('main')){
 			echo '{"status": "notUnique"}';
 			exit;

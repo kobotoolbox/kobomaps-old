@@ -6,6 +6,9 @@
 * Started on 2012-11-08
 *************************************************************/
 
+/**
+* This class sets up the default menus and will handle the dynamic menus that admins can create
+*/
 class Helper_Menus
 {
 	public static function make_menu($page, $user)
@@ -34,7 +37,7 @@ class Helper_Menus
 			}
 			echo '<a href="'.url::base().'public/maps">'.__("Public Maps").'</a></li>';
 			
-			//register page
+			//signup page
 			if($page == "signup")
 			{
 				echo '<li class="selected">';
@@ -45,7 +48,7 @@ class Helper_Menus
 			}
 			echo '<a href="'.url::base().'signup">'.__("Sign Up").'</a></li>';
 			
-			//register page
+			//login page
 			if($page == "login")
 			{
 				echo '<li class="selected">';
@@ -57,12 +60,15 @@ class Helper_Menus
 			echo '<a href="'.url::base().'login">'.__("Log In").'</a></li>';
 		}
 		
+    //see if the given user is an admin, if so they can do super cool stuff
+		$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
+    
 		//if the user is logged in
 		if($user != null)
 		{
 			$login_role = ORM::factory('Role')->where("name", "=", "login")->find();
 
-			if($user->has('roles', $login_role))
+			if($user->has('roles', $login_role) || $user->has('roles', $admin_role))
 			{
 				
 				// home page
@@ -147,6 +153,7 @@ class Helper_Menus
 				{
 					echo '<li>';
 				}
+        //finds out how many unread messages are in the center and displays them
 				$unread = ORM::factory('Message')					
 					->where('user_id','=',$user->id)
 					->where('unread','=',1)
@@ -161,12 +168,9 @@ class Helper_Menus
 				echo '<a href="'.url::base().'message">'.__("Messages").$unread.'</a></li>';
 				
 				
-				
 			}
 		
-		
-			//see if the given user is an admin, if so they can do super cool stuff
-			$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
+	
 			if($user->has('roles', $admin_role))
 			{
 				if($page == "custompage")
@@ -178,7 +182,7 @@ class Helper_Menus
 					echo '<li class="adminmenu">';
 				}
 				echo '<a href="'.url::base().'custompage">'.__("Custom Page").'</a></li>';		
-									
+								
 				
 			}
 		}//end is logged in
@@ -190,7 +194,11 @@ class Helper_Menus
 		
 	}//end function
 	
-	
+  
+  
+	/**
+  * contains the submenus for the pages, contained on the second line of menus, dynamically creates the ones created by admins using the database
+  */
 	public static function make_submenu($page, $user)
 	{
 		
@@ -198,14 +206,43 @@ class Helper_Menus
 
 		switch($page)
 		{
-			case "mymaps":
-				?>
-				<li>
+
+      case "help":
+      ?>
+      <li>
 					<a href="<?php echo URL::base();?>mymaps/add1">
 					<div>
 						<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create New Map');?>
 					</div>
-					</a>
+				</a>
+			</li>		
+
+      <?php break;
+      
+        case "custompage":
+        $menu = ORM::factory('Menus', 'custompage');
+        
+        $item = ORM::factory('Menuitem')->
+        where('menu', '=', $menu->id)->
+        find();
+        
+        ?>
+          <li>
+            <a href="<?php echo $item->item_url?>">
+            <div>
+						  <img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Creat a new menu');?>
+					  </div>
+				  </a>
+          </li>
+          <?php break;
+      case "mymaps":
+      ?>
+      <li>
+					<a href="<?php echo URL::base();?>mymaps/add1">
+					<div>
+						<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create New Map');?>
+					</div>
+				</a>
 				</li>				
 				<li>
 					<a href="<?php echo URL::base();?>message">
@@ -216,7 +253,7 @@ class Helper_Menus
 				</li>
 				<?php 
 				break;
-				
+        
 			case "createmap":
 				
 			case "mapview":
@@ -363,8 +400,8 @@ class Helper_Menus
 		}		
 		
 		echo '</ul>';
+    //this helps make the divs float correctly
 		echo '<p style="clear:both;"></p>';
-	
 	
 	
 	}//end function
@@ -399,7 +436,6 @@ class Helper_Menus
 		}
 		else
 		{
-
 			echo ' <li class="loginMenu">';
 			echo '<a href="'.url::base().'login">'.__('Login, Signup') .'</a>';
 			echo '<ul>';

@@ -52,7 +52,14 @@ class Model_Message extends ORM {
 	}//end function
 
 	
-	
+	/**
+	* Used to create messages to users
+	* @param int $user_id id whom to give the message to
+	* @param string $message content of message
+	* @param string $poster_name name of person who commented
+	* @param string $poster_email email of person who commented
+	* @param date $date of post
+	*/
 	public static function add_message($user_id, $message, $poster_name = '', $poster_email = '', $date = null){
 		if($date == null){
 			$date = time();
@@ -86,12 +93,18 @@ class Model_Message extends ORM {
 			$body = __('You have recieved a new message');
 			
 			Helper_Email::send_email($to, $from, $subject, $body);
-			
-				
 		}
 		
 	}
 	
+	/**
+	* Used to create alerts to users
+	* @param int $user_id id whom to give the message to
+	* @param string $message content of message
+	* @param string $poster_name name of person who commented
+	* @param string $poster_email email of person who commented
+	* @param date $date of post
+	*/
 	public static function add_alert($user_id, $message, $poster_name = '', $poster_email = '', $date = null){
 		if($date == null){
 			$date = time();
@@ -128,10 +141,14 @@ class Model_Message extends ORM {
 	
 	}
 	
+	/**
+	* Called when users delete messages
+	* @param int $message_id message to delete
+	*/
 	public static function delete_message($message_id){
 		$mess_obj = ORM::factory('Message', $message_id);
 		$mess_obj->delete();
 	}
 
 	
-} // End User Model
+} // End Message Model

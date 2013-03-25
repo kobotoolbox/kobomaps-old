@@ -9,6 +9,9 @@
 
 <script type="text/javascript">
 	
+  /**
+  * @param int id of the map to be deleted
+  */
 	function deleteMap(id)
 	{
 		if (confirm("<?php echo __('are you sure you want to delete this map');?>"))

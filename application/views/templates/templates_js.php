@@ -9,6 +9,9 @@
 
 <script type="text/javascript">
 	
+  /**
+  * @param int id of the template to be deleted
+  */
 	function deleteTemplate(id)
 	{
 		if (confirm("<?php echo __("Are you sure you want to delete this template? \r\n\r\n You will break any maps that use this template.");?>"))
