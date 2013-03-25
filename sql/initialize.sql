@@ -272,7 +272,9 @@ UPDATE `metadata` SET  `v` =  '1.0.021' WHERE  `metadata`.`k` ='Database Version
 /** John Etherton -- added columns in the templates table to track who added what template and to know if it's an official template or not**/
 ALTER TABLE  `templates` ADD  `user_id` INT( 11 ) UNSIGNED NOT NULL , ADD  `is_official` BOOLEAN NOT NULL DEFAULT FALSE , ADD INDEX (  `user_id` ,  `is_official`);
 UPDATE  `templates` SET  `user_id` =  '1' WHERE  `templates`.`id` = `templates`.`id`;
-ALTER TABLE `templates`ADD CONSTRAINT `template_user_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+/** to make sure there's a user for the empty template*/
+INSERT INTO `kobomaps`.`users` (`id`, `email`, `username`, `password`, `logins`, `last_login`, `first_name`, `last_name`) VALUES (NULL, 'null@email.com', 'null', 'null', '0', NULL, 'Null', 'User');
+ALTER TABLE `templates` ADD CONSTRAINT `template_user_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 UPDATE `templates` SET `is_official` = '1' WHERE `templates`.`id` = `templates`.`id`;
 UPDATE `metadata` SET  `v` =  '1.0.022' WHERE  `metadata`.`k` ='Database Version';
 
