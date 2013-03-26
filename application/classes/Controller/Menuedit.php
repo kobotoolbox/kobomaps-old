@@ -66,6 +66,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 				where('title', '=', 'custompage')->
 				find_all();
 				
+				//default pages being parsed into selection field
 				$page_array = array();
 				foreach($default as $main){
 					$page_array[$main->slug][] = __('New Submenu in').' '.$main->slug;
@@ -85,6 +86,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 							$page_array[$main->slug][] = $s->text;
 						}
 				}
+				//custom created pages being parsed into selection field
 				foreach($pages as $page){
 					$page_array[$page->slug][] = __('New Submenu in').' '.$page->slug;
 					$menu = ORM::factory('Menus')->
@@ -98,6 +100,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 							$page_array[$page->slug][] = $s->text;
 					}
 				}
+				//custompage being parsed into selection field
 				foreach($custompage as $custom){
 					$page_array[$custom->title][] = __('New Submenu in').' '.$custom->title;
 					$sub = ORM::factory('Menuitem')->
@@ -164,6 +167,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 					$data['menuString'] = '';
 					$this->template->content->data = $data;
 				}
+				//if submenu doesn't exist
 				if($_POST['pages'] == 0){
 					$length = strlen(__('New Submenu in '));
 					//string will be the menu in which to place this
@@ -193,6 +197,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 							$this->template->content->errors[] = $sub->text.__(' already exists.');
 						}
 					}
+					//if menu doesn't exist
 					else{
 						$newMenu = ORM::factory('Menus');
 						$newMenu->title = $this->flip($string);
