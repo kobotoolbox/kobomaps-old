@@ -7,7 +7,7 @@ class Model_Menus extends ORM {
 	/**
 	 * Set the name of the table
 	 */
-	protected  $_table_name = 'menu_items';
+	protected  $_table_name = 'menus';
 	
 	/**
 	 * A user has many tokens and roles

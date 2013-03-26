@@ -4,12 +4,12 @@
 * This software is copy righted by Etherton Technologies Ltd. 2013
 * Writen by Dylan Gillespie
 * Started on 2013-03-22
-* Show user their stats
+* Show menus to edit
 *************************************************************/
 ?>
 
 
-<h2><?php echo __('Create your own custom menus')?></h2>
+<h3><?php echo __('Create your own custom menus')?></h3>
 
 
 <?php if(count($errors) > 0 )
@@ -51,4 +51,41 @@
 }
 ?>
 
-<h1> Here I am editing my menus! </h1>
+<?php 
+	echo Form::open(NULL, array('id'=>'edit_custompage_form', 'enctype'=>'multipart/form-data'));
+	echo Form::hidden('action','edit', array('id'=>'action'));
+  echo Form::input('menuString', $data['menuString'], array('id'=>'menuString', 'style' => 'display:none'));
+	
+	echo '<div id="pageTable" style="float:left; width:200px; height:500px;">';
+	echo Form::label('page_descr', __('This is the list of your current pages.'));
+	echo '</br></br>';
+	echo Form::select('pages', $pages, $data['id'], array('id'=>'pages', 'style' => 'width: 175px; height: 22px'));
+
+	echo '</div>';
+  
+  echo '<div id="menuEdit" style="float:right; width:630px; height 500px;">';
+  
+  echo Form::label('menuPage', __('Create menu item in page').':');
+  echo Form::input('menuPage', '', array('id'=>'menuPage', 'style' => 'width: 180px;', 'readonly' => 'readonly'));
+  echo '</br></br>';
+ 
+  echo Form::label('title', __('Title of menu item').':            ');
+  echo Form::input('text', $data['text'], array('id'=>'text', 'style'=>'width:180px;', 'maxlength' => '60'));
+  echo '</br>';
+  
+  echo Form::label('image_url', __('Image URL').':            ');
+  echo Form::input('image_url', $data['image_url'], array('id'=>'image', 'style'=>'width:250px;', 'maxlength' => '256'));
+  echo '</br>';
+  
+  echo Form::label('link', __('Menu URL').':            ');
+  echo Form::input('item_url', $data['item_url'], array('id'=>'item_url', 'style'=>'width:250px;', 'maxlength' => '256'));
+  echo '</br></br>';
+  echo Form::submit('edit', __('Save'), array('id'=>'edit_button'));
+  echo '</div>';
+  
+  
+  echo Form::close();
+  ?>
+
+
+<div style="clear:both"></div>

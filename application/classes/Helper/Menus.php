@@ -203,38 +203,32 @@ class Helper_Menus
 	{
 		
 		echo '<ul>';
+    
+        //check the case that the page is a custom page and has its own custom menus
+        $m = ORM::factory('Menus')->
+        where('title', '=', $page)->
+        find();
+        
+        if($m->loaded()){
+            $item = ORM::factory('Menuitem')->
+            where('menu', '=', $m->id)->
+            find_all();
+        
+            foreach($item as $menuitem){
+            ?>
+              <li>
+                <a href="<?php echo $menuitem->item_url?>">
+                <div>
+						      <img class="customMenus" src="<?php echo $menuitem->image_url?>" width="60" height="40"/><br/><?php echo $menuitem->text;?>
+					      </div>
+				      </a>
+              </li>
+        <?php
+            }
+        }
 
 		switch($page)
 		{
-
-      case "help":
-      ?>
-      <li>
-					<a href="<?php echo URL::base();?>mymaps/add1">
-					<div>
-						<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create New Map');?>
-					</div>
-				</a>
-			</li>		
-
-      <?php break;
-      
-        case "custompage":
-        $menu = ORM::factory('Menus', 'custompage');
-        
-        $item = ORM::factory('Menuitem')->
-        where('menu', '=', $menu->id)->
-        find();
-        
-        ?>
-          <li>
-            <a href="<?php echo $item->item_url?>">
-            <div>
-						  <img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Creat a new menu');?>
-					  </div>
-				  </a>
-          </li>
-          <?php break;
       case "mymaps":
       ?>
       <li>
@@ -354,48 +348,48 @@ class Helper_Menus
 					break;
 				case "templates":
 					$action = Request::initial()->action();
-				?>
-					<li class="<?php echo $action=='index' ? 'active':'';?>">
-						<?php if($action=='index'){?><span><?php }else{?><a href="<?php echo URL::base();?>templates"><?php }?>
-						<div>
-							<img class="allTemplates" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('All Templates');?>
-						</div>
-						<?php if($action=='index'){?></span><?php }else{?></a><?php }?>
-					</li>
-					<li class="<?php echo $action=='mine' ? 'active':'';?>">
-						<?php if($action=='mine'){?><span><?php }else{?><a href="<?php echo URL::base();?>templates/mine"><?php }?>
-						<div>
-							<img class="myTemplates" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('My Templates');?>
-						</div>
-						<?php if($action=='mine'){?></span><?php }else{?></a><?php }?>
-					</li>
-					<li class="<?php echo ($action=='edit' AND !isset($_GET['id'])) ? 'active':'';?>">
-						<?php if($action=='edit' AND !isset($_GET['id'])){?><span><?php }else{?><a href="<?php echo URL::base();?>templates/edit"><?php }?>
-						<div>
-							<img class="newTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create Template');?>
-						</div>
-						<?php if($action=='edit' AND !isset($_GET['id'])){?></span><?php }else{?></a><?php }?>
-					</li>
-					<?php if($action=='edit' AND isset($_GET['id'])){?>
-					<li class="active">
-						<span>
-						<div>
-							<img class="newTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Edit Template');?>
-						</div>
-						</span>
-					</li>						
-					<?php }?>														
+				  ?>
+					  <li class="<?php echo $action=='index' ? 'active':'';?>">
+						  <?php if($action=='index'){?><span><?php }else{?><a href="<?php echo URL::base();?>templates"><?php }?>
+						  <div>
+							  <img class="allTemplates" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('All Templates');?>
+						  </div>
+						  <?php if($action=='index'){?></span><?php }else{?></a><?php }?>
+					  </li>
+					  <li class="<?php echo $action=='mine' ? 'active':'';?>">
+						  <?php if($action=='mine'){?><span><?php }else{?><a href="<?php echo URL::base();?>templates/mine"><?php }?>
+						  <div>
+							  <img class="myTemplates" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('My Templates');?>
+						  </div>
+						  <?php if($action=='mine'){?></span><?php }else{?></a><?php }?>
+					  </li>
+					  <li class="<?php echo ($action=='edit' AND !isset($_GET['id'])) ? 'active':'';?>">
+						  <?php if($action=='edit' AND !isset($_GET['id'])){?><span><?php }else{?><a href="<?php echo URL::base();?>templates/edit"><?php }?>
+						  <div>
+							  <img class="newTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create Template');?>
+						  </div>
+						  <?php if($action=='edit' AND !isset($_GET['id'])){?></span><?php }else{?></a><?php }?>
+					  </li>
+					  <?php if($action=='edit' AND isset($_GET['id'])){?>
+					  <li class="active">
+						  <span>
+						  <div>
+							  <img class="newTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Edit Template');?>
+						  </div>
+						  </span>
+					  </li>						
+					  <?php }?>														
 					
-					<?php if($action=='view'){?>
-					<li class="active">
-						<span>
-						<div>
-							<img class="viewTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View Template');?>
-						</div>
-						</span>
-					</li>						
-					<?php }?>														
-				<?php 
+					  <?php if($action=='view'){?>
+					  <li class="active">
+						  <span>
+						  <div>
+							  <img class="viewTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View Template');?>
+						  </div>
+						  </span>
+					  </li>						
+					  <?php }?>														
+				  <?php 
 				break;
 		}		
 		

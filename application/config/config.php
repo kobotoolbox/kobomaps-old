@@ -17,5 +17,6 @@ return array(
 			'statistics',
 			'templates',
 			'custompage',
+			'menuedit',
 			),
 );

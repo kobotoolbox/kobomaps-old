@@ -4,7 +4,7 @@
 * This software is copy righted by Etherton Technologies Ltd. 2013
 * Writen by Dylan Gillespie
 * Started on 2013-01-23
-* Show user their stats
+* Let user create html pages
 *************************************************************/
 ?>
 
