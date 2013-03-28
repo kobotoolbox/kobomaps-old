@@ -196,11 +196,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 								$filename = $this->_save_file($_FILES['file'], $menu, $sub);
 							}
 							
-							//print_r($filename);
-							//print_r($_FILES);
-							//exit;
-							
-							
+
 							if($filename !== false){
 								$sub->image_url = $filename;
 							}
@@ -209,9 +205,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 							$this->template->content->pages[$menu->title] = $sub->text;
 							$this->template->content->messages[] = __('Saved submenu').' '.$sub->text;
 						}
-						else{
-							$this->template->content->errors[] = $sub->text.__(' already exists.');
-						}
+						
 					}
 					//if menu doesn't exist
 					else{
@@ -246,13 +240,40 @@ class Controller_Menuedit extends Controller_Loggedin {
 						}
 					}
 				}
+				else{
+					//the submenu exists and is being edited
+					
+					
+					$menu = ORM::factory('Menus')->
+					find_all();
+					
+					if($menu->loaded()){
+						$sub = ORM::factory('Menuitem')->
+						where('text', '=', $_POST['text'])->
+						find();
+						$_POST['image_url'] = $_FILES['file']['name'];
+						if($_FILES['file']['name'] != '')
+						{
+							$filename = $this->_save_file($_FILES['file'], $menu, $sub);
+						}
+						if($filename !== false){
+							$sub->image_url = $filename;
+						}
+						else{
+							echo 'false';
+							exit;
+						}
+						$sub->save();
+					}
+				}
+				
 			}
 		}
 	}//end action_index
 	
 		 
 	/**
-	* used by the Custompage controller to gather the data on the current page that was selected in the menu
+	* used by the Menueidt controller to gather the data on the current menu that was selected in the page
 	*/
 	public function action_getmenu(){
 		$this->auto_render = false;
@@ -269,11 +290,17 @@ class Controller_Menuedit extends Controller_Loggedin {
 		$menu = ORM::factory('Menuitem')->
 		where('text', '=', $sub)->
 		find();
+		
+		//find only the end of the url, after kobomaps
+		$pos = strrpos($menu->item_url, '/kobomaps/');
+		$len = strlen('/kobomaps/');
+		
+		$string = substr($menu->item_url, $pos + $len);
 
 		echo '{';
 		echo '"text" : "'.$menu->text.'",';
 		echo '"image" : "'.$menu->image_url.'",';
-		echo '"url" : "'.$menu->item_url.'"';
+		echo '"url" : "'.$string.'"';
 		echo '}';
 	}
 	

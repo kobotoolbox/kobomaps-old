@@ -22,18 +22,19 @@ $(document).ready(function() {
 				$("#text").val(data.text);
 				$("#item_url").val(data.url);
 				$("#menuString").val(sub);
+				$("#text").attr('readonly', 'readonly');
 
 				if(val == 0){
 					var len = 'New Submenu in '.length;
 					var menu = sub.substring(len);
-
+					$("#text").attr('readonly', false);
 					$("#menuPage").val(menu);
 				}
 				else{
 					var test = $('option', '#pages').map(function(){
 						return this.text;
 					}).get();
-					console.log(test);
+					//console.log(test);
 				}		
 		});
    });
