@@ -203,32 +203,58 @@ class Helper_Menus
 	{
 		
 		echo '<ul>';
-    
-        //check the case that the page is a custom page and has its own custom menus
-        $m = ORM::factory('Menus')->
-        where('title', '=', $page)->
-        find();
-        
-        if($m->loaded()){
-            $item = ORM::factory('Menuitem')->
-            where('menu', '=', $m->id)->
-            find_all();
-        
-            foreach($item as $menuitem){
-            ?>
-              <li>
-                <a href="<?php echo $menuitem->item_url?>">
-                <div>
-						      <img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
-					      </div>
-				      </a>
-              </li>
-        <?php
-            }
-        }
 
 		switch($page)
 		{
+      case "custompage":
+      ?>
+      <li>
+        <a href="<?php echo '/kobomaps/menuedit/'?>">
+        <div>
+          <img class="menuEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create menus');?>
+        </div>
+        </a>
+      </li>
+      <li>
+        <a href="
+          <?php echo '/kobomaps/custompage/'?>">
+          <div>
+            <img class="customEdit" src=""<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create pages');?>
+          </div>
+        </a>
+      </li>
+  <?php
+      break;
+      
+       case "help":
+      ?>
+      <li>
+        <a href="
+          <?php echo '/kobomaps/maphelp/'?>">
+          <div>
+            <img class="maphelp" src=""<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Help making maps');?>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="
+          <?php echo '/kobomaps/templatehelp/'?>">
+          <div>
+            <img class="templatehelp" src=""<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Help making templates');?>
+          </div>
+        </a>
+      </li>
+      <li>
+      <a href="
+        <?php echo '/kobomaps/custompagehelp/'?>">
+        <div>
+          <img class="customPageHelp" src=""<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Help making custom pages');?>
+        </div>
+      </a>
+      </li>
+      <?php
+      break;
+      
       case "mymaps":
       ?>
       <li>
@@ -392,6 +418,30 @@ class Helper_Menus
 				  <?php 
 				break;
 		}		
+    
+    //check the case that the page is a custom page and has its own custom menus
+        $m = ORM::factory('Menus')->
+        where('title', '=', $page)->
+        find();
+        
+        if($m->loaded()){
+            $item = ORM::factory('Menuitem')->
+            where('menu', '=', $m->id)->
+            find_all();
+        
+            foreach($item as $menuitem){
+              ?>
+              <li>
+                <a href="
+                  <?php echo $menuitem->item_url?>">
+                  <div>
+                    <img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
+                  </div>
+                </a>
+              </li>
+              <?php
+            }
+        }
 		
 		echo '</ul>';
     //this helps make the divs float correctly

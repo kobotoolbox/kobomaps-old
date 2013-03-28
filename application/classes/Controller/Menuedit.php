@@ -1,10 +1,10 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /***********************************************************
-* Custompage.php - Controller
+* Menuedit.php - Controller
 * This software is copy righted by Kobo 2013
 * Writen by Dylan Gillespie, Etherton Technologies <http://ethertontech.com>
-* Started on 2013-03-01
-* Creating custom html script pages for the site
+* Started on 2013-03-22
+* Creating custom menu items
 *************************************************************/
 
 class Controller_Menuedit extends Controller_Loggedin {
@@ -69,7 +69,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 				//default pages being parsed into selection field
 				$page_array = array();
 				foreach($default as $main){
-					$page_array[$main->slug][] = __('New Submenu in').' '.$main->slug;
+					$page_array[$main->slug][0] = __('New Submenu in').' '.$main->slug;
 						$main->slug = $this->flip($main->slug);
 
 						$menu = ORM::factory('Menus')->
@@ -83,12 +83,12 @@ class Controller_Menuedit extends Controller_Loggedin {
 						$main->slug = $this->flip($main->slug);
 						
 						foreach($sub as $s){
-							$page_array[$main->slug][] = $s->text;
+							$page_array[$main->slug][$s->id] = $s->text;
 						}
 				}
 				//custom created pages being parsed into selection field
 				foreach($pages as $page){
-					$page_array[$page->slug][] = __('New Submenu in').' '.$page->slug;
+					$page_array[$page->slug][0] = __('New Submenu in').' '.$page->slug;
 					$menu = ORM::factory('Menus')->
 						where('title', '=', $page->slug)->
 						find();
@@ -97,19 +97,10 @@ class Controller_Menuedit extends Controller_Loggedin {
 						where('menu', '=', $menu->id)->
 						find_all();
 					foreach($sub as $s){
-							$page_array[$page->slug][] = $s->text;
+							$page_array[$page->slug][$s->id] = $s->text;
 					}
 				}
-				//custompage being parsed into selection field
-				foreach($custompage as $custom){
-					$page_array[$custom->title][] = __('New Submenu in').' '.$custom->title;
-					$sub = ORM::factory('Menuitem')->
-						where('menu', '=', $custom->id)->
-						find_all();
-					foreach($sub as $s){
-							$page_array[$custom->title][] = $s->text;
-					}
-				}
+				
 				
 				$this->template->header->menu_page = "custompage";
 				//make messages roll up when done
@@ -142,7 +133,10 @@ class Controller_Menuedit extends Controller_Loggedin {
 		if(!empty($_POST)){
 		
 			if($_POST['action'] == 'delete'){
-				$response = Model_Custompage::delete_page($_POST['pages']);
+				$sub = ORM::factory('Menuitem')->
+				where('text', '=', $_POST['text'])->
+				find();
+				$response = Model_Menuitem::delete_menuitem($sub->id);
 				if($response == __('That page cannot be deleted.')){
 					$this->template->content->errors[] = $response;
 					//reload the page with data being set to the page that was attempted to be deleted
@@ -152,8 +146,8 @@ class Controller_Menuedit extends Controller_Loggedin {
 					$this->template->content->data = $data;
 				}
 				else{
-					$this->template->content->messages[] = __('Deleted the page ').$_POST['slug'];
-					unset($this->template->content->pages[$_POST['pages']]);
+					$this->template->content->messages[] = __('Deleted the menu item ').$_POST['text'];
+					unset($this->template->content->pages[$_POST['text']]);
 				}
 			}
 			else{
@@ -173,9 +167,9 @@ class Controller_Menuedit extends Controller_Loggedin {
 					$length = strlen(__('New Submenu in '));
 					//string will be the menu in which to place this
 					$string = substr($_POST['menuString'], $length);
-					
+
 					$menu = ORM::factory('Menus')->
-					where('title', '=', $string)->
+					where('title', '=', $this->flip($string))->
 					find();
 
 					if($menu->loaded()){
@@ -221,7 +215,6 @@ class Controller_Menuedit extends Controller_Loggedin {
 							$sub->text = $_POST['text'];
 							$sub->item_url = URL::base(TRUE, TRUE).$_POST['item_url'];
 							$sub->menu = $menu->id;
-							$sub->save();
 							
 							$_POST['image_url'] = $_FILES['file']['name'];
 							if($_FILES['file']['name'] != '')
@@ -243,26 +236,20 @@ class Controller_Menuedit extends Controller_Loggedin {
 				else{
 					//the submenu exists and is being edited
 					
-					
-					$menu = ORM::factory('Menus')->
-					find_all();
+					$sub = ORM::factory('Menuitem', $_POST['pages']);
+					$menu = ORM::factory('Menus', $sub->menu);
 					
 					if($menu->loaded()){
-						$sub = ORM::factory('Menuitem')->
-						where('text', '=', $_POST['text'])->
-						find();
 						$_POST['image_url'] = $_FILES['file']['name'];
 						if($_FILES['file']['name'] != '')
 						{
 							$filename = $this->_save_file($_FILES['file'], $menu, $sub);
+							if($filename !== false){
+								$sub->image_url = $filename;
+							}
 						}
-						if($filename !== false){
-							$sub->image_url = $filename;
-						}
-						else{
-							echo 'false';
-							exit;
-						}
+						$sub->text = $_POST['text'];
+						$sub->item_url = URL::base(TRUE, TRUE).$_POST['item_url'];
 						$sub->save();
 					}
 				}
@@ -287,19 +274,19 @@ class Controller_Menuedit extends Controller_Loggedin {
 			exit;
 		}
 
-		$menu = ORM::factory('Menuitem')->
-		where('text', '=', $sub)->
-		find();
+		$menuitem = ORM::factory('Menuitem', $val);
+		$menu = ORM::factory('Menus', $menuitem->menu);
 		
 		//find only the end of the url, after kobomaps
-		$pos = strrpos($menu->item_url, '/kobomaps/');
+		$pos = strrpos($menuitem->item_url, '/kobomaps/');
 		$len = strlen('/kobomaps/');
 		
-		$string = substr($menu->item_url, $pos + $len);
+		$string = substr($menuitem->item_url, $pos + $len);
 
 		echo '{';
-		echo '"text" : "'.$menu->text.'",';
-		echo '"image" : "'.$menu->image_url.'",';
+		echo '"menu" : "'.$this->flip($menu->title).'",';
+		echo '"text" : "'.$menuitem->text.'",';
+		echo '"image" : "'.$menuitem->image_url.'",';
 		echo '"url" : "'.$string.'"';
 		echo '}';
 	}
@@ -334,6 +321,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 		if($slug == __('help')){
 			return '__HELP__';
 		}
+		else return $slug;
 	}
 
 	//call the generic slug checker function

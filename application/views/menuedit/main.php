@@ -52,7 +52,7 @@
 ?>
 
 <?php 
-	echo Form::open(NULL, array('id'=>'edit_custompage_form', 'enctype'=>'multipart/form-data'));
+	echo Form::open(NULL, array('id'=>'edit_menu_form', 'enctype'=>'multipart/form-data'));
 	echo Form::hidden('action','edit', array('id'=>'action'));
   echo Form::input('menuString', $data['menuString'], array('id'=>'menuString', 'style' => 'display:none'));
 	
@@ -91,6 +91,7 @@
   echo '</table>';
   
   echo Form::submit('edit', __('Save'), array('id'=>'edit_button'));
+  echo '<div id ="delete_button" style="float:right">'.__('Delete').'</div></div>';
   echo '</div>';
   
   

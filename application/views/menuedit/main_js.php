@@ -22,26 +22,37 @@ $(document).ready(function() {
 				$("#text").val(data.text);
 				$("#item_url").val(data.url);
 				$("#menuString").val(sub);
-				$("#text").attr('readonly', 'readonly');
 
 				if(val == 0){
 					var len = 'New Submenu in '.length;
 					var menu = sub.substring(len);
-					$("#text").attr('readonly', false);
 					$("#menuPage").val(menu);
 				}
 				else{
-					var test = $('option', '#pages').map(function(){
-						return this.text;
-					}).get();
-					//console.log(test);
+					$("#menuPage").val(data.menu);
 				}		
 		});
+   });
+   
+   $('#delete_button').click(function(){
+		deletePage();
    });
 
 });
 
-
+/*
+* asks the user to confirm deletion and then submits the data
+*/
+function deletePage(){
+	var page_id = $("#pages").val();
+	if(page_id != 0){
+		if (confirm("<?php echo __('Are you sure you want to delete this menu item');?>"))
+		{
+			$("#action").val('delete');
+			$("#edit_menu_form").submit();
+		}
+	}
+}
 
 
 

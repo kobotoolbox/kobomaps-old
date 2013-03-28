@@ -16,6 +16,20 @@ class Controller_Dynamic extends Controller_Main {
 	public function action_index()
 	{		
 		$slug = $this->request->param('slug');
+
+		//if any the pages are linked from the help page, redirect and keep the header the same
+		$helpPages = array( 'maphelp' => 'maphelp',
+							'templatehelp' => 'templatehelp',
+							'custompagehelp' => 'custompagehelp',
+							);
+
+		foreach($helpPages as $help){
+			if($help == $slug){
+				$this->template->header->menu_page = 'help';
+				$this->template->content = new View('help/'.$slug);
+				break;
+			}
+		}
 		
 		//handle the default page requests
 		if($slug == __('home') || ''){
@@ -46,6 +60,16 @@ class Controller_Dynamic extends Controller_Main {
 		if($map->loaded()){
 			$this->viewMap($map);
 		}
+
+		if($slug == 'maphelp'){
+			$this->template->header->menu_page = 'help';
+			$this->template->content = new View('help/maphelp');
+		}
+
+		if($slug == 'templatehelp'){
+			$this->template->header->menu_page = 'help';
+			$this->template->content = new View('help/templatehelp');
+		}
 			
 		//if we couldn't find it bounce.
 		if(!$map->loaded() && !$page->loaded())
@@ -75,6 +99,7 @@ class Controller_Dynamic extends Controller_Main {
 		if($page->slug == '__SUPPORT__'){
 			$page->slug = __('support');
 		}
+	
 		$this->template->header->menu_page = $page->slug;
 		$this->template->content = $page->content;
 	}

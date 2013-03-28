@@ -17,7 +17,6 @@
   <strong>Basic Set-Up:</strong>
 </p>
 <ol>
-  <?php echo 'I am here'; ?>
   <li>
     <em>Map Title</em>: This is the title for how you will find and use your map, this cannot be more than 156 characters long.
   </li>
