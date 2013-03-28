@@ -219,7 +219,7 @@ class Helper_Menus
               <li>
                 <a href="<?php echo $menuitem->item_url?>">
                 <div>
-						      <img class="customMenus" src="<?php echo $menuitem->image_url?>" width="60" height="40"/><br/><?php echo $menuitem->text;?>
+						      <img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
 					      </div>
 				      </a>
               </li>

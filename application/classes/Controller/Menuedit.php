@@ -167,6 +167,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 					$data['menuString'] = '';
 					$this->template->content->data = $data;
 				}
+				
 				//if submenu doesn't exist
 				if($_POST['pages'] == 0){
 					$length = strlen(__('New Submenu in '));
@@ -183,11 +184,26 @@ class Controller_Menuedit extends Controller_Loggedin {
 						find();
 
 						if(!$sub->loaded()){
+							//load the image
 							$sub->text = $_POST['text'];
-							$sub->item_url = $_POST['item_url'];
-							$sub->image_url = $_POST['image_url'];
+							$sub->item_url = URL::base(TRUE, TRUE).$_POST['item_url'];
 							$sub->menu = $menu->id;
-
+							$sub->save();
+							
+							$_POST['image_url'] = $_FILES['file']['name'];
+							if($_FILES['file']['name'] != '')
+							{
+								$filename = $this->_save_file($_FILES['file'], $menu, $sub);
+							}
+							
+							//print_r($filename);
+							//print_r($_FILES);
+							//exit;
+							
+							
+							if($filename !== false){
+								$sub->image_url = $filename;
+							}
 							$sub->save();
 
 							$this->template->content->pages[$menu->title] = $sub->text;
@@ -209,10 +225,17 @@ class Controller_Menuedit extends Controller_Loggedin {
 
 						if(!$sub->loaded()){
 							$sub->text = $_POST['text'];
-							$sub->item_url = $_POST['item_url'];
-							$sub->image_url = $_POST['image_url'];
-							$sub->menu = $newMenu->id;
+							$sub->item_url = URL::base(TRUE, TRUE).$_POST['item_url'];
+							$sub->menu = $menu->id;
+							$sub->save();
 							
+							$_POST['image_url'] = $_FILES['file']['name'];
+							if($_FILES['file']['name'] != '')
+							{
+								$filename = $this->_save_file($_FILES['file'], $menu, $sub);
+							}
+							
+							$sub->image_url = $filename;
 							$sub->save();
 
 							$this->template->content->pages[$menu->title] = $sub->text;
@@ -302,6 +325,46 @@ class Controller_Menuedit extends Controller_Loggedin {
 			$db_obj = ORM::factory('Menuitem')->where('id', '=', $_POST['id'])->find();
 		}
 		Helper_Slugs::check_slug($_POST['slug'], $db_obj);
+	}
+	
+	/**
+	 * Grabs the file extention of a file
+	 * @param string $file_name name of the file
+	 * @return the exention of the file. So for 'about.txt' this function would return 'txt'
+	 */
+	protected function get_file_extension($file_name) {
+		return substr(strrchr($file_name,'.'),1);
+	}
+	
+	/**
+	 * Saves a file from the temp upload area to the hard disk
+	 * @param array $upload_file the $_FILES['<name>'] array for the given file
+	 * @param obj $Menu Kohana ORM object for a menu, this is used in naming the file
+	 * @param obj $Menuitem Kohana ORM object for a menuitem, this is used in naming the file
+	 * @return boolean or filename
+	 */
+	protected function _save_file($upload_file, $menu, $sub)
+	{
+
+		if (
+				! Upload::valid($upload_file) OR
+				! Upload::not_empty($upload_file) OR
+				! Upload::type($upload_file, array('png', 'jpeg', 'bmp', 'jpg')))
+		{
+			return FALSE;
+		}
+	
+		$directory = DOCROOT.'uploads/images/';
+	
+		$extention = $this->get_file_extension($upload_file['name']);
+		$filename = $menu->title.'-'.$sub->id.'.'.$extention;
+		 
+		if ($file = Upload::save($upload_file, $filename, $directory))
+		{
+			return URL::base(TRUE,TRUE).'uploads/images/'.$filename;
+		}
+	
+		return FALSE;
 	}
 	
 }//end of class

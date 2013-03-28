@@ -20,7 +20,6 @@ $(document).ready(function() {
 			function(data){
 				data = jQuery.parseJSON(data);
 				$("#text").val(data.text);
-				$("#image").val(data.image);
 				$("#item_url").val(data.url);
 				$("#menuString").val(sub);
 

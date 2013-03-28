@@ -64,22 +64,32 @@
 	echo '</div>';
   
   echo '<div id="menuEdit" style="float:right; width:630px; height 500px;">';
+  echo '<table style="width:630px"><tr><td>';
   
   echo Form::label('menuPage', __('Create menu item in page').':');
+  echo '</td><td>';
   echo Form::input('menuPage', '', array('id'=>'menuPage', 'style' => 'width: 180px;', 'readonly' => 'readonly'));
-  echo '</br></br>';
+  echo '</td></tr><tr><td>';
  
-  echo Form::label('title', __('Title of menu item').':            ');
+  echo Form::label('title', __('Title of menu item'));
+  echo '</td><td>';
   echo Form::input('text', $data['text'], array('id'=>'text', 'style'=>'width:180px;', 'maxlength' => '60'));
-  echo '</br>';
-  
-  echo Form::label('image_url', __('Image URL').':            ');
-  echo Form::input('image_url', $data['image_url'], array('id'=>'image', 'style'=>'width:250px;', 'maxlength' => '256'));
-  echo '</br>';
-  
-  echo Form::label('link', __('Menu URL').':            ');
+  echo '</td></tr><tr><td>';
+ 
+  echo Form::label('link', __('Menu URL').':');
+  echo '</td><td style="width:400px">';
+  echo 'kobomaps/';
   echo Form::input('item_url', $data['item_url'], array('id'=>'item_url', 'style'=>'width:250px;', 'maxlength' => '256'));
-  echo '</br></br>';
+  echo '</td></tr><tr><td>';
+  
+  echo Form::label('image_url', __('Image').' (.jpeg, .png, .bmp):');
+  echo '</td><td>';
+  echo Form::file('file', array('id'=>'file', 'style'=>'width:300px;'));
+  //echo $data['image_url'];
+  echo '</td></tr>';
+   
+  echo '</table>';
+  
   echo Form::submit('edit', __('Save'), array('id'=>'edit_button'));
   echo '</div>';
   
