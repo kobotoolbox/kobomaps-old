@@ -383,6 +383,15 @@ class Helper_Menus
 						<?php if($map_progress >= 4 AND $pageNumber != 5){?></a><?php } else {?></span><?php }?>
 					</li>
 					
+					<li class="<?php echo ($pageNumber == 6)? 'active':''; echo ($map_progress < 6 AND $pageNumber != 6)? 'greyedout':'';?>">
+					
+						<?php if($map_progress >= 5 AND $pageNumber != 6){?><a href="<?php echo URL::base();?>mymaps/add6?id=<?php echo $map_id;?>"> <?php } else {?><span><?php }?>
+							<div>
+								<img class="mapStyle" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Map Style');?>
+							</div>
+						<?php if($map_progress >= 5 AND $pageNumber != 6){?></a><?php } else {?></span><?php }?>
+					</li>
+					
 					<li class="<?php echo ($pageNumber == 0)? 'active':''; echo ($map_progress < 5 AND $pageNumber != 0)? 'greyedout':'';?>">
 					
 						<?php if($map_progress >= 5 AND $pageNumber != 0){?><a href="<?php echo URL::base();?><?php echo $map->slug;?>"> <?php } else {?><span><?php }?>

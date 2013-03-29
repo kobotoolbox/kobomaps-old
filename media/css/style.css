@@ -310,6 +310,10 @@ div#subMenu
 	background: url('../img/submenuSprite.png') -509px 0px;	
 	width:46px;	
 }
+#subMenu img.mapStyle{
+	background: url('../img/helpCustomSprite.png') -250px 0px;	
+	width:54px;	
+}
 
 
 
@@ -338,7 +342,7 @@ div#subMenu
 }
 #subMenu img.submenuHelp{
 	background: url('../img/helpCustomSprite.png') -210px 0px;	
-	width:47px;	
+	width:40px;	
 }
 
 

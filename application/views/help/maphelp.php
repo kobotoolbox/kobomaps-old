@@ -93,6 +93,13 @@ echo '<p>&nbsp;<strong>'.__('Geo Matching').'</strong></p>';
 	'<span style="font-size: small;"><strong> '.__('You cannot use a region more than once.').'</strong></span>';
 echo '</p>';
 
+echo '<p>&nbsp;<strong>'.__('Map Style').'</strong></p>';
+echo '<p style="padding-left: 30px;">'.__('On this page you can set up the base Googlemap style easier than on the Basic Set-up page.');
+echo '</br><strong>'.__('TEXT TO FILL WHEN DONE WITH MAP STYLE PAGE').'</strong>';
+echo '</p>';
+
+echo '</br>';
+
 echo '<p><strong>&nbsp;'.__('And that should be it to complete your map! When you hit submit on the Geo Matching page, your map will be created and you will be able to use it.');
 echo '</strong></p>';
 
