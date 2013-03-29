@@ -9,7 +9,7 @@
 ?>
 
 
-<h3><?php echo __('Create your own custom menus')?></h3>
+<h3><?php echo __('Create your own custom submenus')?></h3>
 
 
 <?php if(count($errors) > 0 )
@@ -82,7 +82,7 @@
   echo Form::input('item_url', $data['item_url'], array('id'=>'item_url', 'style'=>'width:250px;', 'maxlength' => '256'));
   echo '</td></tr><tr><td>';
   
-  echo Form::label('image_url', __('Image').' (.jpeg, .png, .bmp):');
+  echo Form::label('image_url', __('Icon').' (.jpeg, .png, .bmp):');
   echo '</td><td>';
   echo Form::file('file', array('id'=>'file', 'style'=>'width:300px;'));
   //echo $data['image_url'];

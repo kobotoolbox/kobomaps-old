@@ -21,13 +21,14 @@ class Controller_Dynamic extends Controller_Main {
 		$helpPages = array( 'maphelp' => 'maphelp',
 							'templatehelp' => 'templatehelp',
 							'custompagehelp' => 'custompagehelp',
+							'submenuhelp' => 'submenuhelp',
 							);
-
+		
 		foreach($helpPages as $help){
 			if($help == $slug){
 				$this->template->header->menu_page = 'help';
 				$this->template->content = new View('help/'.$slug);
-				break;
+				return;
 			}
 		}
 		

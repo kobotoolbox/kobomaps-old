@@ -313,9 +313,33 @@ div#subMenu
 
 
 
-
-
-
+/************************************************************
+						Help and Custompage menus
+*************************************************************/
+#subMenu img.menuEdit{
+	background: url('../img/helpCustomSprite.png') -129px 0px;	
+	width:46px;	
+}
+#subMenu img.customEdit{
+	background: url('../img/helpCustomSprite.png') -173px 0px;	
+	width:35px;	
+}
+#subMenu img.maphelp{
+	background: url('../img/helpCustomSprite.png') -4px 0px;	
+	width:47px;	
+}
+#subMenu img.templatehelp{
+	background: url('../img/helpCustomSprite.png') -50px 0px;	
+	width:47px;	
+}
+#subMenu img.customPageHelp{
+	background: url('../img/helpCustomSprite.png') -96px 0px;	
+	width:35px;	
+}
+#subMenu img.submenuHelp{
+	background: url('../img/helpCustomSprite.png') -210px 0px;	
+	width:47px;	
+}
 
 
 /************************************************************

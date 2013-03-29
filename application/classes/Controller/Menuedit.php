@@ -137,18 +137,9 @@ class Controller_Menuedit extends Controller_Loggedin {
 				where('text', '=', $_POST['text'])->
 				find();
 				$response = Model_Menuitem::delete_menuitem($sub->id);
-				if($response == __('That page cannot be deleted.')){
-					$this->template->content->errors[] = $response;
-					//reload the page with data being set to the page that was attempted to be deleted
-					$data['id'] = $_POST['pages'];
-					$data['slug'] = $_POST['slug'];
-					$data['content'] = $_POST['content'];
-					$this->template->content->data = $data;
-				}
-				else{
-					$this->template->content->messages[] = __('Deleted the menu item ').$_POST['text'];
-					unset($this->template->content->pages[$_POST['text']]);
-				}
+			
+				$this->template->content->messages[] = __('Deleted the menu item').' '.$_POST['text'];
+				unset($this->template->content->pages[$_POST['pages']]);
 			}
 			else{
 			//if they are creating a new menu or menuitem
@@ -164,7 +155,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 				
 				//if submenu doesn't exist
 				if($_POST['pages'] == 0){
-					$length = strlen(__('New Submenu in '));
+					$length = strlen(__('New Submenu in')) + 1;
 					//string will be the menu in which to place this
 					$string = substr($_POST['menuString'], $length);
 
@@ -229,7 +220,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 							$this->template->content->messages[] = __('Saved submenu').' '.$sub->text;
 						}
 						else{
-							$this->template->content->errors[] = $sub->text.__(' already exists.');
+							$this->template->content->errors[] = $sub->text.' '.__('already exists.');
 						}
 					}
 				}
@@ -251,6 +242,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 						$sub->text = $_POST['text'];
 						$sub->item_url = URL::base(TRUE, TRUE).$_POST['item_url'];
 						$sub->save();
+						$this->template->content->messages[] = __('Saved submenu').' '.$sub->text;
 					}
 				}
 				

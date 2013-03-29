@@ -201,28 +201,38 @@ class Helper_Menus
   */
 	public static function make_submenu($page, $user)
 	{
-		
 		echo '<ul>';
+		
+		//the custompage creation help page should not be available for non admins
+		$auth = Auth::instance();
+		$logged_in = $auth->logged_in() OR $auth->auto_login();
+		//see if the given user is an admin, if so they can do super cool stuff
+		$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
+		if($logged_in)
+		{
+			$user = ORM::factory('user',$auth->get_user());
+		}
 
 		switch($page)
 		{
       case "custompage":
       ?>
       <li>
-        <a href="<?php echo '/kobomaps/menuedit/'?>">
-        <div>
-          <img class="menuEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create menus');?>
-        </div>
-        </a>
-      </li>
-      <li>
         <a href="
           <?php echo '/kobomaps/custompage/'?>">
           <div>
-            <img class="customEdit" src=""<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create pages');?>
+            <img class="customEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create pages');?>
           </div>
         </a>
       </li>
+      <li>
+        <a href="<?php echo '/kobomaps/menuedit/'?>">
+        <div>
+          <img class="menuEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create submenus');?>
+        </div>
+        </a>
+      </li>
+      
   <?php
       break;
       
@@ -232,7 +242,7 @@ class Helper_Menus
         <a href="
           <?php echo '/kobomaps/maphelp/'?>">
           <div>
-            <img class="maphelp" src=""<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Help making maps');?>
+            <img class="maphelp" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Help making maps');?>
           </div>
         </a>
       </li>
@@ -240,19 +250,31 @@ class Helper_Menus
         <a href="
           <?php echo '/kobomaps/templatehelp/'?>">
           <div>
-            <img class="templatehelp" src=""<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Help making templates');?>
+            <img class="templatehelp" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Help making templates');?>
           </div>
         </a>
       </li>
+      <?php 
+      if($user->has('roles', $admin_role)){
+      ?>
       <li>
       <a href="
         <?php echo '/kobomaps/custompagehelp/'?>">
         <div>
-          <img class="customPageHelp" src=""<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Help making custom pages');?>
+          <img class="customPageHelp" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Help making custom pages');?>
+        </div>
+      </a>
+      </li>
+      <li>
+      <a href="
+        <?php echo '/kobomaps/submenuhelp/'?>">
+        <div>
+          <img class="submenuHelp" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Help making submenus');?>
         </div>
       </a>
       </li>
       <?php
+      }
       break;
       
       case "mymaps":

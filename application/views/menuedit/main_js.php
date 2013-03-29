@@ -24,7 +24,7 @@ $(document).ready(function() {
 				$("#menuString").val(sub);
 
 				if(val == 0){
-					var len = 'New Submenu in '.length;
+					var len = '<?php echo __('New Submenu in') ?>'.length + 1;
 					var menu = sub.substring(len);
 					$("#menuPage").val(menu);
 				}
