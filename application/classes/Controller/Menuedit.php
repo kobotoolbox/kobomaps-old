@@ -270,7 +270,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 		$menu = ORM::factory('Menus', $menuitem->menu);
 		
 		//find only the end of the url, after kobomaps
-		$pos = strrpos($menuitem->item_url, '/kobomaps/');
+		$pos = strpos($menuitem->item_url, '/kobomaps/');
 		$len = strlen('/kobomaps/');
 		
 		$string = substr($menuitem->item_url, $pos + $len);
