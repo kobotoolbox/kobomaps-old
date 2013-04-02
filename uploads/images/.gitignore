@@ -1,4 +1,5 @@
 uploads
+uploads/images
 application/bootstrap.php
 application/config/database.php
 application/config/googleapi.php
