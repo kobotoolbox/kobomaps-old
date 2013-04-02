@@ -1,0 +1,16 @@
+uploads
+application/bootstrap.php
+application/config/database.php
+application/config/googleapi.php
+application/cache
+application/logs
+sql/initialize.sql~
+original_code_temp
+.buildpath
+.hg
+.hgignore
+.htaccess
+.project
+.htaccess
+.settings/
+test data
