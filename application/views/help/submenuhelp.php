@@ -13,7 +13,7 @@
 	echo '</strong></p>';
 	echo '<p>';
 		echo __('This page should only be available to administrators of the website and is used to create submenus for any custom pages or any of the four default pages');
-		echo ': '.__('main').', '.__('about').', '.__('help').', '.__('and').' '.__('Support');
+		echo ': '.__('main').', '.__('about').', '.__('help').', '.__('and').' '.__('support');
 	echo '</p>';
 	echo '<p>';
 		echo __('The drop down bar on the left side the list of current pages that can support submenus, if you have no custom pages created, only the four default pages will be visible.');

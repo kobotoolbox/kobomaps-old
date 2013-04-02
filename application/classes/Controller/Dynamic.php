@@ -62,16 +62,6 @@ class Controller_Dynamic extends Controller_Main {
 			$this->viewMap($map);
 		}
 
-		if($slug == 'maphelp'){
-			$this->template->header->menu_page = 'help';
-			$this->template->content = new View('help/maphelp');
-		}
-
-		if($slug == 'templatehelp'){
-			$this->template->header->menu_page = 'help';
-			$this->template->content = new View('help/templatehelp');
-		}
-			
 		//if we couldn't find it bounce.
 		if(!$map->loaded() && !$page->loaded())
 		{
