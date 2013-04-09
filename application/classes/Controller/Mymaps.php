@@ -1868,7 +1868,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//check permissions of the user on this map
 	 	$this->check_map_permissions($map_id, $this->user->id);
 	 	 
-	 	if($map->map_creation_progress < 2)
+	 	if($map->map_creation_progress < 6)
 	 	{
 	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
 	 		HTTP::redirect('mymaps/add2/?id='.$map_id);
