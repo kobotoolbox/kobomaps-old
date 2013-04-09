@@ -16,21 +16,6 @@ class Controller_Dynamic extends Controller_Main {
 	public function action_index()
 	{		
 		$slug = $this->request->param('slug');
-
-		//if any the pages are linked from the help page, redirect and keep the header the same
-		$helpPages = array( 'maphelp' => 'maphelp',
-							'templatehelp' => 'templatehelp',
-							'custompagehelp' => 'custompagehelp',
-							'submenuhelp' => 'submenuhelp',
-							);
-		
-		foreach($helpPages as $help){
-			if($help == $slug){
-				$this->template->header->menu_page = 'help';
-				$this->template->content = new View('help/'.$slug);
-				return;
-			}
-		}
 		
 		//handle the default page requests
 		if($slug == __('home') || ''){

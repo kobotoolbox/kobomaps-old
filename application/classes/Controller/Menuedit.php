@@ -28,6 +28,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 						'item_url' => '',
 						'id' => isset($_GET['id']) ? intval($_GET['id']) : '__HOME__',
 						'menuString' => '',
+						'admin_only' => '0',
 				);
 				
 				$pages = ORM::factory('Custompage')->
@@ -36,70 +37,19 @@ class Controller_Menuedit extends Controller_Loggedin {
 
 				$submenus = array();
 				$menus = array();
-
-				$menu = ORM::factory('Menus')->find_all();
-				foreach($menu as $m){
-					$menus[] = $m;
-				}
-
-				foreach($menus as $menu){
+				
+				$m = ORM::factory('Menus')
+				->find_all();
+				
+				foreach($m as $main){
 					$sub = ORM::factory('Menuitem')->
-					where('menu', '=', $menu->id)->
+					where('menu', '=', $main->id)->
 					find_all();
-
-					$submenuArray = array();
-
 					foreach($sub as $s){
-						$submenuArray[] = $s;
-					}
-
-					$submenus[$menu->id] = $submenuArray;
-				}
-				
-				//grab all of the pages that are in the database from the start, such as main/about/help/support
-				$default = ORM::factory('Custompage')->
-				where('user_id', '=', 1)->
-				find_all();
-
-				//get the menus for the custompage
-				$custompage = ORM::factory('Menus')->
-				where('title', '=', 'custompage')->
-				find_all();
-				
-				//default pages being parsed into selection field
-				$page_array = array();
-				foreach($default as $main){
-					$page_array[$main->slug][0] = __('New Submenu in').' '.$main->slug;
-						$main->slug = $this->flip($main->slug);
-
-						$menu = ORM::factory('Menus')->
-						where('title', '=', $main->slug)->
-						find();
-
-						$sub = ORM::factory('Menuitem')->
-						where('menu', '=', $menu->id)->
-						find_all();
-
-						$main->slug = $this->flip($main->slug);
-						
-						foreach($sub as $s){
-							$page_array[$main->slug][$s->id] = $s->text;
-						}
-				}
-				//custom created pages being parsed into selection field
-				foreach($pages as $page){
-					$page_array[$page->slug][0] = __('New Submenu in').' '.$page->slug;
-					$menu = ORM::factory('Menus')->
-						where('title', '=', $page->slug)->
-						find();
-
-					$sub = ORM::factory('Menuitem')->
-						where('menu', '=', $menu->id)->
-						find_all();
-					foreach($sub as $s){
-							$page_array[$page->slug][$s->id] = $s->text;
+						$menus[$main->title][$s->id] = $s;
 					}
 				}
+
 				
 				
 				$this->template->header->menu_page = "custompage";
@@ -112,7 +62,6 @@ class Controller_Menuedit extends Controller_Loggedin {
 				$this->template->content->errors = array();
 				$this->template->content->messages = array();
 				$this->template->content->data = $data;
-				$this->template->content->pages = $page_array;
 				$this->template->content->menus = $menus;
 				$this->template->content->submenus = $submenus;
 			}
@@ -252,7 +201,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 	
 		 
 	/**
-	* used by the Menueidt controller to gather the data on the current menu that was selected in the page
+	* used by the Menuedit controller to gather the data on the current menu that was selected in the page
 	*/
 	public function action_getmenu(){
 		$this->auto_render = false;
@@ -279,7 +228,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 		echo '"menu" : "'.$this->flip($menu->title).'",';
 		echo '"text" : "'.$menuitem->text.'",';
 		echo '"image" : "'.$menuitem->image_url.'",';
-		echo '"url" : "'.$string.'"';
+		echo '"url" : "'.$menuitem->item_url.'"';
 		echo '}';
 	}
 	

@@ -70,20 +70,18 @@ class Kohana_Auth_ORM extends Auth {
 		if ( ! is_object($user))
 		{
 			$username = $user;
-
 			// Load the user
 			$user = ORM::factory('User');
 			$user->where($user->unique_key($username), '=', $username)->find();
 		}
-
 		if (is_string($password))
 		{
 			// Create a hashed password
 			$password = $this->hash($password);
 		}
-
 		// If the passwords match, perform a login
-		if ($user->has('roles', ORM::factory('Role', array('name' => 'login'))) AND $user->password === $password)
+		if (($user->has('roles', ORM::factory('Role', array('name' => 'login'))) OR $user->has('roles', ORM::factory('Role', array('name' => 'admin')))) 
+				AND (trim($user->password) === $password))
 		{
 			if ($remember === TRUE)
 			{
@@ -108,7 +106,7 @@ class Kohana_Auth_ORM extends Auth {
 
 			return TRUE;
 		}
-
+		
 		// Login failed
 		return FALSE;
 	}

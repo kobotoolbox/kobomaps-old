@@ -59,14 +59,72 @@
 	echo '<div id="pageTable" style="float:left; width:200px; height:500px;">';
 	echo Form::label('page_descr', __('This is the list of your current pages.'));
 	echo '</br></br>';
-	echo Form::select('pages', $pages, $data['id'], array('id'=>'pages', 'style' => 'width: 175px; height: 22px'));
+	echo Form::select('pages', $menus, $data['id'], array('id'=>'pages', 'style' => 'width: 175px; height: 22px'));
 
 	echo '</div>';
   
   echo '<div id="menuEdit" style="float:right; width:630px; height 500px;">';
+  ?>
+  <div class="scroll_table">
+	  <table class="list_table" style="width:550px; height:400px">
+	  <thead>
+	  <tr class="header">
+	  			<th class="menuName" style="width:80px">
+	  				<?php echo __('Menu');?>
+	  			</th>
+	  			<th class="menuItems" style="width:300px">
+	  				<?php echo __('Items');?>
+	  			</th>
+	  			<th class="lastColumn" style="width:70px">
+	  				<?php echo __('Pages');?>
+	  			</th>
+	  		</tr>
+	  	</thead>
+	  	<tbody style="height: 360px">
+	  	<?php
+	  		if(count($menus) == 0)
+	  		{
+	  			echo '<tr><td colspan="4" style="width:880px;text-align:center;">'.__('You have no maps').'</td></tr>';
+	  		}
+	  		$i = 0;
+	  		foreach($menus as $title=>$menu){
+				$i++;
+	  			$odd_row = ($i % 2) == 0 ? 'class="odd_row"' : '';
+	  		?>
+	  
+	  	<tr <?php echo $odd_row; ?>>
+	  		
+	  		<td class="menuName" style="width: 80px">
+	  			<?php echo $title;?>
+	  		</td>
+	  		<td class="menuItems" style="width:300px">
+	  			<ul>
+	  			<?php 
+	  				foreach($menu as $m){
+					?>
+						<li>
+							<a href="
+								<?php echo $m->item_url?>">
+								<div>
+	            					<img class="<?php echo $m->item_url?>" src="<?php echo $m->image_url?>" width="1" height="1"/><br/><?php echo $m->text;?>
+	          					</div>
+       					 	</a>
+      					</li>
+					<?php }	
+	  			?>
+	  			</ul>
+	  		</td>
+	  		<td class="lastColumn" style="width:65px">
+	  		</td>
+	  	</tr>
+	  	<?php }?>
+	  	</tbody>
+	  </table>
+  </div>
+  </br>
+  <?php 
   echo '<table style="width:630px"><tr><td>';
-  
-  echo Form::label('menuPage', __('Create menu item in page').':');
+  echo Form::label('menuPage', __('Create menu item in menu').':');
   echo '</td><td>';
   echo Form::input('menuPage', '', array('id'=>'menuPage', 'style' => 'width: 180px;', 'readonly' => 'readonly'));
   echo '</td></tr><tr><td>';

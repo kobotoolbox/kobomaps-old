@@ -336,11 +336,11 @@ div#subMenu
 	background: url('../img/helpCustomSprite.png') -50px 0px;	
 	width:47px;	
 }
-#subMenu img.customPageHelp{
+#subMenu img.custompagehelp{
 	background: url('../img/helpCustomSprite.png') -96px 0px;	
 	width:35px;	
 }
-#subMenu img.submenuHelp{
+#subMenu img.submenuhelp{
 	background: url('../img/helpCustomSprite.png') -210px 0px;	
 	width:40px;	
 }
@@ -438,18 +438,18 @@ table.list_table tr td a:hover
 *************************************************************/
 
 
-.mapTasks ul, .templateTasks ul, .messageTasks ul{
+.mapTasks ul, .templateTasks ul, .messageTasks ul, .menuItems ul{
 	padding:0px;
 	margin:0px;
 	list-style:none;
 }
 
-.mapTasks ul li, .templateTasks ul li, .messageTasks ul li{
+.mapTasks ul li, .templateTasks ul li, .messageTasks ul li, .menuItems ul li{
 	float:left;
 	margin:3px;
 	padding:3px;
 	}
-.mapTasks ul li a, .templateTasks ul li a, .messageTasks ul li a{
+.mapTasks ul li a, .templateTasks ul li a, .messageTasks ul li a, .menuItems ul li a{
 	font-size: 11px;
 	}
 

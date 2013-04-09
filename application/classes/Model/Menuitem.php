@@ -36,7 +36,7 @@ class Model_Menuitem extends ORM {
 	public function update_menuitem($values)
 	{
 	
-		$expected = array('menu', 'text', 'image_url', 'item_url');
+		$expected = array('menu', 'text', 'image_url', 'item_url', 'admin_only');
 	
 		$this->values($values, $expected);
 		$this->check();
@@ -52,7 +52,7 @@ class Model_Menuitem extends ORM {
 	* @param string $item_url
 	* @return ORM::Menuitem that was created
 	*/
-	public static function create_menuitem($menu, $text, $image_url, $item_url){
+	public static function create_menuitem($menu, $text, $image_url, $item_url, $admin_only){
 		
 		$item = ORM::factory('Menuitem');
 	
@@ -61,6 +61,7 @@ class Model_Menuitem extends ORM {
 			$item->text = $text;
 			$item->image_url = $image_url;
 			$item->item_url = $item_url;
+			$item->admin_only = $admin_only;
 		}
 	
 		$item->save();

@@ -1871,7 +1871,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	if($map->map_creation_progress < 6)
 	 	{
 	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
-	 		HTTP::redirect('mymaps/add2/?id='.$map_id);
+	 		HTTP::redirect('mymaps/add6/?id='.$map_id);
 	 	}
 
 	 	$s = $map->map_style;
