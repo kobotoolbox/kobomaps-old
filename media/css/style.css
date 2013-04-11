@@ -995,7 +995,7 @@ table.list_table tr.unread.odd_row  td {
 /*********************************************************
                Custom Page Center
 *********************************************************/
-#delete_button {
+.delete_button {
    -webkit-box-align: center;
    padding: 1px 6px;
    text-align: center;

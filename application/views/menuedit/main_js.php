@@ -13,29 +13,19 @@
 
 
 $(document).ready(function() {
-	$('#pages').change(function(){
-		var sub = $("#pages option:selected").text();
-		var val = $("#pages").val();
-		$.post("<?php echo URL::base(); ?>menuedit/getmenu", { 'sub': sub, 'val' : val }).done(
-			function(data){
-				data = jQuery.parseJSON(data);
-				$("#text").val(data.text);
-				$("#item_url").val(data.url);
-				$("#menuString").val(sub);
-
-				if(val == 0){
-					var len = '<?php echo __('New Submenu in') ?>'.length + 1;
-					var menu = sub.substring(len);
-					$("#menuPage").val(menu);
-				}
-				else{
-					$("#menuPage").val(data.menu);
-				}		
-		});
-   });
+	
    
-   $('#delete_button').click(function(){
-		deletePage();
+  /// $('#delete_button').click(function(){
+	//	deletePage();
+  // });
+   $('#menu_save').click(function(){
+		saveMenu();
+  });
+   $('#submenu_save').click(function(){
+	   saveSub();
+  });
+   $('#all_save').click(function(){
+	   allSave();
    });
 
 });
@@ -54,8 +44,46 @@ function deletePage(){
 	}
 }
 
+/*
+ * Saves the new menu with the given title
+ */
+function saveMenu(){
+	if($('#title').val() == ''){
+		alert('<?php echo __('Name of the menu cannot be empty.')?>');
+	}
+	else{
+		$('#action').val('subSave');
+		$('#edit_menu_form').submit();
+	}
+}
+/*
+ * Save submenus
+ */
+function saveSub(){
+	if($('#text').val() == '' || $('#item_url').val() == ''){
+		alert('<?php echo __('Title or URL cannot be empty.')?>');
+	}
+	else{
+		if($('#file').val() == ''){
+			if(confirm("<?php echo __('Save without an image?');?>")){
+				$('#action').val('saveSub');
+				$('#edit_menu_form').submit();
+			}
+		}
+		else {
+			$('#action').val('saveSub');
+			$('#edit_menu_form').submit();
+		}
+	}
+}
 
-
+/*
+ * Save the changes in the table for menus
+ */
+ function allSave(){
+	$('#action').val('saveAll');
+	$('#edit_menu_form').submit();
+ }
 
 
 

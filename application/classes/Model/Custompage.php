@@ -80,6 +80,7 @@ class Model_Custompage extends ORM {
 			$page->user_id = $user_id;
 			$page->slug = $slug_id;
 			$page->content = $content;
+			$page->my_menu = 0;
 		}
 	
 		$page->save();

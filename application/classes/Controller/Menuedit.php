@@ -26,17 +26,50 @@ class Controller_Menuedit extends Controller_Loggedin {
 						'text' => '',
 						'image_url' => '',
 						'item_url' => '',
-						'id' => isset($_GET['id']) ? intval($_GET['id']) : '__HOME__',
-						'menuString' => '',
-						'admin_only' => '0',
+						'title' => '',
 				);
 				
-				$pages = ORM::factory('Custompage')->
+				$custompage = ORM::factory('Custompage')->
 				where('user_id', '=', $this->user->id)->
 				find_all();
+				
+				$adminpages = ORM::factory('Custompage')->
+				where('user_id', '=' , 1)->
+				find_all();
+				
+				$pageSelector = array();
+				$pageSelector[0] = __('None');
+				$help = array(
+					'custompagehelp' => 'custompagehelp',
+					'maphelp' => 'maphelp',
+					'templatehelp' => 'templatehelp',
+					'submenuhelp' => 'submenuhelp',
+					'__HELP__' => '__HELP__'
+				);
+				foreach($adminpages as $admin){
+					if(!in_array($admin->slug, $help)){
+						$pageSelector[$admin->id] = $admin->slug;
+						if($admin->my_menu != 0){
+							$m = ORM::factory('Menus')->
+							where('id', '=', $admin->my_menu)->
+							find();
+							$data[$m->title.'pages'] = $admin->id;
+						}
+					}
+				}
+				foreach($custompage as $custom){
+					$pageSelector[$custom->id] = $custom->slug;
+					if($custom->my_menu != 0){
+						$m = ORM::factory('Menus')->
+						where('id', '=', $custom->my_menu)->
+						find();
+						$data[$m->title.'pages'] = $custom->id;
+					}
+				}
 
 				$submenus = array();
 				$menus = array();
+				//these should not be able to be changed by the admins, pages yes, menu no
 				
 				$m = ORM::factory('Menus')
 				->find_all();
@@ -45,25 +78,32 @@ class Controller_Menuedit extends Controller_Loggedin {
 					$sub = ORM::factory('Menuitem')->
 					where('menu', '=', $main->id)->
 					find_all();
+					//guarantees all menus are put through
+					if($main->title != 'help'){
+						$submenus[$main->title] = array();
+						$menus[$main->id] = $main->title;
+					}
 					foreach($sub as $s){
-						$menus[$main->title][$s->id] = $s;
+						if($main->title != 'help'){
+							$submenus[$main->title][$s->id] = $s;
+							$data[$s->id.'admin_only'] = $s->admin_only;
+						}
 					}
 				}
-
 				
 				
 				$this->template->header->menu_page = "custompage";
 				//make messages roll up when done
 				$this->template->html_head->messages_roll_up = true;
-				$this->template->html_head->script_views[] = view::factory('js/messages');
 				$this->template->content = new View('menuedit/main');
 				$this->template->html_head->title = __("Menus Page");
 				$this->template->html_head->script_views[] = new View('menuedit/main_js');
 				$this->template->content->errors = array();
 				$this->template->content->messages = array();
 				$this->template->content->data = $data;
-				$this->template->content->menus = $menus;
+				$this->template->content->pageSelector = $pageSelector;
 				$this->template->content->submenus = $submenus;
+				$this->template->content->menus = $menus;
 			}
 		}
 	}
@@ -81,6 +121,97 @@ class Controller_Menuedit extends Controller_Loggedin {
 
 		if(!empty($_POST)){
 		
+			if($_POST['action'] == 'saveMenu'){
+				$menu = ORM::factory('Menus');
+				//check for titles being the same in the database
+				$other = ORM::factory('Menus')->
+				where('title', '=', $_POST['title'])->
+				find();
+				
+				if(!$other->loaded()){
+					$menu->title = $_POST['title'];
+					$menu->save();
+					
+					//update the submenus array on the page
+					$this->template->content->submenus[$menu->title] = array();
+					$this->template->content->menus[$menu->id] = $menu->title;
+					$this->template->content->messages[] = __('Saved menu ').$menu->title;
+				}
+				else{
+					$this->template->content->errors[] = $_POST['title'].' '.__('already exists.');
+				}
+			}
+			//new submenu
+			if($_POST['action'] == 'saveSub'){
+				$menu = ORM::factory('Menus')->
+				where('id', '=', $_POST['submenu_menu'])->
+				find();
+				
+				$sub = ORM::factory('Menuitem')->
+				where('text', '=', $_POST['text'])->
+				find();
+				
+				if(!$sub->loaded()){
+					//load the image
+					$sub->text = $_POST['text'];
+					$sub->item_url = $_POST['item_url'];
+					$sub->menu = $menu->id;
+					$sub->admin_only = isset($_POST['admin_only']) ? 1 : 0;
+					//save the item so that the database gives it an ID number
+					$sub->save();
+	
+					$_POST['image_url'] = $_FILES['file']['name'];
+					if($_FILES['file']['name'] != '')
+					{
+						$filename = $this->_save_file($_FILES['file'], $menu->title, $sub->id);
+					}
+						
+					
+					if($filename !== false){
+						$sub->image_url = $filename;
+					}
+					$sub->save();
+					
+					$this->template->content->data[$sub->id.'admin_only'] = $sub->admin_only;
+					$this->template->content->submenus[$menu->title][$sub->id] = $sub;
+					$this->template->content->messages[] = __('Saved submenu').' '.$sub->text;
+					
+				}
+			}
+			//editing the menus
+			//i need list of menuitems
+			//and a list of menus
+			//aboutpages
+			//31admin_only
+			if($_POST['action'] == 'saveAll'){
+				$menus = ORM::factory('Menus')->find_all();
+				$subs = ORM::factory('Menuitem')->find_all();
+				$my_menu_array = array();
+				
+				foreach($menus as $m){
+					if(array_key_exists($m->title.'pages', $_POST)){
+						$page = $_POST[$m->title.'pages'];
+						$custompage = ORM::factory('Custompage')->
+						where('id', '=', $page)->
+						find();
+						
+						if($page != 0 AND in_array($page, $my_menu_array) != false){
+							
+							$this->template->content->errors[] = __('A page cannot have more than one menu. 
+										Page used more than once:').$custompage->slug;
+							return;
+						}
+						else if($page != 0){
+							$my_menu_array[] = $page;
+							
+							$custompage->my_menu = $m->id;
+							$custompage->save();
+							$data[$m->title.'pages'] = $m->id;
+						}
+					}
+				}
+			}
+			/*
 			if($_POST['action'] == 'delete'){
 				$sub = ORM::factory('Menuitem')->
 				where('text', '=', $_POST['text'])->
@@ -92,15 +223,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 			}
 			else{
 			//if they are creating a new menu or menuitem
-				if($_POST['text'] == '' || $_POST['item_url'] == ''){
-					$this->template->content->errors[] = __('Title and link url cannot be empty.');
-					$data['text'] = $_POST['text'];
-					$data['item_url'] = $_POST['item_url'];
-					$data['image_url'] = $_POST['image_url'];
-					$data['id'] = $_POST['pages'];
-					$data['menuString'] = '';
-					$this->template->content->data = $data;
-				}
+				
 				
 				//if submenu doesn't exist
 				if($_POST['pages'] == 0){
@@ -141,37 +264,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 						}
 						
 					}
-					//if menu doesn't exist
-					else{
-						$newMenu = ORM::factory('Menus');
-						$newMenu->title = $this->flip($string);
-						$newMenu->save();
-
-						$sub = ORM::factory('Menuitem')->
-						where('text', '=', $_POST['text'])->
-						find();
-
-						if(!$sub->loaded()){
-							$sub->text = $_POST['text'];
-							$sub->item_url = URL::base(TRUE, TRUE).$_POST['item_url'];
-							$sub->menu = $menu->id;
-							
-							$_POST['image_url'] = $_FILES['file']['name'];
-							if($_FILES['file']['name'] != '')
-							{
-								$filename = $this->_save_file($_FILES['file'], $menu, $sub);
-							}
-							
-							$sub->image_url = $filename;
-							$sub->save();
-
-							$this->template->content->pages[$menu->title] = $sub->text;
-							$this->template->content->messages[] = __('Saved submenu').' '.$sub->text;
-						}
-						else{
-							$this->template->content->errors[] = $sub->text.' '.__('already exists.');
-						}
-					}
+					
 				}
 				else{
 					//the submenu exists and is being edited
@@ -196,74 +289,13 @@ class Controller_Menuedit extends Controller_Loggedin {
 				}
 				
 			}
+			*/
 		}
 	}//end action_index
 	
 		 
-	/**
-	* used by the Menuedit controller to gather the data on the current menu that was selected in the page
-	*/
-	public function action_getmenu(){
-		$this->auto_render = false;
 
-		$sub = $_POST['sub'];
-		$val = $_POST['val'];
-		
-		//if creating a new menu shouldn't return anything;
-		if($val == 0){
-			echo '{}';
-			exit;
-		}
 
-		$menuitem = ORM::factory('Menuitem', $val);
-		$menu = ORM::factory('Menus', $menuitem->menu);
-		
-		//find only the end of the url, after kobomaps
-		$pos = strpos($menuitem->item_url, '/kobomaps/');
-		$len = strlen('/kobomaps/');
-		
-		$string = substr($menuitem->item_url, $pos + $len);
-
-		echo '{';
-		echo '"menu" : "'.$this->flip($menu->title).'",';
-		echo '"text" : "'.$menuitem->text.'",';
-		echo '"image" : "'.$menuitem->image_url.'",';
-		echo '"url" : "'.$menuitem->item_url.'"';
-		echo '}';
-	}
-	
-
-	/**
-	* Used to convert static names of default custompages
-	* @param string $slug name to be converted
-	*/
-	public function flip($slug){
-		if($slug == '__HOME__'){
-				return __('home');
-			} 
-		if($slug == '__HELP__'){
-				return __('help');
-			}
-		if($slug == '__ABOUT__'){
-				return __('about');
-			}
-		if($slug == '__SUPPORT__'){
-				return __('support');
-			}
-		if($slug == __('home') || ''){
-			return '__HOME__';
-		}
-		if($slug == __('about')){
-			return '__ABOUT__';
-		}
-		if($slug == __('support')){
-			return '__SUPPORT__';
-		}
-		if($slug == __('help')){
-			return '__HELP__';
-		}
-		else return $slug;
-	}
 
 	//call the generic slug checker function
 	public function action_checkslug(){
@@ -295,11 +327,11 @@ class Controller_Menuedit extends Controller_Loggedin {
 	/**
 	 * Saves a file from the temp upload area to the hard disk
 	 * @param array $upload_file the $_FILES['<name>'] array for the given file
-	 * @param obj $Menu Kohana ORM object for a menu, this is used in naming the file
-	 * @param obj $Menuitem Kohana ORM object for a menuitem, this is used in naming the file
+	 * @param String $title Title of the menu that the file is for
+	 * @param int $id id of the menuitem associated with it
 	 * @return boolean or filename
 	 */
-	protected function _save_file($upload_file, $menu, $sub)
+	protected function _save_file($upload_file, $title, $id)
 	{
 
 		if (
@@ -313,7 +345,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 		$directory = DOCROOT.'uploads/images/';
 	
 		$extention = $this->get_file_extension($upload_file['name']);
-		$filename = $menu->title.'-'.$sub->id.'.'.$extention;
+		$filename = $title.'-'.$id.'.'.$extention;
 		 
 		if ($file = Upload::save($upload_file, $filename, $directory))
 		{

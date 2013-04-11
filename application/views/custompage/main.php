@@ -73,7 +73,7 @@
 	echo Form::textarea('content', $data['content'], array('id'=>'htmlContent', 'style' => 'height: 650px', 'class' => 'tinymce'));
 	echo '</br><div id="button_holder" style="width: 600px">';
 	echo Form::submit('edit', __('Save'), array('id'=>'edit_button'));
-	echo '<div id ="delete_button" style="float:right">'.__('Delete').'</div></div>';
+	echo '<div class ="delete_button" style="float:right">'.__('Delete').'</div></div>';
 	echo '</div>';
 
 	echo Form::close();
