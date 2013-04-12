@@ -201,6 +201,14 @@ class Helper_Menus
   */
 	public static function make_submenu($page, $user)
 	{
+		$protocol = strpos(strtolower($_SERVER['SERVER_PROTOCOL']),'https')
+		=== FALSE ? 'http' : 'https';
+		$host     = $_SERVER['HTTP_HOST'];
+		$script   = $_SERVER['REQUEST_URI'];
+		$params   = $_SERVER['QUERY_STRING'];
+		
+		$current = $protocol . '://' . $host . $script;
+		
 		echo '<ul>';
 		
 		//the custompage creation help page should not be available for non admins
@@ -217,16 +225,24 @@ class Helper_Menus
 		{
       case "custompage":
       ?>
-      <li>
+      <li 
+			<?php if ($current == URL::base(TRUE,TRUE).'custompage/' OR $current == URL::base(TRUE,TRUE).'custompage'){
+					echo 'class="active"';				
+			}?>
+		>
         <a href="
-          <?php echo '/kobomaps/custompage/'?>">
+          <?php echo URL::base().'custompage/'?>">
           <div>
             <img class="customEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create pages');?>
           </div>
         </a>
       </li>
-      <li>
-        <a href="<?php echo '/kobomaps/menuedit/'?>">
+      <li 
+			<?php if ($current == URL::base(TRUE,TRUE).'menuedit/' OR $current == URL::base(TRUE,TRUE).'menuedit'){
+					echo 'class="active"';				
+			}?>
+		>
+        <a href="<?php echo URL::base().'menuedit/'?>">
         <div>
           <img class="menuEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create submenus');?>
         </div>
@@ -411,7 +427,7 @@ class Helper_Menus
     
     //check the case that the page is a custom page and has its own custom menus
     	$custompage = ORM::factory('Custompage')->
-    	where('slug', '=', flip($page))->
+    	where('slug', '=', Model_Menuitem::flip($page))->
     	find();
         if($custompage->loaded()){
 			$m = ORM::factory('Menus')->
@@ -437,16 +453,21 @@ class Helper_Menus
             $item = ORM::factory('Menuitem')->
             where('menu', '=', $m->id)->
             find_all();
-        
+            
             foreach($item as $menuitem){
 				if(in_array($page, $helparray)){
+
 					if($menuitem->admin_only AND $user->has('roles', $admin_role)){
 					?>
-					<li>
-						<a href="/kobomaps/
-          					<?php echo $menuitem->item_url?>">
+					<li 
+					<?php if ($current == URL::base(TRUE,TRUE).$menuitem->item_url){
+							echo 'class="active"';				
+						}?>
+						>
+						<a href="<?php echo URL::base().$menuitem->item_url?>">
          				 <div>
-            				<img class="<?php echo $menuitem->item_url?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo $menuitem->text;?>
+            				<img class="<?php echo $menuitem->item_url?>
+            					" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo $menuitem->text;?>
           				</div>
        					 </a>
       				</li>
@@ -454,23 +475,30 @@ class Helper_Menus
 					}
 					if(!$menuitem->admin_only){
 					?>
-						<li>
-							<a href="/kobomaps/
-	          					<?php echo $menuitem->item_url?>">
-	         				 <div>
-	            				<img class="<?php echo $menuitem->item_url?>" src='<?php echo URL::base();?>media/img/img_trans.gif' width="1" height="1"/><br/><?php echo $menuitem->text;?>
-	          				</div>
-	       					 </a>
-	      				</li>
+						<li 
+							<?php if ($current == URL::base(TRUE,TRUE).$menuitem->item_url){
+							echo 'class="active"';				
+						}?>
+						>
+						<a href="<?php echo URL::base().$menuitem->item_url?>">
+         				 <div>
+            				<img class="<?php echo $menuitem->item_url?>
+            					" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo $menuitem->text;?>
+          				</div>
+       					 </a>
+      				</li>
 	      			<?php 
 					}	
 			 	}
 			 	else{
 					if($menuitem->admin_only AND $user->has('roles', $admin_role)){
               		?>
-              		<li>
-                		<a href="/kobomaps/
-                  			<?php echo $menuitem->item_url?>">
+              		<li 
+						<?php if ($current == URL::base(TRUE,TRUE).$menuitem->item_url){
+							echo 'class="active"';				
+						}?>
+					>
+                		<a href="<?php echo URL::base().$menuitem->item_url?>">
                   		<div>
                     		<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
                   		</div>
@@ -480,9 +508,12 @@ class Helper_Menus
               		}
               		if(!$menuitem->admin_only){
 					?>
-						<li>
-							<a href="/kobomaps/
-	          					<?php echo $menuitem->item_url?>">
+						<li 
+							<?php if ($current == URL::base(TRUE,TRUE).$menuitem->item_url){
+								echo 'class="active"';				
+							}?>
+						>
+							<a href="<?php echo URL::base().$menuitem->item_url?>">
 	         				 <div>
 	            				<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
 	          				</div>
@@ -542,35 +573,5 @@ class Helper_Menus
 	}
 	
 	
-	/**
-	 * Used to convert static names of default custompages
-	 * @param string $slug name to be converted
-	 */
-	private static function flip($slug){
-		if($slug == '__HOME__'){
-			return __('home');
-		}
-		if($slug == '__HELP__'){
-			return __('help');
-		}
-		if($slug == '__ABOUT__'){
-			return __('about');
-		}
-		if($slug == '__SUPPORT__'){
-			return __('support');
-		}
-		if($slug == __('home') || ''){
-			return '__HOME__';
-		}
-		if($slug == __('about')){
-			return '__ABOUT__';
-		}
-		if($slug == __('support')){
-			return '__SUPPORT__';
-		}
-		if($slug == __('help')){
-			return '__HELP__';
-		}
-		else return $slug;
-	}
+	
 }//end class

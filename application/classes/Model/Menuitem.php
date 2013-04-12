@@ -79,4 +79,36 @@ class Model_Menuitem extends ORM {
 			$item->delete();
 			return __('Deleted');
 	}
+	
+	/**
+	 * Used to convert static names of default custompages
+	 * @param string $slug name to be converted
+	 */
+	public static function flip($slug){
+		if($slug == '__HOME__'){
+			return __('home');
+		}
+		if($slug == '__HELP__'){
+			return __('help');
+		}
+		if($slug == '__ABOUT__'){
+			return __('about');
+		}
+		if($slug == '__SUPPORT__'){
+			return __('support');
+		}
+		if($slug == __('home') || ''){
+			return '__HOME__';
+		}
+		if($slug == __('about')){
+			return '__ABOUT__';
+		}
+		if($slug == __('support')){
+			return '__SUPPORT__';
+		}
+		if($slug == __('help')){
+			return '__HELP__';
+		}
+		else return $slug;
+	}
 }

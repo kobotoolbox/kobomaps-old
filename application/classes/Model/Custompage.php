@@ -26,11 +26,12 @@ class Model_Custompage extends ORM {
 	 */
 	public function rules()
 	{
+		
 		return array(
 		'slug' => array(
 				array('not_empty'),
 				array('max_length', array(':value', 130))
-		)
+				)
 		);
 	}//end function
 	
@@ -41,7 +42,7 @@ class Model_Custompage extends ORM {
 	*/
 	public function update_custompage($values)
 	{
-		$expected = array('user_id', 'slug_id', 'content');
+		$expected = array('user_id', 'slug_id', 'content', 'my_menu');
 		
 		//if no slug is set
 		if($values['slug_id'] == '')
@@ -80,7 +81,6 @@ class Model_Custompage extends ORM {
 			$page->user_id = $user_id;
 			$page->slug = $slug_id;
 			$page->content = $content;
-			$page->my_menu = 0;
 		}
 	
 		$page->save();
@@ -104,4 +104,6 @@ class Model_Custompage extends ORM {
 			return __('That page cannot be deleted.');
 		}
 	}
+	
+	
 }

@@ -52,7 +52,7 @@ function saveMenu(){
 		alert('<?php echo __('Name of the menu cannot be empty.')?>');
 	}
 	else{
-		$('#action').val('subSave');
+		$('#action').val('saveMenu');
 		$('#edit_menu_form').submit();
 	}
 }

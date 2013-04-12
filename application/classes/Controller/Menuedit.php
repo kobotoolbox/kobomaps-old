@@ -46,6 +46,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 					'submenuhelp' => 'submenuhelp',
 					'__HELP__' => '__HELP__'
 				);
+				
 				foreach($adminpages as $admin){
 					if(!in_array($admin->slug, $help)){
 						$pageSelector[$admin->id] = $admin->slug;
@@ -91,7 +92,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 					}
 				}
 				
-				
+				$this->template->html_head->script_views[] = view::factory('js/messages');
 				$this->template->header->menu_page = "custompage";
 				//make messages roll up when done
 				$this->template->html_head->messages_roll_up = true;
@@ -120,8 +121,9 @@ class Controller_Menuedit extends Controller_Loggedin {
 		}
 
 		if(!empty($_POST)){
-		
+			
 			if($_POST['action'] == 'saveMenu'){
+				
 				$menu = ORM::factory('Menus');
 				//check for titles being the same in the database
 				$other = ORM::factory('Menus')->
@@ -179,17 +181,19 @@ class Controller_Menuedit extends Controller_Loggedin {
 				}
 			}
 			//editing the menus
-			//i need list of menuitems
-			//and a list of menus
-			//aboutpages
-			//31admin_only
 			if($_POST['action'] == 'saveAll'){
 				$menus = ORM::factory('Menus')->find_all();
 				$subs = ORM::factory('Menuitem')->find_all();
 				$my_menu_array = array();
 				
 				foreach($menus as $m){
-					if(array_key_exists($m->title.'pages', $_POST)){
+					if(array_key_exists($m->title.'delete', $_POST)){
+						unset($this->template->content->submenus[$m->title]);
+						unset($this->template->content->menus[$m->id]);
+						$this->template->content->messages[] = __('Deleted menu').' '.$m->title;
+						$m->delete();
+					}
+					else if(array_key_exists($m->title.'pages', $_POST)){
 						$page = $_POST[$m->title.'pages'];
 						$custompage = ORM::factory('Custompage')->
 						where('id', '=', $page)->
@@ -203,93 +207,41 @@ class Controller_Menuedit extends Controller_Loggedin {
 						}
 						else if($page != 0){
 							$my_menu_array[] = $page;
-							
 							$custompage->my_menu = $m->id;
 							$custompage->save();
-							$data[$m->title.'pages'] = $m->id;
+							$this->template->content->data[$m->title.'pages'] = $custompage->id;
 						}
+						/*else if($page == 0){
+							unset($custompage->my_menu);
+							print_r($custompage);
+							
+							$custompage->save();
+							unset($this->template->content->data[$m->title.'pages']);
+						}*/
 					}
 				}
-			}
-			/*
-			if($_POST['action'] == 'delete'){
-				$sub = ORM::factory('Menuitem')->
-				where('text', '=', $_POST['text'])->
-				find();
-				$response = Model_Menuitem::delete_menuitem($sub->id);
-			
-				$this->template->content->messages[] = __('Deleted the menu item').' '.$_POST['text'];
-				unset($this->template->content->pages[$_POST['pages']]);
-			}
-			else{
-			//if they are creating a new menu or menuitem
 				
-				
-				//if submenu doesn't exist
-				if($_POST['pages'] == 0){
-					$length = strlen(__('New Submenu in')) + 1;
-					//string will be the menu in which to place this
-					$string = substr($_POST['menuString'], $length);
-
-					$menu = ORM::factory('Menus')->
-					where('title', '=', $this->flip($string))->
-					find();
-
-					if($menu->loaded()){
-						$sub = ORM::factory('Menuitem')->
-						where('text', '=', $_POST['text'])->
-						find();
-
-						if(!$sub->loaded()){
-							//load the image
-							$sub->text = $_POST['text'];
-							$sub->item_url = URL::base(TRUE, TRUE).$_POST['item_url'];
-							$sub->menu = $menu->id;
-							$sub->save();
-							
-							$_POST['image_url'] = $_FILES['file']['name'];
-							if($_FILES['file']['name'] != '')
-							{
-								$filename = $this->_save_file($_FILES['file'], $menu, $sub);
-							}
-							
-
-							if($filename !== false){
-								$sub->image_url = $filename;
-							}
-							$sub->save();
-
-							$this->template->content->pages[$menu->title] = $sub->text;
-							$this->template->content->messages[] = __('Saved submenu').' '.$sub->text;
-						}
+				foreach($subs as $s){
+					if(array_key_exists($s->id.'delete', $_POST)){
+						$menu = ORM::factory('Menus', $s->menu);
+						$this->template->content->messages[] = __('Deleted menuitem').' '.$s->text;
+						unset($this->template->content->submenus[$menu->title][$s->id]);
+						$s->delete();
+					}
+					else if(array_key_exists($s->id.'admin_only', $_POST)){
+						$value = ($_POST[$s->id.'admin_only'] == 'on') ? 1 : 0;
 						
+						$this->template->content->data[$s->id.'admin_only'] = $value;
+						$s->admin_only = $value;
+						$s->save();
 					}
-					
-				}
-				else{
-					//the submenu exists and is being edited
-					
-					$sub = ORM::factory('Menuitem', $_POST['pages']);
-					$menu = ORM::factory('Menus', $sub->menu);
-					
-					if($menu->loaded()){
-						$_POST['image_url'] = $_FILES['file']['name'];
-						if($_FILES['file']['name'] != '')
-						{
-							$filename = $this->_save_file($_FILES['file'], $menu, $sub);
-							if($filename !== false){
-								$sub->image_url = $filename;
-							}
-						}
-						$sub->text = $_POST['text'];
-						$sub->item_url = URL::base(TRUE, TRUE).$_POST['item_url'];
-						$sub->save();
-						$this->template->content->messages[] = __('Saved submenu').' '.$sub->text;
+					else{
+						$s->admin_only = 0;
+						$s->save();
 					}
 				}
-				
 			}
-			*/
+			
 		}
 	}//end action_index
 	

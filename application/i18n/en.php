@@ -344,9 +344,21 @@ return array
 		'New Submenu in' => 'New Submenu in',
 		"Menus Page" => "Menus Page",
 		'Deleted the menu item' => 'Deleted the menu item',
-		'Title and link url cannot be empty.' => 'Title and link url cannot be empty.',
+		'Title or URL cannot be empty.' => 'Title or URL cannot be empty.',
 		'Saved submenu' => 'Saved submenu',
 		'already exists.' => 'already exists.',
+		'Submenu' => 'Submenu',
+		'Items' => 'Items',
+		'Name of Menu' => 'Name of Menu',
+		'Deleted menu' => 'Deleted menu',
+		'A page cannot have more than one menu. Page used more than once:' 
+			=> 'A page cannot have more than one menu. Page used more than once:',
+		'Name of the menu cannot be empty.' => 'Name of the menu cannot be empty.',
+		'Save without an image?' => 'Save without an image?',
+		'Page' => 'Page',
+		'Admin only?' => 'Admin only?',
+		
+		
 		
 		//public map page
 		'Search Maps'=>'Search Maps',

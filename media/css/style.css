@@ -250,7 +250,7 @@ div#subMenu
     filter: alpha(opacity=40);
 }
 
-#subMenu li.active span div{
+#subMenu li.active {
 	text-shadow: 0px 0px 4px #ff6602;
 }
 
@@ -1021,4 +1021,13 @@ table.list_table tr.unread.odd_row  td {
 	margin:0px auto;
 	width: 325px;
 	text-align:center;
+}
+/*********************************************************
+               Menuedit page
+*********************************************************/
+.delete_box{
+	outline: 1px solid red;
+}
+.admin_box{
+	outline: 1px solid;
 }

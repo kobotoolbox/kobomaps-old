@@ -497,3 +497,24 @@ UPDATE  `custompage` SET  `user_id` =  '1' WHERE  `custompage`.`id` =4;
 ALTER TABLE  `custompage` CHANGE  `user_id`  `user_id` INT( 11 ) UNSIGNED;
 ALTER TABLE `custompage` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 UPDATE `metadata` SET  `v` =  '1.0.045' WHERE  `metadata`.`k` ='Database Version';
+
+/** Dylan Gillespie --2013-04-09 -- Changing custompages and submenus for pages to have a menu **/
+ALTER TABLE  `custompage` ADD  `my_menu` INT( 11 ) NOT NULL DEFAULT  '0';
+INSERT INTO  `menus` (`id` ,`title`) VALUES ('1',  'help');
+ALTER TABLE  `menu_items` ADD  `admin_only` BOOLEAN NOT NULL DEFAULT FALSE;
+INSERT INTO  `menu_items` (
+`id` ,
+`menu` ,
+`text` ,
+`image_url` ,
+`item_url` ,
+`admin_only`
+)
+VALUES 
+(NULL ,  '1',  'Help Making Maps',  '',  'maphelp',  '0'), 
+(NULL ,  '1',  'Help Making Templates',  '',  'templatehelp',  '0'),
+(NULL ,  '1',  'Help Making Custom Pages',  '',  'custompagehelp',  '1'), 
+(NULL ,  '1',  'Help Making Submenus',  '',  'submenuhelp',  '1');
+UPDATE  `custompage` SET  `my_menu` =  '1' WHERE  `custompage`.`id` = 2;
+
+UPDATE `metadata` SET  `v` =  '1.0.046' WHERE  `metadata`.`k` ='Database Version';

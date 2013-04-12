@@ -65,13 +65,16 @@
   echo '<div id="menuEdit" style="width:830px; height 500px;">';
   ?>
   <div class="scroll_table">
-	  <table class="list_table" style="width:800px; height:400px">
+	  <table class="list_table" style="width:824px; height:400px">
 	  <thead>
 	  <tr class="header">
+	  			<th class="menuDelete" style="width:58px">
+	  				<?php echo __('Delete')?>
+	  			</th>
 	  			<th class="menuName" style="width:80px">
 	  				<?php echo __('Submenu');?>
 	  			</th>
-	  			<th class="menuItems" style="width:560px">
+	  			<th class="menuItems" style="width:520px">
 	  				<?php echo __('Items');?>
 	  			</th>
 	  			<th class="pagesColumn" style="width:121px">
@@ -84,7 +87,7 @@
 	  	<?php
 	  		if(count($submenus) == 0)
 	  		{
-	  			echo '<tr><td colspan="4" style="width:880px;text-align:center;">'.__('You have no maps').'</td></tr>';
+	  			echo '<tr><td colspan="4" style="width:880px;text-align:center;">'.__('You have no menus').'</td></tr>';
 	  		}
 	  		$i = 0;
 	  		foreach($submenus as $title=>$menu){
@@ -93,11 +96,14 @@
 	  		?>
 	  
 	  	<tr <?php echo $odd_row; ?>>
-	  		
-	  		<td class="menuName" style="width: 80px">
-	  			<?php echo $title;?>
+	  		<td class="menuDelete" style="width:59px; text-align:center;">
+	  			<?php echo Form::checkbox($title.'delete', null, 0, array('class' => 'delete_box', 'title' => __('Delete')))?>
 	  		</td>
-	  		<td class="menuItems" style="width:560px">
+	  		<td class="menuName" style="width: 80px">
+	  			<?php echo $title;
+	  			?>
+	  		</td>
+	  		<td class="menuItems" style="width:520px">
 	  			<ul>
 	  			<?php 
 	  				foreach($menu as $m){
@@ -108,8 +114,8 @@
 	            					<img class="customMenus" src="<?php echo $m->image_url?>" width="50" height="50"/><br/><?php echo $m->text;?>
 	            					</br></a>
 	            					<?php 
-	            						echo Form::checkbox($m->id.'admin_only', null, 1==$data[$m->id.'admin_only']);
-	            						echo __('Admin only?');
+	            						echo Form::checkbox($m->id.'admin_only', null, 1==$data[$m->id.'admin_only'], array('title' => __('Admin only?'), 'class' => 'admin_box'));
+	            						echo Form::checkbox($m->id.'delete', null, 0, array('title' => __('Delete'), 'class' => 'delete_box'));
 	            					?>
 	          					</div>
       					</li>
