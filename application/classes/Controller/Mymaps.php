@@ -1320,7 +1320,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 					}
 					
 					$map->update_map($map_array);
-	 				HTTP::redirect('mymaps/mapstyle?id='.$map->id);
+	 				HTTP::redirect('mymaps/add5?id='.$map->id);
 	 			}
 	 	
 	 		 	
@@ -1868,19 +1868,14 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//check permissions of the user on this map
 	 	$this->check_map_permissions($map_id, $this->user->id);
 	 	 
-	 	if($map->map_creation_progress < 6)
+	 	if($map->map_creation_progress < 5)
 	 	{
 	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
-	 		HTTP::redirect('mymaps/add6/?id='.$map_id);
+	 		HTTP::redirect('mymaps/add5/?id='.$map_id);
 	 	}
 
-	 	$s = $map->map_style;
-	 	$s = json_encode($s);
-	 	$data['style'] = json_decode($s);
 	 	$data['id'] = $map->id;
-	 	//$data['style'] = $map->map_style;
-	 
-	 
+	 	
 	 
 	 	/***Now that we have the form, lets initialize the UI***/
 	 	//The title to show on the browser
@@ -1892,6 +1887,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content = view::factory("mymaps/add6");
 	 	$this->template->content->map_id = $map_id;
 	 	$this->template->content->map = $map;
+	 	$this->template->content->style = json_decode($map->map_style);
 	 	$this->template->content->data = $data;
 	 	$this->template->content->messages = array();
 	 	$this->template->content->errors = array();

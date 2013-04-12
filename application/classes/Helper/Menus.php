@@ -367,13 +367,13 @@ class Helper_Menus
 						<?php if($map_progress >= 5 AND $pageNumber != 6){?></a><?php } else {?></span><?php }?>
 					</li>
 					
-					<li class="<?php echo ($pageNumber == 0)? 'active':''; echo ($map_progress < 5 AND $pageNumber != 0)? 'greyedout':'';?>">
+					<li class="<?php echo ($pageNumber == 0)? 'active':''; echo ($map_progress < 6 AND $pageNumber != 0)? 'greyedout':'';?>">
 					
-						<?php if($map_progress >= 5 AND $pageNumber != 0){?><a href="<?php echo URL::base();?><?php echo $map->slug;?>"> <?php } else {?><span><?php }?>
+						<?php if($map_progress >= 6 AND $pageNumber != 0){?><a href="<?php echo URL::base();?><?php echo $map->slug;?>"> <?php } else {?><span><?php }?>
 							<div>
 								<img class="genMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View Map');?>
 							</div>
-						<?php if($map_progress >= 5 AND $pageNumber != 0){?></a><?php } else {?></span><?php }?>
+						<?php if($map_progress >= 6 AND $pageNumber != 0){?></a><?php } else {?></span><?php }?>
 					</li>					
 					<?php 
 

@@ -48,44 +48,10 @@
 
 <div>
 <?php 	
-//trying to substring out of the $data['style'] will be moved to the controller
-	$string = $data['style'];
-	$ppos = strpos($string, '{');
-	$rpos1 = strpos($string, '}');
-	$rpos2 = strpos($string, '}', $rpos1 + 1) + 1;
-	$sub = substr($string, $ppos, $rpos2 - $ppos);
-	$string = substr($string, 1 + $rpos2 - $ppos);
-	echo $sub;
-	echo "</br>";
-	$ppos = strpos($string, '{');
-	$rpos1 = strpos($string, '}');
-	$rpos2 = strpos($string, '}', $rpos1 + 1) + 1;
-	$sub = substr($string, $ppos, $rpos2 - $ppos);
-	$string = substr($string, 1 + $rpos2 - $ppos);
-	echo $sub;
-	echo "</br>";
-	$ppos = strpos($string, '{');
-	$rpos1 = strpos($string, '}');
-	$rpos2 = strpos($string, '}', $rpos1 + 1) + 1;
-	$sub = substr($string, $ppos, $rpos2 - $ppos);
-	$string = substr($string, 1 + $rpos2 - $ppos);
-	echo $sub;
-	echo "</br>";
-	$ppos = strpos($string, '{');
-	$rpos1 = strpos($string, '}');
-	$rpos2 = strpos($string, '}', $rpos1 + 1) + 1;
-	$sub = substr($string, $ppos, $rpos2 - $ppos);
-	$string = substr($string, 1 + $rpos2 - $ppos);
-	echo $sub;
-	echo "</br>";
-	$ppos = strpos($string, '{');
-	$rpos1 = strpos($string, '}');
-	$rpos2 = strpos($string, '}', $rpos1 + 1) + 1;
-	$sub = substr($string, $ppos, $rpos2 - $ppos);
-	$string = substr($string, 1 + $rpos2 - $ppos);
-	echo $sub;
-	echo "</br>";
-
+	foreach($style as $s){
+		echo 'featureType:'.$s->featureType.' elementType:'.$s->elementType.'</br>';
+		print_r($s->stylers);
+	}
 	
 ?>
 
