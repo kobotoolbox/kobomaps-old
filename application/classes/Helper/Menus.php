@@ -457,7 +457,7 @@ class Helper_Menus
             foreach($item as $menuitem){
 				if(in_array($page, $helparray)){
 
-					if($menuitem->admin_only AND $user->has('roles', $admin_role)){
+					if($user != null AND $menuitem->admin_only AND $user->has('roles', $admin_role)){
 					?>
 					<li 
 					<?php if ($current == URL::base(TRUE,TRUE).$menuitem->item_url){
