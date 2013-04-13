@@ -1354,6 +1354,8 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 }//end action_add4
 	 
 	 
+	
+	 
 	 /**
 	  * This ask the user to map their regions to the regions of the template
 	  */
@@ -1819,7 +1821,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$map_array['map_creation_progress'] = 5;
 	 				}
 	 				$map->update_map($map_array);
-	 				HTTP::redirect($map->slug);
+	 				HTTP::redirect('mymaps/add6?id='.$map->id);
 	 			}
 	 		}
 	 		catch (ORM_Validation_Exception $e)
@@ -1847,6 +1849,111 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 }//end action_add5
 	 
 	 
+	 /**
+	  * Set the style of the map
+	  */
+	 public function action_add6(){
+	 
+	 	//get the id
+	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+	 	//something when wrong, kick them back to add1
+	 	if($map_id == 0)
+	 	{
+	 		HTTP::redirect('mymaps/add1');
+	 	}
+	 		
+	 	//pull the map object from the DB
+	 	$map = ORM::factory('Map', $map_id);
+	 	 
+	 	//check permissions of the user on this map
+	 	$this->check_map_permissions($map_id, $this->user->id);
+	 	 
+	 	if($map->map_creation_progress < 5)
+	 	{
+	 		$this->template->content->messages[] = __('Map stage missing. Complete this page first.');
+	 		HTTP::redirect('mymaps/add5/?id='.$map_id);
+	 	}
+
+	 	$data['id'] = $map->id;
+	 	
+	 
+	 	/***Now that we have the form, lets initialize the UI***/
+	 	//The title to show on the browser
+	 	$this->template->html_head->title = __('Add Map - Add 6');
+	 	//make messages roll up when done
+	 	$this->template->html_head->messages_roll_up = true;
+	 	//the name in the menu
+	 	$this->template->header->menu_page = "mymaps";
+	 	$this->template->content = view::factory("mymaps/add6");
+	 	$this->template->content->map_id = $map_id;
+	 	$this->template->content->map = $map;
+	 	$this->template->content->style = json_decode($map->map_style);
+	 	$this->template->content->data = $data;
+	 	$this->template->content->messages = array();
+	 	$this->template->content->errors = array();
+	 	$this->template->header->menu_page = "createmap";
+	 	$this->template->html_head->styles['all'] = 'media/css/jquery-ui.css';
+	 	$this->template->html_head->script_files[] = 'media/js/jquery-ui.min.js';
+	 	$this->template->html_head->script_views[] = view::factory('js/messages');
+	 	//$js =  view::factory("mymaps/add4_js");
+	 	 
+	 
+	 	//get the status
+	 	$status = isset($_GET['status']) ? $_GET['status'] : null;
+	 	if($status == 'saved')
+	 	{
+	 		$this->template->content->messages[] = __('changes saved');
+	 	}
+	 	 
+	 	 
+	 	/******* Handle incoming data*****/
+	 	if(!empty($_POST)) // They've submitted the form to update his/her wish
+	 	{
+	 		try
+	 		{
+	 			//if we're editing things
+	 			if($_POST['action'] == 'edit')
+	 			{
+	 
+	 				//update map creation progress tracker
+	 				//don't change the map creation progress if they've already gone past this point
+	 				if($map->map_creation_progress < 5)
+	 				{
+	 					$map_array['map_creation_progress'] = 5;
+	 				}
+	 					
+	 				$map->update_map($map_array);
+	 				HTTP::redirect($map->slug);
+	 			}
+	 			 
+	 
+	 		}
+	 		catch (ORM_Validation_Exception $e)
+	 		{
+	 			$errors_temp = $e->errors('register');
+	 			if(isset($errors_temp["_external"]))
+	 			{
+	 				$this->template->content->errors = array_merge($errors_temp["_external"], $this->template->content->errors);
+	 			}
+	 			else
+	 			{
+	 				foreach($errors_temp as $error)
+	 				{
+	 					if(is_string($error))
+	 					{
+	 						$this->template->content->errors[] = $error;
+	 					}
+	 				}
+	 			}
+	 		}
+	 		catch(Cannot_Access_Template_Exception $e)
+	 		{
+	 			$this->template->content->errors[] = $e->getMessage();
+	 		}
+	 	}
+	 
+	 
+	 }
 	 
 	 	 
 	 

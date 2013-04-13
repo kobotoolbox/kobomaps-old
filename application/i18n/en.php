@@ -333,6 +333,31 @@ return array
 		'New warning from KoboMaps'=>'New warning from KoboMaps',
 		'Reply' => 'Reply',
 		
+		//Menuedit pages
+		'Title of menu item' => 'Title of menu item',
+		'Menu URL' => 'Menu URL',
+		'Icon' => 'Icon',
+		'Create menu item in page' => 'Create menu item in page',
+		'Create your own custom submenus' => 'Create your own custom submenus',
+		'Create submenus' => 'Create submenus',
+		'Create pages' => 'Create pages',
+		'New Submenu in' => 'New Submenu in',
+		"Menus Page" => "Menus Page",
+		'Deleted the menu item' => 'Deleted the menu item',
+		'Title or URL cannot be empty.' => 'Title or URL cannot be empty.',
+		'Saved submenu' => 'Saved submenu',
+		'already exists.' => 'already exists.',
+		'Submenu' => 'Submenu',
+		'Items' => 'Items',
+		'Name of Menu' => 'Name of Menu',
+		'Deleted menu' => 'Deleted menu',
+		'A page cannot have more than one menu. Page used more than once:' 
+			=> 'A page cannot have more than one menu. Page used more than once:',
+		'Name of the menu cannot be empty.' => 'Name of the menu cannot be empty.',
+		'Save without an image?' => 'Save without an image?',
+		'Page' => 'Page',
+		'Admin only?' => 'Admin only?',
+		
 		
 		
 		//public map page
@@ -396,7 +421,6 @@ return array
 		'Sorry, but we couldn\'t find'=>'Sorry, but we couldn\'t find',
 		'Please make sure you have spelled the slug correctly.' => 'Please make sure you have spelled the slug correctly.',
 		'Please be aware that this map may have been deleted by you or the owner.' => 'Please be aware that this map may have been deleted by you or the owner.',
-		
 		
 );
 

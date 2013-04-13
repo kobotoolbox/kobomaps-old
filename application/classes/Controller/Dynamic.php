@@ -46,7 +46,7 @@ class Controller_Dynamic extends Controller_Main {
 		if($map->loaded()){
 			$this->viewMap($map);
 		}
-			
+
 		//if we couldn't find it bounce.
 		if(!$map->loaded() && !$page->loaded())
 		{
@@ -62,7 +62,21 @@ class Controller_Dynamic extends Controller_Main {
 	 */
 	public function viewPage($page){
 		$this->auto_render = true;
-		
+
+		if($page->slug == '__HOME__'){
+			$page->slug = __('home');
+		} 
+		if($page->slug == '__HELP__'){
+			$page->slug = __('help');
+		}
+		if($page->slug == '__ABOUT__'){
+			$page->slug = __('about');
+		}
+		if($page->slug == '__SUPPORT__'){
+			$page->slug = __('support');
+		}
+	
+		$this->template->header->menu_page = $page->slug;
 		$this->template->content = $page->content;
 	}
 	

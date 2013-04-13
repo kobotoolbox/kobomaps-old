@@ -132,7 +132,7 @@ class Controller_Custompage extends Controller_Loggedin {
 					}
 					else{
 						$default = ORM::factory('Custompage')->
-						where('user_id', '=', 0)->
+						where('user_id', '=', 1)->
 						where('id', '=', $_POST['pages'])->
 						find();
 						

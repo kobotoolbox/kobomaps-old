@@ -250,7 +250,7 @@ div#subMenu
     filter: alpha(opacity=40);
 }
 
-#subMenu li.active span div{
+#subMenu li.active {
 	text-shadow: 0px 0px 4px #ff6602;
 }
 
@@ -310,12 +310,40 @@ div#subMenu
 	background: url('../img/submenuSprite.png') -509px 0px;	
 	width:46px;	
 }
+#subMenu img.mapStyle{
+	background: url('../img/helpCustomSprite.png') -250px 0px;	
+	width:54px;	
+}
 
 
 
-
-
-
+/************************************************************
+						Help and Custompage menus
+*************************************************************/
+#subMenu img.menuEdit{
+	background: url('../img/helpCustomSprite.png') -129px 0px;	
+	width:46px;	
+}
+#subMenu img.customEdit{
+	background: url('../img/helpCustomSprite.png') -173px 0px;	
+	width:35px;	
+}
+#subMenu img.maphelp{
+	background: url('../img/helpCustomSprite.png') -4px 0px;	
+	width:47px;	
+}
+#subMenu img.templatehelp{
+	background: url('../img/helpCustomSprite.png') -50px 0px;	
+	width:47px;	
+}
+#subMenu img.custompagehelp{
+	background: url('../img/helpCustomSprite.png') -96px 0px;	
+	width:35px;	
+}
+#subMenu img.submenuhelp{
+	background: url('../img/helpCustomSprite.png') -210px 0px;	
+	width:40px;	
+}
 
 
 /************************************************************
@@ -410,18 +438,18 @@ table.list_table tr td a:hover
 *************************************************************/
 
 
-.mapTasks ul, .templateTasks ul, .messageTasks ul{
+.mapTasks ul, .templateTasks ul, .messageTasks ul, .menuItems ul{
 	padding:0px;
 	margin:0px;
 	list-style:none;
 }
 
-.mapTasks ul li, .templateTasks ul li, .messageTasks ul li{
+.mapTasks ul li, .templateTasks ul li, .messageTasks ul li, .menuItems ul li{
 	float:left;
 	margin:3px;
 	padding:3px;
 	}
-.mapTasks ul li a, .templateTasks ul li a, .messageTasks ul li a{
+.mapTasks ul li a, .templateTasks ul li a, .messageTasks ul li a, .menuItems ul li a{
 	font-size: 11px;
 	}
 
@@ -967,7 +995,7 @@ table.list_table tr.unread.odd_row  td {
 /*********************************************************
                Custom Page Center
 *********************************************************/
-#delete_button {
+.delete_button {
    -webkit-box-align: center;
    padding: 1px 6px;
    text-align: center;
@@ -993,4 +1021,13 @@ table.list_table tr.unread.odd_row  td {
 	margin:0px auto;
 	width: 325px;
 	text-align:center;
+}
+/*********************************************************
+               Menuedit page
+*********************************************************/
+.delete_box{
+	outline: 1px solid red;
+}
+.admin_box{
+	outline: 1px solid;
 }
