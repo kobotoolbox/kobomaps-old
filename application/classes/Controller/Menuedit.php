@@ -92,19 +92,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 					}
 				}
 				
-				$this->template->html_head->script_views[] = view::factory('js/messages');
-				$this->template->header->menu_page = "custompage";
-				//make messages roll up when done
-				$this->template->html_head->messages_roll_up = true;
-				$this->template->content = new View('menuedit/main');
-				$this->template->html_head->title = __("Menus Page");
-				$this->template->html_head->script_views[] = new View('menuedit/main_js');
-				$this->template->content->errors = array();
-				$this->template->content->messages = array();
-				$this->template->content->data = $data;
-				$this->template->content->pageSelector = $pageSelector;
-				$this->template->content->submenus = $submenus;
-				$this->template->content->menus = $menus;
+			
 			}
 		}
 	}
@@ -119,24 +107,48 @@ class Controller_Menuedit extends Controller_Loggedin {
 		{
 			HTTP::redirect('mymaps');
 		}
+		
+		$this->template->content = new View('menuedit/main');
+		$this->template->content->errors = array();
+		$this->template->content->messages = array();
+		
 
 		if(!empty($_POST)){
 			
+			$action = $_POST['action'];
+			switch($action){
+				case 'delete_sub_menu':
+					$submenu_id = $_POST['submenu_id'];
+					$submenu = ORM::factory('Menus', $submenu_id);
+					$submenu->delete();
+					break;
+					
+				case 'edit_submenu':
+					$submenu_id = $_POST['submenu_id'];
+					$submenu = ORM::factory('Menus', $submenu_id);
+					$submenu->update_menu($_POST);
+					break;
+							
+			}
+			
+			
+			
+			
+			
+			//save a new menu
 			if($_POST['action'] == 'saveMenu'){
-				
-				$menu = ORM::factory('Menus');
+								
 				//check for titles being the same in the database
 				$other = ORM::factory('Menus')->
 				where('title', '=', $_POST['title'])->
 				find();
 				
 				if(!$other->loaded()){
+					$menu = ORM::factory('Menus');
 					$menu->title = $_POST['title'];
 					$menu->save();
 					
-					//update the submenus array on the page
-					$this->template->content->submenus[$menu->title] = array();
-					$this->template->content->menus[$menu->id] = $menu->title;
+					//update the message
 					$this->template->content->messages[] = __('Saved menu ').$menu->title;
 				}
 				else{
@@ -243,9 +255,25 @@ class Controller_Menuedit extends Controller_Loggedin {
 			}
 			
 		}
+		$submenus = ORM::factory('Menus')->find_all();
+		$this->template->content->submenus = $submenus;
+		$this->template->html_head->script_views[] = view::factory('js/messages');
+		$this->template->html_head->script_files[] = 'media/js/jquery.tools.min.js';
+		$this->template->header->menu_page = "custompage";
+		//make messages roll up when done
+		$this->template->html_head->messages_roll_up = true;		
+		$this->template->html_head->title = __("Menus Page");
+		$this->template->html_head->script_views[] = new View('menuedit/main_js');
+
+		
 	}//end action_index
 	
 		 
+	
+	public function action_edit_item()
+	{
+		
+	}
 
 
 
