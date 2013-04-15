@@ -57,6 +57,16 @@ function editSubMenu(subMenuId, title)
 }
 
 
+/**
+ * Use this to edit submenu items.
+ * It's called by the save button for editing menu items
+ */
+function editSubMenuItem(id, menuId){
+	$("#action").val('edit_submenu_item');
+	$("#submenu_id").val(menuId);
+	$("#submenu_item_id").val(id);
+	$("#edit_menu_form").submit();
+}
 
 
 

@@ -19,7 +19,7 @@ class Model_Menus extends ORM {
 		'user' => array('model' => 'user'),
 	);
 
-	protected $_has_many = array('menu_items' => array('model' => 'Menuitem', 'foreign_key' => 'menu'));
+	protected $_has_many = array('menu_items' => array('model' => 'Menuitem', 'foreign_key' => 'menu_id'));
 	
 	/**
 	 * Rules function

@@ -15,98 +15,20 @@ class Controller_Menuedit extends Controller_Loggedin {
 		parent::before();	
 		
 		$auth = Auth::instance();
-		//is the user logged in?
-		if($auth->logged_in('admin'))
-		{
-			$this->session = Session::instance();
-			//if auto rendered set this up
-			if ($this->auto_render)
-			{
-				$data = array(
-						'text' => '',
-						'image_url' => '',
-						'item_url' => '',
-						'title' => '',
-				);
-				
-				$custompage = ORM::factory('Custompage')->
-				where('user_id', '=', $this->user->id)->
-				find_all();
-				
-				$adminpages = ORM::factory('Custompage')->
-				where('user_id', '=' , 1)->
-				find_all();
-				
-				$pageSelector = array();
-				$pageSelector[0] = __('None');
-				$help = array(
-					'custompagehelp' => 'custompagehelp',
-					'maphelp' => 'maphelp',
-					'templatehelp' => 'templatehelp',
-					'submenuhelp' => 'submenuhelp',
-					'__HELP__' => '__HELP__'
-				);
-				
-				foreach($adminpages as $admin){
-					if(!in_array($admin->slug, $help)){
-						$pageSelector[$admin->id] = $admin->slug;
-						if($admin->my_menu != 0){
-							$m = ORM::factory('Menus')->
-							where('id', '=', $admin->my_menu)->
-							find();
-							$data[$m->title.'pages'] = $admin->id;
-						}
-					}
-				}
-				foreach($custompage as $custom){
-					$pageSelector[$custom->id] = $custom->slug;
-					if($custom->my_menu != 0){
-						$m = ORM::factory('Menus')->
-						where('id', '=', $custom->my_menu)->
-						find();
-						$data[$m->title.'pages'] = $custom->id;
-					}
-				}
-
-				$submenus = array();
-				$menus = array();
-				//these should not be able to be changed by the admins, pages yes, menu no
-				
-				$m = ORM::factory('Menus')
-				->find_all();
-				
-				foreach($m as $main){
-					$sub = ORM::factory('Menuitem')->
-					where('menu', '=', $main->id)->
-					find_all();
-					//guarantees all menus are put through
-					if($main->title != 'help'){
-						$submenus[$main->title] = array();
-						$menus[$main->id] = $main->title;
-					}
-					foreach($sub as $s){
-						if($main->title != 'help'){
-							$submenus[$main->title][$s->id] = $s;
-							$data[$s->id.'admin_only'] = $s->admin_only;
-						}
-					}
-				}
-				
-			
-			}
-		}
-	}
-	/**
-	* where users go to edit custom menus
-	*/
-	public function action_index()
-	{
-		$auth = Auth::instance();
 		//only admins should be allowed to see the page in the first place, and if not, are redirected to mymaps
 		if(!$auth->logged_in('admin'))
 		{
 			HTTP::redirect('mymaps');
 		}
+		
+	}
+	
+	
+	/**
+	* where users go to edit custom menus
+	*/
+	public function action_index()
+	{
 		
 		$this->template->content = new View('menuedit/main');
 		$this->template->content->errors = array();
@@ -127,6 +49,15 @@ class Controller_Menuedit extends Controller_Loggedin {
 					$submenu_id = $_POST['submenu_id'];
 					$submenu = ORM::factory('Menus', $submenu_id);
 					$submenu->update_menu($_POST);
+					break;
+				
+				case 'edit_submenu_item':
+					$submenu_item = ORM::factory('Menuitem', $_POST['submenu_item_id']);
+					$submenu_item->text = $_POST['text'];
+					/******************************************************* 
+					 * Finish this and then delete and cancel for sub menu items
+					 * 
+					 ****************************************************/
 					break;
 							
 			}
@@ -269,10 +200,37 @@ class Controller_Menuedit extends Controller_Loggedin {
 	}//end action_index
 	
 		 
-	
+	/**
+	 * The function creates the UI for adding a new
+	 * menu item or editing an existing one.
+	 */
 	public function action_edit_item()
 	{
+		$data=array('text'=>'',
+				'item_url'=>'',
+				'image_url'=>'',
+				'admin_only'=>'',
+				'id'=>0,
+				'menu_id'=>'');
 		
+		$data['menu_id'] = isset($_GET['m_id']) ? intval($_GET['m_id']) : 0;
+		
+		$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+		
+		if($id != 0){
+			$submenu_item = ORM::factory('Menuitem',$id);
+			$data['text'] = $submenu_item->text;
+			$data['item_url'] = $submenu_item->item_url;
+			$data['image_url'] = $submenu_item->image_url;
+			$data['admin_only'] = $submenu_item->admin_only;
+			$data['id'] = $submenu_item->id;
+			$data['menu_id'] = $submenu_item->menu_id;
+		}
+		
+		$this->auto_render = false;
+		$view = new View('menuedit/edit_menu_item');
+		$view->data = $data;
+		echo $view;
 	}
 
 

@@ -518,3 +518,12 @@ VALUES
 UPDATE  `custompage` SET  `my_menu` =  '1' WHERE  `custompage`.`id` = 2;
 
 UPDATE `metadata` SET  `v` =  '1.0.046' WHERE  `metadata`.`k` ='Database Version';
+
+ALTER TABLE menu_items DROP INDEX menu_2;
+ALTER TABLE menu_items DROP INDEX menu;
+ALTER TABLE  `menu_items` DROP FOREIGN KEY  `menu_items_ibfk_1` ;
+ALTER TABLE  `menu_items` CHANGE  `menu`  `menu_id` INT( 11 ) NOT NULL;
+ALTER TABLE  `menu_items` ADD FOREIGN KEY (  `menu_id` ) REFERENCES  `kobomaps`.`menus` (
+	`id`) ON DELETE CASCADE ON UPDATE NO ACTION ;
+UPDATE `metadata` SET  `v` =  '1.0.047' WHERE  `metadata`.`k` ='Database Version';
+	

@@ -146,7 +146,14 @@
   echo Form::submit('submit', __('Submit'));
   echo '</td></tr></table>';
   echo '</div>';
-  
+
+  ?>
+	<div class="apple_overlay" id="overlay">
+		<div class="contentWrap">
+			<img class="contentWrapWaiter" src="<?php echo URL::base();?>media/img/waiter_barber.gif"/>
+		</div>
+	</div>
+  <?php
   
   echo Form::close();
   ?>
@@ -154,8 +161,4 @@
 
 <div style="clear:both"></div>
 
-<div class="apple_overlay" id="overlay">
-		<div class="contentWrap">
-			<img class="contentWrapWaiter" src="<?php echo URL::base();?>media/img/waiter_barber.gif"/>
-		</div>
-</div>
+

@@ -11,7 +11,7 @@
 <?php 
 
   /***********  Create submenu  ****************/
-  echo '<div id="createSubmenu" style="float:right; width: 480px">';
+  echo '<div id="createSubmenu" >';
   echo '<table style="width:630px"><tr><td><strong>';
   echo Form::label('subCreate', __('Create a new menu item.'));
   echo '</strong></td><td></td></tr><tr><td>';
@@ -40,7 +40,10 @@
   echo '</td><td>';
   echo Form::checkbox('admin_only', null, 0);
   echo '</td></tr><tr><td>';
-  echo '<div class ="delete_button" style ="width: 50px">'.__('Submit').'</div>';
+  echo '<input type="button" name="edit_submenu_item" value="'.__('Save').'" onlick="editSubMenuItem('.$data['id'].','.$data['menu_id'].');" />';
+  echo '<input type="button" name="edit_submenu_item" value="'.__('Delete').'" onlick="deleteSubMenuItem('.$data['id'].');" />';
+  echo '<br/>';
+  echo '<input type="button" name="edit_submenu_item" value="'.__('Cancel').'" onlick="cancelSubMenuItem();" />';
   echo '</td></tr>';
   echo '</table>';
   
