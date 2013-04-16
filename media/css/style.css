@@ -311,7 +311,7 @@ div#subMenu
 	width:46px;	
 }
 #subMenu img.mapStyle{
-	background: url('../img/helpCustomSprite.png') -250px 0px;	
+	background: url('../img/HelpCustomSprite.png') -250px 0px;	
 	width:54px;	
 }
 
@@ -321,27 +321,27 @@ div#subMenu
 						Help and Custompage menus
 *************************************************************/
 #subMenu img.menuEdit{
-	background: url('../img/helpCustomSprite.png') -129px 0px;	
+	background: url('../img/HelpCustomSprite.png') -129px 0px;	
 	width:46px;	
 }
 #subMenu img.customEdit{
-	background: url('../img/helpCustomSprite.png') -173px 0px;	
+	background: url('../img/HelpCustomSprite.png') -173px 0px;	
 	width:35px;	
 }
 #subMenu img.maphelp{
-	background: url('../img/helpCustomSprite.png') -4px 0px;	
+	background: url('../img/HelpCustomSprite.png') -4px 0px;	
 	width:47px;	
 }
 #subMenu img.templatehelp{
-	background: url('../img/helpCustomSprite.png') -50px 0px;	
+	background: url('../img/HelpCustomSprite.png') -50px 0px;	
 	width:47px;	
 }
 #subMenu img.custompagehelp{
-	background: url('../img/helpCustomSprite.png') -96px 0px;	
+	background: url('../img/HelpCustomSprite.png') -96px 0px;	
 	width:35px;	
 }
 #subMenu img.submenuhelp{
-	background: url('../img/helpCustomSprite.png') -210px 0px;	
+	background: url('../img/HelpCustomSprite.png') -210px 0px;	
 	width:40px;	
 }
 

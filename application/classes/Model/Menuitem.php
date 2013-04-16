@@ -36,7 +36,7 @@ class Model_Menuitem extends ORM {
 	public function update_menuitem($values)
 	{
 	
-		$expected = array('menu', 'text', 'image_url', 'item_url', 'admin_only');
+		$expected = array('menu_id', 'text', 'image_url', 'item_url', 'admin_only');
 	
 		$this->values($values, $expected);
 		$this->check();

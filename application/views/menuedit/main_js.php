@@ -14,21 +14,81 @@
 
 $(document).ready(function() {
 	
-   
-  /// $('#delete_button').click(function(){
-	//	deletePage();
-  // });
-   $('#menu_save').click(function(){
-		saveMenu();
-  });
-   $('#submenu_save').click(function(){
-	   saveSub();
-  });
-   $('#all_save').click(function(){
-	   allSave();
-   });
-
+	$("a[rel]").overlay({
+		mask: 'grey',
+		effect: 'apple',
+		onBeforeLoad: function() {
+			 
+            // grab wrapper element inside content
+            var wrap = this.getOverlay().find(".contentWrap");
+ 
+            // load the page specified in the trigger
+            wrap.load(this.getTrigger().attr("href"));
+        }
+	
+	}); 
+  
 });
+
+
+/**
+ * Call this when you want to drop a complete menu
+ * and all the kids
+ */
+function deleteSubMenu(subMenuId)
+{
+	if (confirm("<?php echo __('Are you sure you want to delete this menu');?>"))
+	{
+		$("#action").val('delete_sub_menu');
+		$("#submenu_id").val(subMenuId);
+		$("#edit_menu_form").submit();
+	}
+}
+
+/**
+ * Run to put the title of a menu into the title text
+ * box so the user can edit it.
+ */
+function editSubMenu(subMenuId, title)
+{
+	$("#action").val('edit_submenu');
+	$("#submenu_id").val(subMenuId);
+	$("#title").val(title);
+}
+
+
+/**
+ * Use this to edit submenu items.
+ * It's called by the save button for editing menu items
+ */
+function editSubMenuItem(id, menuId){
+	$("#action").val('edit_submenu_item');
+	$("#submenu_id").val(menuId);
+	$("#submenu_item_id").val(id);
+	$("#edit_menu_form").submit();
+}
+
+
+/**
+ * Called by the delete submenu item link
+ */
+function deleteSubMenuItem(id){
+	if (confirm("<?php echo __('Are you sure you want to delete this menu item');?>")){
+		$("#action").val('delete_submenu_item');
+		$("#submenu_item_id").val(id);
+		$("#edit_menu_form").submit();
+	}
+}
+
+/**
+ * Called to close the edit submenu item dialog
+ */
+function cancelSubMenuItem(){
+	$("#overlay a.close").click();
+}
+
+
+
 
 /*
 * asks the user to confirm deletion and then submits the data
