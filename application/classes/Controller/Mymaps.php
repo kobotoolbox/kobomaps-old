@@ -1954,17 +1954,16 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 				$map->map_style = json_encode($style);
 	 				$map->save();
 	 				//update map creation progress tracker
+	 				$map_array = $map->as_array();
 	 				//don't change the map creation progress if they've already gone past this point
 	 				if($map->map_creation_progress < 6)
 	 				{
 	 					$map_array['map_creation_progress'] = 6;
 	 				}
-	 					
-	 				//$map->update_map($map_array);
+	 				$map->update_map($map_array);
 	 				HTTP::redirect($map->slug);
 	 			}
-	 			 
-	 
+	 			
 	 		}
 	 		catch (ORM_Validation_Exception $e)
 	 		{
