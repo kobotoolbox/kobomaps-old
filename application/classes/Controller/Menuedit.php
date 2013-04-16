@@ -53,7 +53,8 @@ class Controller_Menuedit extends Controller_Loggedin {
 				
 				case 'edit_submenu_item':
 					$submenu_item = ORM::factory('Menuitem', $_POST['submenu_item_id']);
-					$submenu_item->text = $_POST['text'];
+					$_POST['menu_id'] = $_POST['submenu_id'];
+					$submenu_item->update_menuitem($_POST);
 					/******************************************************* 
 					 * Finish this and then delete and cancel for sub menu items
 					 * 
