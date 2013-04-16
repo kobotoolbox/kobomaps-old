@@ -8,6 +8,8 @@
 *************************************************************/
 ?>
 
+
+
 <?php 
 
   /***********  Create submenu  ****************/
@@ -40,10 +42,10 @@
   echo '</td><td>';
   echo Form::checkbox('admin_only', null, 0);
   echo '</td></tr><tr><td>';
-  echo '<input type="button" name="edit_submenu_item" value="'.__('Save').'" onlick="editSubMenuItem('.$data['id'].','.$data['menu_id'].');" />';
-  echo '<input type="button" name="edit_submenu_item" value="'.__('Delete').'" onlick="deleteSubMenuItem('.$data['id'].');" />';
+  echo '<input type="button" name="edit_submenu_item" value="'.__('Save').'" onclick="editSubMenuItem('.$data['id'].','.$data['menu_id'].');" />';
+  echo '<input type="button" name="delete_submenu_item" value="'.__('Delete').'" onclick="deleteSubMenuItem('.$data['id'].');" />';
   echo '<br/>';
-  echo '<input type="button" name="edit_submenu_item" value="'.__('Cancel').'" onlick="cancelSubMenuItem();" />';
+  echo '<input type="button" name="cancel_submenu_item" value="'.__('Cancel').'" onclick="cancelSubMenuItem();" />';
   echo '</td></tr>';
   echo '</table>';
   

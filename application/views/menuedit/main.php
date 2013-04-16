@@ -101,15 +101,11 @@
 	  				foreach($submenu_items as $submenu_item){
 					?>
 						<li>
-							<a href="/kobomaps/<?php echo $submenu_item->item_url?>">
+							<a href="/kobomaps/<?php echo $submenu_item->item_url?>" target="_blank">
 								<div>
 	            					<img class="customMenus" src="<?php echo $submenu_item->image_url?>" width="50" height="50"/><br/><?php echo $submenu_item->text;?>
-	            					</br></a>
-	            					<?php 
-	            						echo __('Admin only'). ' '. Form::checkbox('admin_only_'.$submenu_item->id, null, 1==$submenu_item->admin_only, array('title' => __('Admin only?'), 'class' => 'admin_box'));
-	            						echo '<br/>';
-	            						echo __('Delete'). ' '. Form::checkbox('delete_'.$submenu_item->id, null, 0, array('title' => __('Delete'), 'class' => 'delete_box'));
-	            					?>
+	            					</br>
+	            					<a rel="#overlay" href="<?php echo url::base().'menuedit/edit_item?id='.$submenu_item->id; ?>"><?php echo __('Edit');?></a>
 	          					</div>
       					</li>
 					<?php }	
@@ -143,7 +139,7 @@
   echo '</td><td>';
   echo Form::input('title', '', array('id'=>'title', 'style'=>'width:150px'));
   echo '</td></tr><tr><td>';
-  echo Form::submit('submit', __('Submit'));
+  echo Form::submit('submitBtn', __('Submit'));
   echo '</td></tr></table>';
   echo '</div>';
 

@@ -53,15 +53,28 @@ class Controller_Menuedit extends Controller_Loggedin {
 				
 				case 'edit_submenu_item':
 					$submenu_item = ORM::factory('Menuitem', $_POST['submenu_item_id']);
+					$submenu = ORM::factory('Menus', $_POST['submenu_id']);
 					$_POST['menu_id'] = $_POST['submenu_id'];
+					$_POST['image_url'] = $submenu_item->image_url;
 					$submenu_item->update_menuitem($_POST);
-					/******************************************************* 
-					 * Finish this and then delete and cancel for sub menu items
-					 * 
-					 ****************************************************/
+					if($_FILES['file']['name'] != ''){
+						$filename = $this->_save_file($_FILES['file'], $submenu->title, $submenu_item->id);
+						$submenu_item->image_url = $filename;
+						$submenu_item->save();
+					}				
+					break;
+				case 'delete_submenu_item':
+					$submenu_item = ORM::factory('Menuitem',$_POST['submenu_item_id']);
+					if($submenu_item->loaded())
+					{
+						$submenu_item->delete();
+					}
 					break;
 							
 			}
+			
+		}
+		/*
 			
 			
 			
@@ -161,7 +174,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 							
 							$custompage->save();
 							unset($this->template->content->data[$m->title.'pages']);
-						}*/
+						}
 					}
 				}
 				
@@ -187,6 +200,7 @@ class Controller_Menuedit extends Controller_Loggedin {
 			}
 			
 		}
+		*/
 		$submenus = ORM::factory('Menus')->find_all();
 		$this->template->content->submenus = $submenus;
 		$this->template->html_head->script_views[] = view::factory('js/messages');
@@ -285,6 +299,8 @@ class Controller_Menuedit extends Controller_Loggedin {
 	
 		$extention = $this->get_file_extension($upload_file['name']);
 		$filename = $title.'-'.$id.'.'.$extention;
+		//make url safe
+		$filename = urlencode($filename);
 		 
 		if ($file = Upload::save($upload_file, $filename, $directory))
 		{

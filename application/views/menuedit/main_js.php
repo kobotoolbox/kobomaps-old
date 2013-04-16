@@ -37,7 +37,7 @@ $(document).ready(function() {
  */
 function deleteSubMenu(subMenuId)
 {
-	if (confirm("<?php echo __('Are you sure you want to delete this menu item');?>"))
+	if (confirm("<?php echo __('Are you sure you want to delete this menu');?>"))
 	{
 		$("#action").val('delete_sub_menu');
 		$("#submenu_id").val(subMenuId);
@@ -69,6 +69,23 @@ function editSubMenuItem(id, menuId){
 }
 
 
+/**
+ * Called by the delete submenu item link
+ */
+function deleteSubMenuItem(id){
+	if (confirm("<?php echo __('Are you sure you want to delete this menu item');?>")){
+		$("#action").val('delete_submenu_item');
+		$("#submenu_item_id").val(id);
+		$("#edit_menu_form").submit();
+	}
+}
+
+/**
+ * Called to close the edit submenu item dialog
+ */
+function cancelSubMenuItem(){
+	$("#overlay a.close").click();
+}
 
 
 
