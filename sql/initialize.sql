@@ -516,5 +516,6 @@ VALUES
 (NULL ,  '1',  'Help Making Custom Pages',  '',  'custompagehelp',  '1'), 
 (NULL ,  '1',  'Help Making Submenus',  '',  'submenuhelp',  '1');
 UPDATE  `custompage` SET  `my_menu` =  '1' WHERE  `custompage`.`id` = 2;
-
 UPDATE `metadata` SET  `v` =  '1.0.046' WHERE  `metadata`.`k` ='Database Version';
+
+
