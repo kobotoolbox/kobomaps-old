@@ -17,11 +17,12 @@ function updatePageInfo(){
 	var page_id = $("#pages").val();
 	if(page_id != 0){
 		var name = $('#pages option:selected').text();
-		$.post("<?php echo URL::base(); ?>custompage/getpage", { 'page': page_id }).done(
+		$.post("<?php echo URL::base(); ?>custompage/getpage", { 'page': page_id },
 				function(data) {
 					$("#slug").css('border-color', '');
 					$('#slug').val(name);
-					$('textarea.tinymce').val(data);
+					$('#menu_id').val(data.menu_id);
+					$('textarea.tinymce').val(data.content);
 					//don't allow changing of the slugs for the default template pages
 					if(name == '__ABOUT__' || name == '__HELP__' || name == '__SUPPORT__' || name == '__MAIN__'){
 						$('#slug').attr('readonly', 'readonly');
@@ -29,7 +30,7 @@ function updatePageInfo(){
 					else{
 						$('#slug').attr('readonly', false);
 					}
-				});
+				}, "json");
 	}	
 	else{
 		$("#slug").css('border-color', '');
@@ -129,7 +130,6 @@ $(function() {
    $('#pages').change(function(){
 		updatePageInfo();
    });
-
   	//loading may perhaps be on a different page than the default, find the data for the loaded page
    if($("#pages").val() != 0){
 	   updatePageInfo();

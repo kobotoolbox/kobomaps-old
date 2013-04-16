@@ -15,51 +15,10 @@ class Controller_Custompage extends Controller_Loggedin {
 		parent::before();	
 		
 		$auth = Auth::instance();
-		//is the user logged in?
-		if($auth->logged_in('admin'))
+		//only admins should be allowed to see the page in the first place, and if not, are redirected to mymaps
+		if(!$auth->logged_in('admin'))
 		{
-			$this->session = Session::instance();
-			//if auto rendered set this up
-			if ($this->auto_render)
-			{
-				$data = array(
-						'slug' => '',
-						'content' => '',
-						'id' => isset($_GET['id']) ? intval($_GET['id']) : 0,
-				);
-				
-				$pages = ORM::factory('Custompage')->
-				where('user_id', '=', $this->user->id)->
-				find_all();
-				
-				//grab all of the pages that are in the database from the start, such as main/about/help/support
-				$default = ORM::factory('Custompage')->
-				where('user_id', '=', 1)->
-				find_all();
-				
-				$page_array = array();
-				$page_array[0] = __('New Page');
-				foreach($default as $main){
-					$page_array[$main->id] = $main->slug;
-				}
-				foreach($pages as $page){
-					$page_array[$page->id] = $page->slug;
-				}
-
-				
-				$this->template->header->menu_page = "custompage";
-				//make messages roll up when done
-				$this->template->html_head->messages_roll_up = true;
-				$this->template->html_head->script_views[] = view::factory('js/messages');
-				$this->template->content = new View('custompage/main');
-				$this->template->html_head->title = __("Custom Page");
-				$this->template->html_head->script_files[] = 'media/js/tiny_mce/jquery.tinymce.js';
-				$this->template->html_head->script_views[] = new View('custompage/main_js');
-				$this->template->content->errors = array();
-				$this->template->content->messages = array();
-				$this->template->content->data = $data;
-				$this->template->content->pages = $page_array;
-			}
+			HTTP::redirect('mymaps');
 		}
 	}
 	/**
@@ -67,13 +26,41 @@ class Controller_Custompage extends Controller_Loggedin {
 	*/
 	public function action_index()
 	{
-		$auth = Auth::instance();
-		//only admins should be allowed to see the page in the first place, and if not, are redirected to mymaps
-		if(!$auth->logged_in('admin'))
-		{
-			HTTP::redirect('mymaps');
+		
+		
+		$this->template->header->menu_page = "custompage";
+		//make messages roll up when done
+		$this->template->html_head->messages_roll_up = true;
+		$this->template->html_head->script_views[] = view::factory('js/messages');
+		$this->template->content = new View('custompage/main');
+		$this->template->html_head->title = __("Custom Page");
+		$this->template->html_head->script_files[] = 'media/js/tiny_mce/jquery.tinymce.js';
+		$this->template->html_head->script_views[] = new View('custompage/main_js');
+		$this->template->content->errors = array();
+		$this->template->content->messages = array();
+		
+		$pages = ORM::factory('Custompage')->find_all();
+		$page_array = array(0=>__('New Page'));
+		foreach($pages as $page){
+			$page_array[$page->id] = $page->slug;
 		}
+		$this->template->content->pages = $page_array;
+		
+		$data = array(
+				'slug' => '',
+				'content' => '',
+				'id' => 0,
+				'menu_id' => 0,
+		);
 
+		//setup the menus
+		$menus = ORM::factory('Menus')->find_all();
+		$menus_array = array(0=>__('No Menu'));
+		foreach($menus as $menu){
+			$menus_array[$menu->id] = $menu->title;
+		}
+		$this->template->content->menus = $menus_array;
+		
 		if(!empty($_POST)){
 
 			if($_POST['action'] == 'delete'){
@@ -84,6 +71,7 @@ class Controller_Custompage extends Controller_Loggedin {
 					$data['id'] = $_POST['pages'];
 					$data['slug'] = $_POST['slug'];
 					$data['content'] = $_POST['content'];
+					$data['menu_id'] = $_POST['menu_id'];
 					$this->template->content->data = $data;
 				}
 				else{
@@ -95,6 +83,7 @@ class Controller_Custompage extends Controller_Loggedin {
 			//if they submitted a save/create page request
 				$data['slug'] = $_POST['slug'];
 				$data['content'] = $_POST['content'];
+				$data['menu_id'] = $_POST['menu_id'];
 	
 			//throw an error of either are empty
 				if($data['slug'] == '' || $data['content'] == ''){
@@ -105,7 +94,7 @@ class Controller_Custompage extends Controller_Loggedin {
 				
 				//the select page bar on the page has default of 0 for new page
 				if($_POST['pages'] == 0){
-					$newPage = Model_Custompage::create_page($this->user->id, $data['slug'], $data['content']);
+					$newPage = Model_Custompage::create_page($this->user->id, $data['slug'], $data['content'], $data['menu_id']);
 					$this->template->content->pages[$newPage->id] = $newPage->slug;
 					$data['id'] = $newPage->id;
 					$this->template->content->data = $data;
@@ -123,6 +112,7 @@ class Controller_Custompage extends Controller_Loggedin {
 						$page->user_id = $this->user->id;
 						$page->content = $data['content'];
 						$page->slug = $data['slug'];
+						$page->menu_id = $data['menu_id'];
 						$page->save();
 						
 						$data['id'] = $page->id;
@@ -146,9 +136,16 @@ class Controller_Custompage extends Controller_Loggedin {
 						$this->template->content->messages[] = __('Saved page').' '.$data['slug'];
 					}
 				}
-				return;
+				
 			}
 		}
+		
+		
+		
+		
+		
+		$this->template->content->data = $data;
+		
 	}//end action_index
 	
 		 
@@ -157,10 +154,17 @@ class Controller_Custompage extends Controller_Loggedin {
 	*/
 	public function action_getpage(){
 		$this->auto_render = false;
-		
-		$page = ORM::factory('Custompage', $_POST['page']);
+		$this->response->headers('Content-Type','application/json');
+		if(isset($_POST['page'])){
+			$page = ORM::factory('Custompage', $_POST['page']);
+			$response = array('content'=>$page->content, 
+					'menu_id'=>$page->menu_id);
+		}else{
+			$response = array('content'=>'',
+					'menu_id'=>0);
+		}
 
-		echo $page->content;
+		echo json_encode($response);
 	}
 	
 	//call the generic slug checker function

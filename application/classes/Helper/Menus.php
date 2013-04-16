@@ -201,14 +201,8 @@ class Helper_Menus
   */
 	public static function make_submenu($page, $user)
 	{
-		$protocol = strpos(strtolower($_SERVER['SERVER_PROTOCOL']),'https')
-		=== FALSE ? 'http' : 'https';
-		$host     = $_SERVER['HTTP_HOST'];
-		$script   = $_SERVER['REQUEST_URI'];
-		$params   = $_SERVER['QUERY_STRING'];
 		
-		$current = $protocol . '://' . $host . $script;
-		
+		$current = request::current()->controller();
 		echo '<ul>';
 		
 		//the custompage creation help page should not be available for non admins
@@ -226,8 +220,9 @@ class Helper_Menus
       case "custompage":
       ?>
       <li 
-			<?php if ($current == URL::base(TRUE,TRUE).'custompage/' OR $current == URL::base(TRUE,TRUE).'custompage'){
-					echo 'class="active"';				
+			<?php 
+			if ($current == 'Custompage'){
+				echo 'class="active"';
 			}?>
 		>
         <a href="
@@ -238,7 +233,7 @@ class Helper_Menus
         </a>
       </li>
       <li 
-			<?php if ($current == URL::base(TRUE,TRUE).'menuedit/' OR $current == URL::base(TRUE,TRUE).'menuedit'){
+			<?php if ($current == 'Menuedit' ){
 					echo 'class="active"';				
 			}?>
 		>
@@ -423,107 +418,61 @@ class Helper_Menus
 					  <?php }?>														
 				  <?php 
 				break;
-		}		
-    
-    //check the case that the page is a custom page and has its own custom menus
-    	$custompage = ORM::factory('Custompage')->
-    	where('slug', '=', Model_Menuitem::flip($page))->
-    	find();
-        if($custompage->loaded()){
-			$m = ORM::factory('Menus')->
-        	where('id', '=', $custompage->my_menu)->
-        	find();
-		}
-		else{
-			$m = ORM::factory('Menus')->
-			where('title', '=', $page)->
-			find();
-		}	
-        
-        //the help pages have their own images in a sprite and need to be handled differently
-        $helparray = array(
-        		'help' => 'help',
-				'maphelp' => 'maphelp',
-				'templatehelp' => 'templatehelp',
-				'custompagehelp' => 'custompagehelp',
-				'submenuhelp' => 'submenuhelp'
-        );
-        
-        if($m->loaded()){
-            $item = ORM::factory('Menuitem')->
-            where('menu', '=', $m->id)->
-            find_all();
-            
-            foreach($item as $menuitem){
-				if(in_array($page, $helparray)){
+		}//end switch statement
 
-					if($user != null AND $menuitem->admin_only AND $user->has('roles', $admin_role)){
-					?>
-					<li 
-					<?php if ($current == URL::base(TRUE,TRUE).$menuitem->item_url){
-							echo 'class="active"';				
-						}?>
-						>
-						<a href="<?php echo URL::base().$menuitem->item_url?>">
-         				 <div>
-            				<img class="<?php echo $menuitem->item_url?>
-            					" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo $menuitem->text;?>
-          				</div>
-       					 </a>
-      				</li>
-      				<?php 
-					}
-					if(!$menuitem->admin_only){
-					?>
-						<li 
-							<?php if ($current == URL::base(TRUE,TRUE).$menuitem->item_url){
-							echo 'class="active"';				
-						}?>
-						>
-						<a href="<?php echo URL::base().$menuitem->item_url?>">
-         				 <div>
-            				<img class="<?php echo $menuitem->item_url?>
-            					" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo $menuitem->text;?>
-          				</div>
-       					 </a>
-      				</li>
-	      			<?php 
-					}	
-			 	}
-			 	else{
-					if($menuitem->admin_only AND $user->has('roles', $admin_role)){
-              		?>
-              		<li 
-						<?php if ($current == URL::base(TRUE,TRUE).$menuitem->item_url){
-							echo 'class="active"';				
-						}?>
-					>
-                		<a href="<?php echo URL::base().$menuitem->item_url?>">
-                  		<div>
-                    		<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
-                  		</div>
-                		</a>
-              		</li>
-              		<?php
-              		}
-              		if(!$menuitem->admin_only){
-					?>
-						<li 
-							<?php if ($current == URL::base(TRUE,TRUE).$menuitem->item_url){
+		//check if we're dealing with something custom
+		if($current == "Dynamic")
+		{
+			$slug = request::current()->param('slug');
+			$custompage = ORM::factory('Custompage')->
+    			where('slug', '=', $slug)->
+    			find();
+			
+			if($custompage->loaded()){
+				$m = ORM::factory('Menus',$custompage->menu_id);
+				
+				if($m->loaded()){
+					foreach($m->menu_items->find_all() as $menuitem){
+						if($menuitem->admin_only AND $user->has('roles', $admin_role)){
+							?>
+	              		<li 
+							<?php if ($slug == $menuitem->item_url){
 								echo 'class="active"';				
 							}?>
 						>
-							<a href="<?php echo URL::base().$menuitem->item_url?>">
-	         				 <div>
-	            				<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
-	          				</div>
-	       					 </a>
-	      				</li>
-	      			<?php 
-					}	
-            	}	
-        	}//end for loop
-        }//end if loaded
+	                		<a href="<?php echo URL::base().$menuitem->item_url?>">
+	                  		<div>
+	                    		<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
+	                  		</div>
+	                		</a>
+	              		</li>
+	              		<?php
+	              		}
+	              		if(!$menuitem->admin_only){
+						?>
+							<li 
+								<?php if ($slug == $menuitem->item_url){
+									echo 'class="active"';				
+								}?>
+							>
+								<a href="<?php echo URL::base().$menuitem->item_url?>">
+		         				 <div>
+		            				<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
+		          				</div>
+		       					 </a>
+		      				</li>
+		      			<?php 
+						}	
+	            	}//end for loop	
+			   }//if menu loaded
+			}//if custom page loaded
+			
+			
+		}//if dynamic
+    
+    	
+        
+       
 		echo '</ul>';
     //this helps make the divs float correctly
 		echo '<p style="clear:both;"></p>';

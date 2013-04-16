@@ -71,9 +71,10 @@ class Model_Custompage extends ORM {
 	* @param int $user_id is the id of the creator
 	* @param int $slug_id is the title of the custompage
 	* @param string $content is the HTML to create the page
+	* @param int $menu_id is the id of the menu to use with this page
 	* @return ORM::custompage the page that was created
 	*/
-	public static function create_page($user_id, $slug_id, $content){
+	public static function create_page($user_id, $slug_id, $content, $menu_id){
 		
 		$page = ORM::factory('Custompage');
 	
@@ -81,6 +82,7 @@ class Model_Custompage extends ORM {
 			$page->user_id = $user_id;
 			$page->slug = $slug_id;
 			$page->content = $content;
+			$page->menu_id = $menu_id;
 		}
 	
 		$page->save();
