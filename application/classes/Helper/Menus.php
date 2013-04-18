@@ -209,7 +209,7 @@ class Helper_Menus
 		$auth = Auth::instance();
 		$logged_in = $auth->logged_in() OR $auth->auto_login();
 		//see if the given user is an admin, if so they can do super cool stuff
-		$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
+		$admin_role = ORM::factory('Role')->where('name', '=', 'admin')->find();
 		if($logged_in)
 		{
 			$user = ORM::factory('user',$auth->get_user());
@@ -217,39 +217,58 @@ class Helper_Menus
 
 		switch($page)
 		{
-      case "custompage":
-      ?>
-      <li 
+			case "help":
+				$help = ORM::factory('Menus', 1);
+				$submenus = ORM::factory('Menuitem')->
+				where('menu_id', '=', $help->id)->
+				find_all();
+				
+				foreach($submenus as $submenu_item){
+					if(!$submenu_item->admin_only OR ($submenu_item->admin_only AND $user->has('roles', $admin_role))){
+			?>
+				<li>
+					<a href="/kobomaps/<?php echo $submenu_item->item_url?>">
+						<div>
+	            			<img class="<?php echo $submenu_item->item_url?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo $submenu_item->text;?>
+	          			</div>
+	          			</a>
+      			</li>
 			<?php 
-			if ($current == 'Custompage'){
-				echo 'class="active"';
-			}?>
-		>
-        <a href="
-          <?php echo URL::base().'custompage/'?>">
-          <div>
-            <img class="customEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create pages');?>
-          </div>
-        </a>
-      </li>
-      <li 
-			<?php if ($current == 'Menuedit' ){
-					echo 'class="active"';				
-			}?>
-		>
-        <a href="<?php echo URL::base().'menuedit/'?>">
-        <div>
-          <img class="menuEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create submenus');?>
-        </div>
-        </a>
-      </li>
-      
-  <?php
-      break;
-      
-      case "mymaps":
-      ?>
-      <li>
+				}}
+			break;
+		      case "custompage":
+		      ?>
+		      <li 
+					<?php 
+					if ($current == 'Custompage'){
+						echo 'class="active"';
+					}?>
+				>
+		        <a href="
+		          <?php echo URL::base().'custompage/'?>">
+		          <div>
+		            <img class="customEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create pages');?>
+		          </div>
+		        </a>
+		      </li>
+		      <li 
+					<?php if ($current == 'Menuedit' ){
+							echo 'class="active"';				
+					}?>
+				>
+		        <a href="<?php echo URL::base().'menuedit/'?>">
+		        <div>
+		          <img class="menuEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create submenus');?>
+		        </div>
+		        </a>
+		      </li>
+		      
+		  	<?php
+		      break;
+		      
+		      case "mymaps":
+		      ?>
+      			<li>
 					<a href="<?php echo URL::base();?>mymaps/add1">
 					<div>
 						<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create New Map');?>
@@ -423,16 +442,23 @@ class Helper_Menus
 		//check if we're dealing with something custom
 		if($current == "Dynamic")
 		{
-			$slug = request::current()->param('slug');
+			$slug = Model_Menuitem::flip(request::current()->param('slug'));
 			$custompage = ORM::factory('Custompage')->
     			where('slug', '=', $slug)->
     			find();
-			
+			$helpPages = array(
+				'maphelp' => 'maphelp',
+				'templatehelp' => 'templatehelp',
+				'custompagehelp' => 'custompagehelp',
+				'submenuhelp' => 'submenuhelp'	
+			);
 			if($custompage->loaded()){
 				$m = ORM::factory('Menus',$custompage->menu_id);
 				
 				if($m->loaded()){
 					foreach($m->menu_items->find_all() as $menuitem){
+						$helpString = '"'.$menuitem->item_url.'" src="'.URL::base().'media/img/img_trans.gif" width="1" height="1"/>';
+						$normalString = '"customMenus" src="'.$menuitem->image_url.'" width="50" height="40" />';
 						if($menuitem->admin_only AND $user->has('roles', $admin_role)){
 							?>
 	              		<li 
@@ -442,7 +468,8 @@ class Helper_Menus
 						>
 	                		<a href="<?php echo URL::base().$menuitem->item_url?>">
 	                  		<div>
-	                    		<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
+	                    		<img class=<?php echo isset($helpPages[$menuitem->item_url]) ? $helpString : $normalString?>
+	                    		<br/><?php echo $menuitem->text;?>
 	                  		</div>
 	                		</a>
 	              		</li>
@@ -457,7 +484,8 @@ class Helper_Menus
 							>
 								<a href="<?php echo URL::base().$menuitem->item_url?>">
 		         				 <div>
-		            				<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
+		            				<img class=<?php echo isset($helpPages[$menuitem->item_url]) ? $helpString : $normalString?>
+	                    		<br/><?php echo $menuitem->text;?>
 		          				</div>
 		       					 </a>
 		      				</li>

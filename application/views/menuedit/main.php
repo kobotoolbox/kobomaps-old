@@ -99,17 +99,30 @@
 	  			<?php 
 	  				$submenu_items = $submenu->menu_items->find_all();
 	  				foreach($submenu_items as $submenu_item){
+						if($submenu->title == 'help'){
 					?>
 						<li>
 							<a href="/kobomaps/<?php echo $submenu_item->item_url?>" target="_blank">
 								<div>
-	            					<img class="customMenus" src="<?php echo $submenu_item->image_url?>" width="50" height="50"/><br/><?php echo $submenu_item->text;?>
+	            					<img class="<?php echo $submenu_item->item_url?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo $submenu_item->text;?>
 	            					</br>
+	            					</a>
 	            					<a rel="#overlay" href="<?php echo url::base().'menuedit/edit_item?id='.$submenu_item->id; ?>"><?php echo __('Edit');?></a>
 	          					</div>
       					</li>
 					<?php }	
-	  			?>
+					else {
+			  			?>
+			  			<li>
+							<a href="/kobomaps/<?php echo $submenu_item->item_url?>" target="_blank">
+								<div>
+	            					<img class="customMenus" src="<?php echo $submenu_item->image_url?>" width="50" height="50"/><br/><?php echo $submenu_item->text;?>
+	            					</br>
+	            					</a>
+	            					<a rel="#overlay" href="<?php echo url::base().'menuedit/edit_item?id='.$submenu_item->id; ?>"><?php echo __('Edit');?></a>
+	          					</div>
+      					</li>
+      					<?php }}?>
 	  			</ul>
 	  		</td>	 
 	  		<td class="menuDelete" style="width:59px; text-align:center;">

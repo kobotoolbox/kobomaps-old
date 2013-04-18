@@ -42,7 +42,7 @@ class Model_Custompage extends ORM {
 	*/
 	public function update_custompage($values)
 	{
-		$expected = array('user_id', 'slug_id', 'content', 'my_menu');
+		$expected = array('user_id', 'slug_id', 'content', 'menu_id');
 		
 		//if no slug is set
 		if($values['slug_id'] == '')
