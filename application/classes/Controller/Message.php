@@ -46,7 +46,7 @@ class Controller_Message extends Controller_Loggedin {
   */
 	public function action_submitmessage(){
 		$this->auto_render = false;
-		$this->response->headers('Content-Type','application/json');
+		//$this->response->headers('Content-Type','application/json');
 		
 		$name = $_POST['myName'];
 		$email = $_POST['myEmail'];
@@ -66,6 +66,7 @@ class Controller_Message extends Controller_Loggedin {
 		Model_Message::add_message($owner_id, $message, $name, $email);
 		
 		echo '{"status": "success"}';
+		return;
 	}
 	
 	
