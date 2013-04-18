@@ -1942,10 +1942,22 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 											$style[$sets][$sty][1][$col] = '#'.$_POST['administrative_'.$end.'_'.$setsArray[$elem].'_colorDiv'];
 	 											$style[$sets][$sty][$stylers][$vis] = 'on';
 	 										}
+	 										else{
+	 											$style[$sets][$sty][1][$col] = '';
+	 											$style[$sets][$sty][$stylers][$vis] = 'off';
+	 										}
 	 								}
 	 								else{
-	 									$style[$sets][$sty][1][$col] = '';
-	 									$style[$sets][$sty][$stylers][$vis] = 'off';
+	 									if($setsArray[$feat] == 'water' AND $setsArray[$elem] == 'geometry'){
+	 										$style[$sets][$sty][1][$col] = '';
+	 									}
+	 									else if($setsArray[$feat] == 'landscape' AND $setsArray[$elem] == 'geometry'){
+	 										$style[$sets][$sty][1][$col] = '#4d4d4d';
+	 									}
+	 									else{
+	 										$style[$sets][$sty][1][$col] = '';
+	 										$style[$sets][$sty][$stylers][$vis] = 'off';
+	 									}
 	 								}
 	 							}
 	 						}
