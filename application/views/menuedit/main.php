@@ -65,13 +65,13 @@
 	  <table class="list_table" style="width:824px; height:400px">
 	  <thead>
 	  <tr class="header">
-	  			<th class="menuName" style="width:80px">
+	  			<th class="menuName" style="width:78px">
 	  				<?php echo __('Submenu');?>
 	  			</th>
-	  			<th class="menuItems" style="width:641px">
+	  			<th class="menuItems" style="width:631px">
 	  				<?php echo __('Items');?>
 	  			</th>
-	  			<th class="menuDelete" style="width:58px">
+	  			<th class="menuDelete" style="width:76px">
 	  				<?php echo __('Actions')?>
 	  			</th>
 	  			
@@ -90,7 +90,7 @@
 	  		?>
 	  
 	  	<tr <?php echo $odd_row; ?>>
-	  		<td class="menuName" style="width: 80px">
+	  		<td class="menuName" style="width: 79px">
 	  			<?php echo $submenu->title;
 	  			?>
 	  		</td>

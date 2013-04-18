@@ -217,25 +217,7 @@ class Helper_Menus
 
 		switch($page)
 		{
-			case "help":
-				$help = ORM::factory('Menus', 1);
-				$submenus = ORM::factory('Menuitem')->
-				where('menu_id', '=', $help->id)->
-				find_all();
-				
-				foreach($submenus as $submenu_item){
-					if(!$submenu_item->admin_only OR ($submenu_item->admin_only AND $user->has('roles', $admin_role))){
-			?>
-				<li>
-					<a href="/kobomaps/<?php echo $submenu_item->item_url?>">
-						<div>
-	            			<img class="<?php echo $submenu_item->item_url?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo $submenu_item->text;?>
-	          			</div>
-	          			</a>
-      			</li>
-			<?php 
-				}}
-			break;
+			
 		      case "custompage":
 		      ?>
 		      <li 
@@ -459,7 +441,7 @@ class Helper_Menus
 					foreach($m->menu_items->find_all() as $menuitem){
 						$helpString = '"'.$menuitem->item_url.'" src="'.URL::base().'media/img/img_trans.gif" width="1" height="1"/>';
 						$normalString = '"customMenus" src="'.$menuitem->image_url.'" width="50" height="40" />';
-						if($menuitem->admin_only AND $user->has('roles', $admin_role)){
+						if($user != null AND $menuitem->admin_only AND $user->has('roles', $admin_role)){
 							?>
 	              		<li 
 							<?php if ($slug == $menuitem->item_url){
