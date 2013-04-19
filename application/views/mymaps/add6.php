@@ -57,6 +57,7 @@ $col = 'color';
 
 echo Form::open(NULL, array('id'=>'edit_styles_form', 'enctype'=>'multipart/form-data'));
 echo Form::hidden('action','edit', array('id'=>'action'));
+echo Form::hidden('waterActive','false', array('id'=>'waterActive'));
 
 ?>
 

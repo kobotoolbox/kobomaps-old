@@ -19,7 +19,6 @@
 	<input type="text" id="emailField" style="width:250px" maxlength=255/></br></br>
 	
 	<?php echo __('Comment')?></br>
-	<?php echo $_SERVER["SERVER_NAME"]?>
 	<textarea type="text" id="commentField" style="width:400px; height:100px"/></br>
 	
 	<input type="button" value="<?php echo __('Submit')?>" onclick="submitComment()"/>

@@ -126,7 +126,7 @@ class Controller_Message extends Controller_Loggedin {
 			->find_all();
 		
 		$view->messages = $messages;
-		$this->template->header->menu_page = "comment";
+		$this->template->header->menu_page = "message";
 		$this->template->html_head->title = __("Messages");
 		$this->template->html_head->script_files[] = 'media/js/jquery.tools.min.js';
 		$this->template->html_head->script_views[] = $js;

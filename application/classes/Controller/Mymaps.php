@@ -1897,6 +1897,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->html_head->script_files[] = 'media/js/jquery-ui.min.js';
 	 	$this->template->html_head->script_files[] = 'media/js/jscolor/jscolor.js';
 	 	$this->template->html_head->script_views[] = view::factory('js/messages');
+	 	$this->template->html_head->script_views[] = view::factory('mymaps/add6_js');
 	 	 
 	 
 	 	//get the status
@@ -1915,7 +1916,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 			//if we're editing things
 	 			if($_POST['action'] == 'edit')
 	 			{
-	 
 	 				$elem = 'elementType';
 	 				$feat = 'featureType';
 	 				$vis = 'visibility';
@@ -1934,6 +1934,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 									//!!!color should always be the second array for the settings!!!
 	 									$style[$sets][$sty][1][$col] = '#'.$_POST[$setsArray[$feat].'_'.$setsArray[$elem].'_colorDiv'];
 	 									$style[$sets][$sty][$stylers][$vis] = 'on';
+	 									if($setsArray[$feat] == 'water' AND $setsArray[$elem] == 'geometry' AND $_POST['waterActive'] == 'false'){
+	 										$style[$sets][$sty][1][$col] = '';
+	 									}
 	 								}
 	 								else if(strpos($setsArray[$feat], 'administrative') !== false) {
 	 									//we have to check if administrative.# came through, as POST converts '.' to '_'
@@ -1948,7 +1951,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 										}
 	 								}
 	 								else{
-	 									if($setsArray[$feat] == 'water' AND $setsArray[$elem] == 'geometry'){
+	 									if($setsArray[$feat] == 'water' AND $setsArray[$elem] == 'geometry') {
 	 										$style[$sets][$sty][1][$col] = '';
 	 									}
 	 									else if($setsArray[$feat] == 'landscape' AND $setsArray[$elem] == 'geometry'){

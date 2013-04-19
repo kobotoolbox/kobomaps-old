@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /***********************************************************
-* add4_js.php - View
+* add2_js.php - View
 * Written by Etherton Technologies Ltd. 2012
 * Started on 12/06/2011
 *************************************************************/
