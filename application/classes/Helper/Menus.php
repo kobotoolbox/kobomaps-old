@@ -420,18 +420,41 @@ class Helper_Menus
 				break;
 		}//end switch statement
 
+		
 		//check if we're dealing with something custom
 		if($current == "Dynamic")
 		{
-			$slug = request::current()->param('slug');
+			
+			
+			$modified_slug = $slug = request::current()->param('slug');
+			//special case to handle hardcoded pages
+			switch($slug)
+			{
+				case "home":
+					$modified_slug='__HOME__';
+					break;
+				case "help":
+					$modified_slug='__HELP__';
+					break;
+				case "about":
+					$modified_slug='__ABOUT__';
+					break;
+				case "support":
+					$modified_slug='__SUPPORT__';
+					break;
+			}
 			$custompage = ORM::factory('Custompage')->
-    			where('slug', '=', $slug)->
+    			where('slug', '=', $modified_slug)->
     			find();
+			
+			
+			
 			
 			if($custompage->loaded()){
 				$m = ORM::factory('Menus',$custompage->menu_id);
 				
 				if($m->loaded()){
+					
 					foreach($m->menu_items->find_all() as $menuitem){
 						if($menuitem->admin_only AND $user->has('roles', $admin_role)){
 							?>
