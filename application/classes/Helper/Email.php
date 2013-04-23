@@ -21,7 +21,7 @@ class Helper_Email
 	 */
 	public static function send_email($to, $from, $subject, $body)
 	{	
-		if($_SERVER["SERVER_NAME"] != 'localhost'){
+		if($_SERVER["SERVER_NAME"] != 'localhost' AND $_SERVER["SERVER_NAME"] != '127.0.0.1'){
 			require Kohana::find_file('swiftmailer', 'classes/lib/swift_required');
 			//Create the Transport
 			$transport = Swift_SmtpTransport::newInstance($_SERVER['HTTP_HOST'], 25);

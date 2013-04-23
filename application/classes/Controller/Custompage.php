@@ -128,6 +128,7 @@ class Controller_Custompage extends Controller_Loggedin {
 						
 						$default->content = $data['content'];
 						$default->slug = $data['slug'];
+						$default->menu_id = $data['menu_id'];
 						$default->save();
 						
 						$data['id'] = $default->id;

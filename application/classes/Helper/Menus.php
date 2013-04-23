@@ -145,7 +145,7 @@ class Helper_Menus
 				echo '<a href="'.url::base().'templates">'.__("Templates").'</a></li>';
 				
 				//Message center
-				if($page == "messages")
+				if($page == "message")
 				{
 					echo '<li class="selected">';
 				}
@@ -209,7 +209,7 @@ class Helper_Menus
 		$auth = Auth::instance();
 		$logged_in = $auth->logged_in() OR $auth->auto_login();
 		//see if the given user is an admin, if so they can do super cool stuff
-		$admin_role = ORM::factory('Role')->where("name", "=", "admin")->find();
+		$admin_role = ORM::factory('Role')->where('name', '=', 'admin')->find();
 		if($logged_in)
 		{
 			$user = ORM::factory('user',$auth->get_user());
@@ -217,39 +217,40 @@ class Helper_Menus
 
 		switch($page)
 		{
-      case "custompage":
-      ?>
-      <li 
-			<?php 
-			if ($current == 'Custompage'){
-				echo 'class="active"';
-			}?>
-		>
-        <a href="
-          <?php echo URL::base().'custompage/'?>">
-          <div>
-            <img class="customEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create pages');?>
-          </div>
-        </a>
-      </li>
-      <li 
-			<?php if ($current == 'Menuedit' ){
-					echo 'class="active"';				
-			}?>
-		>
-        <a href="<?php echo URL::base().'menuedit/'?>">
-        <div>
-          <img class="menuEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create submenus');?>
-        </div>
-        </a>
-      </li>
-      
-  <?php
-      break;
-      
-      case "mymaps":
-      ?>
-      <li>
+			
+		      case "custompage":
+		      ?>
+		      <li 
+					<?php 
+					if ($current == 'Custompage'){
+						echo 'class="active"';
+					}?>
+				>
+		        <a href="
+		          <?php echo URL::base().'custompage/'?>">
+		          <div>
+		            <img class="customEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create pages');?>
+		          </div>
+		        </a>
+		      </li>
+		      <li 
+					<?php if ($current == 'Menuedit' ){
+							echo 'class="active"';				
+					}?>
+				>
+		        <a href="<?php echo URL::base().'menuedit/'?>">
+		        <div>
+		          <img class="menuEdit" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create submenus');?>
+		        </div>
+		        </a>
+		      </li>
+		      
+		  	<?php
+		      break;
+		      
+		      case "mymaps":
+		      ?>
+      			<li>
 					<a href="<?php echo URL::base();?>mymaps/add1">
 					<div>
 						<img class="createNewMap" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Create New Map');?>
@@ -424,28 +425,14 @@ class Helper_Menus
 		//check if we're dealing with something custom
 		if($current == "Dynamic")
 		{
-			
-			
-			$modified_slug = $slug = request::current()->param('slug');
-			//special case to handle hardcoded pages
-			switch($slug)
-			{
-				case "home":
-					$modified_slug='__HOME__';
-					break;
-				case "help":
-					$modified_slug='__HELP__';
-					break;
-				case "about":
-					$modified_slug='__ABOUT__';
-					break;
-				case "support":
-					$modified_slug='__SUPPORT__';
-					break;
-			}
+			$slug = request::current()->param('slug');
+		
+			$modified_slug = Model_Menuitem::flip(request::current()->param('slug'));
+
 			$custompage = ORM::factory('Custompage')->
     			where('slug', '=', $modified_slug)->
     			find();
+
 			
 			
 			
@@ -488,6 +475,7 @@ class Helper_Menus
 						}	
 	            	}//end for loop	
 			   }//if menu loaded
+
 			}//if custom page loaded
 			
 			

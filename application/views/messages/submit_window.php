@@ -39,6 +39,7 @@
 
 				{ 'myName': myName, 'myEmail': myEmail, 'myMessage': myComment, "map_id": "<?php echo $map->id?>" },
 				function(data) {
+					console.log(data);
 					if(data.status == 'success'){
 						alert('<?php echo __('Message sent successfully!')?>');
 						$("a[rel]").overlay().close();

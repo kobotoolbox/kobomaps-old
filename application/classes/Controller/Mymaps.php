@@ -1864,6 +1864,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		
 	 	//pull the map object from the DB
 	 	$map = ORM::factory('Map', $map_id);
+	 	$style = json_decode($map->map_style, true);
 	 	 
 	 	//check permissions of the user on this map
 	 	$this->check_map_permissions($map_id, $this->user->id);
@@ -1887,15 +1888,16 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$this->template->content = view::factory("mymaps/add6");
 	 	$this->template->content->map_id = $map_id;
 	 	$this->template->content->map = $map;
-	 	$this->template->content->style = json_decode($map->map_style);
+	 	$this->template->content->style = $style;
 	 	$this->template->content->data = $data;
 	 	$this->template->content->messages = array();
 	 	$this->template->content->errors = array();
 	 	$this->template->header->menu_page = "createmap";
 	 	$this->template->html_head->styles['all'] = 'media/css/jquery-ui.css';
 	 	$this->template->html_head->script_files[] = 'media/js/jquery-ui.min.js';
+	 	$this->template->html_head->script_files[] = 'media/js/jscolor/jscolor.js';
 	 	$this->template->html_head->script_views[] = view::factory('js/messages');
-	 	//$js =  view::factory("mymaps/add4_js");
+	 	$this->template->html_head->script_views[] = view::factory('mymaps/add6_js');
 	 	 
 	 
 	 	//get the status
@@ -1914,19 +1916,69 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 			//if we're editing things
 	 			if($_POST['action'] == 'edit')
 	 			{
-	 
-	 				//update map creation progress tracker
-	 				//don't change the map creation progress if they've already gone past this point
-	 				if($map->map_creation_progress < 5)
-	 				{
-	 					$map_array['map_creation_progress'] = 5;
+	 				$elem = 'elementType';
+	 				$feat = 'featureType';
+	 				$vis = 'visibility';
+	 				$col = 'color';
+	 				$sty = 'stylers';
+	 				$stylePOST = $style;
+	 				//$style[$sets][$sty][$stylers] is the path to color/visibility arrays
+	 				
+	 				foreach($stylePOST as $sets=>$setsArray){		
+	 					//these values are encoded in seperate arrays for some reason
+	 					foreach($setsArray[$sty] as $stylers=>$styleArray){
+	 					 		
+	 						foreach($styleArray as $key=>$value){
+	 							if($key == $vis){
+	 								if(isset($_POST[$setsArray[$feat].'_'.$setsArray[$elem].'_vis'])){
+	 									//!!!color should always be the second array for the settings!!!
+	 									$style[$sets][$sty][1][$col] = '#'.$_POST[$setsArray[$feat].'_'.$setsArray[$elem].'_colorDiv'];
+	 									$style[$sets][$sty][$stylers][$vis] = 'on';
+	 									if($setsArray[$feat] == 'water' AND $setsArray[$elem] == 'geometry' AND $_POST['waterActive'] == 'false'){
+	 										$style[$sets][$sty][1][$col] = '';
+	 									}
+	 								}
+	 								else if(strpos($setsArray[$feat], 'administrative') !== false) {
+	 									//we have to check if administrative.# came through, as POST converts '.' to '_'
+	 										$end = substr($setsArray[$feat], strlen('administrative')+ 1);
+	 										if(isset($_POST['administrative_'.$end.'_'.$setsArray[$elem].'_vis'])){
+	 											$style[$sets][$sty][1][$col] = '#'.$_POST['administrative_'.$end.'_'.$setsArray[$elem].'_colorDiv'];
+	 											$style[$sets][$sty][$stylers][$vis] = 'on';
+	 										}
+	 										else{
+	 											$style[$sets][$sty][1][$col] = '';
+	 											$style[$sets][$sty][$stylers][$vis] = 'off';
+	 										}
+	 								}
+	 								else{
+	 									if($setsArray[$feat] == 'water' AND $setsArray[$elem] == 'geometry') {
+	 										$style[$sets][$sty][1][$col] = '';
+	 									}
+	 									else if($setsArray[$feat] == 'landscape' AND $setsArray[$elem] == 'geometry'){
+	 										$style[$sets][$sty][1][$col] = '#4d4d4d';
+	 									}
+	 									else{
+	 										$style[$sets][$sty][1][$col] = '';
+	 										$style[$sets][$sty][$stylers][$vis] = 'off';
+	 									}
+	 								}
+	 							}
+	 						}
+	 					}
 	 				}
-	 					
+	 				$map->map_style = json_encode($style);
+	 				$map->save();
+	 				//update map creation progress tracker
+	 				$map_array = $map->as_array();
+	 				//don't change the map creation progress if they've already gone past this point
+	 				if($map->map_creation_progress < 6)
+	 				{
+	 					$map_array['map_creation_progress'] = 6;
+	 				}
 	 				$map->update_map($map_array);
 	 				HTTP::redirect($map->slug);
 	 			}
-	 			 
-	 
+	 			
 	 		}
 	 		catch (ORM_Validation_Exception $e)
 	 		{

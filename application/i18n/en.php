@@ -220,6 +220,14 @@ return array
 		'You have used region ' => 'You have used region ',
 		' times.' => ' times.',
 		
+		//add 6 page
+		'Add Map - Map Style' => 'Add Map - Map Style',
+		'Change the style of the map.' => 'Change the style of the map.',
+		'Visible?' => 'Visible?',
+		'Color' => 'Color',
+		'Map Features' => 'Map Features',
+		'Style Types' => 'Style Types',
+		'Options' => 'Options',
 		
 		//map view page
 		'Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.'=>'Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.',

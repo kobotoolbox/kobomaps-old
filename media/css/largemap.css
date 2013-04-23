@@ -28,7 +28,7 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 #legend div.infowindow p {margin:4px 0;border:none}
 #minButtonLegend{
 	color: #000;
-	font-size: 23px;
+	font-size: 17px;
 	background:#fff;
 	float:right;
 	width:20px;
@@ -89,12 +89,12 @@ div#maplinks p#loadingtext {border: medium none;font-size: 1em;line-height: 2em;
 div#sheetlinks {left: 0; height:40px; width:100%; position:absolute; background:#6e6e6e; z-index: 1002; padding:0;}
 #sheetnames {float:left; width:100%; height:40px; padding:0; margin:0; color:white;position:relative;}
 div#sheetlinks li.sheet2 {display: block; width: 100px; height: 40px; float: left; text-align:center; margin:0px;vertical-align:middle;}
-div#sheetlinks li.sheet2 span {margin:0px; padding:0px 0px;padding-top:10px;height:30px;vertical-align:middle;color:white;font-size:14px;}
+div#sheetlinks li.sheet2 span {margin:0px; padding:0px 0px;padding-top:10px;height:30px;vertical-align:middle;color:white;font-size:12px;}
 div#sheetlinks li.sheet2 span.active {background: #444444;}
 div#sheetlinks li.sheet2 span:hover {background: #555555;}
 div#sheetlinks a, div#sheetlinks span {color:white;}
-div#sheetlinks div#mapName {float:left; padding:10px 30px 10px 30px;font-weight:bold;font-size:20px;color:white;width:280px;}
-div#sheetlinks div.sheetScrollerControll{float:left;font-size:40px;font-weight:bold;padding:10px 10px;color:white;width:auto;margin-left:auto;}
+div#sheetlinks div#mapName {float:left; padding:10px 30px 10px 30px;font-weight:bold;font-size:18px;color:white;width:280px;}
+div#sheetlinks div.sheetScrollerControll{float:left;font-size:36px;font-weight:bold;padding:10px 10px;color:white;width:auto;margin-left:auto;}
 div#sheetlinks div.sheetScrollerControll a.inactive{color:gray;cursor:default}
 div#sheetlinks div#mapSocialShare{float:right;width:260px;background:#6e6e6e;height:40px;}
 div#sheetlinks div#sheetnamesWrapper{float:left;width:400px;height:40px;overflow:hidden;}

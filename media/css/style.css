@@ -32,7 +32,7 @@ div#header{
 }
 
 div#footer{
-	background-image: url('../img/submenu_background');
+	background-image: url('../img/submenu_background.png');
 	margin:0px;
 	margin-top:30px;
 	height:70px;
@@ -328,20 +328,20 @@ div#subMenu
 	background: url('../img/HelpCustomSprite.png') -173px 0px;	
 	width:35px;	
 }
-#subMenu img.maphelp{
+img.maphelp{
 	background: url('../img/HelpCustomSprite.png') -4px 0px;	
 	width:47px;	
 }
-#subMenu img.templatehelp{
+img.templatehelp{
 	background: url('../img/HelpCustomSprite.png') -50px 0px;	
 	width:47px;	
 }
-#subMenu img.custompagehelp{
+img.custompagehelp{
 	background: url('../img/HelpCustomSprite.png') -96px 0px;	
 	width:35px;	
 }
-#subMenu img.submenuhelp{
-	background: url('../img/HelpCustomSprite.png') -210px 0px;	
+img.submenuhelp{
+	background: url('../img/HelpCustomSprite.png') -208px 0px;	
 	width:40px;	
 }
 

@@ -92,7 +92,7 @@ class Controller_Dynamic extends Controller_Main {
 		$user = null;
 	
 		//if the map isn't ready send it back to where it needs to go
-		if(intval($map->map_creation_progress) != 5)
+		if(intval($map->map_creation_progress) != 6)
 		{
 			HTTP::redirect('mymaps/add'.$map->map_creation_progress.'?id='.$map->id);
 		}

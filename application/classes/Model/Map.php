@@ -173,38 +173,87 @@ class Model_Map extends ORM {
 	public static  $style_default = '[
 	  {
 		"featureType": "administrative.province",
-		"elementType": "all",
+		"elementType": "labels",
 		"stylers": [
-		  { "visibility": "off" }
+		  { "visibility": "off" },
+		  { "color": "" }
+		]
+	  },{
+		"featureType": "administrative.province",
+		"elementType": "geometry",
+		"stylers": [
+		  { "visibility": "off" },
+		  { "color": "" }
+		]
+	  },{
+		"featureType": "administrative.locality",
+		"elementType": "labels",
+		"stylers": [
+		  { "visibility": "off" },
+		  { "color": "" }
+		]
+	  },{
+		"featureType": "administrative.locality",
+		"elementType": "geometry",
+		"stylers": [
+		  { "visibility": "off" },
+		  { "color": "" }
 		]
 	  },{
 		"featureType": "poi",
-		"elementType": "all",
+		"elementType": "labels",
 		"stylers": [
-		  { "visibility": "off" }
+		  { "visibility": "off" },
+		  { "color": "" }
+		]
+	  },{
+		"featureType": "poi",
+		"elementType": "geometry",
+		"stylers": [
+		  { "visibility": "off" },
+		  { "color": "" }
 		]
 	  },{
 		"featureType": "road",
-		"elementType": "all",
+		"elementType": "labels",
 		"stylers": [
-		  { "visibility": "off" }
+		  { "visibility": "off" },
+		  { "color": "" }
+		]
+	  },{
+		"featureType": "road",
+		"elementType": "geometry",
+		"stylers": [
+		  { "visibility": "off" },
+		  { "color": "" }
+		]
+	  },{
+		"featureType": "landscape",
+		"elementType": "labels",
+		"stylers": [
+		  { "visibility": "off" },
+		  { "color": "" }
 		]
 	  },{
 		"featureType": "landscape",
 		"elementType": "geometry",
 		"stylers": [
-		  { "lightness": -60 },
-		  { "hue": "#91ff00" },
 		  { "visibility": "on" },
-		  { "saturation": -60 }
+		  { "color": "#4d4d4d"}
 		]
 	  },{
-		"featureType": "administrative.locality",
-		"elementType": "all",
+		"featureType": "water",
+		"elementType": "labels",
 		"stylers": [
-		  { "saturation": -50 },
-		  { "invert_lightness": true },
-		  { "lightness": 52 }
+		  { "visibility": "off" },
+		  { "color": "" }
+		]
+	  },{
+		"featureType": "water",
+		"elementType": "geometry",
+		"stylers": [
+		  { "visibility": "on" },
+		  { "color": "" }
 		]
 	  }
 	]';
