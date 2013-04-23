@@ -64,7 +64,7 @@
 	
 	echo '<div id="customWork" style="width: 700px; float:right">';
 	
-	echo __('Title of page: ');
+	echo __('URL of page: ');
 	echo Form::input('slug', $data['slug'], array('id'=>'slug', 'style'=>'width:300px;', 'maxlength' => '128', 'onchange' => 'checkSlug()'));
 	echo '</br></br>';
 	echo __('Sub-menu for page: ');

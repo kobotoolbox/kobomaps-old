@@ -397,6 +397,7 @@ return array
 		'Content of page: This is what will be displayed on the page. There are advanced options available.' => 'Content of page: This is what will be displayed on the page. There are advanced options available.',
 		'This is the list of your current pages.' => 'This is the list of your current pages.',
 		'Title of page: ' => 'Title of page: ',
+		'URL of page: ' => 'URL of page: ',
 		
 		//limits exceeded
 		'Map Limit Exceeded'=>'Map Limit Exceeded',
