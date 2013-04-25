@@ -252,7 +252,7 @@ class Model_Map extends ORM {
 		"featureType": "water",
 		"elementType": "geometry",
 		"stylers": [
-		  { "visibility": "on" },
+		  { "visibility": "off" },
 		  { "color": "" }
 		]
 	  }

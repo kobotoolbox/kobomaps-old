@@ -19,7 +19,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	}
 	
 
-
 	/**
 	where users go to change their profile
 	*/
@@ -1953,6 +1952,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 								else{
 	 									if($setsArray[$feat] == 'water' AND $setsArray[$elem] == 'geometry') {
 	 										$style[$sets][$sty][1][$col] = '';
+	 										$style[$sets][$sty][$stylers][$vis] = 'on';
 	 									}
 	 									else if($setsArray[$feat] == 'landscape' AND $setsArray[$elem] == 'geometry'){
 	 										$style[$sets][$sty][1][$col] = '#4d4d4d';
