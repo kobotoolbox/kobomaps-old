@@ -138,7 +138,7 @@ class Controller_Public extends Controller_Main {
 			$query = '\'%'.$database->real_escape_string($q).'%\'';
 			$sql .= 'JOIN templates ON (templates.id = maps.template_id) ';
 		}
-		$sql .= 'WHERE (maps.map_creation_progress = 5 OR 
+		$sql .= 'WHERE (maps.map_creation_progress = 6 OR 
 			(sharing.user_id = '.$user_id.' AND 
 			(sharing.permission = \''.Model_Sharing::$edit.'\' OR sharing.permission = \''.Model_Sharing::$owner.'\'))) 
 			AND (maps.is_private = 0 OR sharing.user_id = '.$user_id.') ';
