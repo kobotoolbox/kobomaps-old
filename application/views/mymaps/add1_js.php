@@ -40,7 +40,7 @@ function toggle_class(elem_class)
 */
 function set_default_map_style(elem_id)
 {
-	$('#'+elem_id).val("<?php echo Model_Map::get_style_default_js(); ?>");
+	$('#'+elem_id).val('<?php echo json_decode(Model_Map::get_style_default_js()); ?>');
 	
 }
 
