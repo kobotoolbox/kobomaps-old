@@ -1,7 +1,7 @@
 /***********************************************************
 * playback_js.php - Script
 * This software is copy righted by Etherton Technologies Ltd. 2013
-* Written by Dylan Gillespie <dylan@ethertontech.com> Tino also did some work on this back in the day
+* Written by Dylan Gillespie <dylan@ethertontech.com> 
 * Started on 2013-02-15
 * Javascript code for playback on sheets
 *************************************************************/
@@ -96,6 +96,7 @@ var playback = (function(){
 		}
 	}
 		 
+	//return so that the functions are called when using class.function()
 	return {onLoad:onLoad, setSheetStart:setSheetStart};
 	  
 })();

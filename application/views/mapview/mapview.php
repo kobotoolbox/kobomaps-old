@@ -36,7 +36,7 @@
 //change the size of the title if it's very large
 ?>
 <div id="sheetlinks">
-	<div id="mapName"
+	<div id="mapName" 
 		<?php 
 		if(strlen($map->title) > 24 && strlen($map->title) <= 30){
 			echo 'style="font-size:17px;">';

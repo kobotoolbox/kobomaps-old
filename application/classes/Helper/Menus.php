@@ -443,7 +443,7 @@ class Helper_Menus
 				if($m->loaded()){
 					
 					foreach($m->menu_items->find_all() as $menuitem){
-						if($menuitem->admin_only AND $user->has('roles', $admin_role)){
+						if($user != null AND $menuitem->admin_only AND $user->has('roles', $admin_role)){
 							?>
 	              		<li 
 							<?php if ($slug == $menuitem->item_url){

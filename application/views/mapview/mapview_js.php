@@ -25,21 +25,20 @@
 <!-- <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/dragresize.js"> </script> -->
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"> </script>
-<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/label.js"> </script>
+
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/RainbowVis-JS-master/rainbowvis.js"></script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.navigate.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.tools.min.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery-ui.min.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.address-1.4.min.js"> </script>
+
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/label.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/playback.js"> </script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/colorProperties.js"></script>
 
 <script type="text/javascript">
 
-
-/* link to the stylesheet for the tabs used in chart windows *
- <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
- */
 
 /*Todo: Make all these setings on the website:*/
 var kmapInfodivHeight = 280;
@@ -63,15 +62,15 @@ var map;
  */
 var mapData;
 
-
 /**
  * global variables that hold the map color choices, just replaces previous values in code
  */
-var border_color = '#<?php echo $map->border_color ?>';
-var region_color = '#<?php echo $map->region_color ?>';
-var polygon_color = '<?php echo $map->polygon_color ?>';
-var graph_color = '#<?php echo $map->graph_bar_color ?>';
-var graph_select_color = '#<?php echo $map->graph_select_color ?>';
+colorProperties.border_color = '#<?php echo $map->border_color ?>';
+colorProperties.region_color = '#<?php echo $map->region_color ?>';
+colorProperties.polygon_color = '<?php echo $map->polygon_color ?>';
+colorProperties.graph_color = '#<?php echo $map->graph_bar_color ?>';
+colorProperties.graph_select_color = '#<?php echo $map->graph_select_color ?>';
+
 
 /**
  *  gives us a list of names for geographicAreas
@@ -150,7 +149,7 @@ function initialize_map() {
 		
 	};
 
-
+	
 	<?php 
 	if(empty($map->map_style))
 	{
@@ -677,18 +676,18 @@ function parseJsonToGmap(jsonUrl, jsonDataUrl)
 				//creates the polygon
 					areaGPolygons[areaName] = new google.maps.Polygon({
 						paths: points,
-						strokeColor: border_color, //sets the line color to defined color
+						strokeColor: colorProperties.border_color, //sets the line color to defined color
 						strokeOpacity: 0.8, //sets the line color opacity to 0.8
 						strokeWeight: 2, //sets the width of the line to 3
-						fillColor: region_color, //sets the fill color
+						fillColor: colorProperties.region_color, //sets the fill color
 						fillOpacity: 0.75 //sets the opacity of the fill color
 				});
 					areaGPolygons[areaName] = new google.maps.Polygon({
 						paths: points,
-						strokeColor: border_color, //sets the line color to defined color
+						strokeColor: colorProperties.border_color, //sets the line color to defined color
 						strokeOpacity: 0.8, //sets the line color opacity to 0.8
 						strokeWeight: 2, //sets the width of the line to 3
-						fillColor: region_color, //sets the fill color
+						fillColor: colorProperties.region_color, //sets the fill color
 						fillOpacity: 0.75 //sets the opacity of the fill color
 				});
 				
@@ -710,49 +709,6 @@ function parseJsonToGmap(jsonUrl, jsonDataUrl)
 }
 
 
-/**
-* Function to be called from the HTML to specify a new opacity and/or color value for a county
-* @param string countyName - name of the county as defined in the json file
-* @param double opacityValue - number between 1.0 and 0.0
-* @param string colorValue - html color value, in the form "#RRGGBB" such as "#ff0000" which is red
-*/
-function formatAreaOpacityColor(name, opacityValue, colorValue)
-{
-	if(typeof areaGPolygons[name] != "undefined")
-	{
-		areaGPolygons[name].setOptions({
-					fillColor: colorValue,
-					fillOpacity: opacityValue
-				});
-	}
-}
-
-/**
-* This uses a Library called Rainbow that creates a gradient color scheme
-* @param double percentage is the data of the area looking to be colored
-* @param double min is the lowest value given in the data
-* @param double spread is the spread from lowest to highest data points
-* @return string color in hex format
-*/
-function calculateColor(percentage, min, spread)
-{
-	var gradient = new Rainbow();
-	var color;
-	var colorPerct = (percentage-min)*(1/spread);
-	var first = polygon_color.substring(0,6);
-	var second = polygon_color.substring(7, 13);
-	if(second == ''){
-		second = '#FFFFFF';
-	}
-
-	gradient.setSpectrum(second, first);
-	gradient.setNumberRange(min, min+spread);
-	//return the hex color of the percentage from min -> spread
-	color = "#" + gradient.colourAt(colorPerct * (min + spread));
-	
-	return color;
-}
-
 
 
 /**
@@ -766,10 +722,10 @@ function calculateColor(percentage, min, spread)
 function UpdateAreaPercentage(name, percentage, min, spread, unit)
 {
 	//calculate the color
-	var color = calculateColor(percentage, min, spread);
+	var color = colorProperties.calculateColor(percentage, min, spread);
 	
 	//update the polygon with this new color
-	formatAreaOpacityColor(name, 0.75, color);
+	colorProperties.formatAreaOpacityColor(name, 0.75, color);
 	
 	//update the labels
 
@@ -972,13 +928,13 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 	 var bothData = [
 	        	  {
 				     data: graphXData,
-				     bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_color} ,
-				     color: graph_color
+				     bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: colorProperties.graph_color} ,
+				     color: colorProperties.graph_color
 			       },
 			      {
 				    data: selectedArea,
-				    bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_select_color} ,
-			        color: graph_select_color
+				    bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: colorProperties.graph_select_color} ,
+			        color: colorProperties.graph_select_color
 			      }
 	  ];
 	  
@@ -1059,13 +1015,13 @@ function drawGeneralChart(fullId, dataPath, name){
 	var bothData = [
 		        	  {
 				        	data: graphXData,
-				          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_color} ,
-				          	color: graph_color
+				          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: colorProperties.graph_color} ,
+				          	color: colorProperties.graph_color
 			        	  },
 			        	  {
 				        	data: selectedArea,
-				        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_select_color} ,
-			        		color: graph_select_color
+				        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: colorProperties.graph_select_color} ,
+			        		color: colorProperties.graph_select_color
 			        	  }
 		  ];
 	  
@@ -1152,13 +1108,13 @@ function drawTotalChart(indicator){
 		var bothData = [
 			        	  {
 				        	data: graphXData,
-				          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_color} ,
-				          	color: graph_color
+				          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: colorProperties.graph_color} ,
+				          	color: colorProperties.graph_color
 			        	  },
 			        	  {
 				        	data: selectedArea,
-				        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: graph_select_color} ,
-			        		color: graph_select_color
+				        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: colorProperties.graph_select_color} ,
+			        		color: colorProperties.graph_select_color
 			        	  }
 			  ];
 
@@ -1432,7 +1388,7 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 	}
 	
 	//update the key
-	updateKey(min, spread, title, unit);
+	colorProperties.updateKey(min, spread, title, unit);
 	//console.log("National Average: " + nationalAverage);
 	
 	//update the national average
@@ -1531,7 +1487,7 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator, to
 	//updates the key
 	////////////////////////////////////////////////////////////////
 	//set the color
-	var color = calculateColor(nationalAverage, min, spread);
+	var color = colorProperties.calculateColor(nationalAverage, min, spread);
     
 	$("#nationalaveragediv").css("background-color", color);
 	$("#nationalaverageimg").text(addCommas(nationalAverage)+" "+htmlDecode(unit));
@@ -1542,48 +1498,6 @@ function updateNationalAverage(min, spread, nationalAverage, unit, indicator, to
 
 
 /**
-* Changes the key bar in the legend to the value of the current total
-* @param double Min: Minimum value of percentages across all areas for baselining the color scale
-* @param double span: Spread from min to max of percentages across all areas for making the ceiling of the color scale
-* @param string Title: Title of the question
-* @param string unit is the unit designated by the user when the map was made
-*/
-function updateKey(min, span, title, unit)
-{ 
-	if(isNaN(min) || isNaN(span)){
-		$('#legend_gradient').hide();
-	}
-	else
-	{
-		var canvas = document.getElementById('legend_canvas');
-	    var context = canvas.getContext('2d');
-	    context.rect(0, 0, 298, 140);
-
-	    // add linear gradient
-	    var grd = context.createLinearGradient(0, 0, 298, 19);
-	    var first = '#' + polygon_color.substring(0, 6);
-	    var second = '#' + polygon_color.substring(7,13);
-	    if(second == '#'){
-			second = '#FFFFFF';
-	    }
-	    grd.addColorStop(0, second);   
-	    grd.addColorStop(1, first);
-	    context.fillStyle = grd;
-	    context.fill();
-	      
-		$("#percentleft").attr("title", addCommas(min)+" "+htmlDecode(unit));
-		$("#percentleft").text(addCommas(min)+" "+htmlDecode(unit));
-		
-		$("#percentright").attr("title", addCommas((min+span))+" "+htmlDecode(unit));
-		$("#percentright").text(addCommas((min+span))+" "+htmlDecode(unit));
-
-		$('#legend_gradient').show();
-	}
-
-	$("#spanLegendText").html(title);
-}
-
-/**
 * This little function just goes through and wipes clean the areas on the map
 * and their charts and so forth
 */
@@ -1592,7 +1506,7 @@ function zeroOutMap()
 		//loop over the polygons and set the colors to not-set
 		for(areaName in areaGPolygons)
 		{
-			formatAreaOpacityColor(areaName, 0.75, region_color);
+			colorProperties.formatAreaOpacityColor(areaName, 0.75, colorProperties.region_color);
 			//set the label to blank("")
 	
 			labels[areaName].set("areaValue", "");
