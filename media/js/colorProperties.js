@@ -1,5 +1,9 @@
 /***********************************************************
+<<<<<<< HEAD
 * colorProperties.js - Script
+=======
+* colorProperties_js.php - Script
+>>>>>>> e08e7a16426e0364e25719116b335384366d8bde
 * This software is copy righted by Etherton Technologies Ltd. 2013
 * Written by Dylan Gillespie <dylan@ethertontech.com> 
 * Started on 2013-08-05
@@ -8,6 +12,7 @@
 
 
 
+<<<<<<< HEAD
  //Constructor for colorProperties
 var colorProperties = (function(){
 	
@@ -52,6 +57,17 @@ var colorProperties = (function(){
 	}
 	
 	
+=======
+ //Constructor for playbacks
+var colorProperties = (function(){
+	
+	this.border_color = '';
+	this.region_color = '';
+	this.polygon_color = '';
+	this.graph_color = '';
+	this.graph_select_color = '';
+	 
+>>>>>>> e08e7a16426e0364e25719116b335384366d8bde
 	/**
 	* Function to be called from the HTML to specify a new opacity and/or color value for a county
 	* @param string countyName - name of the county as defined in the json file
@@ -81,8 +97,13 @@ var colorProperties = (function(){
 		var gradient = new Rainbow();
 		var color;
 		var colorPerct = (percentage-min)*(1/spread);
+<<<<<<< HEAD
 		var first = polygon_color.substring(0,6);
 		var second = polygon_color.substring(7, 13);
+=======
+		var first = this.polygon_color.substring(0,6);
+		var second = this.polygon_color.substring(7, 13);
+>>>>>>> e08e7a16426e0364e25719116b335384366d8bde
 		if(second == ''){
 			second = '#FFFFFF';
 		}
@@ -115,8 +136,13 @@ var colorProperties = (function(){
 
 		    // add linear gradient
 		    var grd = context.createLinearGradient(0, 0, 298, 19);
+<<<<<<< HEAD
 		    var first = '#' + polygon_color.substring(0, 6);
 		    var second = '#' + polygon_color.substring(7,13);
+=======
+		    var first = '#' + this.polygon_color.substring(0, 6);
+		    var second = '#' + this.polygon_color.substring(7,13);
+>>>>>>> e08e7a16426e0364e25719116b335384366d8bde
 		    if(second == '#'){
 				second = '#FFFFFF';
 		    }
@@ -125,17 +151,26 @@ var colorProperties = (function(){
 		    context.fillStyle = grd;
 		    context.fill();
 		      
+<<<<<<< HEAD
 			$("#percentleft").attr("title", mapParsers.addCommas(min)+" "+mapParsers.htmlDecode(unit));
 			$("#percentleft").text(mapParsers.addCommas(min)+" "+mapParsers.htmlDecode(unit));
 			
 			$("#percentright").attr("title", mapParsers.addCommas((min+span))+" "+mapParsers.htmlDecode(unit));
 			$("#percentright").text(mapParsers.addCommas((min+span))+" "+mapParsers.htmlDecode(unit));
+=======
+			$("#percentleft").attr("title", addCommas(min)+" "+htmlDecode(unit));
+			$("#percentleft").text(addCommas(min)+" "+htmlDecode(unit));
+			
+			$("#percentright").attr("title", addCommas((min+span))+" "+htmlDecode(unit));
+			$("#percentright").text(addCommas((min+span))+" "+htmlDecode(unit));
+>>>>>>> e08e7a16426e0364e25719116b335384366d8bde
 
 			$('#legend_gradient').show();
 		}
 
 		$("#spanLegendText").html(title);
 	}
+<<<<<<< HEAD
 	
 	/**
 	* Used to update the color of an area given a percentage, min and spread
@@ -162,6 +197,12 @@ var colorProperties = (function(){
 	//return so that the functions are called when using class.function()	 
 	return {formatAreaOpacityColor:formatAreaOpacityColor, calculateColor:calculateColor, updateKey:updateKey, UpdateAreaPercentage:UpdateAreaPercentage, setColors:setColors,
 		getBorder:getBorder, getRegion:getRegion, getPolygon:getPolygon, getGraph:getGraph, getGraphS:getGraphS};
+=======
+
+
+	//return so that the functions are called when using class.function()	 
+	return {formatAreaOpacityColor:formatAreaOpacityColor, calculateColor:calculateColor, updateKey:updateKey};
+>>>>>>> e08e7a16426e0364e25719116b335384366d8bde
 	  
 })();
  

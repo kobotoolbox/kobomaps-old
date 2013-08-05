@@ -1,13 +1,22 @@
 /***********************************************************
+<<<<<<< HEAD
 * graphCreator.js - Script
 * This software is copy righted by Etherton Technologies Ltd. 2013
 * Written by Dylan Gillespie <dylan@ethertontech.com> 
 * Started on 2013-08-05
 * Javascript code for the graphs and charts throughout the map
+=======
+* graphCreator_js.php - Script
+* This software is copy righted by Etherton Technologies Ltd. 2013
+* Written by Dylan Gillespie <dylan@ethertontech.com> 
+* Started on 2013-08-05
+* Javascript code for the graphs throughout the map
+>>>>>>> e08e7a16426e0364e25719116b335384366d8bde
 *************************************************************/
 
 
 
+<<<<<<< HEAD
  //Constructor for graphCreator
 var graphCreator = (function(){
 	/*Todo: Make all these setings on the website:*/
@@ -546,6 +555,14 @@ var graphCreator = (function(){
 	//return so that the functions are called when using class.function()
 	return {DrawDataGraph:DrawDataGraph, calculateBarHeight:calculateBarHeight, drawTotalChart:drawTotalChart, UpdateAreaPercentageTitleData:UpdateAreaPercentageTitleData,
 		updateNationalAverage:updateNationalAverage};
+=======
+ //Constructor for playbacks
+var graphCreator = (function(){
+	
+	
+	//return so that the functions are called when using class.function()
+	return {formatAreaOpacityColor:formatAreaOpacityColor, calculateColor:calculateColor, updateKey:updateKey};
+>>>>>>> e08e7a16426e0364e25719116b335384366d8bde
 	  
 })();
  
