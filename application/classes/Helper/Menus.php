@@ -432,10 +432,6 @@ class Helper_Menus
 			$custompage = ORM::factory('Custompage')->
     			where('slug', '=', $modified_slug)->
     			find();
-
-			
-			
-			
 			
 			if($custompage->loaded()){
 				$m = ORM::factory('Menus',$custompage->menu_id);
@@ -476,9 +472,7 @@ class Helper_Menus
 	            	}//end for loop	
 			   }//if menu loaded
 
-			}//if custom page loaded
-			
-			
+			}//if custom page loaded			
 		}//if dynamic
     
     	

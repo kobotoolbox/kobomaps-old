@@ -294,8 +294,8 @@
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    Map style text box
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr class="advanced"  style="display:none"><td>';
+  // Is going to be hidden as options are decided on another page now
+	echo '</td></tr><tr style="display:none"><td>';
 	echo Form::label('map_style', __('Map Style').": ");
 	echo '</td><td>';
 	echo Form::label('map_style_description', '<br/>'.__('The map styles can be used to edit the style of the background map.').'<br/>'.__('To learn more about the use of map styles see: '));
@@ -307,6 +307,9 @@
 	echo '</td><td>';
 	echo Form::button('default_map_style', __('Default'), array('type'=>'button', 'id'=>'default_map_button', 'onclick'=>'set_default_map_style("map_style"); return false'));
 	
+	
+	//              End of page						
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	echo '</td></tr><tr><td>';
 	echo Form::submit('edit', __('Continue'), array('id'=>'edit_button'));
 	echo '</td><td></td></tr></table>';

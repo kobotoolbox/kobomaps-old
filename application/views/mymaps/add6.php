@@ -69,7 +69,6 @@ echo Form::hidden('waterActive','false', array('id'=>'waterActive'));
 		<th id="styleStyles" style="width:186px"> <?php echo __('Options')?> </th>
 	</thead>
 	<?php 	
-	
 		foreach($style as $sets){
 			echo '<tr><td style="width:175px"><em>';
 			if($sets[$elem] != 'geometry'){

@@ -33,6 +33,7 @@
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery-ui.min.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.address-1.4.min.js"> </script>
 
+<!-- These contain all of the js classes that used to form this page -->
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/label.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/playback.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/colorProperties.js"></script>
