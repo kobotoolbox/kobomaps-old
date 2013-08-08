@@ -378,6 +378,7 @@ return array
 		'Templates are the base maps from which custom maps are made.'=>'Templates are the base maps from which custom maps are made.',
 		'User'=>'User',
 		"Are you sure you want to delete this template? \r\n\r\n You will break any maps that use this template."=>"Are you sure you want to delete this template? \\r\\n\\r\\n You will break any maps that use this template.",
+		'Search Templates' => 'Search Templates',
 		
 		
 		//templates edit page
