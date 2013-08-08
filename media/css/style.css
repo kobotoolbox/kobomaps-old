@@ -401,7 +401,7 @@ table tr td.selectColumn, table tr th.selectColumn
 }
 table.list_table tr th.lastColumn
 {
-	width:60px
+	width:50px;
 	text-align:center;
 }
 table.list_table tr td.lastColumn{
@@ -506,8 +506,8 @@ div.data_specify{
 	}
 
 .q1 {width:121px; height: 60px; border-top:solid 1px white; border-left:solid 1px white;}
-.q2 {width:760px; height: 60px;margin-right:15px; background:#aaa;}
-.q3 {width:121px; height: 385px;margin-bottom:15px; background:#aaa;}
+.q2 {width:775px; height: 60px; background:#aaa;}
+.q3 {width:121px; height: 400px; background:#aaa;}
 .q4 {width:775px; height: 400px; overflow:auto;}
 
 .q2 .firstCol, .q2 td.header, .q3 thead, .q4 thead, .q4 tr td.header, .q4 tr th.header {display:none;}
@@ -518,7 +518,9 @@ table.data_specify_table tr th div.width, table.data_specify_table tr td div.wid
 	padding:5px 0px 0px 5px;
 	vertical-align: top;
 }
-
+.q2 div.width{
+	height:80px;
+}
 
 
 table.data_specify_table{

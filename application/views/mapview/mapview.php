@@ -201,7 +201,7 @@
 		</div>
 	<?php }?>
 	
-	<div class="apple_overlay" id="overlay">
+	<div class="apple_overlay" id="overlay" style="display:none">
 		<div class="contentWrap">
 			<img class="contentWrapWaiter" src="<?php echo URL::base();?>media/img/waiter_barber.gif"/>
 		</div>
