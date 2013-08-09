@@ -239,7 +239,8 @@ class Controller_Templates extends Controller_Loggedin {
 		/******* Handle incoming data*****/
 		if(!empty($_POST)) // They've submitted the form to update his/her wish
 		{
-		
+			//print_r($_POST);
+			//exit;
 			try
 			{
 				$first_time = false; //used to know if we should blow away everything if there's an error

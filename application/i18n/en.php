@@ -390,6 +390,10 @@ return array
 		'Private'=>'Private',
 		'Copy Template'=>'Copy Template',
 		'File (.kml, .kmz)'=>'File (.kml, .kmz)',
+		'Kobomaps' => 'Kobomaps',
+		'Personal and Publically owned templates.' => 'Personal and Publically owned templates.',
+		'Official templates provided by Kobomaps. These templates were gathered from GADM.org.' => 'Official templates provided by Kobomaps. These templates were gathered from GADM.org.',
+	
 		
 		
 		//templates view page

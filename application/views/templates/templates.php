@@ -57,6 +57,75 @@
 	echo Form::close();
 ?>
 </div>
+<h4> <?php echo __('Official templates provided by Kobomaps. These templates were gathered from GADM.org.')?></h4>
+<table class="list_table" >
+	<thead>
+		<tr class="header">
+			<th style="width:200px;">
+				<?php echo __('Map');?>
+			</th>
+			<th style="width:370px;">
+				<?php echo __('Description');?>
+			</th>
+			<th style="width:150px;">
+				<?php echo __('Actions');?>
+			</th>
+			<th style="width:100px;">
+				<?php echo __('User');?>
+			</th>
+		</tr>
+	</thead>
+	<tbody style="height:300px;">
+	<?php
+		$j = 0;
+		foreach($templates as $template){
+			if(!$template->is_official){
+				continue;
+			}
+			if($template->id != 0)	//ignore template
+			{
+				$j++;
+				$odd_row = ($j % 2) == 0 ? 'class="odd_row"' : '';
+		?>
+
+	<tr <?php echo $odd_row; ?> style="height:50px;">
+		<td style="width:200px;">
+			<?php echo '<strong>';?>
+			<?php if(!$is_admin AND $user->id != $template->user_id){$action='view';}else{$action='edit';}?>
+			<a href="<?php echo url::base(); ?>templates/<?php echo $action.'?id='.$template->id;?>" ><?php echo $template->title; ?></a>
+			<?php echo '</strong>';?>
+		</td>
+		<td style="width:370px;">
+			<?php echo $template->description; ?>
+		</td>
+		<td style="width:150px;" class="templateTasks">
+			<ul>
+			<?php if(!$is_admin AND ($template->is_official == 1 OR $template->user_id != $user->id)){?>
+				<li>
+					<a href="<?php echo url::base(); ?>templates/view?id=<?php echo $template->id;?>" >
+						<img class="viewTemplate" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('View');?>
+					</a>
+				</li>
+			<?php }?>
+			<li>
+				<a href="<?php echo url::base(); ?>templates/copy?id=<?php echo $template->id;?>" >
+					<img class="copy" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/><br/><?php echo __('Copy');?>
+				</a>
+			</li>
+			</ul>
+		</td>
+		<td style="width:100px;">
+			<?php echo $template->user_id == 1 ? __('Kobomaps') : ($template->username . ($is_admin ? ' - '. $template->user_id : ''));?>
+		</td>
+	</tr>
+	<?php 
+			}
+		}
+		?>
+	</tbody>
+</table>
+</br>
+<h4> <?php echo __('Personal and Publically owned templates.')?></h4>
 <table class="list_table" >
 	<thead>
 		<tr class="header">
@@ -82,6 +151,9 @@
 		}
 		$i = 0;
 		foreach($templates as $template){
+			if($template->is_official){
+				continue;
+			}
 			if($template->id != 0)	//ignore template
 			{
 				$i++;
@@ -126,7 +198,7 @@
 			</ul>
 		</td>
 		<td style="width:100px;">
-			<?php echo $template->username . ($is_admin ? ' - '. $template->user_id : '');?>
+			<?php echo $template->user_id == 1 ? __('Kobomaps') : ($template->username . ($is_admin ? ' - '. $template->user_id : ''));?>
 		</td>
 	</tr>
 	<?php 
@@ -135,6 +207,7 @@
 		?>
 	</tbody>
 </table>
+
 <?php
 echo Form::open(NULL, array('id'=>'edit_template_form')); 
 echo Form::hidden('action','edit', array('id'=>'action'));
