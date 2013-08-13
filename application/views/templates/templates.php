@@ -57,6 +57,7 @@
 	echo Form::close();
 ?>
 </div>
+<?php if(request::initial()->action() != 'mine'){?>
 <h4> <?php echo __('Official templates provided by Kobomaps. These templates were gathered from GADM.org.')?></h4>
 <table class="list_table" >
 	<thead>
@@ -125,6 +126,7 @@
 	</tbody>
 </table>
 </br>
+<?php }?>
 <h4> <?php echo __('Personal and Publically owned templates.')?></h4>
 <table class="list_table" >
 	<thead>

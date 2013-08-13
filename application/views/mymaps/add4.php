@@ -81,7 +81,6 @@
 	echo Form::hidden('zoom', $map->zoom, array('id'=>'zoom'));
 ?>
 
-
 <div class="data_specify template_select">
 
 	<div class="q2">
@@ -108,7 +107,61 @@
 		}
 		foreach($templates as $template)
 		{
-			
+			if($template->is_official){
+				if($template->id != 0){
+					//handle truncating long descriptions
+					$description = strlen($template->description) < 50 ? $template->description : substr($template->description,0,50) . '...';
+					echo '<tr>';
+					echo '<td class="selectColumn">';
+					echo Form::radio('template_id', $template->id, $data['template_id'] == $template->id, array('onchange'=>'renderMap("'.$template->file.'",'.$template->lat.','.$template->lon.','.$template->zoom.'); return false;'));
+					echo '</td>';
+					echo '<td style="width:300px;">';
+					echo $template->is_official == 1 ? '<strong>':'';
+					echo '<a href="#" onclick="renderMap(\''.$template->file.'\','.$template->lat.','.$template->lon.','.$template->zoom.'); return false;">'.$template->title.'</a>';
+					echo $template->is_official == 1 ? '</strong>':'';
+					echo '</td>';
+					echo '<td style="width:250px;"><span title="'.$template->description.'">'.$description.'</span></td>';
+					echo '<td style="width:50px;">'.$template->admin_level.'</td>';
+					echo '<td style="width:90px;">'.($template->decimals == -1 ? __('No Rounding'):$template->decimals).'</td>';
+					echo '<td style="width:60px;text-align:center;">'.($template->is_official == 1 ? 'X':'').'</td>';
+					echo '</tr>';
+				}
+			}
+		}
+	
+	?>
+		</table>
+	</div>
+</div>
+</br>
+<div class="data_specify template_select">
+
+	<div class="q2">
+		<table class="data_specify_table">
+			<thead>
+				<tr>
+					<th class="selectColumn"><div><?php echo __('Select')?></div></th>
+					<th style="width:300px;"><div><?php echo __('Title')?></div></th>
+					<th style="width:300px;"><div><?php echo __('Description')?></div></th>
+					<th style="width:50px;"><div><?php echo __('Admin Level')?></div></th>
+					<th style="width:90px;"><div><?php echo __('Decimals')?></div></th>
+				</tr>	
+			</thead>
+		</table>
+	</div>
+	<div class="q4">
+		<table class="data_specify_table">
+	<?php 	
+		
+		if(count($templates) == 0)
+		{
+			echo '<tr><td colspan="5">'.__('There are no templates').'</td></tr>';
+		}
+		foreach($templates as $template)
+		{
+			if($template->is_official){
+				continue;
+			}	
 			if($template->id != 0){
 				//handle truncating long descriptions
 				$description = strlen($template->description) < 50 ? $template->description : substr($template->description,0,50) . '...';
@@ -121,10 +174,10 @@
 				echo '<a href="#" onclick="renderMap(\''.$template->file.'\','.$template->lat.','.$template->lon.','.$template->zoom.'); return false;">'.$template->title.'</a>';
 				echo $template->is_official == 1 ? '</strong>':'';
 				echo '</td>';
-				echo '<td style="width:250px;"><span title="'.$template->description.'">'.$description.'</span></td>';
+				echo '<td style="width:300px;"><span title="'.$template->description.'">'.$description.'</span></td>';
 				echo '<td style="width:50px;">'.$template->admin_level.'</td>';
 				echo '<td style="width:90px;">'.($template->decimals == -1 ? __('No Rounding'):$template->decimals).'</td>';
-				echo '<td style="width:60px;text-align:center;">'.($template->is_official == 1 ? 'X':'').'</td>';
+				//echo '<td style="width:60px;text-align:center;">'.($template->is_official == 1 ? 'X':'').'</td>';
 				echo '</tr>';
 			}
 		}
