@@ -379,6 +379,7 @@ return array
 		'User'=>'User',
 		"Are you sure you want to delete this template? \r\n\r\n You will break any maps that use this template."=>"Are you sure you want to delete this template? \\r\\n\\r\\n You will break any maps that use this template.",
 		'Search Templates' => 'Search Templates',
+		'You have no templates' => 'You have no templates.',
 		
 		
 		//templates edit page

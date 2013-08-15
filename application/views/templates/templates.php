@@ -149,7 +149,7 @@
 	<?php
 		if(count($templates) == 0)
 		{
-			echo '<tr><td colspan="4" style="text-align:center;width:860px;">'.__('you have no templates').'</td></tr>';
+			echo '<tr><td colspan="4" style="text-align:center;width:860px;">'.__('You have no templates').'</td></tr>';
 		}
 		$i = 0;
 		foreach($templates as $template){

@@ -369,14 +369,14 @@ class Controller_Templates extends Controller_Loggedin {
 			catch (UTF_Character_Exception $e)
 			{
 				$this->template->content->errors[] = $e->getMessage();
-				$data['id'] =  $_POST['id'];
-				$data['title'] =  $_POST['title'];
-				$data['description'] =  $_POST['description'];
-				$data['admin_level'] =  $_POST['admin_level'];
-				$data['decimals'] =  $_POST['decimals'];
-				$data['zoom'] =  $_POST['zoom'];
-				$data['lat'] =  $_POST['lat'];
-				$data['lon'] =  $_POST['lon'];
+				//$data['id'] =  $_POST['id'];
+				//$data['title'] =  $_POST['title'];
+				//$data['description'] =  $_POST['description'];
+				//$data['admin_level'] =  $_POST['admin_level'];
+				//$data['decimals'] =  $_POST['decimals'];
+				//$data['zoom'] =  $_POST['zoom'];
+				//$data['lat'] =  $_POST['lat'];
+				//$data['lon'] =  $_POST['lon'];
 			}
 
 			//if we just created a new template, go to that page
