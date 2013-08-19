@@ -20,10 +20,10 @@ class Controller_Login extends Controller_Main {
 		$auth = Auth::instance();
 		if( $auth->logged_in() OR $auth->auto_login())
 		{
-			HTTP::redirect(Session::instance()->get_once('returnUrl','mymaps'));
+			HTTP::redirect(Session::instance()->get_once('returnUrl','home'));
 		}
 		 
-		$this->template->html_head->title = __("login");
+		$this->template->html_head->title = __("Login");
 		$this->template->content = View::factory('login/login');
 		$this->template->header->menu_page = 'login';
 		$this->template->content->errors = array();
@@ -107,7 +107,6 @@ class Controller_Login extends Controller_Main {
 	protected function detect_open_id()
 	{
 		$auth_url = $_GET['openidurl'];
-		
 		
 		if($auth_url != null)
 		{

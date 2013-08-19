@@ -79,7 +79,7 @@ class Controller_Signup extends Controller_Main {
 			
 				if(!isset($_POST['terms']))
 				{
-					$this->template->content->errors[] = __('must agree to terms of use');
+					$this->template->content->errors[] = __('Must agree to terms of use');
 					return;
 				}
 				//conver the DOB to a format mysql recognizes
@@ -112,9 +112,16 @@ class Controller_Signup extends Controller_Main {
 					{
 						if(is_string($error))
 						{
-							$this->template->content->errors[] = $error;		
+							//print_r($error.'    ');
+							$start = strpos($error, '.');
+							$end = strrpos($error, '.');
+							
+							$part = substr($error, $start + 1, $end-$start-1);
+							$cause = substr($error, $end+1);
+							$this->template->content->errors[] = __('The').' '.$part.' '.__('has already been used. Please choose another.');		
 						}
 					}
+					//exit;
 				}
 			}	
 		}

@@ -34,7 +34,7 @@ class Controller_Dynamic extends Controller_Main {
 		$page = ORM::factory('Custompage')
 			->where('slug', '=', $slug)
 			->find();
-		
+
 		if($page->loaded()){
 			$this->viewPage($page);
 		}

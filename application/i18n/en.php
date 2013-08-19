@@ -37,6 +37,7 @@ return array
 		'profile'=>'profile',
 		'Log Out'=>'Log Out',
 		'Login, Signup'=>'Login, Signup',
+		'Login' => 'Login',
 		'about' => 'about',
 		'support' => 'support',
 		'main' => 'main',
@@ -75,6 +76,9 @@ return array
 		'password again'=>'password again',
 		'Agree to terms of use'=>'Agree to terms of use',
 		'Terms of use' => 'Terms of use',
+		'Must agree to terms of use' => 'Must agree to terms of use',
+		'has already been used. Please choose another.' => 'has already been used. Please choose another.',
+		'The' => 'The',
 		
 		//my maps main page
 		'Select a map to edit or create a new one'=>'Select a map to edit or create a new one',

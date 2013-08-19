@@ -65,7 +65,7 @@
                 <div id="openid_btns">
                 	<a title="log in with Google" href="<?php echo URL::base()?>login?openidurl=<?php echo urlencode('https://www.google.com/accounts/o8/id')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: 0px 0px" class="google openid_large_btn"></a>
                 	<a title="log in with Yahoo" href="<?php echo URL::base()?>login?openidurl=<?php echo urlencode('http://me.yahoo.com/')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: -100px 0px" class="yahoo openid_large_btn"></a>
-                	<a title="log in with Facebook" href="#" onclick="myFBlogin(); return false;" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: -500px 0px" class="facebook openid_large_btn"></a>
+                	<!-- <a title="log in with Facebook" href="#" onclick="myFBlogin(); return false;" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: -500px 0px" class="facebook openid_large_btn"></a> -->
                 	<!-- <a title="log in with Twitter" href="<?php echo URL::base()?>login?openidurl=<?php echo urlencode('https://www.twitter.com')?>" style="background: #FFF url('<?php echo URL::base()?>media/img/openid-providers-en.png'); background-position: -600px 0px" class="twitter openid_large_btn"></a> -->
                 	<br/>
                 	<div style="clear:both;">

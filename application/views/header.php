@@ -13,7 +13,7 @@
 			echo Helper_Menus::make_user_menu($menu_page, $user);
 		?>
 	</div>
-	<a id="headerImage" href="<?php echo URL::base();if(isset($user) AND $user != null){echo 'mymaps';}?>">
+	<a id="headerImage" href="<?php echo URL::base();if(isset($user) AND $user != null){echo 'home';}?>">
 		<img  src="<?php echo URL::base();?>media/img/kobo_logo.jpg"/>
 	</a>
 	

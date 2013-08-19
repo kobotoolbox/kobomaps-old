@@ -102,7 +102,7 @@
 						if($submenu->title == 'help'){
 					?>
 						<li>
-							<a href="/kobomaps/<?php echo $submenu_item->item_url?>" target="_blank">
+							<a href="<?php echo $submenu_item->item_url?>" target="_blank">
 								<div>
 	            					<img class="<?php echo $submenu_item->item_url?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo $submenu_item->text;?>
 	            					</br>
@@ -114,7 +114,7 @@
 					else {
 			  			?>
 			  			<li>
-							<a href="/kobomaps/<?php echo $submenu_item->item_url?>" target="_blank">
+							<a href="<?php echo $submenu_item->item_url?>" target="_blank">
 								<div>
 	            					<img class="customMenus" src="<?php echo $submenu_item->image_url?>" width="50" height="50"/><br/><?php echo $submenu_item->text;?>
 	            					</br>

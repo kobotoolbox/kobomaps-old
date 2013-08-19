@@ -8,5 +8,5 @@
 </h4>
 
 <h3 style="text-align:center;margin-top:40px;">
-<a href="<?php echo URL::base();?>"><?php echo __('Go home')?></a>
+<a href="<?php echo URL::base().'home';?>"><?php echo __('Go home')?></a>
 </h3> 

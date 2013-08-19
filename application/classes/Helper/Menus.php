@@ -26,6 +26,16 @@ class Helper_Menus
 		//Don't show the register link if the user is logged in
 		if($user == null)
 		{
+			// home page
+			if($page == "home")
+			{
+				echo '<li class="selected">';
+			}
+			else
+			{
+				echo '<li>';
+			}
+			echo '<a href="'.url::base().'home">'.__("Home").'</a></li>';
 			// public maps page
 			if($page == "publicmaps")
 			{
@@ -70,7 +80,16 @@ class Helper_Menus
 
 			if($user->has('roles', $login_role) || $user->has('roles', $admin_role))
 			{
-				
+				// home page
+				if($page == "home")
+				{
+					echo '<li class="selected">';
+				}
+				else
+				{
+					echo '<li>';
+				}
+				echo '<a href="'.url::base().'home">'.__("Home").'</a></li>';
 				// home page
 				if($page == "mymaps")
 				{
@@ -438,36 +457,72 @@ class Helper_Menus
 				if($m->loaded()){
 					
 					foreach($m->menu_items->find_all() as $menuitem){
-						if($user != null AND $menuitem->admin_only AND $user->has('roles', $admin_role)){
-							?>
-	              		<li 
-							<?php if ($slug == $menuitem->item_url){
-								echo 'class="active"';				
-							}?>
-						>
-	                		<a href="<?php echo URL::base().$menuitem->item_url?>">
-	                  		<div>
-	                    		<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
-	                  		</div>
-	                		</a>
-	              		</li>
-	              		<?php
-	              		}
-	              		if(!$menuitem->admin_only){
-						?>
-							<li 
+						//help menu images are from a sprite
+						if($m->id == 1){
+							if($user != null AND $menuitem->admin_only AND $user->has('roles', $admin_role)){
+								?>
+								<li 
+									<?php if($slug == $menuitem->item_url){
+											echo 'class="active"';
+									}								
+									?>
+								>
+								<a href="<?php echo $menuitem->item_url?>">
+									<div>
+		            					<img class="<?php echo $menuitem->item_url?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo $menuitem->text;?>
+		            					</br>
+		            			</a>
+		            				</div>
+		            			</li>
+		            			<?php }
+		            			if(!$menuitem->admin_only){
+		            				?>
+								<li 
+									<?php if($slug == $menuitem->item_url){
+											echo 'class="active"';
+									}								
+									?>
+								>
+								<a href="<?php echo $menuitem->item_url?>">
+									<div>
+		            					<img class="<?php echo $menuitem->item_url?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo $menuitem->text;?>
+		            					</br>
+		            			</a>
+		            				</div>
+		            			</li>
+		            			<?php }}
+						else{
+							if($user != null AND $menuitem->admin_only AND $user->has('roles', $admin_role)){
+								?>
+		              		<li 
 								<?php if ($slug == $menuitem->item_url){
 									echo 'class="active"';				
 								}?>
 							>
-								<a href="<?php echo URL::base().$menuitem->item_url?>">
-		         				 <div>
-		            				<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
-		          				</div>
-		       					 </a>
-		      				</li>
-		      			<?php 
-						}	
+		                		<a href="<?php echo URL::base().$menuitem->item_url?>">
+		                  		<div>
+		                    		<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
+		                  		</div>
+		                		</a>
+		              		</li>
+		              		<?php
+		              		}
+		              		if(!$menuitem->admin_only){
+							?>
+								<li 
+									<?php if ($slug == $menuitem->item_url){
+										echo 'class="active"';				
+									}?>
+								>
+									<a href="<?php echo URL::base().$menuitem->item_url?>">
+			         				 <div>
+			            				<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
+			          				</div>
+			       					 </a>
+			      				</li>
+			      			<?php 
+							}	
+						}//end else for menus
 	            	}//end for loop	
 			   }//if menu loaded
 
