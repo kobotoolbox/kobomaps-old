@@ -344,6 +344,10 @@ img.submenuhelp{
 	background: url('../img/HelpCustomSprite.png') -208px 0px;	
 	width:40px;	
 }
+img.stathelp{
+	background: url('../img/HelpCustomSprite.png') -299px 0px;	
+	width:44px;	
+}
 
 
 /************************************************************

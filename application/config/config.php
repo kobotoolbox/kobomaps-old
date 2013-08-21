@@ -18,5 +18,6 @@ return array(
 			'templates',
 			'custompage',
 			'menuedit',
+			'help'
 			),
 );

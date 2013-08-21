@@ -571,3 +571,28 @@ UPDATE `custompage` SET `content` = '<p><span style="text-decoration: underline;
 UPDATE `custompage` SET `content` = '<h1>Welcome to Kobo Maps</h1><p>KoBoMap is the latest KoBo product and is currently in development. The idea of KoBoMap is to facilitate the geospatial presentation of survey data. Survey data are typically available at national or sub-national levels. Few organizations have the capability to produce maps, yet, the ability to represent geographically various indicators can yield important information about the spatial distribution of events and population characteristics. Maps also provide an easy way to share information without having to release raw data.</p><p>&nbsp;<img src="media/img/Help/mainPage1.png" alt="Example of the site" width="778" height="381" /></p><p><strong>It is easy to get started! All you need to do to start making maps to help present data is the following:</strong></p><p><strong>1. Make an account:&nbsp;</strong>Making an account will let you save maps and templates and access the rest of the site. You can do that <a href="signup">here</a>. You can create a map using either Microsoft Excel spreadsheets, or if you have a Google account, you can use your Google account to log in to the site. To do that go <a href="login">here</a> and select "OpenID Login" and choose Google.</p><p><strong>2. Create a template:&nbsp;</strong>To create a map, you first need to make sure you have a template to use. Kobomaps has a large list of templates already loaded, consisting of the countries of the world that you can use instead of making your own. After having an account you can make templates <a href="templates/edit">here</a>. If you need any help, there is a <a href="templatehelp">help page</a> available.</p><p><strong>3. Create a map:&nbsp;</strong>Starting <a href="mymaps/add1">here</a>, you can go through the steps to create a geospatial presentation of any data that you wish. If you need any help, there is a <a href="maphelp">help page</a> available.</p><p><img src="media/img/Help/mainPage2.png" alt="Example of tables in Kobomaps." width="780" height="530" /></p>'
  WHERE `custompage`.`slug` = '__HOME__';
 UPDATE `metadata` SET `v` = '1.0.051' WHERE `metadata`.`k` = 'Database Version';
+
+/** Dylan Gillespie --- Adding statistic help page **/
+INSERT INTO `custompage` (
+`id` ,
+`user_id` ,
+`slug` ,
+`content` ,
+`special` ,
+`menu_id`
+)
+VALUES (
+NULL ,  '1',  'stathelp',  '<p><strong>Help for the Statistics page</strong></p><p>The Statistics page is where you can see the activity for each one of your maps. The interface is pretty simple.</p><p><img src="media/img/Help/statHelp.png" alt="Detailed screen of the Statistics page." width="952" height="431" /></p><p>&nbsp;</p>'
+,  '1',  '1');
+
+INSERT INTO `menu_items` (
+`id` ,
+`menu_id` ,
+`text` ,
+`image_url` ,
+`item_url` ,
+`admin_only`
+)
+VALUES (
+NULL ,  '1',  'Help with Statistics',  '',  'stathelp',  '0'
+);
