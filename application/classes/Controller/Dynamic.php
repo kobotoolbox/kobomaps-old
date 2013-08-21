@@ -64,16 +64,16 @@ class Controller_Dynamic extends Controller_Main {
 		$this->auto_render = true;
 
 		if($page->slug == '__HOME__'){
-			$page->slug = ucfirst(__('home'));
+			$page->slug = __('home');
 		} 
 		if($page->slug == '__HELP__'){
-			$page->slug = ucfirst(__('help'));
+			$page->slug = __('help');
 		}
 		if($page->slug == '__ABOUT__'){
-			$page->slug = ucfirst(__('about'));
+			$page->slug = __('about');
 		}
 		if($page->slug == '__SUPPORT__'){
-			$page->slug = ucfirst(__('support'));
+			$page->slug = __('support');
 		}
 	
 		$this->template->header->menu_page = $page->slug;

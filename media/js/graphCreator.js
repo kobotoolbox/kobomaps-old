@@ -400,7 +400,10 @@ var graphCreator = (function(){
 	* @return int what the height should be for the div
 	*/
 	function calculateBarHeight(barCount){
-		return (barCount * (parseInt(kmapInfochartBarHeight)));
+		if(barCount == 1){
+			return (1.65 * (parseInt(kmapInfochartBarHeight)));
+		}
+		else return (barCount * (parseInt(kmapInfochartBarHeight)));
 	}
 	
 	/**
