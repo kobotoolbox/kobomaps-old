@@ -215,8 +215,8 @@ class Helper_Menus
   
   
 	/**
-  * contains the submenus for the pages, contained on the second line of menus, dynamically creates the ones created by admins using the database
-  */
+  	* contains the submenus for the pages, contained on the second line of menus, dynamically creates the ones created by admins using the database
+  	*/
 	public static function make_submenu($page, $user)
 	{
 		
@@ -285,8 +285,55 @@ class Helper_Menus
 				<?php 
 				break;
         
-			case "createmap":
-				
+			case "help":
+				$helpPage = Request::initial()->action();
+					?>
+						<li <?php echo ($helpPage == 'maphelp') ? 'class="active"' : ''?>>
+							<a href="<?php echo url::base().'help/maphelp'?>">
+									<div>
+						            	<img class="<?php echo 'maphelp'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Help Making Maps');?>
+						            					</br>
+						            </div>
+						    </a>            				
+						</li>
+						<li <?php echo ($helpPage == 'templatehelp') ? 'class="active"' : ''?>>
+							<a href="<?php echo url::base().'help/templatehelp'?>">
+									<div>
+						            	<img class="<?php echo 'templatehelp'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Help Making Templates');?>
+						            					</br>
+						            </div>
+						    </a>            				
+						</li>
+						<li <?php echo ($helpPage == 'stathelp') ? 'class="active"' : ''?>>
+							<a href="<?php echo url::base().'help/stathelp'?>">
+									<div>
+						            	<img class="<?php echo 'stathelp'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Statistics Help');?>
+						            					</br>
+						            </div>
+						    </a>            				
+						</li>
+				<?php
+					if($user != null AND $user->has('roles', $admin_role)){
+					?>
+						<li <?php echo ($helpPage == 'custompagehelp') ? 'class="active"' : ''?>>
+							<a href="<?php echo url::base().'help/custompagehelp'?>">
+									<div>
+						            	<img class="<?php echo 'custompagehelp'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Help Making Custom Pages');?>
+						            					</br>
+						            </div>
+						    </a>            				
+						</li>
+						<li <?php echo ($helpPage == 'submenuhelp') ? 'class="active"' : ''?>>
+							<a href="<?php echo url::base().'help/submenuhelp'?>">
+									<div>
+						            	<img class="<?php echo 'maphelp'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Help Making Submenus');?>
+						            					</br>
+						            </div>
+						    </a>            				
+						</li>
+					<?php }
+				break;
+			case "createmap":				
 			case "mapview":
 
 					$pageNumber = Request::initial()->action();
@@ -458,41 +505,8 @@ class Helper_Menus
 					
 					foreach($m->menu_items->find_all() as $menuitem){
 						//help menu images are from a sprite
-						if($m->id == 1){
-							if($user != null AND $menuitem->admin_only AND $user->has('roles', $admin_role)){
-								?>
-								<li 
-									<?php if($slug == $menuitem->item_url){
-											echo 'class="active"';
-									}								
-									?>
-								>
-								<a href="<?php echo $menuitem->item_url?>">
-									<div>
-		            					<img class="<?php echo $menuitem->item_url?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo $menuitem->text;?>
-		            					</br>
-		            			</a>
-		            				</div>
-		            			</li>
-		            			<?php }
-		            			if(!$menuitem->admin_only){
-		            				?>
-								<li 
-									<?php if($slug == $menuitem->item_url){
-											echo 'class="active"';
-									}								
-									?>
-								>
-								<a href="<?php echo $menuitem->item_url?>">
-									<div>
-		            					<img class="<?php echo $menuitem->item_url?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo $menuitem->text;?>
-		            					</br>
-		            			</a>
-		            				</div>
-		            			</li>
-		            			<?php }}
-						else{
-							if($user != null AND $menuitem->admin_only AND $user->has('roles', $admin_role)){
+						
+						if($user != null AND $menuitem->admin_only AND $user->has('roles', $admin_role)){
 								?>
 		              		<li 
 								<?php if ($slug == $menuitem->item_url){
@@ -520,9 +534,8 @@ class Helper_Menus
 			          				</div>
 			       					 </a>
 			      				</li>
-			      			<?php 
-							}	
-						}//end else for menus
+			      			<?php 	
+							}
 	            	}//end for loop	
 			   }//if menu loaded
 

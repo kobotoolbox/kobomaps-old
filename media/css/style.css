@@ -312,7 +312,7 @@ div#subMenu
 }
 #subMenu img.mapStyle{
 	background: url('../img/HelpCustomSprite.png') -250px 0px;	
-	width:54px;	
+	width:50px;	
 }
 
 
@@ -347,6 +347,48 @@ img.submenuhelp{
 img.stathelp{
 	background: url('../img/HelpCustomSprite.png') -299px 0px;	
 	width:44px;	
+}
+
+
+/************************************************************
+						Help pages
+************************************************************/
+#help .title, #tempHelp .title{
+	font-weight: bold;
+	font-style: italic;
+}
+#help .sections, #tempHelp .sections{
+	text-decoration: underline;
+	font-weight: bold;
+}
+.helpSidebar{
+	float:left;
+	left: -335px;
+	position:relative;
+}
+#help{
+	top: -528px;
+	position:relative;
+	left: 58px;
+	float: right;
+}
+#tempHelp{
+	top: -270px;
+	position:relative;
+	float:right;
+}
+.ToC{
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+#signUp{
+	-webkit-border-radius:7px;
+	border-radius:7px;
+	padding: 5px;
+	border: solid 2px #9a9a9a;
+	outline:none;
+	width: 300px;
 }
 
 
