@@ -29,25 +29,65 @@ class Controller_Help extends Controller_Main {
 		//the name in the menu
 		$this->template->header->menu_page = "help";
 		$this->template->content = view::factory("help/main");
-		//$this->template->content->errors = array();
-		//$this->template->content->messages = array();
-		//$this->template->html_head->script_files[] = 'media/js/jquery.tools.min.js';
+
 		//set the JS
 		$js = view::factory('help/help_js');
 		$this->template->html_head->script_views[] = $js;
-		//$this->template->html_head->script_views[] = view::factory('js/messages');
-		//$this->template->html_head->script_views[] = view::factory('js/shareEdit');
-		//$this->template->html_head->script_views[] = view::factory('js/facebook');
 		
-		//$this->template->content->maps = $maps;
-		
+		//set table variable
+		$this->template->content->table = $this->_createToCTable();
 		
 	}//end action_index
 	
 	
+	/**
+	 * Gather tables out of custompage table and make a table of contents on the main help page
+	 */
+	private function _createToCTable(){
+		$sections = array();
+		$Kobo = array();
+		
+		//the custompage creation help page should not be available for non admins
+		$auth = Auth::instance();
+		$logged_in = $auth->logged_in() OR $auth->auto_login();
+		//see if the given user is an admin, if so they can do super cool stuff
+		$admin_role = ORM::factory('Role')->where('name', '=', 'admin')->find();
+		if($logged_in)
+		{
+			$user = ORM::factory('user',$auth->get_user());
+		}
+		else{
+			$user = null;
+		}
+		
+		$Kobo[__('Help Making Maps')] = url::base().'help/maphelp';
+		$Kobo[__('Help Making Templates')] = url::base().'help/templatehelp';
+		$Kobo[__('Help With Statistics')] = url::base().'help/stathelp';
+		
+		if($user != null){
+			$Kobo[__('Help Making Custom Pages')] = url::base().'help/custompagehelp';
+			$Kobo[__('Help Making Submenus')] = url::base().'help/submenuhelp';
+		}
+		
+		$sections[__('Kobo help pages')] = $Kobo;
+		$customArray = array();
+		
+		$custom = ORM::factory('Custompage')
+		->where('help', '=', '1')
+		->find_all();
+		
+		foreach($custom as $page){
+			$customArray[$page->title] = url::base().$page->slug; 
+		}
+		
+		$sections[__('Custom Help')] = $customArray;
+		
+		return $sections;
+	}
+	
 	
 	/**
-	 * the function for editing a form
+	 * Generates the map help page
 	 * Creates the map edit/create form that is first seen upon clicking edit/create
 	 */
 	 public function action_maphelp()
@@ -124,7 +164,9 @@ class Controller_Help extends Controller_Main {
 	 	return $sections;
 	 }
 	 
-	 
+	 /**
+	  * Generates template help page
+	  */
 	 public function action_templatehelp(){
 	 	/***Now that we have the form, lets initialize the UI***/
 	 	//The title to show on the browser
@@ -152,9 +194,9 @@ class Controller_Help extends Controller_Main {
 	 private function _createTempHelpTable(){
 	 	$sections = array();
 	 	
+	 	$sections['NoTemp'] = __('No Template');
 	 	$sections['AllTemps'] = __('AllTemplates');
 	 	$sections['MyTemps'] = __('MyTemplates');
-	 	$sections['NoTemp'] = __('No Template');
 	 	
 	 	$create = array();
 	 	
@@ -174,4 +216,84 @@ class Controller_Help extends Controller_Main {
 	 	
 	 	return $sections;
 	 }
+	 
+	 /**
+	  * Generates help page for statistics
+	  */
+	 public function action_stathelp(){
+	 	/***Now that we have the form, lets initialize the UI***/
+	 	//The title to show on the browser
+	 	$header =  __('Help With Statistics');
+	 	$this->template->html_head->title = $header;
+	 
+	 	//the name in the menu
+	 	$this->template->content = view::factory("help/stathelp");
+	 
+	 	$this->template->content->header = $header;
+	 	$this->template->header->menu_page = "help";
+	 	//set the JS
+	 	$js = view::factory('help/help_js');
+	 	$this->template->html_head->script_views[] = $js;
+	 
+	 	$this->template->content->table = $this->_createStatHelpTable();
+	 	//get the status
+	 }
+	 
+	 
+	 /**
+	  * Helps make Table of contents
+	  * Currently no ToC for Stat page
+	  * @return array of strings and arrays of strings
+	  */
+	 private function _createStatHelpTable(){
+	 	$sections = array();
+	 	return $sections;
+	 }
+	 
+	 /**
+	  * Generates help page for custompages, admin only!
+	  */
+	 public function action_custompagehelp(){
+	 	$auth = Auth::instance();
+	 	//only admins should be allowed to see the page in the first place, and if not, are redirected to help home
+	 	if(!$auth->logged_in('admin'))
+	 	{
+	 		HTTP::redirect('help');
+	 	}
+	 	/***Now that we have the form, lets initialize the UI***/
+	 	//The title to show on the browser
+	 	$header =  __('Help Making Custom Pages') ;
+	 	$this->template->html_head->title = $header;
+	 
+	 	//the name in the menu
+	 	$this->template->content = view::factory("help/custompagehelp");
+	 
+	 	$this->template->content->header = $header;
+	 	$this->template->header->menu_page = "help";
+	 	//set the JS
+	 	$js = view::factory('help/help_js');
+	 	$this->template->html_head->script_views[] = $js;
+	 
+	 	$this->template->content->table = $this->_createCustomHelpTable();
+	 	//get the status
+	 }
+	 
+	 
+	 /**
+	  * Helps make Table of contents
+	  * @return array of strings and arrays of strings
+	  */
+	 private function _createCustomHelpTable(){
+	 	$sections = array();
+	 	
+	 	$sections['currentPages'] = __('currentPages');
+	 	$sections['customPageTitle'] = __('customPage Title');
+	 	$sections['customPageSlug'] = __('customPage Slug');
+	 	$sections['customPageSub'] = __('customPage Sub');
+	 	$sections['customPageHelp'] = __('customPage Help');
+	 	$sections['customPageContent'] = __('customPage Content');
+	 	
+	 	return $sections;
+	 }
+	 
 }//end of class

@@ -23,8 +23,14 @@ function updatePageInfo(){
 					$('#slug').val(name);
 					$('#menu_id').val(data.menu_id);
 					$('textarea.tinymce').val(data.content);
+					if(data.help_page == 1){
+						$('#help_page').prop('checked', true);
+					}
+					else{
+						$('#help_page').prop('checked', false);
+					}
 					//don't allow changing of the slugs for the default template pages
-					if(name == '__ABOUT__' || name == '__HELP__' || name == '__SUPPORT__' || name == '__MAIN__'){
+					if(name == '__ABOUT__' || name == '__SUPPORT__' || name == '__MAIN__'){
 						$('#slug').attr('readonly', 'readonly');
 					}
 					else{

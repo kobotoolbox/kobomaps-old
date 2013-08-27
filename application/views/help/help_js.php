@@ -16,10 +16,8 @@
 	function openHelp(elem){
 		$('.helpGroup').hide('slow');
 		if(typeof(elem.name) != null){ 
-			$('.' + elem.name).show('slow');
-			window.location.hash=elem.href;
+			$('.' + elem.name).show('slow');		
 		}
-		console.log(window.location.hash);
 	}
 	
 </script>

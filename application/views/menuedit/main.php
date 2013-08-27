@@ -136,7 +136,7 @@
 	  	<?php }?>
 	  	</tbody>
 	  </table>
-  </div>
+  </div></div>
   </br>
   <?php 
   
@@ -166,7 +166,6 @@
   
   echo Form::close();
   ?>
-
 
 <div style="clear:both"></div>
 

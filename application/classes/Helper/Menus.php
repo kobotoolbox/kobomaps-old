@@ -287,7 +287,16 @@ class Helper_Menus
         
 			case "help":
 				$helpPage = Request::initial()->action();
+				
 					?>
+						<li <?php echo ($helpPage == 'index' AND Request::initial()->controller() == 'Help') ? 'class="active"' : ''?>>
+							<a href="<?php echo url::base().'help'?>">
+									<div>
+						            	<img class="<?php echo 'helpHome'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Help Home');?>
+						            					</br>
+						            </div>
+						    </a>            				
+						</li>
 						<li <?php echo ($helpPage == 'maphelp') ? 'class="active"' : ''?>>
 							<a href="<?php echo url::base().'help/maphelp'?>">
 									<div>
@@ -326,7 +335,7 @@ class Helper_Menus
 						<li <?php echo ($helpPage == 'submenuhelp') ? 'class="active"' : ''?>>
 							<a href="<?php echo url::base().'help/submenuhelp'?>">
 									<div>
-						            	<img class="<?php echo 'maphelp'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Help Making Submenus');?>
+						            	<img class="<?php echo 'submenuhelp'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Help Making Submenus');?>
 						            					</br>
 						            </div>
 						    </a>            				
@@ -502,41 +511,100 @@ class Helper_Menus
 				$m = ORM::factory('Menus',$custompage->menu_id);
 				
 				if($m->loaded()){
-					
-					foreach($m->menu_items->find_all() as $menuitem){
-						//help menu images are from a sprite
-						
-						if($user != null AND $menuitem->admin_only AND $user->has('roles', $admin_role)){
-								?>
-		              		<li 
-								<?php if ($slug == $menuitem->item_url){
-									echo 'class="active"';				
-								}?>
-							>
-		                		<a href="<?php echo URL::base().$menuitem->item_url?>">
-		                  		<div>
-		                    		<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
-		                  		</div>
-		                		</a>
-		              		</li>
-		              		<?php
-		              		}
-		              		if(!$menuitem->admin_only){
+					if($m->id == 1){
+						$helpPage = Request::initial()->action();
+
 							?>
-								<li 
+						<li <?php echo ($helpPage == 'index' AND Request::initial()->controller() == 'Help') ? 'class="active"' : ''?>>
+							<a href="<?php echo url::base().'help'?>">
+									<div>
+						            	<img class="<?php echo 'helpHome'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Help Home');?>
+						            					</br>
+						            </div>
+						    </a>            				
+						</li>
+						<li <?php echo ($helpPage == 'maphelp') ? 'class="active"' : ''?>>
+							<a href="<?php echo url::base().'help/maphelp'?>">
+									<div>
+						            	<img class="<?php echo 'maphelp'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Help Making Maps');?>
+						            					</br>
+						            </div>
+						    </a>            				
+						</li>
+						<li <?php echo ($helpPage == 'templatehelp') ? 'class="active"' : ''?>>
+							<a href="<?php echo url::base().'help/templatehelp'?>">
+									<div>
+						            	<img class="<?php echo 'templatehelp'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Help Making Templates');?>
+						            					</br>
+						            </div>
+						    </a>            				
+						</li>
+						<li <?php echo ($helpPage == 'stathelp') ? 'class="active"' : ''?>>
+							<a href="<?php echo url::base().'help/stathelp'?>">
+									<div>
+						            	<img class="<?php echo 'stathelp'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Statistics Help');?>
+						            					</br>
+						            </div>
+						    </a>            				
+						</li>
+				<?php
+					if($user != null AND $user->has('roles', $admin_role)){
+					?>
+						<li <?php echo ($helpPage == 'custompagehelp') ? 'class="active"' : ''?>>
+							<a href="<?php echo url::base().'help/custompagehelp'?>">
+									<div>
+						            	<img class="<?php echo 'custompagehelp'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Help Making Custom Pages');?>
+						            					</br>
+						            </div>
+						    </a>            				
+						</li>
+						<li <?php echo ($helpPage == 'submenuhelp') ? 'class="active"' : ''?>>
+							<a href="<?php echo url::base().'help/submenuhelp'?>">
+									<div>
+						            	<img class="<?php echo 'submenuhelp'?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo __('Help Making Submenus');?>
+						            					</br>
+						            </div>
+						    </a>            				
+						</li>
+					<?php }
+				
+					}
+					else{
+						foreach($m->menu_items->find_all() as $menuitem){
+							//help menu images are from a sprite
+							
+							if($user != null AND $menuitem->admin_only AND $user->has('roles', $admin_role)){
+									?>
+			              		<li 
 									<?php if ($slug == $menuitem->item_url){
 										echo 'class="active"';				
 									}?>
 								>
-									<a href="<?php echo URL::base().$menuitem->item_url?>">
-			         				 <div>
-			            				<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
-			          				</div>
-			       					 </a>
-			      				</li>
-			      			<?php 	
-							}
-	            	}//end for loop	
+			                		<a href="<?php echo URL::base().$menuitem->item_url?>">
+			                  		<div>
+			                    		<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
+			                  		</div>
+			                		</a>
+			              		</li>
+			              		<?php
+			              		}
+			              		if(!$menuitem->admin_only){
+								?>
+									<li 
+										<?php if ($slug == $menuitem->item_url){
+											echo 'class="active"';				
+										}?>
+									>
+										<a href="<?php echo URL::base().$menuitem->item_url?>">
+				         				 <div>
+				            				<img class="customMenus" src="<?php echo $menuitem->image_url?>" width="50" height="40"/><br/><?php echo $menuitem->text;?>
+				          				</div>
+				       					 </a>
+				      				</li>
+				      			<?php 	
+								}
+		            	}//end for loop
+		            }//end else	
 			   }//if menu loaded
 
 			}//if custom page loaded			

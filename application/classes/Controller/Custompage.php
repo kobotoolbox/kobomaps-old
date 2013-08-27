@@ -51,6 +51,8 @@ class Controller_Custompage extends Controller_Loggedin {
 				'content' => '',
 				'id' => 0,
 				'menu_id' => 0,
+				'help_page' => 0,
+				'title' => ''
 		);
 
 		//setup the menus
@@ -72,6 +74,8 @@ class Controller_Custompage extends Controller_Loggedin {
 					$data['slug'] = $_POST['slug'];
 					$data['content'] = $_POST['content'];
 					$data['menu_id'] = $_POST['menu_id'];
+					$data['title'] = $_POST['title'];
+					$data['help_page'] = isset($_POST['help_page']) ? 1 : 0;;
 					$this->template->content->data = $data;
 				}
 				else{
@@ -84,6 +88,8 @@ class Controller_Custompage extends Controller_Loggedin {
 				$data['slug'] = $_POST['slug'];
 				$data['content'] = $_POST['content'];
 				$data['menu_id'] = $_POST['menu_id'];
+				$data['title'] = $_POST['title'];
+				$data['help_page'] = isset($_POST['help_page']) ? 1 : 0;;
 	
 			//throw an error of either are empty
 				if($data['slug'] == '' || $data['content'] == ''){
@@ -94,7 +100,7 @@ class Controller_Custompage extends Controller_Loggedin {
 				
 				//the select page bar on the page has default of 0 for new page
 				if($_POST['pages'] == 0){
-					$newPage = Model_Custompage::create_page($this->user->id, $data['slug'], $data['content'], $data['menu_id']);
+					$newPage = Model_Custompage::create_page($this->user->id, $data['slug'], $data['content'], $data['menu_id'], $data['help_page'], $data['title']);
 					$this->template->content->pages[$newPage->id] = $newPage->slug;
 					$data['id'] = $newPage->id;
 					$this->template->content->data = $data;
@@ -113,6 +119,7 @@ class Controller_Custompage extends Controller_Loggedin {
 						$page->content = $data['content'];
 						$page->slug = $data['slug'];
 						$page->menu_id = $data['menu_id'];
+						$page->help = $data['help_page'] == 1;
 						$page->save();
 						
 						$data['id'] = $page->id;
@@ -129,6 +136,8 @@ class Controller_Custompage extends Controller_Loggedin {
 						$default->content = $data['content'];
 						$default->slug = $data['slug'];
 						$default->menu_id = $data['menu_id'];
+						$default->help = $data['help_page'];
+						$default->title = $data['title'];
 						$default->save();
 						
 						$data['id'] = $default->id;
@@ -140,10 +149,6 @@ class Controller_Custompage extends Controller_Loggedin {
 				
 			}
 		}
-		
-		
-		
-		
 		
 		$this->template->content->data = $data;
 		
@@ -159,7 +164,9 @@ class Controller_Custompage extends Controller_Loggedin {
 		if(isset($_POST['page'])){
 			$page = ORM::factory('Custompage', $_POST['page']);
 			$response = array('content'=>$page->content, 
-					'menu_id'=>$page->menu_id);
+					'menu_id'=>$page->menu_id,
+					'help_page' =>$page->help
+			);
 		}else{
 			$response = array('content'=>'',
 					'menu_id'=>0);

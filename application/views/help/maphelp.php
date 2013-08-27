@@ -1,17 +1,17 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /***********************************************************
-* maphelp.php - Controller
+* maphelp.php - view
 * This software is copy righted by Kobo 2013
 * Writen by Dylan Gillespie <dylan@ethertontech.com>, Etherton Technologies <http://ethertontech.com>
 * Started on 2013-08-22
 *************************************************************/
 
-echo '<div style="clear:both"><div class="helpSidebar" style="height:auto;width:350px;">';
-echo '<ul>';
-echo '<span class="ToC">'.__('ToC').'</span>';
+echo '<div class="helpSidebar">';
+echo '<span class="ToC">'.__('ToC').'</span></br>';
+		echo '<ul>';
 foreach($table as $key=>$section){
 	if(is_array($section)){
-		echo '<li>'.$key;
+		echo '<li><span  class="title">'.$key.'</span>';
 		echo '<ul>';
 		foreach($section as $label=>$part){
 			if($label != 'class'){
@@ -26,7 +26,7 @@ foreach($table as $key=>$section){
 }
 echo '</ul></div>';
 
-	echo '<div id="help" style="float:right;">';
+	echo '<div id="mapHelp">';
 		echo '<div class="sections">'.__('Help on how to create a map.').'</div>';
 		echo '<div>'.__('This page will go over how to create a map using Kobomaps.').'</div></br>';
 		
@@ -151,4 +151,6 @@ echo '</ul></div>';
 		echo '</ul></div></br></br></br>';
 		
 		echo __('mapHelpClosing');
-	echo '</div><div style="clear:both"></div></div>';?>
+	echo '</div></div>';?>
+	
+	<div style="clear:both"></div>

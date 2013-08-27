@@ -64,11 +64,17 @@
 	
 	echo '<div id="customWork" style="width: 700px; float:right">';
 	
+	echo __('Title of page: ');
+	echo Form::input('title', $data['title'], array('id'=>'title', 'style'=>'width:300px;', 'maxlength' => '128'));
+	echo '</br></br>';
 	echo __('URL of page: ');
 	echo Form::input('slug', $data['slug'], array('id'=>'slug', 'style'=>'width:300px;', 'maxlength' => '128', 'onchange' => 'checkSlug()'));
 	echo '</br></br>';
 	echo __('Sub-menu for page: ');
 	echo Form::select('menu_id', $menus, $data['menu_id'], array('id'=>'menu_id', 'style'=>'width:300px;'));
+	echo '</br></br>';
+	echo __('Is this a help page?');
+	echo Form::checkbox('help_page', null, $data['help_page']==1, array('id'=>'help_page'));
 	echo '</br></br>';
 	echo __('Content of page: This is what will be displayed on the page. There are advanced options available.');
 	echo '</br>'; 

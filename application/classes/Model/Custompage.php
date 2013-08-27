@@ -31,6 +31,9 @@ class Model_Custompage extends ORM {
 		'slug' => array(
 				array('not_empty'),
 				array('max_length', array(':value', 130))
+				),
+		'title' => array(
+				array('not_empty')
 				)
 		);
 	}//end function
@@ -38,11 +41,11 @@ class Model_Custompage extends ORM {
 
 	/**
 	* creates a custompage
-	* @param array of 'user_id', 'slug_id', 'content'
+	* @param array of 'user_id', 'slug_id', 'content','menu_id', 'help', 'title'
 	*/
 	public function update_custompage($values)
 	{
-		$expected = array('user_id', 'slug_id', 'content', 'menu_id');
+		$expected = array('user_id', 'slug_id', 'content', 'menu_id', 'help', 'title');
 		
 		//if no slug is set
 		if($values['slug_id'] == '')
@@ -60,6 +63,10 @@ class Model_Custompage extends ORM {
 				$page = ORM::factory('Custompage')->where('slug_id','=',$hash)->find();
 			}
 		}
+		
+		if($values['title'] == ''){
+			$values['title'] = $values['slug'];
+		}
 	
 		$this->values($values, $expected);
 		$this->check();
@@ -74,7 +81,7 @@ class Model_Custompage extends ORM {
 	* @param int $menu_id is the id of the menu to use with this page
 	* @return ORM::custompage the page that was created
 	*/
-	public static function create_page($user_id, $slug_id, $content, $menu_id){
+	public static function create_page($user_id, $slug_id, $content, $menu_id, $help, $title){
 		
 		$page = ORM::factory('Custompage');
 	
@@ -83,6 +90,8 @@ class Model_Custompage extends ORM {
 			$page->slug = $slug_id;
 			$page->content = $content;
 			$page->menu_id = $menu_id;
+			$page->help = $help;
+			$page->title = $title;
 		}
 	
 		$page->save();

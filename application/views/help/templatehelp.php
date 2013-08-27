@@ -1,18 +1,18 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 /***********************************************************
-* templatehelp.php - Controller
+* templatehelp.php - view
 * This software is copy righted by Kobo 2013
 * Writen by Dylan Gillespie <dylan@ethertontech.com>, Etherton Technologies <http://ethertontech.com>
 * Started on 2013-08-23
 *************************************************************/
 
 
-echo '<div style="clear:both"><div class="helpSidebar" style="height:auto;width:350px;">';
-	echo '<ul>';
-	echo '<span class="ToC">'.__('ToC').'</span>';
+echo '<div class="helpSidebar">';
+	echo '<span class="ToC">'.__('ToC').'</span></br>';
+		echo '<ul>';
 	foreach($table as $key=>$section){
 		if(is_array($section)){
-			echo '<li>'.$key;
+			echo '<li><span  class="title">'.$key.'</span>';
 			echo '<ul>';
 			foreach($section as $label=>$part){
 				if($label != 'class'){
@@ -30,8 +30,19 @@ echo '</ul></div>';
 echo '<div id="tempHelp">';
 	echo '<div class="sections">'.__('Help on how to create a template.').'</div></br>';
 	echo __('templateHelpDesc');
-	echo '</br></br><span class="sections">'.__('Warning').': </span>'.__('warningDesc');
+	echo '</br></br></br><span class="sections warning">'.__('Warning').': </span>'.__('warningDesc');
 	echo '</br></br>';
+	
+	echo '</br>';
+	echo '<div id="NoTemp" class="sections">'.__('No Template').' </div>';
+	echo __('noTempDesc');
+	
+	echo '</br></br>';
+	
+	echo '<div id="signUp"><p>	<img src="http://groups.google.com/intl/en/images/logos/groups_logo_sm.gif" height=30 width=140 alt="Google Groups">	</p>';
+	echo '<p>	<form action="http://groups.google.com/group/kobo-users/boxsubscribe">	<span>Email: </span>	<input type=text name=email>';
+	echo '<input type=submit name="sub" value="Subscribe">	</form>	</p></div>';
+	echo '</br></br></br>';
 	
 	echo '<div id="AllTemps" class="sections">'.__('AllTemplates').': </div>';
 	echo __('AllTempDesc');
@@ -40,16 +51,6 @@ echo '<div id="tempHelp">';
 	echo '</br></br></br>';
 	echo '<div id="MyTemps" class="sections">'.__('MyTemplates').': </div>';
 	echo __('MyTempDesc');
-	
-	echo '</br></br></br>';
-	echo '<div id="NoTemp" class="sections">'.__('No Template').' </div>';
-	echo __('noTempDesc');
-	
-	echo '</br></br></br>';
-	
-	echo '<div id="signUp"><p>	<img src="http://groups.google.com/intl/en/images/logos/groups_logo_sm.gif" height=30 width=140 alt="Google Groups">	</p>';
-	echo '<p>	<form action="http://groups.google.com/group/kobo-users/boxsubscribe">	<span>Email: </span>	<input type=text name=email>';
-	echo '<input type=submit name="sub" value="Subscribe">	</form>	</p></div>';
 	
 	echo '</br></br></br>';
 	
@@ -104,5 +105,6 @@ echo '<div id="tempHelp">';
 		echo '</br></br><img src="'.url::base().'media/img/Help/templateFull.png" width="644" height="720"/></br></br>';
 		
 		echo __('TemplateEnd');
-echo '</div><div style="clear:both"></div></div>';
+echo '</div></div>';
 ?>
+<div style="clear:both"></div>

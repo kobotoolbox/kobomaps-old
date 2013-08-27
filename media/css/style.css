@@ -346,18 +346,22 @@ img.submenuhelp{
 }
 img.stathelp{
 	background: url('../img/HelpCustomSprite.png') -299px 0px;	
-	width:44px;	
+	width:43px;	
+}
+img.helpHome{
+	background: url('../img/HelpCustomSprite.png') -342px 0px;	
+	width:47px;	
 }
 
 
 /************************************************************
 						Help pages
 ************************************************************/
-#help .title, #tempHelp .title{
+#mapHelp .title, #tempHelp .title, .mainToC .title, .helpSidebar .title, #statHelp .title, #customHelp .title{
 	font-weight: bold;
 	font-style: italic;
 }
-#help .sections, #tempHelp .sections{
+#mapHelp .sections, #tempHelp .sections, .mainToC .sections, #statHelp .sections, #customHelp .sections{
 	text-decoration: underline;
 	font-weight: bold;
 }
@@ -365,17 +369,47 @@ img.stathelp{
 	float:left;
 	left: -335px;
 	position:relative;
+	-webkit-border-radius:7px;
+	border-radius:7px;
+	padding: 5px;
+	border: solid 2px #9a9a9a;
+	outline:none;
+	width: 315px;
 }
-#help{
-	top: -528px;
+.helpSidebar ul, .mainToC ul{
+	list-style:none;
+}
+.helpSidebar li, .mainToC li, .contentList li{
+	padding: 1px;
+}
+.mainToC{
+	-webkit-border-radius:7px;
+	border-radius:7px;
+	padding: 5px;
+	border: solid 2px #9a9a9a;
+	outline:none;
+	width: 800px;
+}
+
+.helpSidebar a, .helpSidebar a:link, .helpSidebar a:visited, #mapHelp a, #mapHelp a:link, #mapHelp a:visited, 
+	#tempHelp a, #tempHelp a:link, #tempHelp a:visited, .mainToC a, .mainToC a:link, .mainToC a:visited{
+		color: #223593;
+}
+#mapHelp{
+	top: -610px;
 	position:relative;
-	left: 58px;
+	left: 20px;
 	float: right;
 }
 #tempHelp{
-	top: -270px;
+	top: -352px;
 	position:relative;
 	float:right;
+}
+#customHelp{
+	position:relative;
+	float:right;
+	top: -165px;
 }
 .ToC{
 	text-decoration: underline;
@@ -391,6 +425,9 @@ img.stathelp{
 	width: 300px;
 }
 
+#tempHelp .warning{
+	color: red;
+}
 
 /************************************************************
 							Tables

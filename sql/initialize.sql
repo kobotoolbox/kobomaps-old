@@ -572,27 +572,7 @@ UPDATE `custompage` SET `content` = '<h1>Welcome to Kobo Maps</h1><p>KoBoMap is 
  WHERE `custompage`.`slug` = '__HOME__';
 UPDATE `metadata` SET `v` = '1.0.051' WHERE `metadata`.`k` = 'Database Version';
 
-/** Dylan Gillespie --- Adding statistic help page **/
-INSERT INTO `custompage` (
-`id` ,
-`user_id` ,
-`slug` ,
-`content` ,
-`special` ,
-`menu_id`
-)
-VALUES (
-NULL ,  '1',  'stathelp',  '<p><strong>Help for the Statistics page</strong></p><p>The Statistics page is where you can see the activity for each one of your maps. The interface is pretty simple.</p><p><img src="media/img/Help/statHelp.png" alt="Detailed screen of the Statistics page." width="952" height="431" /></p><p>&nbsp;</p>'
-,  '1',  '1');
-
-INSERT INTO `menu_items` (
-`id` ,
-`menu_id` ,
-`text` ,
-`image_url` ,
-`item_url` ,
-`admin_only`
-)
-VALUES (
-NULL ,  '1',  'Help with Statistics',  '',  'stathelp',  '0'
-);
+/** Dylan Gillespie --08/26/2013- Adding help bool into custompages **/
+ALTER TABLE  `custompage` ADD  `help` BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE  `custompage` ADD  `title` CHAR( 130 ) NOT NULL;
+UPDATE `metadata` SET `v` = '1.0.052' WHERE `metadata`.`k` = 'Database Version';
