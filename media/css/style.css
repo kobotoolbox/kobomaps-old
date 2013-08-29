@@ -357,11 +357,11 @@ img.helpHome{
 /************************************************************
 						Help pages
 ************************************************************/
-#mapHelp .title, #tempHelp .title, .mainToC .title, .helpSidebar .title, #statHelp .title, #customHelp .title{
+#mapHelp .title, #tempHelp .title, .mainToC .title, .helpSidebar .title, #statHelp .title, #customHelp .title, #submenuHelp .title{
 	font-weight: bold;
 	font-style: italic;
 }
-#mapHelp .sections, #tempHelp .sections, .mainToC .sections, #statHelp .sections, #customHelp .sections{
+#mapHelp .sections, #tempHelp .sections, .mainToC .sections, #statHelp .sections, #customHelp .sections, #submenuHelp .sections{
 	text-decoration: underline;
 	font-weight: bold;
 }
@@ -379,7 +379,7 @@ img.helpHome{
 .helpSidebar ul, .mainToC ul{
 	list-style:none;
 }
-.helpSidebar li, .mainToC li, .contentList li{
+.helpSidebar li, .mainToC li, .contentList li, #submenuHelp li{
 	padding: 1px;
 }
 .mainToC{
@@ -391,18 +391,22 @@ img.helpHome{
 	width: 800px;
 }
 
-.helpSidebar a, .helpSidebar a:link, .helpSidebar a:visited, #mapHelp a, #mapHelp a:link, #mapHelp a:visited, 
-	#tempHelp a, #tempHelp a:link, #tempHelp a:visited, .mainToC a, .mainToC a:link, .mainToC a:visited{
-		color: #223593;
+
+.helpLink a, .helpLink a:link, .helpLink a:visited{
+	color : #223593;
 }
 #mapHelp{
 	top: -610px;
 	position:relative;
-	left: 20px;
 	float: right;
 }
 #tempHelp{
 	top: -352px;
+	position:relative;
+	float:right;
+}
+#submenuHelp{
+	top: -200px;
 	position:relative;
 	float:right;
 }
@@ -423,6 +427,8 @@ img.helpHome{
 	border: solid 2px #9a9a9a;
 	outline:none;
 	width: 300px;
+	margin-left : auto;
+	margin-right : auto;
 }
 
 #tempHelp .warning{

@@ -29,7 +29,7 @@
  
   echo Form::label('link', __('Menu URL').':');
   echo '</td><td style="width:400px">';
-  echo 'kobomaps/';
+  echo url::base(true, true);
   echo Form::input('item_url', $data['item_url'], array('id'=>'item_url', 'style'=>'width:150px;', 'maxlength' => '256'));
   echo '</td></tr><tr><td>';
   

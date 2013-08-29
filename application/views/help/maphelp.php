@@ -6,7 +6,7 @@
 * Started on 2013-08-22
 *************************************************************/
 
-echo '<div class="helpSidebar">';
+echo '<div class="helpSidebar helpLink">';
 echo '<span class="ToC">'.__('ToC').'</span></br>';
 		echo '<ul>';
 foreach($table as $key=>$section){
@@ -26,7 +26,7 @@ foreach($table as $key=>$section){
 }
 echo '</ul></div>';
 
-	echo '<div id="mapHelp">';
+	echo '<div id="mapHelp" class="helpLink">';
 		echo '<div class="sections">'.__('Help on how to create a map.').'</div>';
 		echo '<div>'.__('This page will go over how to create a map using Kobomaps.').'</div></br>';
 		

@@ -102,12 +102,12 @@
 						if($submenu->title == 'help'){
 					?>
 						<li>
-							<a href="<?php echo $submenu_item->item_url?>" target="_blank">
+							<a href="<?php echo url::base().'help/'.$submenu_item->item_url?>" target="_blank">
 								<div>
 	            					<img class="<?php echo $submenu_item->item_url?>" src="<?php echo URL::base();?>media/img/img_trans.gif" width="26" height="46"/><br/><?php echo $submenu_item->text;?>
 	            					</br>
 	            					</a>
-	            					<a rel="#overlay" href="<?php echo url::base().'menuedit/edit_item?id='.$submenu_item->id; ?>"><?php echo __('Edit');?></a>
+	            					
 	          					</div>
       					</li>
 					<?php }	

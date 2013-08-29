@@ -12,7 +12,7 @@ echo '<div id="mainHelp">';
 
 echo '</div></br></br>';
 
-echo '<div class="mainToC">';
+echo '<div class="mainToC  helpLink">';
 	echo '<span class="ToC">'.__('ToC').'</span></br>';
 		echo '<ul>';
 		foreach($table as $key=>$section){
@@ -32,4 +32,10 @@ echo '<div class="mainToC">';
 		}
 echo '</ul></div>';
 
-echo '<img src="'.url::base().'media/img/Help/mainHelp.png" width="825">';
+echo '</br></br><div>'.__('koboUserGroup').'</div></br>';
+
+echo '<div id="signUp"><p>	<img src="http://groups.google.com/intl/en/images/logos/groups_logo_sm.gif" height=30 width=140 alt="Google Groups">	</p>';
+echo '<p>	<form action="http://groups.google.com/group/kobo-users/boxsubscribe">	<span>Email: </span>	<input type=text name=email>';
+echo '<input type=submit name="sub" value="Subscribe">	</form>	</p></div>';
+
+echo '</br></br><img src="'.url::base().'media/img/Help/mainHelp.png" width="825">';

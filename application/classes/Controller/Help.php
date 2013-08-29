@@ -296,4 +296,57 @@ class Controller_Help extends Controller_Main {
 	 	return $sections;
 	 }
 	 
+
+	 /**
+	  * Generates help page for submenus, admin only!
+	  */
+	 public function action_submenuhelp(){
+	 	$auth = Auth::instance();
+	 	//only admins should be allowed to see the page in the first place, and if not, are redirected to help home
+	 	if(!$auth->logged_in('admin'))
+	 	{
+	 		HTTP::redirect('help');
+	 	}
+	 	/***Now that we have the form, lets initialize the UI***/
+	 	//The title to show on the browser
+	 	$header =  __('Help Making Submenus') ;
+	 	$this->template->html_head->title = $header;
+	 
+	 	//the name in the menu
+	 	$this->template->content = view::factory("help/submenuhelp");
+	 
+	 	$this->template->content->header = $header;
+	 	$this->template->header->menu_page = "help";
+	 	//set the JS
+	 	$js = view::factory('help/help_js');
+	 	$this->template->html_head->script_views[] = $js;
+	 
+	 	$this->template->content->table = $this->_createSubmenuHelpTable();
+	 	//get the status
+	 }
+	 
+	 
+	 /**
+	  * Helps make Table of contents
+	  * @return array of strings and arrays of strings
+	  */
+	 private function _createSubmenuHelpTable(){
+	 	$sections = array();
+	 	$create = array();
+	 	 
+	 	$sections['submenuTitle'] = __('submenu Title');
+	 	$sections['submenuItems'] = __('submenu Items');
+	 	$sections['submenuActions'] = __('submenu Actions');
+	 	
+	 	$create['menuTitle'] = __('Title of menu item');
+	 	$create['submenuUrl'] = __('Menu URL');
+	 	$create['submenuIcon'] = __('Icon');
+	 	$create['submenuAdmin'] = __('Admin only?');
+	 	
+	 	$sections[__('Create Menu')] = $create; 
+	 	
+	 	 
+	 	return $sections;
+	 }
+	 
 }//end of class

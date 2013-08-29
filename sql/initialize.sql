@@ -576,3 +576,24 @@ UPDATE `metadata` SET `v` = '1.0.051' WHERE `metadata`.`k` = 'Database Version';
 ALTER TABLE  `custompage` ADD  `help` BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE  `custompage` ADD  `title` CHAR( 130 ) NOT NULL;
 UPDATE `metadata` SET `v` = '1.0.052' WHERE `metadata`.`k` = 'Database Version';
+
+/** Dylan Gillespie --8/28/2013 -- Adding Help Home submenu item so that help submenus will have it 
+	and purging database of help pages, became actual pages now.**/
+INSERT INTO  `menu_items` (
+`id` ,
+`menu_id` ,
+`text` ,
+`image_url` ,
+`item_url` ,
+`admin_only`
+)
+VALUES (
+NULL ,  '1',  'Help Home',  '',  'helpHome',  '0'
+);
+DELETE FROM `custompage` WHERE `custompage`.`slug` = '__HELP__';
+DELETE FROM `custompage` WHERE `custompage`.`slug` = 'maphelp';
+DELETE FROM `custompage` WHERE `custompage`.`slug` = 'custompagehelp';
+DELETE FROM `custompage` WHERE `custompage`.`slug` = 'submenuhelp';
+DELETE FROM `custompage` WHERE `custompage`.`slug` = 'templatehelp';
+DELETE FROM `custompage` WHERE `custompage`.`slug` = 'stathelp';
+UPDATE `metadata` SET `v` = '1.0.053' WHERE `metadata`.`k` = 'Database Version';

@@ -54,6 +54,7 @@ return array
 		'Help Desc' => 'The Table of Contents below will display all of Kobomap\'s current help pages and any other help pages that have been created by administrators.',
 		'Custom Help' => 'Help Pages by Administrators',
 		'Help Home' => 'Help Home',
+		'koboUserGroup' => 'If you can\'t find what you were looking for, you can join the Kobo User Group and ask and they will see what they can do.',
 		
 		//map help page
 		'Map Title' => 'Map Title',
@@ -331,6 +332,25 @@ return array
 		'customPage76' => 'Will bring up how the page looks directly in HTML.',
 		'customPage End' => 'Be sure to save the page that you are working on before leaving, you can hit either ctrl+S or the Save button.',
 		
+		//submenu help page
+		'submenuHelp Title' => 'This is the help page for creating submenus',
+		'submenuHelp Desc' => 'This page should only be available to administrators of the website and is used to create submenus for any custom pages that you have made or any of the three default pages: main, about, and support.',
+		'submenuContent Title' => 'Upon loading the page, you will see a table that holds the menus and their items.',
+		'submenu Title' => 'Submenu',
+		'submenu Desc' => 'This is the name of the menu that the corresponding items are in.',
+		'submenu Items' => 'Items',
+		'submenu Actions' => 'Actions',
+		'items Desc' => 'This is the representation of how the submenu will appear on the page. Clicking edit will open a pop up window allowing you to change its properties.',
+		'actions Desc' => 'These are the actions that you can do on the menu. Delete will delete the menu and all the items it contains. Edit will allow you to change the name. And Add Item will allow you to put another item in the menu.',
+		'menu Below' => 'Below the table you will see options to create a new Menu.',
+		'menu Desc' => 'The menu just requires a title by which you will identify it. Clicking this save button will create the menu.',
+		'submenu Edit' => 'The pop up page on clicking Add Item or Edit an item will show you this',
+		'submenuTitle' => 'This is the text that will be displayed below the item, such as "Help Making Submenus" located above.',
+		'submenuURL' => 'This is the name of the page that the menu item will link to when clicked on.',
+		'submmenuIcon' => 'Use this to upload an image file for the display of the menu item.',
+		'submenuAdmin' => 'This checkbox will say if the menu item will be seen by everyone or only by Admins, selected is for Admins only.',
+		'submenuFinal' => 'And clicking save here will save the menu item into the menu that was selected. You can also click delete to get rid of this item in the menu.',
+		'Create Menu' => 'Create Menu',
 		
 		//main page
 		'Welcome to Kobo Maps'=>'Welcome to Kobo Maps',
