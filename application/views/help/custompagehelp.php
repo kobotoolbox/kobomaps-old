@@ -7,7 +7,7 @@
 *************************************************************/
 
 
-echo '<div class="helpSidebar">';
+echo '<div class="helpSidebar  helpLink">';
 	echo '<span class="ToC">'.__('ToC').'</span></br>';
 		echo '<ul>';
 	foreach($table as $key=>$section){

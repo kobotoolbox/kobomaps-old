@@ -154,8 +154,8 @@
 						<span id="nationalaverageimg" ></span>
 					</div>
 					</br>
-					<div id="nationalChartScrollDiv"  style=" width:320px; overflow-y: auto; overflow-x: hidden">
-				       	<div id="nationalIndicatorChart" style="width: 300px"></div>		
+					<div id="nationalChartScrollDiv"  style=" width:275px; overflow-y: auto; overflow-x: hidden">
+				       	<div id="nationalIndicatorChart" style="width: 265px"></div>		
 				    </div>
 				       <div id="sourcetext">
 						<span id="sourcetextspan" style="display:none;"> Data Source:  
@@ -168,9 +168,9 @@
 				<?php
 				//Powered by KoBoToolbox - Please be kind and leave a reference with a link to our website.
 				?>
-					<div id="poweredby">
+					<span id="poweredby">
 					<a href="http://www.kobotoolbox.org" title="KoBoToolbox.org"><?php echo __('powered by KoboToolbox')?></a>
-					</div>
+					</span>
 				</div>
 			</div>
 		
