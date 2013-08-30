@@ -125,17 +125,16 @@
 <div style="height:40px;width:10px;"></div>
 <div id="maplinks"	style="overflow-y:auto">
 	
+		<p id="loadingtext">
+		<?php echo __('Please be patient while the map is loading.')?>  
+		</p>
 		
-		<p id="mapHelpText"><?php echo __('Click on a section name to display the questions, then click on the questions to show the indicator(s). Click on the indicator to display its data on the map.')?></p>
+		
 		<?php if(strlen($map->description) > 0){?>
 		<div id="descriptionText" position="relative"><p ><?php echo $map->description;?></p>
 		</div>
 		<?php }?>
-			<ul id="questionsindicators" class="questionsindicators" >	</ul>
-			
-		<p id="loadingtext">
-		<?php echo __('Please be patient while the map is loading.')?>  
-		</p>
+			<ul id="questionsindicators" class="questionsindicators" >	</ul>		
 		
 		<div id="legend" >
 			<a id="minButtonLegend" > - </a>
