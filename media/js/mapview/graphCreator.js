@@ -11,10 +11,10 @@
  //Constructor for graphCreator
 var graphCreator = (function(){
 	/*Todo: Make all these setings on the website:*/
-	this.kmapInfodivHeight = 280;
+	this.kmapInfodivHeight = 315;
 	//modifiers for the flot graphs
 	this.kmapInfochartWidth = 315; //if this number is changed, the legend div (which contains the national graph) also needs to be adjusted 
-	this.kmapInfochartBarHeight = 40; //these are numbers, not strings
+	this.kmapInfochartBarHeight = 24; //these are numbers, not strings
 	this.kmapInfochartXAxisMargin = 35;
 	
 	
@@ -89,6 +89,7 @@ var graphCreator = (function(){
 		var selecX;
 		var count = 1;
 		var largest = 0;
+		var stringLen = 0;
 
 		//last indicator level is the one we want the data from
 		for(i in regionData.indicators){
@@ -102,6 +103,9 @@ var graphCreator = (function(){
 						}	
 						tempYAxis[i] = regionData.indicators[i].name;
 						tempXData[i] = value;
+						if(tempYAxis[i].length > stringLen){
+							stringLen = tempYAxis[i].length;
+						}
 					}
 					break;
 				}
@@ -109,7 +113,6 @@ var graphCreator = (function(){
 			
 		}
 		count = Object.keys(tempYAxis).length;
-
 
 		for(i in tempYAxis){
 			graphYAxis.push([count, tempYAxis[i]]);
@@ -135,7 +138,7 @@ var graphCreator = (function(){
 		
 		var kmapInfochartHeight = calculateBarHeight(graphYAxis.length);
 
-		var dimen = " height: " + kmapInfochartHeight + "px; ";
+		var dimen = " height: " + kmapInfochartHeight + "%; ";
 		var oldStyle = $("#iChartLocal").attr("style");
 
 		$("#iChartLocal").attr("style", dimen + oldStyle);
@@ -166,10 +169,15 @@ var graphCreator = (function(){
 	         }
 	     }
 	     if(data){
+	    	 if(stringLen > 25){
+	    		 $('#iChartTabs').width($('#iChartTabs').width() + 30);
+	    		 $('#iChartLocal').width($('#iChartLocalTab').width() + stringLen * 5);
+	    		 $('#iChartTabs').width($('#iChartTabs').width() + 40);
+	    	 }
 			 $.plot($("#iChartLocal"), bothData,  {
 			    	bars: {show: true, horizontal: true, fill: true},
 			    	grid: {hoverable: true},
-			    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 72, labelHeight: 20, min:.45, max:graphXData.length + .55},
+			    	yaxis:{ticks: graphYAxis, position: "left", labelHeight: 20, min:.45, max:graphXData.length + .55},
 			    	xaxes:[{panRange: [0, largest]}],
 			    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
 				}
@@ -197,6 +205,7 @@ var graphCreator = (function(){
 		var graphXData = new Array();
 		var graphYAxis = new Array();
 		var selectedArea = new Array();
+		var stringLen = 0;
 
 		var dataPtr = mapData.sheets[+id[0]];
 		for(var i=1; i < id.length; i++){
@@ -218,11 +227,13 @@ var graphCreator = (function(){
 			for(i in totalData.indicators){
 				var total = parseFloat(totalData.indicators[i].total);
 				if(!isNaN(total)){
+					if(totalData.indicators[i].name.length > stringLen){
+						stringLen = totalData.indicators[i].name.length;
+					}
 					tempYAxis.push(totalData.indicators[i].name);
 					tempXData.push(total);
 				}
 			}
-		
 			count = tempYAxis.length;
 		//fill in full arrays so that the chart is as large as it needs to be
 			for(i = 0; i < tempYAxis.length; i++){
@@ -263,10 +274,13 @@ var graphCreator = (function(){
 
 			if(graphYAxis.length != 0){
 				//$("#nationalIndicatorChart").empty();
+				if(stringLen > 25){
+					$('#nationalIndicatorChart').width($('#nationalIndicatorChart').width() + stringLen * 2);
+				}
 				$.plot($("#nationalIndicatorChart"), bothData,  {
 			    	bars: {show: true, horizontal: true, fill: true},
 			    	grid: {hoverable: true},
-			    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 60, labelHeight: 20, min:.45, max:graphXData.length + .55},
+			    	yaxis:{ticks: graphYAxis, position: "left", labelHeight: 20, min:.45, max:graphXData.length + .55},
 			    	xaxes:[{}],
 			    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
 					}
@@ -295,6 +309,7 @@ var graphCreator = (function(){
 		var selecX;
 		var count = 1;
 		var largest = 0;
+		var stringLen = 0;
 
 		//create the graph data array and the array of yAxis Names
 		for(i in dataPath){
@@ -310,10 +325,12 @@ var graphCreator = (function(){
 				if(value > largest){
 					largest = value;
 				}
+				if(i.length > stringLen){
+					stringLen = i.length;
+				}
 				count++; //increment that counter
 			}
 		}
-
 		//variables for javascript graph, ynames and xdata
 		//add data to graphXData, i indicates location on graph
 		for(i=0; i < graphXData.length; i++){
@@ -338,11 +355,13 @@ var graphCreator = (function(){
 	      /*
 	      * Size of the chart is controlled by the div tag where iChartFull is created
 	      */
-
+		if(stringLen > 25){
+			$('#iChartTabs').width($('#iChartTabs').width() + 30);
+   		 }
 		 $.plot($("#iChartFull"+fullId), bothData,  {
 		    	bars: {horizontal: true},
 		    	grid: {hoverable: true},
-		    	yaxis:{ticks: graphYAxis, labelWidth: 72, min:.45, max:graphXData.length + .55}	    
+		    	yaxis:{ticks: graphYAxis, min:.45, max:graphXData.length + .55}	    
 			}
 		);
 		bindHoverTip("#iChartFull" + fullId,graphYAxis);
@@ -400,8 +419,8 @@ var graphCreator = (function(){
 	* @return int what the height should be for the div
 	*/
 	function calculateBarHeight(barCount){
-		if(barCount == 1){
-			return (1.65 * (parseInt(kmapInfochartBarHeight)));
+		if(barCount < 3){
+			return (1.6 * (parseInt(kmapInfochartBarHeight)) + 100);
 		}
 		else return (barCount * (parseInt(kmapInfochartBarHeight)));
 	}
@@ -427,7 +446,7 @@ var graphCreator = (function(){
 		$("#nationalaveragediv").css("background-color", color);
 		$("#nationalaverageimg").text(mapParsers.addCommas(nationalAverage)+" "+mapParsers.htmlDecode(unit));
 
-		$("#nationalaveragelabel").html(totalLabel);
+		$("#nationalaveragelabel").html('Total: ' +totalLabel);
 	}
 	
 	/**
@@ -523,17 +542,17 @@ var graphCreator = (function(){
 		//creates the tab html that contains the chart ids
 		var chartStr = '<div id="'+ id + '" class="infowindow"><p class="bubbleheader">' + name + " - " + title +": " + data[name]
 		+'</p>' +
-		'<div id = "iChartTabs" style= "width: 350px; height: 200px">' +
+		'<div id = "iChartTabs" style= "width: 380px; height: 200px">' +
 		  		'<ul>' +
 		  			'<li> <a href="#iChartFull">' + title + ' </a> </li>' + 
 					'<li> <a href="#iChartLocalTab">' + name + '</a> </li>' +
 		  		'</ul>' +
 		  		'<div id= "iChartFull" style="height: 140px; overflow-y: auto; overflow-x: hidden">'+
-		  			'<div id="iChartFull' + id + '"  style=" width:300px; height:'+kmapInfochartHeight+'px">' + 
+		  			'<div id="iChartFull' + id + '"  style=" width:345px; height:'+kmapInfochartHeight+'px;  overflow-x: auto">' + 
 		  				'</div>' +
 		  			'</div>' +
 		  			'<div id="iChartLocalTab" style="height: 140px; overflow-y: auto; overflow-x: hidden">' +
-		  		'<div id="iChartLocal" style = " width : 300px; position: relative; padding: 0px">' +
+		  		'<div id="iChartLocal" style = " width : 345px; position: relative; padding: 0px;  overflow-x: auto">' +
 		  			'</div> </div>' + 
 		  	'</div> ';
 			
