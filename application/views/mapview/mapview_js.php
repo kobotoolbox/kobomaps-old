@@ -35,13 +35,13 @@
 
 <!-- These contain all of the js classes that used to form this page -->
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/label.js"> </script>
-<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/playback.js"> </script>
-<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/colorProperties.js"></script>
-<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/graphCreator.js"></script>
-<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/mapMath.js"></script>
-<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/mapParsers.js"></script>
-<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/sheetControl.js"></script>
-<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/mapButtons.js"></script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/mapview/playback.js"> </script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/mapview/colorProperties.js"></script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/mapview/graphCreator.js"></script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/mapview/mapMath.js"></script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/mapview/mapParsers.js"></script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/mapview/sheetControl.js"></script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/mapview/mapButtons.js"></script>
 
 <script type="text/javascript">
 
