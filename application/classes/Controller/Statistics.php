@@ -22,6 +22,7 @@ class Controller_Statistics extends Controller_Loggedin {
 		$this->template->html_head->script_files[] = 'media/js/jquery-ui.min.js';
 		$this->template->html_head->script_files[] = 'media/js/flot/jquery.flot.js';
 		$this->template->html_head->script_files[] = 'media/js/flot/jquery.flot.navigate.js';
+		$this->template->html_head->script_files[] = 'media/js/flot/jquery.flot.time.js';
 		$this->template->html_head->script_views[] = new View('statistics/main_js');
 		$this->template->html_head->styles['all'] = 'media/css/jquery-ui.css';
 		

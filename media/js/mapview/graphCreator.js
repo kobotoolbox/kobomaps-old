@@ -174,12 +174,12 @@ var graphCreator = (function(){
 	    		 $('#iChartTabs').width($('#iChartTabs').width() + 40);
 	    	 }
 	    	 else{
-	    		 //$('#iChartLocal').width($('#iChartLocal').width() + stringLen * 2);
+	    		 $('#iChartLocal').width($('#iChartLocal').width() + stringLen * 2);
 	    	 }
 			 $.plot($("#iChartLocal"), bothData,  {
-			    	bars: {show: true, horizontal: true, fill: true},
+				 	bars: {horizontal: true},
 			    	grid: {hoverable: true},
-			    	yaxis:{ticks: graphYAxis,  min:.45, max:graphXData.length + .55},
+			    	yaxis:{ticks: graphYAxis, min:.45, max:graphXData.length + .55}	    
 				}
 			);
 	     }
@@ -552,7 +552,7 @@ var graphCreator = (function(){
 		  				'</div>' +
 		  			'</div>' +
 		  			'<div id="iChartLocalTab" style="height: 140px; overflow-y: auto; overflow-x: hidden">' +
-		  		'<div id="iChartLocal" style ="width : 345px; overflow-x: auto">' +
+		  		'<div id="iChartLocal" style="width : 345px; overflow-x: auto">' +
 		  			'</div> </div>' + 
 		  	'</div> ';
 			

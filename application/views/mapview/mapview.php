@@ -154,7 +154,7 @@
 						<span id="nationalaverageimg" ></span>
 					</div>
 					</br>
-					<div id="nationalChartScrollDiv" style="width:330px; overflow: auto">
+					<div id="nationalChartScrollDiv" style="width:330px; overflow-y: auto; overflow-x: auto;">
 				       	<div id="nationalIndicatorChart" style="width: 300px"></div>		
 				    </div>
 				       <div id="sourcetext">
