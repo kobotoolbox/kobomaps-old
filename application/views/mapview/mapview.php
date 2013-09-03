@@ -154,7 +154,7 @@
 						<span id="nationalaverageimg" ></span>
 					</div>
 					</br>
-					<div id="nationalChartScrollDiv"  style=" width:330px; overflow: auto">
+					<div id="nationalChartScrollDiv" style="width:330px; overflow: auto">
 				       	<div id="nationalIndicatorChart" style="width: 300px"></div>		
 				    </div>
 				       <div id="sourcetext">
@@ -183,10 +183,6 @@
 //The background element containing the actual map
 ?>
 <div id="map_canvas"></div>
-
-<?php
-//The legend
-?>
 
 	
 	<?php if(!$template->loaded()){?>

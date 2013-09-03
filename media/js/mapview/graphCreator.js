@@ -170,16 +170,16 @@ var graphCreator = (function(){
 	     }
 	     if(data){
 	    	 if(stringLen > 25){
-	    		 $('#iChartTabs').width($('#iChartTabs').width() + 30);
-	    		 $('#iChartLocal').width($('#iChartLocalTab').width() + stringLen * 5);
+	    		 $('#iChartLocal').width($('#iChartLocal').width() + stringLen * 5);
 	    		 $('#iChartTabs').width($('#iChartTabs').width() + 40);
+	    	 }
+	    	 else{
+	    		 //$('#iChartLocal').width($('#iChartLocal').width() + stringLen * 2);
 	    	 }
 			 $.plot($("#iChartLocal"), bothData,  {
 			    	bars: {show: true, horizontal: true, fill: true},
 			    	grid: {hoverable: true},
-			    	yaxis:{ticks: graphYAxis, position: "left", labelHeight: 20, min:.45, max:graphXData.length + .55},
-			    	xaxes:[{panRange: [0, largest]}],
-			    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
+			    	yaxis:{ticks: graphYAxis,  min:.45, max:graphXData.length + .55},
 				}
 			);
 	     }
@@ -280,7 +280,7 @@ var graphCreator = (function(){
 				$.plot($("#nationalIndicatorChart"), bothData,  {
 			    	bars: {show: true, horizontal: true, fill: true},
 			    	grid: {hoverable: true},
-			    	yaxis:{ticks: graphYAxis, position: "left", labelHeight: 20, min:.45, max:graphXData.length + .55},
+			    	yaxis:{ticks: graphYAxis, position: "left",  min:.45, max:graphXData.length + .55},
 			    	xaxes:[{}],
 			    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
 					}
@@ -420,7 +420,7 @@ var graphCreator = (function(){
 	*/
 	function calculateBarHeight(barCount){
 		if(barCount < 3){
-			return (1.6 * (parseInt(kmapInfochartBarHeight)) + 100);
+			return (1.6 * (parseInt(kmapInfochartBarHeight)) + 60);
 		}
 		else return (barCount * (parseInt(kmapInfochartBarHeight)));
 	}
@@ -548,11 +548,11 @@ var graphCreator = (function(){
 					'<li> <a href="#iChartLocalTab">' + name + '</a> </li>' +
 		  		'</ul>' +
 		  		'<div id= "iChartFull" style="height: 140px; overflow-y: auto; overflow-x: hidden">'+
-		  			'<div id="iChartFull' + id + '"  style=" width:345px; height:'+kmapInfochartHeight+'px;  overflow-x: auto">' + 
+		  			'<div id="iChartFull' + id + '"  style="width:345px; height:'+kmapInfochartHeight+'px;  overflow-x: auto">' + 
 		  				'</div>' +
 		  			'</div>' +
 		  			'<div id="iChartLocalTab" style="height: 140px; overflow-y: auto; overflow-x: hidden">' +
-		  		'<div id="iChartLocal" style = " width : 345px; position: relative; padding: 0px;  overflow-x: auto">' +
+		  		'<div id="iChartLocal" style ="width : 345px; overflow-x: auto">' +
 		  			'</div> </div>' + 
 		  	'</div> ';
 			
