@@ -89,6 +89,7 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 	var selecX;
 	var count = 1;
 	var largest = 0;
+	var stringLen = 0;
 	
 	//last indicator level is the one we want the data from
 	for(i in regionData.indicators){
@@ -102,6 +103,9 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 					}	
 					tempYAxis[i] = regionData.indicators[i].name;
 					tempXData[i] = value;
+					if(regionData.indicators[i].name.length > stringLen){
+						stringLen = regionData.indicators[i].name.length;
+					}
 				}
 				break;
 			}
@@ -166,12 +170,13 @@ function drawRegionChart(regionData, name, indicatorIdNum){
          }
      }
      if(data){
+    	 if(stringLen > 20){
+    		 $('#iChartLocal').width($('#iChartLocal').width() + 40);
+    	 }
 		 $.plot($("#iChartLocal"), bothData,  {
 		    	bars: {show: true, horizontal: true, fill: true},
 		    	grid: {hoverable: true},
-		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 72, labelHeight: 20, min:.45, max:graphXData.length + .55},
-		    	xaxes:[{panRange: [0, largest]}],
-		    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
+		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 90, min:.45, max:graphXData.length + .55}
 			}
 		);
      }
@@ -180,7 +185,6 @@ function drawRegionChart(regionData, name, indicatorIdNum){
      }
 	+
 	bindHoverTip("#iChartLocal", graphYAxis);	
-	console.log($('#iChartLocal').children());
 	$('#iChartLocal .y1Axis').children().css('left', '0px');
 }
 
