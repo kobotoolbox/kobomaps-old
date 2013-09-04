@@ -11,11 +11,11 @@
  //Constructor for graphCreator
 var graphCreator = (function(){
 	/*Todo: Make all these setings on the website:*/
-	this.kmapInfodivHeight = 315;
+	var kmapInfodivHeight = 315;
 	//modifiers for the flot graphs
-	this.kmapInfochartWidth = 315; //if this number is changed, the legend div (which contains the national graph) also needs to be adjusted 
-	this.kmapInfochartBarHeight = 24; //these are numbers, not strings
-	this.kmapInfochartXAxisMargin = 35;
+	//var kmapInfochartWidth = 315; //if this number is changed, the legend div (which contains the national graph) also needs to be adjusted 
+	var kmapInfochartBarHeight = 26; //these are numbers, not strings
+	var kmapInfochartXAxisMargin = 35;
 	
 	
 	/**
@@ -73,122 +73,117 @@ var graphCreator = (function(){
 	}
 	
 
-	/**
-	* Draws the chart that is found on the second page of the popup window, showing only the selected regions data
-	* @param array regionData parsed from the mapData, contains all the values of the indicators
-	* @param string name of the region selected
-	* @param int indicatorIdNum to know that this is the region selected
-	*/
-	function drawRegionChart(regionData, name, indicatorIdNum){
-		var graphYAxis = new Array();
-		var selectedArea = new Array(); //Array to hold changes colors for selected area
-		var selecY;
-		var graphXData = new Array();	
-		var tempXData = new Array();
-		var tempYAxis = new Array();
-		var selecX;
-		var count = 1;
-		var largest = 0;
-		var stringLen = 0;
-
-		//last indicator level is the one we want the data from
-		for(i in regionData.indicators){
-			//data level
-			for(j in regionData.indicators[i].data){
-				if(j == name){
-					var value = parseFloat(regionData.indicators[i].data[j].value);
-					if(!isNaN(value)){
-						if(value > largest){
-							largest = value;
-						}	
-						tempYAxis[i] = regionData.indicators[i].name;
-						tempXData[i] = value;
-						if(tempYAxis[i].length > stringLen){
-							stringLen = tempYAxis[i].length;
-						}
-					}
-					break;
+/**
+* Draws the chart that is found on the second page of the popup window, showing only the selected regions data
+* @param array regionData parsed from the mapData, contains all the values of the indicators
+* @param string name of the region selected
+* @param int indicatorIdNum to know that this is the region selected
+*/
+function drawRegionChart(regionData, name, indicatorIdNum){
+	var graphYAxis = new Array();
+	var selectedArea = new Array(); //Array to hold changes colors for selected area
+	var selecY;
+	var graphXData = new Array();	
+	var tempXData = new Array();
+	var tempYAxis = new Array();
+	var selecX;
+	var count = 1;
+	var largest = 0;
+	
+	//last indicator level is the one we want the data from
+	for(i in regionData.indicators){
+		//data level
+		for(j in regionData.indicators[i].data){
+			if(j == name){
+				var value = parseFloat(regionData.indicators[i].data[j].value);
+				if(!isNaN(value)){
+					if(value > largest){
+						largest = value;
+					}	
+					tempYAxis[i] = regionData.indicators[i].name;
+					tempXData[i] = value;
 				}
-			}
-			
-		}
-		count = Object.keys(tempYAxis).length;
-
-		for(i in tempYAxis){
-			graphYAxis.push([count, tempYAxis[i]]);
-			graphXData.push([tempXData[i], count]);
-			if(i == indicatorIdNum){
-				selecY = count;
-				selecX = tempXData[i];
-			}	
-			
-			count --;
-		}
-				
-
-		for(i=0; i < graphXData.length; i++){
-			if(graphXData[i][1] == selecY){
-				selecX = graphXData[i][0];
+				break;
 			}
 		}
-		//fixes an issue with hovertips being reversed, doesn't affect drawing of charts 
-		graphXData.reverse();
-		graphYAxis.reverse();
-
 		
-		var kmapInfochartHeight = calculateBarHeight(graphYAxis.length);
-
-		var dimen = " height: " + kmapInfochartHeight + "%; ";
-		var oldStyle = $("#iChartLocal").attr("style");
-
-		$("#iChartLocal").attr("style", dimen + oldStyle);
-		selectedArea = [[selecX, selecY]];
-		 var bothData = [
-		        	  {
-					     data: graphXData,
-					     bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: colorProperties.getGraph()} ,
-					     color: colorProperties.getGraph()
-				       },
-				      {
-					    data: selectedArea,
-					    bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: colorProperties.getGraphS()} ,
-				        color: colorProperties.getGraphS()
-				      }
-		  ];
-		  
-	      /*
-	      * Size of the chart is controlled by the div tag where iChartFull is created
-	      */
-
-	     //check to see if the region has any data, if not, don't draw the graph
-	     var data = false;
-	     for(i in graphXData){
-	         if(!isNaN(graphXData[i][0])){
-	             data = true;
-	             break;
-	         }
-	     }
-	     if(data){
-	    	 if(stringLen > 25){
-	    		 $('#iChartLocal').width($('#iChartLocal').width() + stringLen * 5);
-	    		 $('#iChartTabs').width($('#iChartTabs').width() + 40);
-	    	 }
-	    	 else{
-	    		 $('#iChartLocal').width($('#iChartLocal').width() + stringLen * 2);
-	    	 }
-			 $.plot($("#iChartLocal"), bothData,  {
-				 	bars: {horizontal: true},
-			    	grid: {hoverable: true},
-			    	yaxis:{ticks: graphYAxis, min:.45, max:graphXData.length + .55}	    
-				}
-			);
-	     }
-	     else{
-			$('iChartLocal').text("No regional data to display.");
-	     }
-
-		bindHoverTip("#iChartLocal", graphYAxis);	
 	}
+	count = Object.keys(tempYAxis).length;
+	
+	
+	for(i in tempYAxis){
+		graphYAxis.push([count, tempYAxis[i]]);
+		graphXData.push([tempXData[i], count]);
+		if(i == indicatorIdNum){
+			selecY = count;
+			selecX = tempXData[i];
+		}	
+		
+		count --;
+	}
+			
+	
+	for(i=0; i < graphXData.length; i++){
+		if(graphXData[i][1] == selecY){
+			selecX = graphXData[i][0];
+		}
+	}
+	//fixes an issue with hovertips being reversed, doesn't affect drawing of charts 
+	graphXData.reverse();
+	graphYAxis.reverse();
+	
+	
+	var kmapInfochartHeight = calculateBarHeight(graphYAxis.length);
+	
+	var dimen = " height: " + kmapInfochartHeight + "px; ";
+	var oldStyle = $("#iChartLocal").attr("style");
+	
+	$("#iChartLocal").attr("style", dimen + oldStyle);
+	selectedArea = [[selecX, selecY]];
+	 var bothData = [
+	        	  {
+				     data: graphXData,
+				     bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: colorProperties.getGraph()} ,
+				     color: colorProperties.getGraph()
+			       },
+			      {
+				    data: selectedArea,
+				    bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: colorProperties.getGraphS()} ,
+			        color: colorProperties.getGraphS()
+			      }
+	  ];
+	  
+      /*
+      * Size of the chart is controlled by the div tag where iChartFull is created
+      */
+	
+     //check to see if the region has any data, if not, don't draw the graph
+     var data = false;
+     for(i in graphXData){
+         if(!isNaN(graphXData[i][0])){
+             data = true;
+             break;
+         }
+     }
+     if(data){
+		 $.plot($("#iChartLocal"), bothData,  {
+		    	bars: {show: true, horizontal: true, fill: true},
+		    	grid: {hoverable: true},
+		    	yaxis:{ticks: graphYAxis, position: "left", labelWidth: 72, labelHeight: 20, min:.45, max:graphXData.length + .55},
+		    	xaxes:[{panRange: [0, largest]}],
+		    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
+			}
+		);
+     }
+     else{
+		$('iChartLocal').text("No regional data to display.");
+     }
+	+
+	bindHoverTip("#iChartLocal", graphYAxis);	
+	console.log($('#iChartLocal').children());
+	$('#iChartLocal .y1Axis').children().css('left', '0px');
+}
+
 	
 	/**
 	* Draws the charts if there are totals present
@@ -275,14 +270,12 @@ var graphCreator = (function(){
 			if(graphYAxis.length != 0){
 				//$("#nationalIndicatorChart").empty();
 				if(stringLen > 25){
-					$('#nationalIndicatorChart').width($('#nationalIndicatorChart').width() + stringLen * 2);
+					$('#nationalIndicatorChart').width($('#nationalIndicatorChart').width() + stringLen * 2 - 30);
 				}
 				$.plot($("#nationalIndicatorChart"), bothData,  {
 			    	bars: {show: true, horizontal: true, fill: true},
 			    	grid: {hoverable: true},
-			    	yaxis:{ticks: graphYAxis, position: "left",  min:.45, max:graphXData.length + .55},
-			    	xaxes:[{}],
-			    	pan:  {interactive: false, cursor: 'move', frameRate: 20}
+			    	yaxis:{ticks: graphYAxis, position: "left",  min:.45, max:graphXData.length + .55}
 					}
 				);
 			
@@ -356,7 +349,7 @@ var graphCreator = (function(){
 	      * Size of the chart is controlled by the div tag where iChartFull is created
 	      */
 		if(stringLen > 25){
-			$('#iChartTabs').width($('#iChartTabs').width() + 30);
+			$('#iChartTabs').width($('#iChartTabs').width() + 40);
    		 }
 		 $.plot($("#iChartFull"+fullId), bothData,  {
 		    	bars: {horizontal: true},
@@ -419,8 +412,8 @@ var graphCreator = (function(){
 	* @return int what the height should be for the div
 	*/
 	function calculateBarHeight(barCount){
-		if(barCount < 3){
-			return (1.6 * (parseInt(kmapInfochartBarHeight)) + 60);
+		if(barCount <= 2){
+			return (2 * (parseInt(kmapInfochartBarHeight)) + 50);
 		}
 		else return (barCount * (parseInt(kmapInfochartBarHeight)));
 	}
@@ -552,7 +545,7 @@ var graphCreator = (function(){
 		  				'</div>' +
 		  			'</div>' +
 		  			'<div id="iChartLocalTab" style="height: 140px; overflow-y: auto; overflow-x: hidden">' +
-		  		'<div id="iChartLocal" style="width : 345px; overflow-x: auto">' +
+		  			'<div id="iChartLocal" style = "width : 345px; position: relative; padding: 0px">'  +
 		  			'</div> </div>' + 
 		  	'</div> ';
 			
