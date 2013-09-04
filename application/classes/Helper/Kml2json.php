@@ -265,6 +265,7 @@ class Helper_Kml2json
 			//now loop over these triplets
 			$lastPointArray = array();
 			$i = 0;
+			$cumaltive_dis = array();
 			$memory = intval($_POST['round_mem']) == 0 ? 1 : intval($_POST['round_mem']);
 			foreach($coordinateArray as $cordTriplet)
 			{
@@ -281,8 +282,6 @@ class Helper_Kml2json
 				$lon = doubleval($subArray[0]);
 				$lat = doubleval($subArray[1]);
 				//$alt = floatval($subArray[2]);
-					
-					
 					
 					
 				if($_POST['decimals'] != '-1')
@@ -309,13 +308,26 @@ class Helper_Kml2json
 					echo ",";
 				}
 					
+				//new attemp at finding center of zones
+				if(count($lastPointArray) > 0){
+					$old_x = floatval(substr($lastPointArray[0], 0, strpos($lastPointArray[0], ',')));
+					$old_y = floatval(substr($lastPointArray[0], strpos($lastPointArray[0], ',') + 1));
+					$new_x = $roundedLat;
+					$new_y = $roundedLon;
+					
+					$dis = sqrt( pow($new_x-$old_x, 2) + pow($new_y-$old_y, 2));
+				}
+				else{
+					$dis = 1;
+				}
+				
 				$lastPointArray[$i % $memory] =  $roundedLat.','.$roundedLon;
 				
-					
+				$cumaltive_dis[] = $dis;
+				$cumaltive_lon = ($cumaltive_lon + $lon);
+				$cumaltive_lat = ($cumaltive_lat + $lat);
+				
 				$count++;
-				$cumaltive_lon = $cumaltive_lon + $lon;
-				$cumaltive_lat = $cumaltive_lat + $lat;
-					
 
 				echo "[$roundedLat,$roundedLon]";
 			}
@@ -326,8 +338,10 @@ class Helper_Kml2json
 		//calculate center point
 		if($count > 0)
 		{
-			$marker_lat = $cumaltive_lat / $count;
-			$marker_lon = $cumaltive_lon / $count;
+			$offset = max($cumaltive_dis);
+			$marker_lat = ($cumaltive_lat / ($offset * $count));
+			$marker_lon = ($cumaltive_lon  / ($offset * $count));
+		
 			echo '"marker":['.$marker_lat.','.$marker_lon.']}';
 		}
 		else

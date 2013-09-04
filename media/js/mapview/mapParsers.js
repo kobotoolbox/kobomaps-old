@@ -154,7 +154,7 @@ var mapParsers = (function(){
 		
 		//initiates a HTTP get request for the json file
 		$.getJSON(jsonUrl, function(data) {
-
+			console.log(data);
 			//loops over each entry in the json over "areas"
 			for(areaIndex in data["areas"])
 			{
@@ -168,6 +168,7 @@ var mapParsers = (function(){
 				//creates a list of the place names we've encountered
 				geographicAreaNames[areaName] = true;
 				
+				
 				//now loops over every set of point in the json that defines an area.
 				for(pointsSetIndex in areaData.points)
 				{
@@ -177,6 +178,7 @@ var mapParsers = (function(){
 					for(pointsIndex in pointsSetValue)
 					{
 						var pointsValue = pointsSetValue[pointsIndex];
+						
 						areaPoints[areaName][pointsSetIndex][pointsIndex] = new google.maps.LatLng(pointsValue[0], pointsValue[1]);
 					}
 					
