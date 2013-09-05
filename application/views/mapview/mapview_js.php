@@ -121,6 +121,11 @@ var round = true;
 	   initialize_map();
 	   mapButtons.initialize_buttons(<?php echo strlen($map->description)?>, "<?php echo __("Show Labels"); ?>", "<?php echo __("Hide Labels"); ?>","<?php echo __("Show Values"); ?>","<?php echo __("Hide Values"); ?>");
 	   mapButtons.init_legend_listener(<?php echo strlen($map->description)?>);
+
+	   if($('#descriptionText p').height() < 100){
+			$('#descriptionText').height($('#descriptionText p').height() + 20);
+			$('#descriptionText').css('overflow-y', 'hidden');
+	   }
 	});
 
 
