@@ -158,6 +158,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			'value_label_font' => 12,
 			'large_file'=> false,
 			'gradient' => false,
+			'extend_range' => false,
 			);
 		
 		$map = null;
@@ -200,6 +201,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['value_label_font'] = $map->value_label_font;
 			$data['large_file'] = $map->large_file;
 			$data['gradient'] = $map->gradient;
+			$data['extend_range'] = $map->extend_range;
 		}
 		else
 		{
@@ -293,6 +295,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 				$_POST['is_private'] = isset($_POST['is_private']) ? 1 : 0;
 				$_POST['show_empty_name'] = isset($_POST['show_empty_name']) ? 1 : 0;
 				$_POST['gradient'] = isset($_POST['gradient']) ? 1 : 0;
+				$_POST['extend_range'] = isset($_POST['extend_range']) ? 1 : 0;
 
 				//if the gradient has been chosen, put the two color keys together seperated by a space
 				if($_POST['gradient'] == 1){

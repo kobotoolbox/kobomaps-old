@@ -262,6 +262,13 @@
 	echo '<input id="region_two_picker" class="color {valueElement: regionTwo, pickerClosable:true}" style="width:30px"><input id="regionTwo" name="regionTwo" value="'.$secondColor.'" style="display:none">';
 	echo  '  '.__('Regions will gradient into this color from the default color.');
 	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//                    Concurrent color across all sheets option
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo Form::label('same_color_explain', '<br/>'.__('Make map colors same'));
+	echo '</td><td></br>';
+	echo Form::checkbox('extend_range', null, $data['extend_range']==1, array('id' => 'gradient'));
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    Graph default bar color picker

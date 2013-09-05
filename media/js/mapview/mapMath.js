@@ -21,12 +21,57 @@ var mapMath = (function(){
 	*/
 	function calculateMinSpread(data)
 	{
+		//console.log(data);
+		if(extend_compute){
+			return;
+		}
 		//loop over the data to pre process it and figure out the below:
 		var min = Infinity; // because we're using percentages we can assume that they'll never be above 100, so 101 is safe
 		var max = -Infinity; 
+		
+		var more = true;
+		if(extend_range){
+			for(sheet in data){
+				console.log(data[sheet].indicators);
+				if(typeof(data[sheet].data) != 'undefined'){
+					for(datum in data[sheet].data){
+						if(data[sheet].data[datum].value < min)
+						{
+							min = data[sheet].data[datum].value;
+						}
+						//check for max
+						if(data[sheet].data[datum].value  > max)
+						{
+							max = data[sheet].data[datum].value;
+						}
+					}
+				}
+				for(indic in data[sheet].indicators){
+					console.log(data[sheet].indicators[indic]);
+					for(val in data[sheet].indicators[indic].indicators){
+						for(i in data[sheet].indicators[indic].indicators[val].indicators){
+							console.log(data[sheet].indicators[indic].indicators[val].indicators[i].value);
+							for(lastData in data[sheet].indicators[indic].indicators[val].indicators[i].data){
+								console.log(data[sheet].indicators[indic].indicators[val].indicators[i].data[lastData].value)
+								if(data[sheet].indicators[indic].indicators[val].indicators[i].data[lastData].value < min)
+								{
+									min = data[sheet].indicators[indic].indicators[val].indicators[i].data[lastData].value;
+								}
+								//check for max
+								if(data[sheet].indicators[indic].indicators[val].indicators[i].data[lastData].value  > max)
+								{
+									max = data[sheet].indicators[indic].indicators[val].indicators[i].data[lastData].value;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		for(areaName in data)
 		{
-			data[areaName] = data[areaName];
+			//data[areaName] = data[areaName];
 			//check for min
 			if(data[areaName] < min)
 			{

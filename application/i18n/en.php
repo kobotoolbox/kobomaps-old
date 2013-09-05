@@ -452,6 +452,7 @@ return array
 		'Color of regions that are being affected by an indicator.' => 'Color of regions that are being affected by an indicator.',
 		'Color of bars in all graphs.' => 'Color of bars in all graphs.',
 		'Color of bars in graphs that indicate the region selected currently.' => 'Color of bars in graphs that indicate the region selected currently.',
+		'Make map colors same' => 'Make the range of data extend across all sheets?',
 		//add1 errors
 		'register/map.slug.unique'=>'Your slug is not unique, please pick another one',
 		'Your slug had illegal characters, they have been replaced.' => 'Your slug had illegal characters, they have been replaced.',

@@ -184,9 +184,11 @@ var sheetControl = (function(){
 		$("li.sheet#sheetli_"+sheetId).show();
 		$("li.sheet#sheetli_"+sheetId).addClass("active");
 		
+		var extend_data = mapData.sheets;
 		dataPtr = mapData.sheets[sheetId]; //get the sheet, because it's different
 		
 		var currentIndicator = sheetId; // stores the current indicator key as we built it up
+		//console.log(dataPtr);
 		//loop over the remaining indicators
 		for(i in ids)
 		{
@@ -228,8 +230,12 @@ var sheetControl = (function(){
 			{
 				totalLabel = dataPtr["total_label"];
 			}
-
-			UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel);
+			if(!extend_range){
+				UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel, null);
+			}
+			else{
+				UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel, extend_data);
+			}
 			$.address.parameter("indicator", indicator);
 		
 			//check and see if there is a source to link to

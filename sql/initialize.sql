@@ -597,3 +597,7 @@ DELETE FROM `custompage` WHERE `custompage`.`slug` = 'submenuhelp';
 DELETE FROM `custompage` WHERE `custompage`.`slug` = 'templatehelp';
 DELETE FROM `custompage` WHERE `custompage`.`slug` = 'stathelp';
 UPDATE `metadata` SET `v` = '1.0.053' WHERE `metadata`.`k` = 'Database Version';
+
+/** Dylan Gillespie 9/05/2013 -- Adding Extend_range option for maps **/
+ALTER TABLE  `maps` ADD  `extend_range` BOOLEAN NOT NULL DEFAULT FALSE AFTER  `gradient`;
+UPDATE `metadata` SET `v` = '1.0.054' WHERE `metadata`.`k` = 'Database Version';

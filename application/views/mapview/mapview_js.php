@@ -22,6 +22,14 @@
 </style>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.min.js"> </script>
 
+<!-- Let the sheetControl know if it should extend range -->
+<script type="text/javascript">
+var extend_range = <?php echo $map->extend_range;?>;
+var extend_spread = 0;
+var extend_min = 0;
+var extend_compute = false;
+</script>
+
 <!-- <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/dragresize.js"> </script> -->
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"> </script>
@@ -234,15 +242,31 @@ function initialize_map() {
 * @param string totalLabel is the name for the totals that is designated by the user
 * Note: All of this assumes positive numbers. 
 */
-function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel)
+function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel, extend_data)
 {
 	
 	//first zero out all the current map data. Do this incase certain indicators don't apply to all geographic areas
 	zeroOutMap();
 
-	var minSpread = mapMath.calculateMinSpread(data);
-	var min = minSpread["min"];
-	var spread = minSpread["spread"];
+	var min, spread;
+
+	if(!extend_compute){
+		if(typeof(extend_data) == null){
+			var minSpread = mapMath.calculateMinSpread(data);
+			min = minSpread["min"];
+			spread = minSpread["spread"];
+		}
+		else{
+			mapMath.calculateMinSpread(extend_data);
+			min = extend_min;
+			spread = extend_spread;
+		}
+	}
+	else{
+		min = extend_min;
+		spread = extend_spread;
+	}
+	
 	
 	//loop over all our data
 	for(areaName in data)
