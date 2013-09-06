@@ -28,7 +28,7 @@ var mapMath = (function(){
 		//loop over the data to pre process it and figure out the below:
 		var min = Infinity; // because we're using percentages we can assume that they'll never be above 100, so 101 is safe
 		var max = -Infinity; 
-		
+		/*
 		var more = true;
 		if(extend_range){
 			for(sheet in data){
@@ -68,7 +68,7 @@ var mapMath = (function(){
 				}
 			}
 		}
-		
+		*/
 		for(areaName in data)
 		{
 			//data[areaName] = data[areaName];

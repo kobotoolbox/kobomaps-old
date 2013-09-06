@@ -265,7 +265,7 @@ class Helper_Kml2json
 			//now loop over these triplets
 			$lastPointArray = array();
 			$i = 0;
-			$cumaltive_dis = array();
+			$cumaltive_points = array();
 			$memory = intval($_POST['round_mem']) == 0 ? 1 : intval($_POST['round_mem']);
 			foreach($coordinateArray as $cordTriplet)
 			{
@@ -308,22 +308,10 @@ class Helper_Kml2json
 					echo ",";
 				}
 					
-				//new attemp at finding center of zones
-				if(count($lastPointArray) > 0){
-					$old_x = floatval(substr($lastPointArray[0], 0, strpos($lastPointArray[0], ',')));
-					$old_y = floatval(substr($lastPointArray[0], strpos($lastPointArray[0], ',') + 1));
-					$new_x = $roundedLat;
-					$new_y = $roundedLon;
-					
-					$dis = sqrt( pow($new_x-$old_x, 2) + pow($new_y-$old_y, 2));
-				}
-				else{
-					$dis = 1;
-				}
 				
 				$lastPointArray[$i % $memory] =  $roundedLat.','.$roundedLon;
 				
-				$cumaltive_dis[] = $dis;
+				//$cumaltive_points[] = array('x' => $roundedLat, 'y' => $roundedLon);
 				$cumaltive_lon = ($cumaltive_lon + $lon);
 				$cumaltive_lat = ($cumaltive_lat + $lat);
 				
@@ -338,11 +326,34 @@ class Helper_Kml2json
 		//calculate center point
 		if($count > 0)
 		{
-			$offset = max($cumaltive_dis);
-			$marker_lat = ($cumaltive_lat / ($offset * $count));
-			$marker_lon = ($cumaltive_lon  / ($offset * $count));
+			/*
+			$c = count($cumaltive_points);
+			$x = 0;
+			$y = 0;
+			$a = 0;
+			foreach($cumaltive_points as $k => $p){
+				//print_r($p);
+				//exit;
+				$j = ($k + 1) % $c;
+				$P = ($p['x'] * $cumaltive_points[$j]['y']) - ($p['y'] - $cumaltive_points[$j]['x']);
+				$a += ($p['x'] * $cumaltive_points[$j]['y']) - ($p['y'] * $cumaltive_points[$j]['x']);
+				//print_r($a);
+				//exit;
+				$x = $x + ($p['x'] + $cumaltive_points[$j]['x']) * $P;
+				$y = $y + ($p['y'] + $cumaltive_points[$j]['y']) * $P;
+			}
+			
+			//$area = Helper_Kml2json::_get_area($cumaltive_points);
+			$marker_lat = $x / (3 * $a);
+			$marker_lon = $y / (3 * $a);
 		
+			$marker_lat = -1 * fmod($marker_lat, 90);
+			$marker_lon =  -1 * fmod($marker_lon, 180);
+			*/
+			$marker_lat = $cumaltive_lat / $count;
+			$marker_lon = $cumaltive_lon / $count;
 			echo '"marker":['.$marker_lat.','.$marker_lon.']}';
+			
 		}
 		else
 		{
@@ -350,4 +361,16 @@ class Helper_Kml2json
 		}
 	
 	}//end function placePlacemark
+	
+	private static function _get_area($pts){
+		$a = 0;
+		$c = count($pts);
+		foreach($pts as $k => $p){
+			$j = ($k + 1) % $c;
+			$a += $p['x'] * $pts[$j]['y'];
+			$a -= $p['y'] * $pts[$j]['x'];
+		}
+		$a /= 2;
+		return abs($a);
+	}
 }//end class
