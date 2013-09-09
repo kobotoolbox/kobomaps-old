@@ -140,6 +140,7 @@ class Controller_Help extends Controller_Main {
 	 	$advanced['MapRegionColor'] = __('Map Region Color');
 	 	$advanced['MapGradient'] = __('Map Gradient');
 	 	$advanced['MapShading'] = __('Map Shading');
+	 	$advanced['MapSpread'] = __('Make map colors same');
 	 	$advanced['MapBar'] = __('Map Bar');
 	 	$advanced['MapSelected'] = __('Map Selected');
 	 	$advanced['MapCSS'] = __('Map CSS');

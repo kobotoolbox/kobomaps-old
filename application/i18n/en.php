@@ -122,6 +122,7 @@ return array
 		'waterDesc' => 'These are the options for the oceans, lakes, and rivers. Having the visibility off and no color selected will default the water to a sky blue color.',
 		'mapHelpClosing' => 'And that should be it to complete your map! When you hit submit on the Map Style page, your map will be created and you will be able to use it.',
 		'ToC' => 'Table of Contents',
+		'mapSpreadDesc' => 'This will make the range of your data the same throughout all of the sheets that you have entered. This means that a value of 10 will be the same color no matter which indicator you choose, having this not checked will have each indicator have its own range.',
 		
 		//template help page
 		'templateHelpDesc' => 'This is the help page for creating templates.',
