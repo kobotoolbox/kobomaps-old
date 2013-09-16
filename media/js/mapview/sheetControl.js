@@ -211,7 +211,7 @@ var sheetControl = (function(){
 
 		//now make sure
 		
-		
+		console.log(dataPtr);
 		if(dataPtr != undefined)
 		{				
 			var title = dataPtr["name"];
@@ -221,7 +221,6 @@ var sheetControl = (function(){
 			{
 				data[areaName] = parseFloat(dataPtr.data[areaName].value);
 			}
-			
 			var nationalAverage = dataPtr["total"]; 
 			var unit = dataPtr["unit"];
 			
@@ -268,6 +267,20 @@ var sheetControl = (function(){
 				}
 			}
 			
+		}
+		else{
+			console.log('Here');
+			//loop over the polygons and set the colors to not-set
+			for(areaName in areaGPolygons)
+			{
+				colorProperties.formatAreaOpacityColor(areaName, 0.75, colorProperties.getRegion());
+				//set the label to blank("")
+		
+				labels[areaName].set("areaValue", "");
+				labels[areaName].draw();
+				//remove any old pop-up listeners
+				google.maps.event.clearListeners(areaGPolygons[areaName], 'click');
+			}
 		}
 	}
 

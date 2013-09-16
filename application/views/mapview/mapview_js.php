@@ -256,7 +256,6 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 	var min, spread;
 
 		if(extend_data === null){
-			console.log(extend_data);
 			var minSpread = mapMath.calculateMinSpread(data, null);
 			min = minSpread["min"];
 			spread = minSpread["spread"];
