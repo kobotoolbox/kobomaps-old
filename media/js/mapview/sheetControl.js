@@ -184,7 +184,7 @@ var sheetControl = (function(){
 		$("li.sheet#sheetli_"+sheetId).show();
 		$("li.sheet#sheetli_"+sheetId).addClass("active");
 		
-		var extend_data = mapData.sheets;
+		var extend_data = mapData;
 		dataPtr = mapData.sheets[sheetId]; //get the sheet, because it's different
 		
 		var currentIndicator = sheetId; // stores the current indicator key as we built it up

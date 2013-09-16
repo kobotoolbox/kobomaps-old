@@ -19,70 +19,55 @@ var mapMath = (function(){
 	* @param array data is the array that contains all the data points for the map
 	* @return array that contains the min and span
 	*/
-	function calculateMinSpread(data)
+	function calculateMinSpread(data, indicator)
 	{
-		//console.log(data);
-		if(extend_compute){
-			return;
-		}
 		//loop over the data to pre process it and figure out the below:
-		var min = Infinity; // because we're using percentages we can assume that they'll never be above 100, so 101 is safe
+		var min = Infinity; 
 		var max = -Infinity; 
-		/*
-		var more = true;
+		
 		if(extend_range){
-			for(sheet in data){
-				console.log(data[sheet].indicators);
-				if(typeof(data[sheet].data) != 'undefined'){
-					for(datum in data[sheet].data){
-						if(data[sheet].data[datum].value < min)
-						{
-							min = data[sheet].data[datum].value;
-						}
-						//check for max
-						if(data[sheet].data[datum].value  > max)
-						{
-							max = data[sheet].data[datum].value;
-						}
+			var ids = indicator.split('_');
+			//for all sheets find the indicators
+			for(sheet in data.sheets){
+				var dataPtr = data.sheets[sheet];
+				for(var i = 0; i < ids.length; i++){
+					if(i!=0){
+						dataPtr = dataPtr.indicators[parseInt(ids[i])];
 					}
 				}
-				for(indic in data[sheet].indicators){
-					console.log(data[sheet].indicators[indic]);
-					for(val in data[sheet].indicators[indic].indicators){
-						for(i in data[sheet].indicators[indic].indicators[val].indicators){
-							console.log(data[sheet].indicators[indic].indicators[val].indicators[i].value);
-							for(lastData in data[sheet].indicators[indic].indicators[val].indicators[i].data){
-								console.log(data[sheet].indicators[indic].indicators[val].indicators[i].data[lastData].value)
-								if(data[sheet].indicators[indic].indicators[val].indicators[i].data[lastData].value < min)
-								{
-									min = data[sheet].indicators[indic].indicators[val].indicators[i].data[lastData].value;
-								}
-								//check for max
-								if(data[sheet].indicators[indic].indicators[val].indicators[i].data[lastData].value  > max)
-								{
-									max = data[sheet].indicators[indic].indicators[val].indicators[i].data[lastData].value;
-								}
-							}
-						}
+				//now that we have the indicator we want, find mins and max
+				for(regions in dataPtr.data){
+					var regData = parseFloat(dataPtr.data[regions].value);
+					if(regData < min)
+					{
+						min = regData;
+					}
+					//check for max
+					if(regData > max)
+					{
+						max = regData;
 					}
 				}
 			}
+			
 		}
-		*/
-		for(areaName in data)
-		{
-			//data[areaName] = data[areaName];
-			//check for min
-			if(data[areaName] < min)
+		else{	
+			for(areaName in data)
 			{
-				min = data[areaName];
-			}
-			//check for max
-			if(data[areaName] > max)
-			{
-				max = data[areaName];
+				//data[areaName] = data[areaName];
+				//check for min
+				if(data[areaName] < min)
+				{
+					min = data[areaName];
+				}
+				//check for max
+				if(data[areaName] > max)
+				{
+					max = data[areaName];
+				}
 			}
 		}
+		
 		//console.log("max: " + max + " min: " + min);
 		//figure out the order of magnitude of max
 		var maxMagnitude = calculateMagnitude(max);
