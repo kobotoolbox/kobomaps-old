@@ -97,7 +97,20 @@ var sheetControl = (function(){
 						showByIndicator(newIndicatorIdString);
 						return;
 					}
-				}			
+				}
+				//clear the page if nothing was found
+				//loop over the polygons and set the colors to not-set
+				for(areaName in areaGPolygons)
+				{
+					colorProperties.formatAreaOpacityColor(areaName, 0.75, colorProperties.getRegion());
+					//set the label to blank("")
+					$('#minButtonLegend').click();
+					labels[areaName].set('areaValue', '');
+					labels[areaName].draw();
+					//remove any old pop-up listeners
+					google.maps.event.clearListeners(areaGPolygons[areaName], 'click');
+					
+				}
 			}//end if the two sheets don't match
 		}//end 	if(!sheetButton.hasClass("active"))
 		

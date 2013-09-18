@@ -30,22 +30,22 @@ var mapMath = (function(){
 			//for all sheets find the indicators
 			for(sheet in data.sheets){
 				var dataPtr = data.sheets[sheet];
-				for(var i = 0; i < ids.length; i++){
-					if(i!=0){
-						dataPtr = dataPtr.indicators[parseInt(ids[i])];
-					}
+				for(var i = 1; i < ids.length; i++){
+					dataPtr = dataPtr.indicators[parseInt(ids[i])];
 				}
 				//now that we have the indicator we want, find mins and max
-				for(regions in dataPtr.data){
-					var regData = parseFloat(dataPtr.data[regions].value);
-					if(regData < min)
-					{
-						min = regData;
-					}
-					//check for max
-					if(regData > max)
-					{
-						max = regData;
+				if(typeof(dataPtr) != 'undefined'){
+					for(regions in dataPtr.data){
+						var regData = parseFloat(dataPtr.data[regions].value);
+						if(regData < min)
+						{
+							min = regData;
+						}
+						//check for max
+						if(regData > max)
+						{
+							max = regData;
+						}
 					}
 				}
 			}

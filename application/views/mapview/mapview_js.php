@@ -25,9 +25,6 @@
 <!-- Let the sheetControl know if it should extend range -->
 <script type="text/javascript">
 var extend_range = <?php echo $map->extend_range;?>;
-var extend_spread = 0;
-var extend_min = 0;
-var extend_compute = false;
 </script>
 
 <!-- <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/dragresize.js"> </script> -->

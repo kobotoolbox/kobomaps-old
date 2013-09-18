@@ -289,6 +289,7 @@ function drawRegionChart(regionData, name, indicatorIdNum){
 				$("#nationalChartScrollDiv").hide();
 			}
 		}
+		$('#legendMinDiv').show();
 	}
 
 	/**
