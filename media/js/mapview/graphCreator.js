@@ -61,14 +61,27 @@ var graphCreator = (function(){
 		//contains the path given by the id to access the data
 		var dataPath = dataPtr.data;
 
-	    $("#iChartTabs").tabs();
+	    $("#iChartTabs").tabs({
+	    	activate: function(event, ui){
+	    		//console.log(event);
+	    		//console.log(ui.newPanel.selector);
+	    		//Make the graph draw when the panel is opened..there were issues happening with it
+	    		if(ui.newPanel.selector == '#iChartLocalTab'){
+	    			drawRegionChart(regionData, name, idArray[idArray.length - 1]);
+	    		}
+	    	}
+	    });
 		
 		//draw the general chart
 		drawGeneralChart(fullId, dataPath, name);
 
 		//draw the region's response chart
 		if(regionData != null){
-	  		drawRegionChart(regionData, name, idArray[idArray.length - 1]);
+			$('.ui-state-default')[1].click(function(){
+				//console.log('draw');
+				drawRegionChart(regionData, name, idArray[idArray.length - 1]);
+			});
+	  		//drawRegionChart(regionData, name, idArray[idArray.length - 1]);
 		}
 	}
 	
@@ -559,8 +572,8 @@ var graphCreator = (function(){
 		  			'<div id="iChartFull' + id + '" style="width:345px; height:'+kmapInfochartHeight+'px; overflow-x:auto">' + 
 		  				'</div>' +
 		  			'</div>' +
-		  			'<div id="iChartLocalTab" style="height:140px; overflow-y: auto; overflow-x: hidden">' +
-		  				'<div id="iChartLocal" style="width:345px; position: relative; padding: 0px">'  +
+		  			'<div id="iChartLocalTab" style="height:140px; overflow-y: auto; overflow-x: auto">' +
+		  				'<div id="iChartLocal" style="width:300px; position: relative; padding: 0px">'  +
 		  			'</div> </div>' + 
 		  	'</div> ';
 			
