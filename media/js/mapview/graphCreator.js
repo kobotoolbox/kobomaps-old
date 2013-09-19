@@ -174,9 +174,6 @@ var graphCreator = (function(){
 	      /*
 	      * Size of the chart is controlled by the div tag where iChartFull is created
 	      */
-		if(stringLen > 25){
-			$('#iChartTabs').width($('#iChartTabs').width() + 40);
-  		 }
 	     if(data){
 	    	 if(stringLen > 20){
 	    		 $('#iChartLocal').width($('#iChartLocal').width() + 40);
@@ -536,7 +533,6 @@ var graphCreator = (function(){
 		
 		//now loop through the data and build the rest of the URL
 		var count = 0; 
-		console.log(data);
 		for(areaName in data)
 		{
 			//handle non-numbers
@@ -559,19 +555,18 @@ var graphCreator = (function(){
 		  			'<li> <a href="#iChartFull">' + title + ' </a> </li>' + 
 					'<li> <a href="#iChartLocalTab">' + name + '</a> </li>' +
 		  		'</ul>' +
-		  		'<div id= "iChartFull" style="height: 140px; overflow-y: auto; overflow-x: hidden">'+
-		  			'<div id="iChartFull' + id + '"  style="width:345px; height:'+kmapInfochartHeight+'px;  overflow-x: auto">' + 
+		  		'<div id= "iChartFull" style="height:140px; overflow-y: auto; overflow-x: hidden">'+
+		  			'<div id="iChartFull' + id + '" style="width:345px; height:'+kmapInfochartHeight+'px; overflow-x:auto">' + 
 		  				'</div>' +
 		  			'</div>' +
-		  			'<div id="iChartLocalTab" style="height: 140px; overflow-y: auto; overflow-x: hidden">' +
-		  				'<div id="iChartLocal" style = "width : 345px; position: relative; padding: 0px">'  +
+		  			'<div id="iChartLocalTab" style="height:140px; overflow-y: auto; overflow-x: hidden">' +
+		  				'<div id="iChartLocal" style="width:345px; position: relative; padding: 0px">'  +
 		  			'</div> </div>' + 
 		  	'</div> ';
 			
 
 		//now put all of that together
 		chartStr += '</div>';
-		//console.log(chartStr);
 		return chartStr;
 	}
 

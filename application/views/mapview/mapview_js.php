@@ -263,7 +263,6 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 			spread = minSpread["spread"];
 		}
 	
-	
 	//loop over all our data
 	for(areaName in data)
 	{
