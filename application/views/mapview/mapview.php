@@ -84,10 +84,10 @@
 				<img class="playbackLabels" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1"/>
 				<ul id="playBackButtons">
 					<li>
-						<span id="playButton" title="<?php echo __('Play through the sheets.') ?>"><?php echo __('Play')?></a>
+						<span id="playButton" title="<?php echo __('Play through the sheets.') ?>"><?php echo __('Play')?></span>
 					</li>	
 					<li id="pauseButton">
-						<span title="<?php  echo __('Pause the sheets.')?>"> <?php echo __('Pause')?></a>		
+						<span title="<?php  echo __('Pause the sheets.')?>"> <?php echo __('Pause')?></span>		
 					</li>
 					<li>
 					<?php 
