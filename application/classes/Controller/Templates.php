@@ -244,6 +244,8 @@ class Controller_Templates extends Controller_Loggedin {
 			try
 			{
 				$first_time = false; //used to know if we should blow away everything if there's an error
+				$utferror = false; //small error with utf not catching and telling
+				$ormerror = false; //just in case it doesn't catch these errors either
 				//Should we use the old file
 				if($_FILES['file']['size'] == '0' AND $template != null)
 				{
@@ -343,6 +345,7 @@ class Controller_Templates extends Controller_Loggedin {
 			catch (ORM_Validation_Exception $e)
 			{
 				$errors_temp = $e->errors('register');
+				$ormerror = true;
 				if(isset($errors_temp["_external"]))
 				{
 					$this->template->content->errors = array_merge($errors_temp["_external"], $this->template->content->errors);
@@ -369,18 +372,18 @@ class Controller_Templates extends Controller_Loggedin {
 			catch (UTF_Character_Exception $e)
 			{
 				$this->template->content->errors[] = $e->getMessage();
-				//$data['id'] =  $_POST['id'];
-				//$data['title'] =  $_POST['title'];
-				//$data['description'] =  $_POST['description'];
-				//$data['admin_level'] =  $_POST['admin_level'];
-				//$data['decimals'] =  $_POST['decimals'];
-				//$data['zoom'] =  $_POST['zoom'];
-				//$data['lat'] =  $_POST['lat'];
-				//$data['lon'] =  $_POST['lon'];
+				$utferror = TRUE;
+				$data['id'] =  $_POST['id'];
+				$data['title'] =  $_POST['title'];
+				$data['description'] =  $_POST['description'];
+				$data['admin_level'] =  $_POST['admin_level'];
+				$data['decimals'] =  $_POST['decimals'];
+				$data['zoom'] =  $_POST['zoom'];
+				$data['lat'] =  $_POST['lat'];
+				$data['lon'] =  $_POST['lon'];
 			}
-
 			//if we just created a new template, go to that page
-			if(!isset($_GET['id']))
+			if(!isset($_GET['id']) AND !$utferror AND !$ormerror)
 			{
 				HTTP::redirect('templates/edit?id='.$template->id);				
 			}

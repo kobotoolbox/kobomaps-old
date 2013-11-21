@@ -259,7 +259,7 @@ var labels = new Array();
 	 {
 		 var lonStr = $("#lon").val();
 		 var lon = parseFloat(lonStr);
-		 if(!isNaN(lon) && lon <= 180 && lon >= -180 && lonStr.substring(lonStr.length - 1) != '.')
+		 if(!isNaN(lon) && (lon <= 180) && (lon >= -180) && lonStr.substring(lonStr.length - 1) != '.')
 		 {
 			dontUpdate = true;
 		 	var latLon = new google.maps.LatLng(map.getCenter().lat(), lon);
