@@ -123,7 +123,7 @@ var round = true;
 			$('#descriptionText').height($('#descriptionText p').height() + 20);
 			$('#descriptionText').css('overflow-y', 'hidden');
 	   }
-	   var fs = <?php echo isset($_GET['fullscreen']); ?>;
+	   var fs = <?php echo isset($_GET['fullscreen']) ? 'true' : 'false'; ?>;
 	   if(fs == 'true'){
 			$('#fullScreenButton').click();
 	   }
