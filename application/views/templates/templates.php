@@ -58,7 +58,7 @@
 ?>
 </div>
 <?php if(request::initial()->action() != 'mine'){?>
-<h4> <?php echo __('Official templates provided by Kobomaps. These templates were gathered from GADM.org.')?></h4>
+<h4> <?php echo __('Official templates provided by Kobomaps. These templates were gathered from GADM.org.').' '.__('Kobomaps does not currently have templates for Moldova or Singapore.')?></h4>
 <table class="list_table" >
 	<thead>
 		<tr class="header">

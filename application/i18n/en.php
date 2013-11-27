@@ -708,6 +708,7 @@ return array
 		'File (.kml, .kmz)'=>'File (.kml, .kmz)',
 		'Kobomaps' => 'Kobomaps',
 		'Personal and Publically owned templates.' => 'Personal and Publically owned templates.',
+		'Kobomaps does not currently have templates for Moldova or Singapore.' => 'Kobomaps does not currently have templates for Moldova or Singapore.',
 		'Official templates provided by Kobomaps. These templates were gathered from GADM.org.' => 'Official templates provided by Kobomaps. These templates were gathered from GADM.org.',
 	
 		
