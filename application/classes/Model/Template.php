@@ -150,6 +150,8 @@ class Model_Template extends ORM {
 		//copy the new file locations
 		$new_template->file = $new_file;
 		$new_template->kml_file = $new_kml;
+		$new_template->is_official = 0;
+		
 		$new_template->save();
 		
 		return $new_template;
