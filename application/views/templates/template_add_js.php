@@ -166,7 +166,6 @@ var labels = new Array();
 		
 		//initiates a HTTP get request for the json file
 		$.getJSON(jsonUrl, function(data) {
-			console.log(data);
 			//loops over each entry in the json over "areas"
 			for(areaIndex in data["areas"])
 			{

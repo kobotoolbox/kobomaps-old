@@ -383,6 +383,7 @@ class Controller_Templates extends Controller_Loggedin {
 				$data['lon'] =  $_POST['lon'];
 			}
 			//if we just created a new template, go to that page
+			//checks if errors occured, this was overwritting the errors before
 			if(!isset($_GET['id']) AND !$utferror AND !$ormerror)
 			{
 				HTTP::redirect('templates/edit?id='.$template->id);				
