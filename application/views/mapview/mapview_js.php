@@ -188,7 +188,7 @@ function initialize_map() {
 		{	
 	?>	
 	//Calling the boundaries and data files. The variables need to be defined in the container file as they are country-specific
-	mapParsers.parseJsonToGmap('<?php echo URL::base() .'uploads/templates/'. $template->file; ?>', '<?php echo URL::base() .'uploads/data/'. $map->json_file; ?>');
+	mapParsers.parseJsonToGmap('<?php echo URL::base() .'uploads/templates/'. $template->file; ?>', '<?php echo URL::base() .'uploads/data/'.ORM::factory('user', $map->user_id)->username.'/'. $map->json_file; ?>');
 	<?php }else{
 		//the template is missing :-( show an error message
 	?>

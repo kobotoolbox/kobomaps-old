@@ -182,7 +182,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['id'] = $map_id;
 			$data['title'] = $map->title;
 			$data['description'] = $map->description;
-			$data['slug']= $map->slug;
+			$data['slug']= $this->user->username.'/'.$map->slug;
 			$data['CSS'] = $map->CSS;
 			$data['lat'] = $map->lat;
 			$data['lon'] = $map->lon;
@@ -312,6 +312,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 				{
 					$_POST['map_creation_progress'] = $map->map_creation_progress; 
 				}		
+				$_POST['slug'] = $this->user->username.'/'.$_POST['slug'];
 				$map->update_map($_POST);
 				if($first_time)
 				{
@@ -349,7 +350,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 				
 					//now we need to figure out what sheets there are
 					//read the xls file and parse it
-					$file_path = DOCROOT.'uploads/data/'. $map->file;
+					$file_path = DOCROOT.'uploads/data/'. $this->user->username.'/'.$map->file;
 					 
 					//read in the excel file
 					$excel = Helper_Excel::open_for_reading_data($file_path);
@@ -492,7 +493,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	
 	 	//now we need to figure out what is on the sheets
 	 	//read the xls file and parse if
-	 	$file_path = DOCROOT.'uploads/data/'. $map->file;
+	 	$file_path = DOCROOT.'uploads/data/'. $this->user->username.'/'.$map->file;
 	 		
 	 	$excel = Helper_Excel::open_for_reading_data($file_path);
 	 	
@@ -1094,7 +1095,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//so lets load in the excel file
 	 	//now we need to figure out what is on the sheets
 	 	//read the xls file and parse if
-	 	$file_path = DOCROOT.'uploads/data/'. $map->file;
+	 	$file_path = DOCROOT.'uploads/data/'. $this->user->username.'/'.$map->file;
 	 	
 	 	$excel = Helper_Excel::open_for_reading_data($file_path);
 	 	
@@ -1455,7 +1456,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//finally grab the data in the file
 	 	//now we need to figure out what is on the sheets
 	 	//read the xls file and parse if
-	 	$file_path = DOCROOT.'uploads/data/'. $map->file;
+	 	$file_path = DOCROOT.'uploads/data/'. $this->user->username.'/'.$map->file;
 	 	
 	 	
 	 	//echo "Set up the database stuff: ". (microtime(true) - $time) . "<br/>";
@@ -1672,7 +1673,7 @@ class Controller_Mymaps extends Controller_Loggedin {
  					
  					
  					//save the json to file
- 					$file = DOCROOT.'uploads/data/'.$map_id.'.json';
+ 					$file = DOCROOT.'uploads/data/'.$this->user->username.'/'.$map_id.'.json';
  					//if the file exists delete it
  					if(file_exists($file))
  					{
@@ -2028,7 +2029,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 		return FALSE;
 	 	}
 	 
-	 	$directory = DOCROOT.'uploads/data/';
+	 	$auth = Auth::instance();
+	 	$user = ORM::factory('user',$auth->get_user());
+	 	$directory = DOCROOT.'uploads/data/'.$user->username.'/';
+	 	if(!file_exists($directory)){
+	 		mkdir($directory, 0777);
+	 	}
 	 
 	 	$extention = $this->get_file_extension($upload_file['name']);
 	 	$filename = $map->user_id.'-'.$map->id.'.'.$extention;
@@ -2050,7 +2056,12 @@ class Controller_Mymaps extends Controller_Loggedin {
 	  */
 	 protected function _save_google_doc($link, $map)
 	 {
-	 	$directory = DOCROOT.'uploads/data/';
+	 	$auth = Auth::instance();
+	 	$user = ORM::factory('user',$auth->get_user());
+	 	$directory = DOCROOT.'uploads/data/'.$user->username.'/';
+	 	if(!file_exists($directory)){
+	 		mkdir($directory, 0777);
+	 	}
 	 	$filename = $map->user_id.'-'.$map->id.'.xlsx';
 	 	
 	 	//we'll need this to get access

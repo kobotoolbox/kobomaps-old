@@ -63,6 +63,17 @@
 
 <div id="category_editor">
 <?php 	
+
+	$auth = Auth::instance();
+	$logged_in = $auth->logged_in() OR $auth->auto_login();
+	if($logged_in)
+	{
+		$user = ORM::factory('user',$auth->get_user());
+	}
+	else{
+		$user = null;
+		$user->user_id = '';
+	}
 	echo Form::open(NULL, array('id'=>'edit_maps_form', 'enctype'=>'multipart/form-data')); 
 	echo Form::hidden('action','edit', array('id'=>'action'));
 	echo Form::hidden('user_id',$data['user_id'], array('id'=>'user_id'));
@@ -79,8 +90,9 @@
 	echo '</td></tr><tr><td>';
 	echo Form::label('slug', __('Map Slug').": ");
 	echo '</td><td>';
-	echo URL::site(null,'HTTP').Form::input('slug', $data['slug'], array('id'=>'slug', 'style'=>'width:300px;', 'maxlength'=>128));
-	echo '<br/>'.__('This will be the URL to access this map. It should be short and sweet');
+	echo '<br/>'.__('This will be the URL to access this map. It should be short and sweet').'.</br>';
+	echo URL::site(null,'HTTP').$user->username.'/'.Form::input('slug', $data['slug'], array('id'=>'slug', 'style'=>'width:260px;', 'maxlength'=>128));
+	
 
 	echo '</td></tr><tr><td>';
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
