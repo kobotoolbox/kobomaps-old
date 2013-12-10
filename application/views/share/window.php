@@ -12,7 +12,7 @@
 
 
 	<?php echo __('Code to embed map')?><br/>
-	<input readonly="readonly" type="text" value="<iframe src=&quot;<?php echo URL::site(NULL, TRUE)?><?php echo $map->slug?>&quot; width=&quot;800&quot; height=&quot;600&quot;/>"/>
+	<input readonly="readonly" type="text" value="<iframe src=&quot;<?php echo URL::site(NULL, TRUE)?><?php echo $map->slug?>?fullscreen&quot; width=&quot;800&quot; height=&quot;600&quot;/>"/>
 	<br/>
 	<br/>
 
