@@ -123,7 +123,7 @@
 </div>
 
 <div style="height:40px;width:10px;"></div>
-<div id="maplinks"	style="overflow-y:auto">
+<div id="maplinks"	style="overflow-y:hidden">
 	
 		<p id="loadingtext">
 		<?php echo __('Please be patient while the map is loading.')?>  

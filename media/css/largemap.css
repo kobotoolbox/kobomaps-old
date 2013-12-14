@@ -76,7 +76,7 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 #bottombar a {display:inline;}
 
 /* Div holding the indicator list */
-div#maplinks {left:0;height:100%;width:350px;overflow-y:auto;overflow-x:hidden;position:absolute;z-index:10;background-color:rgba(255,255,255,0.86);text-align:left; resize:horizontal}
+div#maplinks {left:0;height:100%;width:350px;overflow-y:hidden;overflow-x:hidden;position:absolute;z-index:10;background-color:rgba(255,255,255,0.86);text-align:left;}
 div#maplinks h3 {margin: 50px 5px 0;font-family: Helvetica,Arial,sans-serif;}
 div#maplinks p {padding:10px 5px 10px;margin:0px;font-size:10px;line-height:14px;font-weight:bold;border-bottom:2px solid #333;}
 div#maplinks div p {border-bottom:none;}
@@ -199,7 +199,7 @@ div#mapSocialShare ul li ul li a.active, div#mapSocialShare ul li ul li span.act
 span.sheet2 {color: #000;display: block;margin:0.5em 0;padding: 0.4em 0;font-size:1.7em;}
 span.indicatorLevel_1  {;color: #000;display: block;margin:0.5em 0;padding: 0.4em 0;border-bottom: 1px solid #bbb;font-size:1.1em;}
 span.indicatorLevel_1 .hover, span.indicatorLevel_1.active {border-bottom: 1px solid #E59595;}
-div#descriptionText{height:100px; overflow-y:auto;border-bottom:2px solid #333; resize:vertical;}
+div#descriptionText{ overflow:auto;border-bottom:2px solid #333; resize:none;}
 li.indicator {margin: 0.15em 0 0.8em 1.2em;list-style: none outside none;color:#000000;font-weight:bold;text-transform:none}
 ul.indicator {margin: 0.5em 0 0.3em;padding: 0;list-style:none;}
 
@@ -213,8 +213,8 @@ li.indicatorLevel_3 {margin:0 0 0 2em; padding:0;font: 0.9em/1.4 Verdana,sans-se
 span.dataLevel:hover, span.dataLevel.active{background-color: #E59595;}
 
 /* Pop up bubbles created through Gmaps */
-.bubbleheader {font-weight:bold;}
-div.infowindow {border:1px solid #a1a1a1;padding:10px 0 0 5px}
+.bubbleheader {font-weight:bold; margin:0 0 0.2em}
+div.infowindow {border:none; min-width: 400px; padding:0}
 div.chartHolder {height:300px; width:400px; overflow:auto;}
 
 

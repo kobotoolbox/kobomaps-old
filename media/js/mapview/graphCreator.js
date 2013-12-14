@@ -16,6 +16,7 @@ var graphCreator = (function(){
 	//var kmapInfochartWidth = 315; //if this number is changed, the legend div (which contains the national graph) also needs to be adjusted 
 	var kmapInfochartBarHeight = 26; //these are numbers, not strings
 	var kmapInfochartXAxisMargin = 35;
+	var tabsClicked = false;
 	
 	
 	/**
@@ -61,28 +62,21 @@ var graphCreator = (function(){
 		//contains the path given by the id to access the data
 		var dataPath = dataPtr.data;
 
+		
 	    $("#iChartTabs").tabs({
 	    	activate: function(event, ui){
-	    		//console.log(event);
-	    		//console.log(ui.newPanel.selector);
 	    		//Make the graph draw when the panel is opened..there were issues happening with it
-	    		if(ui.newPanel.selector == '#iChartLocalTab'){
+	    		if(ui.newPanel.selector == '#iChartLocalTab' && !tabsClicked){
 	    			drawRegionChart(regionData, name, idArray[idArray.length - 1]);
+	    			tabsClicked = true;
 	    		}
 	    	}
 	    });
+	    
 		
 		//draw the general chart
 		drawGeneralChart(fullId, dataPath, name);
-
-		//draw the region's response chart
-		if(regionData != null){
-			$('.ui-state-default')[1].click(function(){
-				//console.log('draw');
-				drawRegionChart(regionData, name, idArray[idArray.length - 1]);
-			});
-	  		//drawRegionChart(regionData, name, idArray[idArray.length - 1]);
-		}
+		
 	}
 	
 
@@ -481,9 +475,9 @@ var graphCreator = (function(){
 	* @param string indicator is the example (0_0_2) string of the indicators
 	* @param string unit is the unit designated by the user when the map was created
 	*/
-	function UpdateAreaPercentageTitleData(name, percentage, min, spread, title, data, indicator, unit)
+	function UpdateAreaPercentageTitleData(name, percentage, min, spread, title, data, indicator, unit, currentIndicatorString)
 	{
-		var message = '<div class="chartHolder" style="height:'+kmapInfodivHeight+'px">' + createHTMLChart(name, title, data, indicator+"_by_area_chart");
+		var message = '<div class="chartHolder" >' + createHTMLChart(name, title, data, indicator+"_by_area_chart", currentIndicatorString);
 		message += "</div>";
 		
 		//now call the next method that does work
@@ -527,8 +521,10 @@ var graphCreator = (function(){
 			//set up the new info window and open it.
 			infoWindow.setPosition(event.latLng);
 			infoWindow.open(map);
+			//reset the listener for a new region
+			tabsClicked = false;
 			//draw the data chart inside the window
-			DrawDataGraph(id, name);		
+			DrawDataGraph(id, name);	
 		});	
 			
 	}
@@ -541,7 +537,7 @@ var graphCreator = (function(){
 	* @param int id: id of the region currently selected
 	* @return string chartStr that contains the html used to create the tabs and graphs
 	*/
-	function createHTMLChart(name,title, data, id)
+	function createHTMLChart(name,title, data, id, indicatorString)
 	{
 		
 		//now loop through the data and build the rest of the URL
@@ -561,19 +557,19 @@ var graphCreator = (function(){
 		var kmapInfochartHeight = calculateBarHeight(count);
 		
 		//creates the tab html that contains the chart ids
-		var chartStr = '<div id="'+ id + '" class="infowindow"><p class="bubbleheader">' + name + " - " + title +": " + data[name]
+		var chartStr = '<div id="'+ id + '" class="infowindow" style="width:auto; height:auto"><p class="bubbleheader">' + name + " - " + title +": " + data[name]
 		+'</p>' +
-		'<div id = "iChartTabs" style= "width: 380px; height: 200px">' +
+		'<div id = "iChartTabs" style= "width:auto;">' +
 		  		'<ul>' +
-		  			'<li> <a href="#iChartFull">' + title + ' </a> </li>' + 
+		  			'<li> <a href="#iChartFull">' + indicatorString + ' </a> </li>' + 
 					'<li> <a href="#iChartLocalTab">' + name + '</a> </li>' +
 		  		'</ul>' +
-		  		'<div id= "iChartFull" style="height:140px; overflow-y: auto; overflow-x: hidden">'+
-		  			'<div id="iChartFull' + id + '" style="width:345px; height:'+kmapInfochartHeight+'px; overflow-x:auto">' + 
+		  		'<div id= "iChartFull" style="height:auto; width:auto; overflow-y: hidden; overflow-x: hidden">'+
+		  			'<div id="iChartFull' + id + '" style="height:'+kmapInfochartHeight+'px; width:auto; overflow-x:hidden">' + 
 		  				'</div>' +
 		  			'</div>' +
-		  			'<div id="iChartLocalTab" style="height:140px; overflow-y: auto; overflow-x: auto">' +
-		  				'<div id="iChartLocal" style="width:300px; position: relative; padding: 0px">'  +
+		  			'<div id="iChartLocalTab" style="height:auto; width:auto;">' +
+		  				'<div id="iChartLocal" style="width: 330px;position: relative; padding: 0px">'  +
 		  			'</div> </div>' + 
 		  	'</div> ';
 			

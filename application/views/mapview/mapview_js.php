@@ -152,6 +152,13 @@ function initialize_map() {
 		
 	};
 
+	$('#maplinks').resizable({minWidth:350});
+	$('#maplinks').resize(function(){
+			if($('#descriptionText p').height() < 90){
+				console.log($('#descriptionText p').height());
+				console.log($('#descriptionText').height($('#descriptionText p').height() + 20));
+				$('#descriptionText').css('overflow-y', 'hidden');
+   			}});
 
 	//Set the colors with the database
 	colorProperties.setColors('#<?php echo $map->border_color?>','#<?php echo $map->region_color ?>', 
@@ -273,7 +280,7 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 	{
 		if(!isNaN(data[areaName]) && typeof labels[areaName] != 'undefined')
 		{
-			graphCreator.UpdateAreaPercentageTitleData(areaName, data[areaName], min, spread, title, data, indicator, unit);
+			graphCreator.UpdateAreaPercentageTitleData(areaName, data[areaName], min, spread, title, data, indicator, unit, '<?php echo __('Current Indicator')?>');
 		}
 	}
 	

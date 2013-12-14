@@ -568,6 +568,7 @@ return array
 		'Sets the speed in seconds of playback.' => 'Sets the speed in seconds of playback.',
 		'Pause' => 'Pause',
 		'Play' => 'Play',
+		'Current Indicator' => 'Current Indicator',
 		
 		
 		//footer
