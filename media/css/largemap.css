@@ -214,8 +214,8 @@ span.dataLevel:hover, span.dataLevel.active{background-color: #E59595;}
 
 /* Pop up bubbles created through Gmaps */
 .bubbleheader {font-weight:bold; margin:0 0 0.2em}
-div.infowindow {border:none; min-width: 400px; padding:0}
-div.chartHolder {height:300px; width:400px; overflow:auto;}
+div.infowindow {border:none; min-width: 425px; padding:0}
+div.chartHolder {min-height:300px; min-width:450px; overflow:auto;}
 
 
 

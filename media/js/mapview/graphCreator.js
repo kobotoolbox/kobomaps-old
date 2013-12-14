@@ -557,7 +557,7 @@ var graphCreator = (function(){
 		var kmapInfochartHeight = calculateBarHeight(count);
 		
 		//creates the tab html that contains the chart ids
-		var chartStr = '<div id="'+ id + '" class="infowindow" style="width:auto; height:auto"><p class="bubbleheader">' + name + " - " + title +": " + data[name]
+		var chartStr = '<div id="'+ id + '" class="infowindow"><p class="bubbleheader">' + name + " - " + title +": " + data[name]
 		+'</p>' +
 		'<div id = "iChartTabs" style= "width:auto;">' +
 		  		'<ul>' +
@@ -569,7 +569,7 @@ var graphCreator = (function(){
 		  				'</div>' +
 		  			'</div>' +
 		  			'<div id="iChartLocalTab" style="height:auto; width:auto;">' +
-		  				'<div id="iChartLocal" style="width: 330px;position: relative; padding: 0px">'  +
+		  				'<div id="iChartLocal" style="width:380px; position: relative; padding: 0px">'  +
 		  			'</div> </div>' + 
 		  	'</div> ';
 			
