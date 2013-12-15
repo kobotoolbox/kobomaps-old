@@ -38,11 +38,17 @@ var mapButtons = (function(){
 	 * like the share button and the fullscreen button
 	 */
 	 var headerOffset = 0;
-	function initialize_buttons(description, showL, hideL, showV, hideV)
+	function initialize_buttons(description, showL, hideL, showV, hideV, makeFullText, closeFullText)
 	{	
 		//handle toggling between full screen and normal view
 		$("#fullScreenButton").click(function(){
 				$("#siteHeader").toggle();
+				if($('.fullscreen').data("ui-tooltip-title") != closeFullText){
+					$('.fullscreen').data("ui-tooltip-title", closeFullText);
+				}
+				else{
+					$('.fullscreen').data("ui-tooltip-title", makeFullText);
+				}
 				resizeMaplinks(description);
 				return false;
 			});

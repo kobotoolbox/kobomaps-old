@@ -116,7 +116,8 @@ var round = true;
 	   $("#kmapTitle").html(<?php echo json_encode($map->title);?>);
 	   
 	   initialize_map();
-	   mapButtons.initialize_buttons(<?php echo strlen($map->description)?>, "<?php echo __("Show Labels"); ?>", "<?php echo __("Hide Labels"); ?>","<?php echo __("Show Values"); ?>","<?php echo __("Hide Values"); ?>");
+	   mapButtons.initialize_buttons(<?php echo strlen($map->description)?>, "<?php echo __("Show Labels"); ?>", "<?php echo __("Hide Labels"); ?>",
+			   "<?php echo __("Show Values"); ?>","<?php echo __("Hide Values"); ?>", "<?php echo __("Make this map fullscreen.")?>", "<?php echo __("Close fullscreen.")?>");
 	   mapButtons.init_legend_listener(<?php echo strlen($map->description)?>);
 
 	   if($('#descriptionText p').height() < 100){
@@ -127,7 +128,6 @@ var round = true;
 	   if(fs == 'true'){
 			$('#fullScreenButton').click();
 	   }
-	   
 	});
 
 
