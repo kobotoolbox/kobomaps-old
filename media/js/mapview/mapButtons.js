@@ -12,24 +12,19 @@
 var mapButtons = (function(){
 	
 	//will change the heights of the maplinks div on the left side of the map page
-	function resizeMaplinks(description){
+	function resizeMaplinks(){
 		var height = $(window).height();
 
 		if($("#siteHeader").is(':visible')){
 			$("#maplinks").height(parseInt(height - 280));
 			$("#nationalChartScrollDiv").height(parseInt(height * .20));
 			$("#questionsindicators").height(parseInt(height * .19));
-			if(description > 0){
-				$("#descriptionText").height(parseInt(height * .10));
-			}
+			
 		}
 		else{
 			$("#maplinks").height(height);
 			$("#nationalChartScrollDiv").height(parseInt(height * .30));
 			$("#questionsindicators").height(parseInt(height * .33));
-			if(description > 0){
-				$("#descriptionText").height(parseInt(height * .15));
-			}
 		}
 	}
 	
@@ -38,7 +33,7 @@ var mapButtons = (function(){
 	 * like the share button and the fullscreen button
 	 */
 	 var headerOffset = 0;
-	function initialize_buttons(description, showL, hideL, showV, hideV, makeFullText, closeFullText)
+	function initialize_buttons(showL, hideL, showV, hideV, makeFullText, closeFullText)
 	{	
 		//handle toggling between full screen and normal view
 		$("#fullScreenButton").click(function(){
@@ -49,7 +44,7 @@ var mapButtons = (function(){
 				else{
 					$('.fullscreen').data("ui-tooltip-title", makeFullText);
 				}
-				resizeMaplinks(description);
+				resizeMaplinks();
 				return false;
 			});
 
@@ -165,22 +160,72 @@ var mapButtons = (function(){
 	/**
 	* creates the listener on the +/- sign on the legend to minimize it or not
 	*/
-	function init_legend_listener(description){
+	function init_legend_listener(legendString){
+		$('#spanLegendText').prop('title', legendString);
 		$("#minButtonLegend").click(function(){
+			var height = $(window).height();
+
+			if($("#siteHeader").is(':visible')){
+				$("#questionsindicators").height(parseInt(height * .19));
+			}
+			else{
+				$("#questionsindicators").height(parseInt(height * .33));
+			}
+			
 			if($("#legendMinDiv").is(":visible")){
 				$("#legendMinDiv").toggle();
 				$("#minButtonLegend").html("+");
+				var tempString = $('#spanLegendText').html();
+				$('#spanLegendText').html($('#spanLegendText').prop('title'));
+				$('#spanLegendText').prop('title', tempString);
 			}
 			else {
 				$("#legendMinDiv").toggle();
 				$("#minButtonLegend").html("-");
+				var tempString = $('#spanLegendText').html();
+				$('#spanLegendText').html($('#spanLegendText').prop('title'));
+				$('#spanLegendText').prop('title', tempString);
+				if($("#questionsindicators").height() > 400){
+					if($("#siteHeader").is(':visible')){
+						$("#questionsindicators").height(parseInt(height * .3));
+					}
+					else{
+						$("#questionsindicators").height(parseInt(height * .56));
+					}
+				}
+			}
+			
+			if(!$('#descriptionText').is(":visible") && !$("#legendMinDiv").is(":visible")){
+				if($("#siteHeader").is(':visible')){
+					$("#questionsindicators").height(parseInt(height * .56));
+				}
+				else{
+					$("#questionsindicators").height(parseInt(height * .86));
+				}
+			}
+		});
+		$("#minButtonDesc").click(function(){
+			if($("#descriptionText").is(":visible")){
+				$("#descriptionText").toggle();
+				$("#minButtonDesc").html("+");
+				$("#descriptionMin").toggle();
+				$("#descTitle").toggle();
+			}
+			else {
+				$("#descriptionText").toggle();
+				$("#minButtonDesc").html("-");
+				$("#descriptionMin").toggle();
+				$("#descTitle").toggle();
+			}
+			if(!$('#descriptionText').is(":visible") && !$("#legendMinDiv").is(":visible")){
+				$('#questionsindicators').height(440);
 			}
 		});	
 		$(window).resize(function(){
-			resizeMaplinks(description);
+			resizeMaplinks();
 		});
 		
-		resizeMaplinks(description);
+		resizeMaplinks();
 	}
 
 	
