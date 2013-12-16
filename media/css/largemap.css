@@ -26,7 +26,7 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 #nationalIndicatorChart {float:left;}
 #legend div.infowindow {padding:0;margin:9px 0 0;}
 #legend div.infowindow p {margin:4px 0;border:none}
-#minButtonLegend{
+#minButtonLegend, #minButtonDesc{
 	color: #000;
 	font-size: 17px;
 	background:#fff;
@@ -199,7 +199,8 @@ div#mapSocialShare ul li ul li a.active, div#mapSocialShare ul li ul li span.act
 span.sheet2 {color: #000;display: block;margin:0.5em 0;padding: 0.4em 0;font-size:1.7em;}
 span.indicatorLevel_1  {;color: #000;display: block;margin:0.5em 0;padding: 0.4em 0;border-bottom: 1px solid #bbb;font-size:1.1em;}
 span.indicatorLevel_1 .hover, span.indicatorLevel_1.active {border-bottom: 1px solid #E59595;}
-div#descriptionText{ overflow:auto;border-bottom:2px solid #333; resize:none;}
+div#descriptionText{ height:auto; resize:none;border-bottom:2px solid #333;}
+div#descDiv {border-bottom:2px solid #333; position:relative; top:-2px}
 li.indicator {margin: 0.15em 0 0.8em 1.2em;list-style: none outside none;color:#000000;font-weight:bold;text-transform:none}
 ul.indicator {margin: 0.5em 0 0.3em;padding: 0;list-style:none;}
 
@@ -215,7 +216,7 @@ span.dataLevel:hover, span.dataLevel.active{background-color: #E59595;}
 /* Pop up bubbles created through Gmaps */
 .bubbleheader {font-weight:bold; margin:0 0 0.2em}
 div.infowindow {border:none; min-width: 425px; padding:0}
-div.chartHolder {min-height:300px; min-width:450px; overflow:auto;}
+div.chartHolder {min-height:300px; min-width:450px; overflow:hidden;}
 
 
 
