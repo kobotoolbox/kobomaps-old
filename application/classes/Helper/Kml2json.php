@@ -268,6 +268,9 @@ class Helper_Kml2json
 			$cumaltive_points = array();
 			$memory = intval($_POST['round_mem']) == 0 ? 1 : intval($_POST['round_mem']);
 			$disArray = array();
+			$maxLat = $maxLon = $minLat = $minLon = 0;
+			$minCount = true;
+			
 			$offset = 0;
 			foreach($coordinateArray as $cordTriplet)
 			{
@@ -326,15 +329,36 @@ class Helper_Kml2json
 					$disArray[] = $distance;
 				}
 				
-				if($distance >= .05){
+				/*
+				if($distance >= .009){
 					$lon *= 1.005;
 					$lat *= 1.005;
 				}
+				*/
 				
 				$lastPointArray[$i % $memory] =  $roundedLat.','.$roundedLon;
 				
+				if($minCount){
+					$maxLon = $minLon = $lon;
+					$maxLat = $minLat = $lat;
+					$minCount = false;
+				}
+				
+				if($lon > $maxLon){
+					$maxLon = $lon;
+				}
+				if($lon < $minLon){
+					$minLon = $lon;
+				}
+				if($lat > $maxLat){
+					$maxLat = $lat;
+				}
+				if($lat < $minLat){
+					$minLat = $lat;
+				}
+				
 				if($distance != 0){
-					if($distance >= .009){
+					if($distance >= .1){
 						/*
 						print_r($old_x.' old_x, ');
 						print_r($old_y.' old_y, ');
@@ -344,7 +368,9 @@ class Helper_Kml2json
 						print_r(abs($old_y - $roundedLat).' lat');
 						exit;
 						*/
-						if($offset % 4 != 0){
+						if($offset % 3 == 0){
+							//$lon *= 1.005;
+							//$lat *= 1.005;
 							$cumaltive_lon = ($cumaltive_lon + $lon);
 							$cumaltive_lat = ($cumaltive_lat + $lat);
 							$count++;
@@ -352,6 +378,8 @@ class Helper_Kml2json
 						
 					}
 				}
+				
+				
 				$offset ++;
 
 				echo "[$roundedLat,$roundedLon]";
@@ -361,19 +389,23 @@ class Helper_Kml2json
 		}
 		echo "],";
 		//calculate center point
+		print_r($maxLon.' '. $minLon.' and x '.$maxLat.' '.$minLat);
+		//exit;
 		if($count > 0)
 		{
 			
-			//print_r(max($disArray));
-			//exit;
-			$marker_lat = $cumaltive_lat / $count;
-			$marker_lon = $cumaltive_lon / $count;
+			$marker_lon = ($maxLon + $minLon + ($cumaltive_lon/$count))/3;
+			$marker_lat = ($minLat + $maxLat + ($cumaltive_lat/$count))/3;
+			
+			print_r($marker_lat.' '.$marker_lon);
+			exit;
 			echo '"marker":['.$marker_lat.','.$marker_lon.']}';
 			
 		}
 		else
 		{
 			echo '"marker":[0,0]}';
+			exit;
 		}
 	
 	}//end function placePlacemark
