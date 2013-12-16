@@ -116,9 +116,9 @@ var round = true;
 	   $("#kmapTitle").html(<?php echo json_encode($map->title);?>);
 	   
 	   initialize_map();
-	   mapButtons.initialize_buttons("<?php echo __("Show Labels"); ?>", "<?php echo __("Hide Labels"); ?>",
+	   mapButtons.initialize_buttons(<?php echo strlen($map->description)?>, "<?php echo __("Show Labels"); ?>", "<?php echo __("Hide Labels"); ?>",
 			   "<?php echo __("Show Values"); ?>","<?php echo __("Hide Values"); ?>", "<?php echo __("Make this map fullscreen.")?>", "<?php echo __("Close fullscreen.")?>");
-	   mapButtons.init_legend_listener('<?php echo __('legendString')?>');
+	   mapButtons.init_legend_listener(<?php echo strlen($map->description)?>);
 
 	   if($('#descriptionText p').height() < 100){
 			$('#descriptionText').height($('#descriptionText p').height() + 20);
@@ -153,10 +153,10 @@ function initialize_map() {
 	};
 
 	$('#maplinks').resizable({minWidth:350});
-	$('#questionsindicator').resizable({minHeight:50, maxHeight: 375});
 	$('#maplinks').resize(function(){
 			if($('#descriptionText p').height() < 90){
-				$('#descriptionText').height($('#descriptionText p').height() + 20);
+				console.log($('#descriptionText p').height());
+				console.log($('#descriptionText').height($('#descriptionText p').height() + 20));
 				$('#descriptionText').css('overflow-y', 'hidden');
    			}});
 

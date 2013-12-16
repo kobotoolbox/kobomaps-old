@@ -129,12 +129,10 @@
 		<?php echo __('Please be patient while the map is loading.')?>  
 		</p>
 		
-		<div id="descDiv"><span id="descriptionMin" style="display:none"><?php echo __('Description')?> </span><a id="minButtonDesc" > - </a></div>
-		<?php if(strlen($map->description) > 0){?>
-		<div id="descriptionText" position="relative"><p ><?php echo $map->description;?></p></div>
-		<span id="descriptionBar"></span>
 		
-
+		<?php if(strlen($map->description) > 0){?>
+		<div id="descriptionText" position="relative"><p ><?php echo $map->description;?></p>
+		</div>
 		<?php }?>
 			<ul id="questionsindicators" class="questionsindicators" >	</ul>		
 		

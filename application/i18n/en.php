@@ -569,7 +569,6 @@ return array
 		'Pause' => 'Pause',
 		'Play' => 'Play',
 		'Current Indicator' => 'Current Indicator',
-		'legendString' => 'Legend',
 		
 		
 		//footer
