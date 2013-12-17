@@ -182,7 +182,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['id'] = $map_id;
 			$data['title'] = $map->title;
 			$data['description'] = $map->description;
-			$data['slug']= $this->user->username.'/'.$map->slug;
+			$data['slug']= $this->_protectSlug($this->user->username).'/'.$map->slug;
 			$data['CSS'] = $map->CSS;
 			$data['lat'] = $map->lat;
 			$data['lon'] = $map->lon;
@@ -418,6 +418,20 @@ class Controller_Mymaps extends Controller_Loggedin {
 		
 	 }//end action_add1
 	 
+	 
+	 /**
+	  * Protects usernames if they contain an email by removing the @email.com
+	  * @param string $slug
+	  * @return string
+	  */
+	 private function _protectSlug($slug){
+	 	if(strpos($slug, "@") !== false){
+	 		return substr($slug, strpos($slug, "@"));
+	 	}
+	 	else{
+	 		return $slug;
+	 	}
+	 }
 	 
 	 /**
 	 *	Calls the helper slug checker and exits if the slug is not defined
@@ -1846,9 +1860,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 			}
 	 		}
 	 	}
-	 
-	 
-	 
 	 }//end action_add5
 	 
 	 
@@ -2011,6 +2022,35 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 
 	 }
 	 
+	 
+	 public function action_totalChart(){
+	 	$this->auto_render = false;
+	 	$this->template = null;
+	 	
+	 	//grab the map ID
+	 	//was an id given?
+	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+	 	
+	 	if($map_id == 0)
+	 	{
+	 		return;
+	 	}
+	 	
+	 	//grab the map from the database
+	 	$map = ORM::factory('Map',$map_id);
+	 	
+	 	if(!$map->loaded())
+	 	{
+	 		return;
+	 	}
+	 	$js = view::factory('mapview/totalchart_js');
+	 	$view = new View('mapview/totalchart');
+	 	$view->map = $map;
+	 	$js->map = $map;
+	 	$view->user = $this->user;
+	 	$view->js = $js;
+	 	echo $view;
+	 }
 	 	 
 	 
 	 /**

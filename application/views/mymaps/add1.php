@@ -74,6 +74,11 @@
 		$user = null;
 		$user->user_id = '';
 	}
+	$username = $user->username;
+	if(strpos($username, "@") !== false){
+		$username = substr($username, strpos($slug, "@"));
+	}
+	
 	echo Form::open(NULL, array('id'=>'edit_maps_form', 'enctype'=>'multipart/form-data')); 
 	echo Form::hidden('action','edit', array('id'=>'action'));
 	echo Form::hidden('user_id',$data['user_id'], array('id'=>'user_id'));
@@ -91,7 +96,7 @@
 	echo Form::label('slug', __('Map Slug').": ");
 	echo '</td><td>';
 	echo '<br/>'.__('This will be the URL to access this map. It should be short and sweet').'.</br>';
-	echo URL::site(null,'HTTP').$user->username.'/'.Form::input('slug', $data['slug'], array('id'=>'slug', 'style'=>'width:260px;', 'maxlength'=>128));
+	echo URL::site(null,'HTTP').$username.'/'.Form::input('slug', $data['slug'], array('id'=>'slug', 'style'=>'width:260px;', 'maxlength'=>128));
 	
 
 	echo '</td></tr><tr><td>';
