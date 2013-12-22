@@ -228,12 +228,11 @@ var graphCreator = (function(){
 		}
 
 		if(dataPtr.total == null){
-			$("#nationalChartScrollDiv").hide();
+			//$('#minButtonLegend').click();
 			return;
 		}
 
 		else{
-			$("#nationalChartScrollDiv").show();
 		//fill temp arrays with data
 			for(i in totalData.indicators){
 				var total = parseFloat(totalData.indicators[i].total);
@@ -303,9 +302,11 @@ var graphCreator = (function(){
 		}
 		
 		//if it's been hidden, open it
+		/*
 		if($('#minButtonLegend').text() == '+'){
 			$('#minButtonLegend').click();
 		}
+		*/
 	}
 
 	/**

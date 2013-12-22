@@ -38,7 +38,7 @@ class Controller_Message extends Controller_Loggedin {
 		$view->user = $this->user;
 		echo $view;
 		
-	}//end action_index
+	}//end action_submit()
 		
   /**
   * Reads in the POST data from the form

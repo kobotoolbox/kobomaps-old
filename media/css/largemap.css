@@ -10,6 +10,13 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 #legendtext {margin:0 0 4px;}
 #legendtext span {}
 #legend_gradient, #nationalaveragediv {height:19px;display:none;/*Only visible if indicator is selected*/}
+#totalChartFrame {width:140px; height:40px; resize:none; overflow:hidden; border: none;
+    -moz-transform: scale(0.2);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.2);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(0.2);
+    -webkit-transform-origin: 0 0;}
 
 #legend_gradient {float:left;width:120px; position:relative;}
 #percentleft, #percentright, #nationalaveragelabel, #nationalaverageimg {line-height:14px;font-weight:bold;}

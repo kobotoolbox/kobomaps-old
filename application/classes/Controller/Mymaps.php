@@ -2048,8 +2048,9 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	$view->map = $map;
 	 	$js->map = $map;
 	 	$view->user = $this->user;
-	 	$view->js = $js;
-	 	echo $view;
+		$view->js = $js;
+		
+		echo $view;
 	 }
 	 	 
 	 

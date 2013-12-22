@@ -258,7 +258,6 @@ function initialize_map() {
 */
 function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalLabel, extend_data)
 {
-	
 	//first zero out all the current map data. Do this incase certain indicators don't apply to all geographic areas
 	zeroOutMap();
 
@@ -310,7 +309,7 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 	}
 
 	//draw the javascript graph of the totals of the selected indicator stack
-	graphCreator.drawTotalChart(indicator);
+	//graphCreator.drawTotalChart(indicator, null);
 	
 	if(title == "<?php __("Please select an indicator to display its data.") ?>" )
 	{

@@ -10,7 +10,7 @@
 
  //Constructor for mapMath
 var mapButtons = (function(){
-	
+	var legend = '';
 	//will change the heights of the maplinks div on the left side of the map page
 	function resizeMaplinks(){
 		var height = $(window).height();
@@ -32,7 +32,6 @@ var mapButtons = (function(){
 	 * This function is called to initialize the event handlers for the buttons on this page,
 	 * like the share button and the fullscreen button
 	 */
-	 var headerOffset = 0;
 	function initialize_buttons(showL, hideL, showV, hideV, makeFullText, closeFullText)
 	{	
 		//handle toggling between full screen and normal view
@@ -85,6 +84,11 @@ var mapButtons = (function(){
 			}
 			return false;
 			});
+		
+		$('#iframeBlocker').click(function(){
+			$('#totalChartFrame').attr('src', "<?php echo url::base()?>mymaps/totalchart?id=<?php echo $map->id?>&indicator=<?php echo isset($_GET['indicator'])? $_GET['indicator'] : ''?>");
+			$('#totalChartHREF').click();
+		});
 
 		$("#turnOffLabelsButton").tooltip( {
 			position:{
@@ -161,7 +165,7 @@ var mapButtons = (function(){
 	* creates the listener on the +/- sign on the legend to minimize it or not
 	*/
 	function init_legend_listener(legendString){
-		$('#spanLegendText').prop('title', legendString);
+		legend = legendString;
 		$("#minButtonLegend").click(function(){
 			var height = $(window).height();
 
@@ -176,15 +180,14 @@ var mapButtons = (function(){
 				$("#legendMinDiv").toggle();
 				$("#minButtonLegend").html("+");
 				var tempString = $('#spanLegendText').html();
-				$('#spanLegendText').html($('#spanLegendText').prop('title'));
+				$('#spanLegendText').html(legend);
 				$('#spanLegendText').prop('title', tempString);
 			}
 			else {
 				$("#legendMinDiv").toggle();
 				$("#minButtonLegend").html("-");
-				var tempString = $('#spanLegendText').html();
+				console.log(legend);
 				$('#spanLegendText').html($('#spanLegendText').prop('title'));
-				$('#spanLegendText').prop('title', tempString);
 				if($("#questionsindicators").height() > 400){
 					if($("#siteHeader").is(':visible')){
 						$("#questionsindicators").height(parseInt(height * .3));

@@ -334,7 +334,7 @@ class Controller_Login extends Controller_Main {
 		$auth = Auth::instance();
 		$hash = $auth->hash_password(date('U').$user->password);
 		$user->reset_hash = $hash;
-		$user->reset_expire = date('Y-m-d G:i:s', time() + (2*60*60)); //give them two hours
+		$user->reset_expire = date('Y-m-d G:i:s', time() + (2*60*60*1000)); //give them two hours
 		$user->save();
 		//create the link
 		$secret_link = '<a href="'.URL::site(NULL, 'http').'login/resetpassword?key='.$hash.'">'.URL::site(NULL, 'http').'login/resetpassword?key='.$hash.'</a>';

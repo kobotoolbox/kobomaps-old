@@ -156,8 +156,15 @@
 						<span id="nationalaverageimg" ></span>
 					</div>
 					</br>
-					<div id="nationalChartScrollDiv" style="width:330px; overflow-y: auto; overflow-x: auto;padding-top: 25px;">
-				       	<div id="nationalIndicatorChart" style="width: 300px"></div>		
+					<!--<div id="nationalChartScrollDiv" style="width:330px; overflow-y: auto; overflow-x: auto;padding-top: 25px;">
+				       	<div id="nationalIndicatorChart" style="width: 300px"></div>-->
+				       	</br></br>
+				       	<a id="totalChartHREF" rel="#overlay" style="display:none"></a>
+				       	<div id="iFrameWrapper" style="position:relative">
+				       		<div id="iframeBlocker" style="position: absolute; top: 0; left: 0; width: 140px; height: 40px"></div> 
+				       		<iframe id="totalChartFrame"  src="<?php echo url::base()?>mymaps/totalchart?id=<?php echo $map->id?>&indicator=<?php 
+				       			echo isset($_GET['indicator'])? $_GET['indicator'] : ''?>"></iframe>	
+				       	</div>
 				    </div>
 				       <div id="sourcetext">
 						<span id="sourcetextspan" style="display:none;"> Data Source:  

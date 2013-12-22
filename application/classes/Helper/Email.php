@@ -24,7 +24,7 @@ class Helper_Email
 		if($_SERVER["SERVER_NAME"] != 'localhost' AND $_SERVER["SERVER_NAME"] != '127.0.0.1'){
 			require Kohana::find_file('swiftmailer', 'classes/lib/swift_required');
 			//Create the Transport
-			$transport = Swift_SmtpTransport::newInstance($_SERVER['HTTP_HOST'], 25);
+			$transport = Swift_SmtpTransport::newInstance('localhost', 25);
 			//Create the Mailer using your created Transport
 			$mailer = Swift_Mailer::newInstance($transport);
 			//Create a message
@@ -32,7 +32,10 @@ class Helper_Email
 			->setSubject($subject)
 			->setFrom($from)
 			->setTo($to)
-			->setBody($body, 'text/html');
+			->setBody($body, 'text/html')
+			->setReturnPath('dylan@ethertontech.com');
+			//echo($message->toString());
+			//phpinfo();
 			//Send the message
 			$result = $mailer->send($message);
 		}
