@@ -10,12 +10,12 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 #legendtext {margin:0 0 4px;}
 #legendtext span {}
 #legend_gradient, #nationalaveragediv {height:19px;display:none;/*Only visible if indicator is selected*/}
-#totalChartFrame {width:140px; height:40px; resize:none; overflow:hidden; border: none;
-    -moz-transform: scale(0.2);
+#totalChartFrame {width:375px; height:125px; resize:none; overflow:hidden; border: none;
+    -moz-transform: scale(0.4);
     -moz-transform-origin: 0 0;
-    -o-transform: scale(0.2);
+    -o-transform: scale(0.4);
     -o-transform-origin: 0 0;
-    -webkit-transform: scale(0.2);
+    -webkit-transform: scale(0.4);
     -webkit-transform-origin: 0 0;}
 
 #legend_gradient {float:left;width:120px; position:relative;}
@@ -30,7 +30,7 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 #nationalaverageimg {text-shadow:0 0 2px #fff;color:#000}
 #sourcetext {clear:both;margin:0 0 10px;float:left;width:315px;font-size:11px;}
 
-#nationalIndicatorChart {float:left;}
+
 #legend div.infowindow {padding:0;margin:9px 0 0;}
 #legend div.infowindow p {margin:4px 0;border:none}
 #minButtonLegend, #minButtonDesc{

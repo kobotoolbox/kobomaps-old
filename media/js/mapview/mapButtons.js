@@ -86,7 +86,7 @@ var mapButtons = (function(){
 			});
 		
 		$('#iframeBlocker').click(function(){
-			$('#totalChartFrame').attr('src', "<?php echo url::base()?>mymaps/totalchart?id=<?php echo $map->id?>&indicator=<?php echo isset($_GET['indicator'])? $_GET['indicator'] : ''?>");
+			//$('#totalChartFrame').attr('src', "<?php echo url::base()?>mymaps/totalchart?id=<?php echo $map->id?>&indicator=<?php echo isset($_GET['indicator'])? $_GET['indicator'] : ''?>");
 			$('#totalChartHREF').click();
 		});
 
@@ -186,7 +186,6 @@ var mapButtons = (function(){
 			else {
 				$("#legendMinDiv").toggle();
 				$("#minButtonLegend").html("-");
-				console.log(legend);
 				$('#spanLegendText').html($('#spanLegendText').prop('title'));
 				if($("#questionsindicators").height() > 400){
 					if($("#siteHeader").is(':visible')){

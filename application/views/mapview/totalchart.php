@@ -9,9 +9,7 @@
 ?>
 <?php echo $js;?>
 
-<h2><?php echo $map->title?></h2>
-
-<div id="nationalIndicatorChart" style="width:300px">testing</div>
+<div id="nationalIndicatorChart" style="width:300px"></div>
 
 
 <?php 

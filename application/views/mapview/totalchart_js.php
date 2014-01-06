@@ -14,6 +14,10 @@
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/mapview/mapParsers.js"></script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.js"> </script>
 <script type="text/javascript" src="<?php echo URL::base(); ?>media/js/flot/jquery.flot.navigate.js"> </script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.tools.min.js"> </script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery-ui.min.js"> </script>
+<script type="text/javascript" src="<?php echo URL::base(); ?>media/js/jquery.address-1.4.min.js"> </script>
+
 
 
 <script type="text/javascript">
@@ -24,23 +28,14 @@ var mapData;
 * Controls the content of the divs by asking for the information for the page that was selected
 */
 $(document).ready(function(){
-	console.log('Im loading');
 	$.get('<?php echo URL::base() .'uploads/data/'.ORM::factory('user', $map->user_id)->username.'/'. $map->json_file; ?>', function(data){
 		mapData = data;
-
-		console.log($);
-		var indicator = $.address.parameter("indicator");
-		/*
-		if(indicator != undefined && typeof mapData !== "undefined" && typeof mapData.sheets !== "undefined")
+		
+		if('<?php echo $_GET['indicator']?>' != undefined && typeof mapData !== "undefined" && typeof mapData.sheets !== "undefined")
 		{
-			graphCreator.createTotalChart(indicator);
-			console.log('true');					
+			graphCreator.drawTotalChart('<?php echo $_GET['indicator']?>','#<?php echo $map->graph_bar_color ?>', '#<?php echo $map->graph_select_color ?>');
 		}
-		*/
-		console.log(mapData);
 	});
-	
-	
 });
 
 

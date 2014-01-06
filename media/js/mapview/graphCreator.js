@@ -206,7 +206,7 @@ var graphCreator = (function(){
 	* @param string indicator is the path to the indicator selected on the left side of the map
 	*/
 	//used to draw the national total data chart
-	function drawTotalChart(indicator){
+	function drawTotalChart(indicator, barColor, barSelectColor){
 		var id = indicator.split("_");
 		var totalData = new Array();
 		var selecY;
@@ -272,32 +272,24 @@ var graphCreator = (function(){
 			var bothData = [
 				        	  {
 					        	data: graphXData,
-					          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: colorProperties.getGraph()} ,
-					          	color: colorProperties.getGraph()
+					          	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: barColor} ,
+					          	color: barColor
 				        	  },
 				        	  {
 					        	data: selectedArea,
-					        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: colorProperties.getGraphS()} ,
-				        		color: colorProperties.getGraphS()
+					        	bars: {show: true, barWidth: .80, align: "center", fill:true, fillColor: barSelectColor} ,
+				        		color: barSelectColor
 				        	  }
 				  ];
 
 			if(graphYAxis.length != 0){
-				//$("#nationalIndicatorChart").empty();
-				if(stringLen > 25){
-					$('#nationalIndicatorChart').width($('#nationalIndicatorChart').width() + stringLen * 2 - 30);
-				}
 				$.plot($("#nationalIndicatorChart"), bothData,  {
 			    	bars: {show: true, horizontal: true, fill: true},
 			    	grid: {hoverable: true},
 			    	yaxis:{ticks: graphYAxis, position: "left",  min:.45, max:graphXData.length + .55}
 					}
 				);
-			
 				bindHoverTip("#nationalIndicatorChart", graphYAxis);
-			}
-			else{
-				$("#nationalChartScrollDiv").hide();
 			}
 		}
 		

@@ -173,6 +173,11 @@ var sheetControl = (function(){
 		var dataPtr = null;
 		var ids = indicator.split("_"); //split up the ids
 		var sheetId = ids[0];
+		
+		var s = $('#totalChartFrame').attr('src');
+		var newS = s.substring(0, s.indexOf('indicator='));
+		$('#totalChartHREF').attr('href', newS + 'indicator=' + indicator);
+		$('#totalChartFrame').attr('src', $('#totalChartHREF').attr('href'));
 
 		//make sure the appropriate sheet tab is highlighted
 		//first remove the active class from all sheet tabs
