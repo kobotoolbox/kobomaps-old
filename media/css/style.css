@@ -449,34 +449,34 @@ table.list_table
 	border: solid 1px #848484; 
 }
 
-table.list_table tbody
+table.list_table tbody, table.scroll_list_table tbody
 {
 	display: block;
 	height: 500px;
 	overflow-y: scroll;
 	width: 100%;	
 }
-table.list_table thead{
+table.list_table thead, table.scroll_list_table thead{
 	font-size:15px;
 }
 
-table.list_table tr td, table.list_table tr th{
+table.list_table tr td, table.list_table tr th, .scoll_list_table tr td, .scroll_list_table tr th{
 	border: solid 1px #848484;
 	padding-left:10px;
 	text-align: left;
 	
 }
 
-table.list_table thead tr{
+table.list_table thead tr, table.scroll_list_table thead tr{
 	display:block;
 	position:relative;
 }
 
-table.list_table tbody tr{
+table.list_table tbody tr, table.scroll_list_table tbody tr{
 	height:50px;
 }
 
-table.list_table tr th{
+table.list_table tr th, table.scroll_list_table tr th{
 	background:#d6d7d6;
 	padding-top:10px;
 	padding-bottom:10px;
@@ -506,17 +506,17 @@ table.list_table tr td.mapTasks, table tr th.mapTasks
 	width:300px;
 }
 
-table.list_table tr.odd_row td{
+table.list_table tr.odd_row td, table.scroll_list_table tr.odd_row td{
 	background: #ececec;
 }
 
-table.list_table tr td a
+table.list_table tr td a, table.scroll_list_table tr td a
 {
 	color:black;
 	text-decoration:none;
 }
 
-table.list_table tr td a:hover
+table.list_table tr td a:hover, table.scroll_list_table tr td a:hover
 {
 	text-decoration:underline;
 }
@@ -576,9 +576,91 @@ table.list_table tr td a:hover
 	width:32px;
 	}			
 	
+/************************************************************
+						Custompage and menuedit data table
+*************************************************************/
+#pageTable{
+	float:left;
+	width:200px;
+	height:500px;
+}
+#pageTable #pages{
+	width: 175px;
+	height: 22px;	
+}
+#customWork{
+	width: 700px;
+	float:right;
+}
+#customWork #title, #customWork #slug, #customWork #menu_id{
+	width:300px;
+}
+#customWork #htmlContent{
+	height:650px;
+}
+#customWork #button_holder{
+	width: 600px;
+}
+#button_holder div.delete_button{
+	float:right;
+}
 
-
-
+#menuEdit{
+	width: 830px;
+	height: 500px;
+}
+.scroll_table.scroll_list_table{
+	width:824px;
+	height: 400px;
+}
+.scroll_table th.menuName{
+	width: 78px;
+}
+.scroll_table th.menuItems{
+	width: 631px;
+}
+.scroll_table th.menuDelete{
+	width: 76px;
+	text-align:center;	
+}
+.scroll_table td.menuName{
+	width: 79px;
+}
+.scroll_table td.menuItems{
+	width: 641px;
+}
+.scroll_table td.menuDelete{
+	width: 59px;	
+}
+#createMenu{
+	float:left;
+	width: 300px;
+}
+.createMenuTable{
+	width: 330px;
+}
+#createMenu #title{
+	width: 150px;
+}
+#createSubmenu table {
+	width:630px;
+}
+#createSubmenu #text{
+	width: 180px;
+}
+.wideCreateSubmenuTable{
+	width: 400px;
+}
+#createSubmenu #item_url{
+	width:150px;
+}
+#createSubmenu #file{
+	width: 300px;
+}
+.scroll_list_table{
+	width: 824px;
+	border: solid 1px #848484; 
+}
 /************************************************************
 						Specify data table
 *************************************************************/
@@ -1072,7 +1154,7 @@ select.needstobemapped{
 table .unread{
 	background: #aebcce;
 }
-table.list_table tr.unread.odd_row  td {
+table.list_table tr.unread.odd_row  td, table.scroll_list_table tr.undread.odd_row{
 	background: #aebcce;
 }
 .unread a{

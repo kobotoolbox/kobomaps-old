@@ -122,7 +122,7 @@
 	
 </div>
 
-<div style="height:40px;width:10px;"></div>
+<div class="mapLinksDiv"></div>
 <div id="maplinks"	style="overflow-y:hidden">
 	
 		<p id="loadingtext">
@@ -162,8 +162,8 @@
 				       	<a id="totalChartHREF" rel="#overlay" style="display:none" href="<?php echo url::base()?>mymaps/totalchart?id=<?php echo $map->id?>&indicator=<?php 
 				       			echo isset($_GET['indicator'])? $_GET['indicator'] : '';?>"></a>
 				       	<div id="iFrameWrapper" style="position:relative">
-				       		<div id="iframeBlocker" style="position: absolute; top: 0; left: 0; width: 375px; height: 125px"></div> 
-				       		<iframe id="totalChartFrame"  src="<?php echo url::base()?>mymaps/totalchart?id=<?php echo $map->id?>&indicator=<?php 
+				       		<div id="iframeBlocker"></div> 
+				       		<iframe id="totalChartFrame" scrolling="no" src="<?php echo url::base()?>mymaps/totalchart?id=<?php echo $map->id?>&indicator=<?php 
 				       			echo isset($_GET['indicator'])? $_GET['indicator'] : ''?>"></iframe>	
 				       	</div>
 				    </div>

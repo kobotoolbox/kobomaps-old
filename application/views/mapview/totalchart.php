@@ -9,7 +9,7 @@
 ?>
 <?php echo $js;?>
 
-<div id="nationalIndicatorChart" style="width:300px"></div>
+<div id="nationalIndicatorChart"></div>
 
 
 <?php 

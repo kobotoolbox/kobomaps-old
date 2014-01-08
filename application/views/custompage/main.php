@@ -55,33 +55,33 @@
 	echo Form::open(NULL, array('id'=>'edit_custompage_form', 'enctype'=>'multipart/form-data'));
 	echo Form::hidden('action','edit', array('id'=>'action'));
 	
-	echo '<div id="pageTable" style="float:left; width:200px; height:500px;">';
+	echo '<div id="pageTable">';
 	echo Form::label('page_descr', __('This is the list of your current pages.'));
 	echo '</br></br>';
-	echo Form::select('pages', $pages, $data['id'], array('id'=>'pages', 'style' => 'width: 175px; height: 22px'));
+	echo Form::select('pages', $pages, $data['id'], array('id'=>'pages'));
 	
 	echo '</div>';
 	
-	echo '<div id="customWork" style="width: 700px; float:right">';
+	echo '<div id="customWork">';
 	
 	echo __('Title of page: ');
-	echo Form::input('title', $data['title'], array('id'=>'title', 'style'=>'width:300px;', 'maxlength' => '128'));
+	echo Form::input('title', $data['title'], array('id'=>'title', 'maxlength' => '128'));
 	echo '</br></br>';
 	echo __('URL of page: ');
-	echo Form::input('slug', $data['slug'], array('id'=>'slug', 'style'=>'width:300px;', 'maxlength' => '128', 'onchange' => 'checkSlug()'));
+	echo Form::input('slug', $data['slug'], array('id'=>'slug', 'maxlength' => '128', 'onchange' => 'checkSlug()'));
 	echo '</br></br>';
 	echo __('Sub-menu for page: ');
-	echo Form::select('menu_id', $menus, $data['menu_id'], array('id'=>'menu_id', 'style'=>'width:300px;'));
+	echo Form::select('menu_id', $menus, $data['menu_id'], array('id'=>'menu_id'));
 	echo '</br></br>';
 	echo __('Is this a help page?');
 	echo Form::checkbox('help_page', null, $data['help_page']==1, array('id'=>'help_page'));
 	echo '</br></br>';
 	echo __('Content of page: This is what will be displayed on the page. There are advanced options available.');
 	echo '</br>'; 
-	echo Form::textarea('content', $data['content'], array('id'=>'htmlContent', 'style' => 'height: 650px', 'class' => 'tinymce'));
-	echo '</br><div id="button_holder" style="width: 600px">';
+	echo Form::textarea('content', $data['content'], array('id'=>'htmlContent','class' => 'tinymce'));
+	echo '</br><div id="button_holder">';
 	echo Form::submit('edit', __('Save'), array('id'=>'edit_button'));
-	echo '<div class ="delete_button" style="float:right">'.__('Delete').'</div></div>';
+	echo '<div class ="delete_button" >'.__('Delete').'</div></div>';
 	echo '</div>';
 
 	echo Form::close();

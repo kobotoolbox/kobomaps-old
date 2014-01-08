@@ -14,7 +14,7 @@
 
   /***********  Create submenu  ****************/
   echo '<div id="createSubmenu" >';
-  echo '<table style="width:630px"><tr><td><strong>';
+  echo '<table><tr><td><strong>';
   echo Form::label('subCreate', __('Create a new menu item.'));
   echo '</strong></td><td></td></tr><tr><td>';
 
@@ -24,18 +24,18 @@
  
   echo Form::label('title', __('Title of menu item'));
   echo '</td><td>';
-  echo Form::input('text', $data['text'], array('id'=>'text', 'style'=>'width:180px;', 'maxlength' => '60'));
+  echo Form::input('text', $data['text'], array('id'=>'text', 'maxlength' => '60'));
   echo '</td></tr><tr><td>';
  
   echo Form::label('link', __('Menu URL').':');
-  echo '</td><td style="width:400px">';
+  echo '</td><td class="wideCreateSubmenuTable">';
   echo url::base(true, true);
-  echo Form::input('item_url', $data['item_url'], array('id'=>'item_url', 'style'=>'width:150px;', 'maxlength' => '256'));
+  echo Form::input('item_url', $data['item_url'], array('id'=>'item_url', 'maxlength' => '256'));
   echo '</td></tr><tr><td>';
   
   echo Form::label('image_url', __('Icon').' (.jpeg, .png, .bmp):');
   echo '</td><td>';
-  echo Form::file('file', array('id'=>'file', 'style'=>'width:300px;'));
+  echo Form::file('file', array('id'=>'file'));
   //echo $data['image_url'];
   echo '</td></tr><tr><td>'; 
   echo Form::label('admin_onlyText', __('Only visible by Admins?'));

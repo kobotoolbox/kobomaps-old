@@ -59,19 +59,19 @@
 	
 	
   
-  echo '<div id="menuEdit" style="width:830px; height 500px;">';
+  echo '<div id="menuEdit">';
   ?>
   <div class="scroll_table">
-	  <table class="list_table" style="width:824px; height:400px">
+	  <table class="scroll_list_table">
 	  <thead>
 	  <tr class="header">
-	  			<th class="menuName" style="width:78px">
+	  			<th class="menuName">
 	  				<?php echo __('Submenu');?>
 	  			</th>
-	  			<th class="menuItems" style="width:631px">
+	  			<th class="menuItems">
 	  				<?php echo __('Items');?>
 	  			</th>
-	  			<th class="menuDelete" style="width:76px">
+	  			<th class="menuDelete">
 	  				<?php echo __('Actions')?>
 	  			</th>
 	  			
@@ -90,11 +90,11 @@
 	  		?>
 	  
 	  	<tr <?php echo $odd_row; ?>>
-	  		<td class="menuName" style="width: 79px">
+	  		<td class="menuName">
 	  			<?php echo $submenu->title;
 	  			?>
 	  		</td>
-	  		<td class="menuItems" style="width:641px">
+	  		<td class="menuItems">
 	  			<ul>
 	  			<?php 
 	  				$submenu_items = $submenu->menu_items->find_all();
@@ -125,7 +125,7 @@
       					<?php }}?>
 	  			</ul>
 	  		</td>	 
-	  		<td class="menuDelete" style="width:59px; text-align:center;">
+	  		<td class="menuDelete">
 	  			<a href="#" onclick="deleteSubMenu(<?php echo $submenu->id; ?>);"><?php echo __('Delete');?></a>
 	  			<br/>
 	  			<a href="#" onclick="editSubMenu(<?php echo $submenu->id; ?>, '<?php echo str_replace('\'', '\\\'', $submenu->title); ?>'); return false;"><?php echo __('Edit');?></a>
@@ -145,12 +145,12 @@
   
   /*********** Create menu ***************/
   echo '<div id="createMenu" style="float:left; width: 300px">';
-  echo '<table style="width:330px"><tr><td><strong>';
+  echo '<table class="createMenuTable"><tr><td><strong>';
   echo Form::label('menuCreate', __('Create a new menu.'));
   echo '</strong</td><td></td></tr><tr><td>';
   echo Form::label('title', __('Name of Menu'.':'));
   echo '</td><td>';
-  echo Form::input('title', '', array('id'=>'title', 'style'=>'width:150px'));
+  echo Form::input('title', '', array('id'=>'title'));
   echo '</td></tr><tr><td>';
   echo Form::submit('submitBtn', __('Submit'));
   echo '</td></tr></table>';

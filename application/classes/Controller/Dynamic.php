@@ -103,7 +103,6 @@ class Controller_Dynamic extends Controller_Main {
 		//is the user logged in?
 		if($auth->logged_in())
 		{
-	
 			$user = ORM::factory('user',$auth->get_user());
 		}
 		 

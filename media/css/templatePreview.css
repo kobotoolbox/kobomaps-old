@@ -1,39 +1,24 @@
+/*******************************
+   Template preview page
+ ******************************/
 
-
-#waiting{background:url(../img/loading.gif) no-repeat scroll;width:20px;height:20px;margin:0 auto;}
-#map_canvas {width: 100%; height: 100%; min-height: 555px; min-width: 500px; position: relative;} /* Fills the entire page */
-
-/* Legend */
-#topbar, #bottombar {background: url("../img/b40.png") repeat scroll 0 0 transparent;padding:5px}
-#topbar {left: 355px;position: absolute;/*bottom: 48px;*/z-index: 999;width:325px;}
-#legend {float:left;padding:3px; width:317px;text-align:left;}
-#legendtext {margin:0 0 4px;}
-#legendtext span {}
-#legend_gradient, #nationalaveragediv {height:19px;border:1px solid #ffffff;display:none;/*Only visible if indicator is selected*/}
-
-#legend_gradient {clear:left;float:left;width:120px;}
-#percentleft, #percentright, #nationalaveragelabel, #nationalaverageimg {line-height:14px;font-weight:bold;}
-#percentleft, #nationalaveragelabel {float:left;margin:3px 0 0 2px;height:13px;text-shadow:0 0 2px #fff;color:#000000;}
-#percentright, #nationalaverageimg {text-align:right;float:right;margin:3px 2px 0 0;height:13px;color:#fff;text-shadow:0 0 2px #000;}
-
-#nationalaveragediv {width:167px;float:right;}
-#nationalaveragelabelxx {}
-#nationalaverageimg {text-shadow:0 0 2px #fff;color:#000}
-#sourcetext {clear:both;margin:0 0 10px;float:left;width:315px;font-size:11px;}
-
-#nationalIndicatorChart {float:left;}
-#legend div.infowindow {padding:0;margin:9px 0 0;}
-#legend div.infowindow p {margin:4px 0;border:none}
-
-#twitterbutton {float:left;margin:4px 0 0 0;clear:both;}
-
-#poweredby {float:left;font-size:9px;}
-#poweredby a, #poweredby a:visited  {font-weight:bold;color:#555566;}
-#poweredby a:hover {font-weight:bold;color:#007EB8;text-decoration:underline;}
+#waiting{
+	background:url(../img/loading.gif) no-repeat scroll;
+	width:20px;
+	height:20px;
+	margin:0 auto;
+}
+#map_canvas {
+	width: 100%; 
+	height: 100%; 
+	min-height: 555px;
+	 min-width: 500px;
+	  position: relative;
+} /* Fills the entire page */
 
 
 /* resizing stuff*/
-/* Apply the element you want to drag/resize */
+/* Apply the element you wanto drag/resize */
 .drsElement {
  position: absolute;
 }
@@ -57,6 +42,23 @@
 }
 
 /*Map labels*/
-.countylabel, .areaVal{text-align:center;position:relative;z-index:999;white-space:nowrap;color:#FFF;font-weight:bold;text-shadow:0 0 2px #000;}
-.countylabel {left:-50%;font-size:10px;}
-.areaVal {font-size:14px;display:block;height:13px;font-family:Tahoma,sans-serif;}
+.countylabel, .areaVal{
+	text-align:center;
+	position:relative;
+	z-index:999;
+	white-space:
+	nowrap;
+	color:#FFF;
+	font-weight:bold;
+	text-shadow:0 0 2px #000;
+}
+.countylabel {
+	left:-50%;
+	font-size:10px;
+}
+.areaVal {
+	font-size:14px;
+	display:block;
+	height:13px;
+	font-family:Tahoma,sans-serif;
+}

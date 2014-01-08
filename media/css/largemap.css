@@ -1,38 +1,151 @@
-html {height: 100%; overflow:hidden;}
-body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;color: #404040;background-image: url('../img/background.png');}
-#siteHeader{width:900px;margin:0px auto;padding:0px}
-#waiting{background:url(../img/loading.gif) no-repeat scroll;width:20px;height:20px;margin:0 auto;}
-#map_canvas {width: 100%; height: 100%; min-height: 555px; min-width: 500px; position: relative;} /* Fills the entire page */
-/* Legend */
-#topbar, #bottombar {padding:5px; background-color:rgba(255,255,255,0.86);}
-#topbar {left: 355px;position: absolute; /*top:448px;*/ z-index: 999;width:325px;}
-#legend {padding:3px; width:333px;text-align:left; resize:both}
-#legendtext {margin:0 0 4px;}
-#legendtext span {}
-#legend_gradient, #nationalaveragediv {height:19px;display:none;/*Only visible if indicator is selected*/}
-#totalChartFrame {width:375px; height:125px; resize:none; overflow:hidden; border: none;
+/************************************************************
+			CSS For the user map pages 
+*************************************************************/ 
+
+html {
+	height: 100%; 
+	overflow:hidden;
+}
+body {
+	height: 100%; 
+	margin: 0px; 
+	padding: 0px;
+	font: 76%/170% Verdana,sans-serif;
+	color: #404040;
+	background-image: url('../img/background.png');
+}
+#siteHeader{
+	width:900px;
+	margin:0px auto;
+	padding:0px
+}
+#waiting{
+	background:url(../img/loading.gif) no-repeat scroll;
+	width:20px;
+	height:20px;
+	margin:0 auto;
+}
+#map_canvas { 
+	/* Fills the entire page */
+	width: 100%; 
+	height: 100%; 
+	min-height: 555px; 
+	min-width: 500px; 
+	position: relative;
+}
+
+
+/************************************************************
+						Legend
+*************************************************************/
+#topbar, #bottombar {
+	padding:5px; 
+	background-color:rgba(255,255,255,0.86);
+}
+#topbar {
+	left: 355px;
+	position: absolute; 
+	/*top:448px;*/ 
+	z-index: 999;
+	width:325px;
+}
+#legend {
+	padding:3px; 
+	width:333px;
+	text-align:left; 
+	resize:both;
+}
+#legendtext {
+	margin:0 0 4px;
+}
+#legend_gradient, #nationalaveragediv {
+	height:19px;
+	display:none;
+	/*Only visible if indicator is selected*/
+}
+#totalChartFrame {
+	width:375px; 
+	height:125px; 
+	resize:none; 
+	overflow:hidden;
+	border: none;
     -moz-transform: scale(0.4);
     -moz-transform-origin: 0 0;
     -o-transform: scale(0.4);
     -o-transform-origin: 0 0;
     -webkit-transform: scale(0.4);
-    -webkit-transform-origin: 0 0;}
-
-#legend_gradient {float:left;width:120px; position:relative;}
-#percentleft, #percentright, #nationalaveragelabel, #nationalaverageimg {line-height:14px;font-weight:bold;}
-#nationalaveragelabel {float:left;margin:3px 0 0 2px;height:13px;text-shadow:0 0 2px #fff;color:#000000;}
-#nationalaverageimg {text-align:right;float:right;margin:3px 2px 0 0;height:13px;color:#fff;text-shadow:0 0 2px #000;}
-#percentleft {top:0px; position:absolute; float:left;margin:3px 0 0 2px;height:13px;text-shadow:2px 2px 4px #fff;color:#000000;}
-#percentright {top: 0px; right:0px; text-align:right;float:right;margin:3px 2px 0 0;height:13px;color:#fff;text-shadow:2px 2px 4px #000; position:absolute; }
-
-#nationalaveragediv {width:167px;float:right; }
-#nationalaveragelabelxx {}
-#nationalaverageimg {text-shadow:0 0 2px #fff;color:#000}
-#sourcetext {clear:both;margin:0 0 10px;float:left;width:315px;font-size:11px;}
-
-
-#legend div.infowindow {padding:0;margin:9px 0 0;}
-#legend div.infowindow p {margin:4px 0;border:none}
+    -webkit-transform-origin: 0 0;
+}
+#legend_gradient {
+	float:left;
+	width:120px; 
+	position:relative;
+}
+#percentleft, #percentright, #nationalaveragelabel, #nationalaverageimg {
+	line-height:14px;
+	font-weight:bold;
+}
+#nationalaveragelabel {
+	float:left;
+	margin:3px 0 0 2px;
+	height:13px;
+	text-shadow:0 0 2px #fff;
+	color:#000000;
+}
+#nationalaverageimg {
+	text-align:right;
+	float:right;
+	margin:3px 2px 0 0;
+	height:13px;
+	color:#fff;
+	text-shadow:0 0 2px #000;
+}
+#percentleft {
+	top:0px; 
+	position:absolute; 
+	float:left;
+	margin:3px 0 0 2px;
+	height:13px;
+	text-shadow:2px 2px 4px #fff;
+	color:#000000;
+}
+#percentright {
+	top: 0px; 
+	right:0px; 
+	text-align:right;
+	float:right;
+	margin:3px 2px 0 0;
+	height:13px;
+	color:#fff;
+	text-shadow:2px 2px 4px #000; 
+	position:absolute; 
+}
+#nationalaveragediv {
+	width:167px;
+	float:right;
+}
+#nationalaverageimg {
+	text-shadow:0 0 2px #fff;
+	color:#000;
+}
+#nationalIndicatorChart{
+	width: 300px;
+}
+#sourcetext {
+	clear:both;
+	margin:0 0 10px;
+	float:left;
+	width:315px;
+	font-size:11px;
+}
+#legend div.infowindow {
+	padding:0;
+	margin:9px 0 0;
+}
+#legend div.infowindow p {
+	margin:4px 0;
+	border:none;
+}
 #minButtonLegend, #minButtonDesc{
 	color: #000;
 	font-size: 17px;
@@ -42,14 +155,24 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 	text-align:center;
 	border-radius:5px;
 }
-
-
-
-#twitterbutton {float:left;margin:4px 0 0 0;clear:both;}
-
-#poweredby {float:left;font-size:9px;}
-#poweredby a, #poweredby a:visited  {font-weight:bold;color:#555566;}
-#poweredby a:hover {font-weight:bold;color:#007EB8;text-decoration:underline;}
+#twitterbutton {
+	float:left;
+	margin:4px 0 0 0;
+	clear:both;
+}
+#poweredby {
+	float:left;
+	font-size:9px;
+}
+#poweredby a, #poweredby a:visited  {
+	font-weight:bold;
+	color:#555566;
+}
+#poweredby a:hover {
+	font-weight:bold;
+	color:#007EB8;
+	text-decoration:underline;
+}
 
 
 /* resizing stuff*/
@@ -79,32 +202,153 @@ body {height: 100%; margin: 0px; padding: 0px;font: 76%/170% Verdana,sans-serif;
 
 
 /* Info div at the bottom */
-#bottombar {position:absolute;bottom:90px;left:355px;z-index:999;}
-#bottombar a {display:inline;}
+#bottombar {
+	position:absolute;
+	bottom:90px;
+	left:355px;
+	z-index:999;
+}
+#bottombar a {
+	display:inline;
+}
 
 /* Div holding the indicator list */
-div#maplinks {left:0;height:100%;width:350px;overflow-y:hidden;overflow-x:hidden;position:absolute;z-index:10;background-color:rgba(255,255,255,0.86);text-align:left;}
-div#maplinks h3 {margin: 50px 5px 0;font-family: Helvetica,Arial,sans-serif;}
-div#maplinks p {padding:10px 5px 10px;margin:0px;font-size:10px;line-height:14px;font-weight:bold;border-bottom:2px solid #333;}
-div#maplinks div p {border-bottom:none;}
-div#maplinks p#loadingtext {border: medium none;font-size: 1em;line-height: 2em;padding:15px 5px;margin:25% 10px 0;border:1px solid #777777;color:#777777;text-align:center;background:url(../img/loading.gif) no-repeat scroll 50% 39px #ffffff;}
-#maplinks a, a:link, #maplinks a:visited  {text-decoration:none;color:#000;}
-#maplinks  a:hover, #maplinks  a:active, #maplinks  a.active, #maplinks  li.active a {text-decoration:none;background-color:#E59595;color:#fff}
-#mapHelpText{}
+div#maplinks {
+	left:0;
+	height:100%;
+	width:350px;
+	overflow-y:hidden;
+	overflow-x:hidden;
+	position:absolute;
+	z-index:10;
+	background-color:rgba(255,255,255,0.86);
+	text-align:left;
+}
+div#maplinks h3 {
+	margin: 50px 5px 0;
+	font-family: Helvetica,Arial,sans-serif;
+}
+div#maplinks p {
+	padding:10px 5px 10px;
+	margin:0px;
+	font-size:10px;
+	line-height:14px;
+	font-weight:bold;
+	border-bottom:2px solid #333;
+}
+div#maplinks div p {
+	border-bottom:none;
+}
+.mapLinksDiv{
+	height: 40px;
+	width:10px;
+}
+div#maplinks p#loadingtext {
+	border: medium none;
+	font-size: 1em;
+	line-height: 2em;
+	padding:15px 5px;
+	margin:25% 10px 0;
+	border:1px solid #777777;
+	color:#777777;
+	text-align:center;
+	background:url(../img/loading.gif) no-repeat scroll 50% 39px #ffffff;
+}
+#maplinks a, a:link, #maplinks a:visited  {
+	text-decoration:none;color:#000;
+}
+#maplinks  a:hover, #maplinks  a:active, #maplinks  a.active, #maplinks  li.active a {
+	text-decoration:none;
+	background-color:#E59595;
+	color:#fff;
+}
 
 /* Div at the bottom for selecting different sheets */
-div#sheetlinks {left: 0; height:40px; width:100%; position:absolute; background:#6e6e6e; z-index: 1002; padding:0;}
-#sheetnames {float:left; width:100%; height:40px; padding:0; margin:0; color:white;position:relative;}
-div#sheetlinks li.sheet2 {display: block; width: 100px; height: 40px; float: left; text-align:center; margin:0px;vertical-align:middle;}
-div#sheetlinks li.sheet2 span {margin:0px; padding:0px 0px;padding-top:10px;height:30px;vertical-align:middle;color:white;font-size:12px;}
-div#sheetlinks li.sheet2 span.active {background: #444444;}
-div#sheetlinks li.sheet2 span:hover {background: #555555;}
-div#sheetlinks a, div#sheetlinks span {color:white;}
-div#sheetlinks div#mapName {float:left; padding:10px 30px 10px 30px;font-weight:bold;font-size:18px;color:white;width:280px;}
-div#sheetlinks div.sheetScrollerControll{float:left;font-size:36px;font-weight:bold;padding:10px 10px;color:white;width:auto;margin-left:auto;}
-div#sheetlinks div.sheetScrollerControll a.inactive{color:gray;cursor:default}
-div#sheetlinks div#mapSocialShare{float:right;width:260px;background:#6e6e6e;height:40px;}
-div#sheetlinks div#sheetnamesWrapper{float:left;width:400px;height:40px;overflow:hidden;}
+div#sheetlinks {
+	left: 0; 
+	height:40px; 
+	width:100%; 
+	position:absolute; 
+	background:#6e6e6e; 
+	z-index: 1002; 
+	padding:0;
+}
+#sheetnames {
+	float:left; 
+	width:100%; 
+	height:40px; 
+	padding:0; 
+	margin:0; 
+	color:white;
+	position:relative;
+}
+div#sheetlinks li.sheet2 {
+	display: block; 
+	width: 100px; 
+	height: 40px; 
+	float: left; 
+	text-align:center; 
+	margin:0px;
+	vertical-align:middle;
+}
+div#sheetlinks li.sheet2 span {
+	margin:0px; 
+	padding:0px 0px;
+	padding-top:10px;
+	height:30px;
+	vertical-align:middle;
+	color:white;
+	font-size:12px;
+}
+div#sheetlinks li.sheet2 span.active {
+	background: #444444;
+}
+div#sheetlinks li.sheet2 span:hover {
+	background: #555555;
+}
+div#sheetlinks a, div#sheetlinks span {
+	color:white;
+}
+div#sheetlinks div#mapName {
+	float:left;
+	 padding:10px 30px 10px 30px;
+	 font-weight:bold;
+	 font-size:18px;
+	 color:white;
+	 width:280px;
+}
+div#sheetlinks div.sheetScrollerControll{
+	float:left;
+	font-size:36px;
+	font-weight:bold;
+	padding:10px 10px;
+	color:white;
+	width:auto;
+	margin-left:auto;
+}
+div#sheetlinks div.sheetScrollerControll a.inactive{
+	color:gray;
+	cursor:default;
+}
+div#sheetlinks div#mapSocialShare{
+	float:right;
+	width:260px;
+	background:#6e6e6e;
+	height:40px;
+}
+div#sheetlinks div#sheetnamesWrapper{
+	float:left;
+	width:400px;
+	height:40px;
+	overflow:hidden;
+}
+#iframeBlocker{
+	position: absolute;
+	 top: 0; 
+	 left: 0;
+	  width: 375px; 
+	  height: 125px;
+}
 
 /***************************************
  				map buttons
@@ -203,32 +447,124 @@ div#mapSocialShare ul li ul li a.active, div#mapSocialShare ul li ul li span.act
 }
 
 /* Styling the indicator list */
-span.sheet2 {color: #000;display: block;margin:0.5em 0;padding: 0.4em 0;font-size:1.7em;}
-span.indicatorLevel_1  {;color: #000;display: block;margin:0.5em 0;padding: 0.4em 0;border-bottom: 1px solid #bbb;font-size:1.1em;}
-span.indicatorLevel_1 .hover, span.indicatorLevel_1.active {border-bottom: 1px solid #E59595;}
-div#descriptionText{ height:auto; resize:none;border-bottom:2px solid #333;}
-div#descDiv {border-bottom:2px solid #333; position:relative; top:-2px}
-li.indicator {margin: 0.15em 0 0.8em 1.2em;list-style: none outside none;color:#000000;font-weight:bold;text-transform:none}
-ul.indicator {margin: 0.5em 0 0.3em;padding: 0;list-style:none;}
+span.sheet2 {
+	color: #000;
+	display: block;
+	margin:0.5em 0;
+	padding: 0.4em 0;
+	font-size:1.7em;
+}
+span.indicatorLevel_1  {
+	color: #000;
+	display: block;
+	margin:0.5em 0;
+	padding: 0.4em 0;
+	border-bottom: 1px solid #bbb;
+	font-size:1.1em;
+}
+span.indicatorLevel_1 .hover, span.indicatorLevel_1.active {
+	border-bottom: 1px solid #E59595;
+}
+div#descriptionText{ 
+	height:auto; 
+	resize:none;
+	border-bottom:2px solid #333;
+}
+div#descDiv {
+	border-bottom:2px solid #333; 
+	position:relative; 
+	top:-2px;
+}
+li.indicator {
+	margin: 0.15em 0 0.8em 1.2em;
+	list-style: none outside none;
+	color:#000000;
+	font-weight:bold;
+	text-transform:none;
+}
+ul.indicator {
+	margin: 0.5em 0 0.3em;
+	padding: 0;
+	list-style:none;
+}
 
-ul.questionsindicators {font:normal 0.8em/1.4 Verdana, sans-serif;margin:1.5em 0 0;padding:0;overflow-x:auto;border-bottom:2px solid #333; resize:vertical}
-li.indicatorLevel_1 {margin: 0.15em 0 0.15em 0.5em;padding: 0;font:bold 1em/1 Verdana,sans-serif;color:#919191;list-style:none;cursor:pointer;}
-ul.indicatorLevel_1 {margin: 0.3em 0 1em;padding: 0;cursor:default;} /* hidden by default using the js file */
-li.indicatorLevel_2 {margin: 0.15em 0 0.8em 1.2em;list-style: none outside none;color:#000000;font-weight:bold;text-transform:none}
-ul.indicatorLevel_2 {margin: 0.5em 0 0.3em;padding: 0;list-style:none;}
-li.indicatorLevel_3 {margin:0 0 0 2em; padding:0;font: 0.9em/1.4 Verdana,sans-serif;text-transform:none;}
+ul.questionsindicators {
+	font:normal 0.8em/1.4 Verdana, sans-serif;
+	margin:1.5em 0 0;
+	padding:0;
+	overflow-x:auto;
+	border-bottom:2px solid #333; 
+	resize:vertical;
+}
+li.indicatorLevel_1 {
+	margin: 0.15em 0 0.15em 0.5em;
+	padding: 0;
+	font:bold 1em/1 Verdana,sans-serif;
+	color:#919191;
+	list-style:none;
+	cursor:pointer;
+}
+ul.indicatorLevel_1 {
+	margin: 0.3em 0 1em;
+	padding: 0;
+	cursor:default;
+} /* hidden by default using the js file */
+li.indicatorLevel_2 {
+	margin: 0.15em 0 0.8em 1.2em;
+	list-style: none outside none;
+	color:#000000;
+	font-weight:bold;
+	text-transform:none;
+}
+ul.indicatorLevel_2 {
+	margin: 0.5em 0 0.3em;
+	padding: 0;
+	list-style:none;
+}
+li.indicatorLevel_3 {
+	margin:0 0 0 2em; 
+	padding:0;
+	font: 0.9em/1.4 Verdana,sans-serif;
+	text-transform:none;
+}
 
-span.dataLevel:hover, span.dataLevel.active{background-color: #E59595;}
+span.dataLevel:hover, span.dataLevel.active{
+	background-color: #E59595;
+}
 
 /* Pop up bubbles created through Gmaps */
-.bubbleheader {font-weight:bold; margin:0 0 0.2em}
-div.infowindow {border:none; min-width: 425px; padding:0}
-div.chartHolder {min-height:300px; min-width:450px; overflow:hidden;}
-
-
-
+.bubbleheader {
+	font-weight:bold; 
+	margin:0 0 0.2em;
+}
+div.infowindow {
+	border:none;
+	 min-width: 425px;
+	  padding:0;
+}
+div.chartHolder {
+	min-height:300px; 
+	min-width:450px; 
+	overflow:hidden;
+}
 
 /*Map labels*/
-.countylabel, .areaVal{text-align:center;position:relative;z-index:999;white-space:nowrap;color:#FFF;font-weight:bold;text-shadow:0 0 2px #000;}
-.countylabel {left:-50%;font-size:10px;}
-.areaVal {font-size:14px;display:block;height:13px;font-family:Tahoma,sans-serif;}
+.countylabel, .areaVal{
+	text-align:center;
+	position:relative;
+	z-index:999;
+	white-space:nowrap;
+	color:#FFF;
+	font-weight:bold;
+	text-shadow:0 0 2px #000;
+}
+.countylabel {
+	left:-50%;
+	font-size:10px;
+}
+.areaVal {
+	font-size:14px;
+	display:block;
+	height:13px;
+	font-family:Tahoma,sans-serif;
+}
