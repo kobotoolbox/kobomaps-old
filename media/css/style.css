@@ -460,7 +460,7 @@ table.list_table thead, table.scroll_list_table thead{
 	font-size:15px;
 }
 
-table.list_table tr td, table.list_table tr th, .scoll_list_table tr td, .scroll_list_table tr th{
+table.list_table tr td, table.list_table tr th, table.scroll_list_table tr td, table.scroll_list_table tr th{
 	border: solid 1px #848484;
 	padding-left:10px;
 	text-align: left;
@@ -612,6 +612,7 @@ table.list_table tr td a:hover, table.scroll_list_table tr td a:hover
 .scroll_table.scroll_list_table{
 	width:824px;
 	height: 400px;
+	border: solid 1px #848484;
 }
 .scroll_table th.menuName{
 	width: 78px;
@@ -627,7 +628,7 @@ table.list_table tr td a:hover, table.scroll_list_table tr td a:hover
 	width: 79px;
 }
 .scroll_table td.menuItems{
-	width: 641px;
+	width: 630px;
 }
 .scroll_table td.menuDelete{
 	width: 59px;	
@@ -654,13 +655,10 @@ table.list_table tr td a:hover, table.scroll_list_table tr td a:hover
 #createSubmenu #item_url{
 	width:150px;
 }
-#createSubmenu #file{
+#createSubmenu #file, #category_editor #file{
 	width: 300px;
 }
-.scroll_list_table{
-	width: 824px;
-	border: solid 1px #848484; 
-}
+
 /************************************************************
 						Specify data table
 *************************************************************/
@@ -899,8 +897,42 @@ a, a:visited, a:link{
 	color:blue;
 }
 
+.messageTable th.selectTH{
+	width: 60px;
+}
+.messageTable th.sentTH{
+	width: 167px;
+}
+.messageTable th.nameTH, th.messageTable.emailTH{
+	width: 285px;
+}
+.messageTable th.tasksTH{
+	width: 90px;
+}
+.messageTable.noMessages{
+	width: 880px;
+	text-align:center;
+}
+.messageTable td.selectTD{
+	width: 65px;
+}
+.messageTable td .sentTD{
+	width: 175px;
+}
+.messageTable td.nameTD, .messageTable td.emailTD{
+	width: 300px;
+}
+.messageTable td.tasksTD{
+	width: 75px;
+}
 
-
+.commentWindow #emailField{
+	width:250px;
+}
+.commentWindow textarea{
+	width:400px;
+	height:100px;
+}
 
 /************************************************************
 							inputs
@@ -1059,7 +1091,47 @@ div#accessList td{
 	padding-top:10px;
 	border-bottom:solid 1px #ebebeb;
 }
+/************************************************************
+							add1 general style
+*************************************************************/
+#category_editor #title, #category_editor #lat, #category_editor #lon,#category_editor #zoom{
+	width: 300px;
+}
+#category_editor #slug{
+	width: 260px;
+}
+#category_editor #description, #category_editor #advanced_options, #category_editor #CSS, #category_editor #map_style{
+	width: 600px;
+}
+#category_editor #googledoc, #category_editor #border_color, #category_editor #region_color, 
+	#category_editor.gradient_explain, #category_editor #regionTwo, #category_editor #graph_bar_color, #category_editor #graph_select_color{
+	display:none;
+}
+#category_editor #blankGSrow td{
+	text-align:center;
+}
+#category_editor #blankGSrow span{
+	color: #9a9a9a;
+}
+#category_editor tr.advanced{
+	display:none;
+}
+#category_editor #region_color_pick, #category_editor #border_color_pick, #category_editor #region_two_picker,
+	#category_editor #bar_color_pick, #category_editor #bar_select_color_pick{
+	width: 30px;
+}
 
+/************************************************************
+							add3 LongUnits warning
+*************************************************************/
+.longUnits  {
+	color: #d81417;
+	font-weight: bold;
+}
+.longUnits li {
+	font-weight: bold;
+	font-size: 14px;
+}
 
 /************************************************************
 							add5 page stuff
@@ -1079,20 +1151,32 @@ select.needstobemapped{
 }
 
 /************************************************************
-							add3 LongUnits warning
+							add6 page stuff
 *************************************************************/
-.longUnits  {
-	color: #d81417;
-	font-weight: bold;
+#styleTable{
+	width: 450px;
 }
-.longUnits li {
-	font-weight: bold;
-	font-size: 14px;
+#styleTable #styleName{
+	width: 229px;
+}
+#styleTable #styleType{
+	width: 155px;
+}
+#styleTable #styleStyles{
+	width: 186px;
 }
 
 /************************************************************
 						Stats
 *************************************************************/
+#statChart{
+	width: 700px;
+	height: 500px;
+}
+#statControls #maps{
+	width: 175px;
+	height: 100px;
+}
 #statChartWrapper{
 	float: right;
 }

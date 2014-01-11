@@ -2022,36 +2022,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 
 	 }
 	 
-	 
-	 public function action_totalChart(){
-	 	$this->auto_render = false;
-	 	$this->template = null;
-	 	
-	 	//grab the map ID
-	 	//was an id given?
-	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-	 	
-	 	if($map_id == 0)
-	 	{
-	 		return;
-	 	}
-	 	
-	 	//grab the map from the database
-	 	$map = ORM::factory('Map',$map_id);
-	 	
-	 	if(!$map->loaded())
-	 	{
-	 		return;
-	 	}
-	 	$js = view::factory('mapview/totalchart_js');
-	 	$view = new View('mapview/totalchart');
-	 	$view->map = $map;
-	 	$js->map = $map;
-	 	$view->user = $this->user;
-		$view->js = $js;
-		
-		echo $view;
-	 }
 	 	 
 	 
 	 /**

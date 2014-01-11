@@ -585,7 +585,6 @@ return array
 		'her'=>'her',
 		'error'=>'Error:',
 		
-		
 	
 		//Header
 		'site name'=>'KoBo Maps',
@@ -657,6 +656,12 @@ return array
 		'You have recieved a new message'=> 'You have recieved a new message. Click <a href="'.URL::base(TRUE, TRUE).'message">here</a> to view it.',
 		'New warning from KoboMaps'=>'New warning from KoboMaps',
 		'Reply' => 'Reply',
+		'Type the text.' => 'Type the text.',
+		'Play again' => 'Play again',
+		'Download as an MP3' => 'Download as an MP3',
+		'Ask new words' => 'Ask new words',
+		'Incorrect, try again.' => 'Incorrect, try again.',
+		"That was incorrect, please try again." => "That was incorrect, please try again.",
 		
 		//Menuedit pages
 		'Title of menu item' => 'Title of menu item',

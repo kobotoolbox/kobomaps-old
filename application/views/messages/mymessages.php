@@ -15,19 +15,19 @@
 	<table border="3" class="list_table">
 		<thead>
       <tr class="header">
-        <th style="width: 60px">
+        <th class="selectTH">
           <?php echo __('Select').'</br>'.Form::checkbox('select_all', null, false, array('id'=>'selectAll'));?>
         </th>
-        <th style="width: 167px">
+        <th class="sentTH">
           <?php echo __('Sent')?>
         </th>
-        <th style="width: 285px">
+        <th class="nameTH">
           <?php echo __('Name')?>
         </th>
-        <th style="width: 285px">
+        <th class="emailTH">
           <?php echo __('Email Address')?>
         </th>
-        <th style="width: 90px">
+        <th class="tasksTH">
           <?php echo __('Tasks')?>
         </th>
       </tr>
@@ -36,7 +36,7 @@
 			<?php 
 			if(count($messages) == 0)
 			{
-				echo '<tr><td colspan="5" style="width:880px;text-align:center;">'.__('You have no messages').'</td></tr>';
+				echo '<tr><td colspan="5" class="noMessages">'.__('You have no messages').'</td></tr>';
 			}
 			$i = 0;
 				foreach($messages as $message){
@@ -53,14 +53,14 @@
 					}
 					
 					
-					echo '<td style="width:65px">';
+					echo '<td class="selectTD">';
 					echo Form::checkbox('message_check['.$message->id.']', null, false, array('id'=>'message_check_'.$message->id));
-					echo '</td><td style="width: 175px">';
+					echo '</td><td class="sentTD">';
 					
 					echo '<a class="messageData" rel="#overlay" href="'.url::base().'message/messageDetails?id='.$message->id.'">';
 					
 					echo date('Y-m-d H:i',strtotime($message->date));
-					echo '</td><td style="width: 300px">';
+					echo '</td><td class="nameTD">';
 					//end of date column
 					
 					echo '<a class="messageData" rel="#overlay" href="'.url::base().'message/messageDetails?id='.$message->id.'">';
@@ -71,7 +71,7 @@
 					else {
 						echo $message->poster_name;
 					}
-					echo '</td><td style="width: 300px">';
+					echo '</td><td class="emailTD">';
 
 					echo '<a class="messageData" rel="#overlay" href="'.url::base().'message/messageDetails?id='.$message->id.'">';
 						
@@ -81,7 +81,7 @@
 					else {
 						echo $message->poster_email;
 					}
-					echo '</td></a><td style="width: 75px" class="messageTasks">';
+					echo '</td></a><td class="messageTasks tasksTD">';
 					//tasks stuff
 					echo '<a href="#" onclick="deleteMessage('.$message->id.')"><img class="delete" src="'.URL::base().'media/img/img_trans.gif" width="1" height="1"/></br>'. __('Delete');
 					

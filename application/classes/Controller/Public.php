@@ -13,7 +13,7 @@ class Controller_Public extends Controller_Main {
   	
 	
 	/**
-	 where users go to change their profiel
+	 where users go to change their profile
 	 */
 	public function action_maps()
 	{
@@ -188,7 +188,7 @@ class Controller_Public extends Controller_Main {
 	 	$map = ORM::factory('Map', $map_id);
 	 	 
 	 	//if the map isn't ready send it back to where it needs to go
-	 	if(intval($map->map_creation_progress) != 5)
+	 	if(intval($map->map_creation_progress) != 6)
 	 	{
 	 		HTTP::redirect('mymaps/add'.$map->map_creation_progress.'?id='.$map->id);
 	 	}
@@ -198,7 +198,6 @@ class Controller_Public extends Controller_Main {
 	 	//is the user logged in?
 	 	if($auth->logged_in())
 	 	{
-	 		
 	 		$user = ORM::factory('user',$auth->get_user());
 	 	}
 	 	
@@ -251,6 +250,40 @@ class Controller_Public extends Controller_Main {
 	 	 
 	 		 	
 	 }//end action_view()
+	 
+	 
+	 /**
+	  * The function that is used to create the jframe of the total chart to have a small version and then a popup
+	  */
+	 public function action_totalChart(){
+	 	$this->auto_render = false;
+	 	$this->template = null;
+	 	 
+	 	//grab the map ID
+	 	//was an id given?
+	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+	 	 
+	 	if($map_id == 0)
+	 	{
+	 		return;
+	 	}
+	 	 
+	 	//grab the map from the database
+	 	$map = ORM::factory('Map',$map_id);
+	 	 
+	 	if(!$map->loaded())
+	 	{
+	 		return;
+	 	}
+	 	$js = view::factory('mapview/totalchart_js');
+	 	$view = new View('mapview/totalchart');
+	 	$view->map = $map;
+	 	$js->map = $map;
+	 	$view->user = $this->user;
+	 	$view->js = $js;
+	 
+	 	echo $view;
+	 }
 	 
 	 
 	 /**

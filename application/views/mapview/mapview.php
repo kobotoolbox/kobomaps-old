@@ -159,11 +159,11 @@
 					<!--<div id="nationalChartScrollDiv" style="width:330px; overflow-y: auto; overflow-x: auto;padding-top: 25px;">
 				       	<div id="nationalIndicatorChart" style="width: 300px"></div>-->
 				       	</br></br>
-				       	<a id="totalChartHREF" rel="#overlay" style="display:none" href="<?php echo url::base()?>mymaps/totalchart?id=<?php echo $map->id?>&indicator=<?php 
+				       	<a id="totalChartHREF" rel="#overlay" style="display:none" href="<?php echo url::base()?>public/totalchart?id=<?php echo $map->id?>&indicator=<?php 
 				       			echo isset($_GET['indicator'])? $_GET['indicator'] : '';?>"></a>
 				       	<div id="iFrameWrapper" style="position:relative">
 				       		<div id="iframeBlocker"></div> 
-				       		<iframe id="totalChartFrame" scrolling="no" src="<?php echo url::base()?>mymaps/totalchart?id=<?php echo $map->id?>&indicator=<?php 
+				       		<iframe id="totalChartFrame" scrolling="no" src="<?php echo url::base()?>public/totalchart?id=<?php echo $map->id?>&indicator=<?php 
 				       			echo isset($_GET['indicator'])? $_GET['indicator'] : ''?>"></iframe>	
 				       	</div>
 				    </div>

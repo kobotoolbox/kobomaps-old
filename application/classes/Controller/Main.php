@@ -18,8 +18,6 @@ class Controller_Main extends Controller_Template {
 	{
 		parent::before();
 		
-		
-
 		$this->user = null; //not logged in
 		$auth = Auth::instance();
 		//is the user logged in?
@@ -66,7 +64,6 @@ class Controller_Main extends Controller_Template {
 		$logged_in = $auth->logged_in() OR $auth->auto_login();
 		if($logged_in)
 		{
-		
 			HTTP::redirect('mymaps'); //send them to their maps page if they're logged in		
 		}
 		HTTP::redirect('home');

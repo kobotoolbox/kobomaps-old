@@ -91,12 +91,12 @@
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    Slug Box
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo Form::input('title', $data['title'], array('id'=>'title', 'style'=>'width:300px;', 'maxlength' => '128'));
+	echo Form::input('title', $data['title'], array('id'=>'title', 'maxlength' => '128'));
 	echo '</td></tr><tr><td>';
 	echo Form::label('slug', __('Map Slug').": ");
 	echo '</td><td>';
 	echo '<br/>'.__('This will be the URL to access this map. It should be short and sweet').'.</br>';
-	echo URL::site(null,'HTTP').$username.'/'.Form::input('slug', $data['slug'], array('id'=>'slug', 'style'=>'width:260px;', 'maxlength'=>128));
+	echo URL::site(null,'HTTP').$username.'/'.Form::input('slug', $data['slug'], array('id'=>'slug', 'maxlength'=>128));
 	
 
 	echo '</td></tr><tr><td>';
@@ -105,7 +105,7 @@
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	echo Form::label('description', __('Map Description').": ");
 	echo '</td><td>';
-	echo Form::textarea('description', $data['description'], array('id'=>'description', 'style'=>'width:600px;'));
+	echo Form::textarea('description', $data['description'], array('id'=>'description'));
 	echo '</td></tr><tr><td>';
 	
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,12 +128,12 @@
 	
 	echo Form::label('file', __('Spreadsheet (.xls, .xlsx)').": ");
 	echo '</td><td>';
-	echo Form::file('file', array('id'=>'file', 'style'=>'width:300px;'));	
+	echo Form::file('file', array('id'=>'file'));	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                    Googledoc implementation
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr id="googledoc" style="display:none;"><td>';
+	echo '</td></tr><tr id="googledoc"><td>';
 	echo Form::label('googleurl', __('Google Spreadsheet').": ");
 	echo '</td><td>';
 	echo '<input type="button" id="authorizeButton" value="Authorize" onclick="authorizeKoboMaps();"/>';
@@ -148,7 +148,7 @@
 				</thead>
 				<tbody>
 				<tr id="blankGSrow">
-					<td colspan="4" style="text-align:center;"><span style="color:#9a9a9a;">Empty</span></td>
+					<td colspan="4"><span>Empty</span></td>
 				</tr>
 				</tbody>
 			</table>
@@ -166,7 +166,7 @@
 	echo '<tr style="display:none"><td>';
 	echo Form::label('lat', __('Latitude of center of map').": ");
 	echo '</td><td>';
-	echo Form::input('lat', $data['lat'], array('id'=>'lat', 'style'=>'width:300px;'));
+	echo Form::input('lat', $data['lat'], array('id'=>'lat'));
 	
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                     Googledoc longitude
@@ -174,12 +174,12 @@
 	echo '</td></tr><tr style="display:none"><td>';
 	echo Form::label('lon', __('Longitude of center of map').": ");
 	echo '</td><td>';
-	echo Form::input('lon', $data['lon'], array('id'=>'lon', 'style'=>'width:300px;'));
+	echo Form::input('lon', $data['lon'], array('id'=>'lon'));
 	
 	echo '</td></tr><tr style="display:none"><td>';
 	echo Form::label('zoom', __('Default map zoom').": ");
 	echo '</td><td>';
-	echo Form::select('zoom', array(1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9,10=>10,11=>11,12=>12,13=>13,14=>14,15=>15,16=>16,17=>17,18=>18),$data['zoom'], array('id'=>'zoom', 'style'=>'width:300px;'));
+	echo Form::select('zoom', array(1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9,10=>10,11=>11,12=>12,13=>13,14=>14,15=>15,16=>16,17=>17,18=>18),$data['zoom'], array('id'=>'zoom'));
 	
   /************************************************************************************************************************************************
                                           Advanced options section
@@ -187,12 +187,12 @@
 	echo '</td></tr><tr><td>';
 	echo Form::label('advanced_options', __('Show advanced options').": ");
 	echo '</td><td>';
-	echo Form::input('advanced_options', __('Advanced'), array('type'=>'button', 'id'=>'advanced_options', 'onclick'=>"toggle_class('advanced'); return false;", 'style'=>'width:600px;'));
+	echo Form::input('advanced_options', __('Advanced'), array('type'=>'button', 'id'=>'advanced_options', 'onclick'=>"toggle_class('advanced'); return false;"));
 	
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                     Show region names without data checkbox
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo '</td></tr><tr class="advanced"><td>';
 	echo Form::label('show_label', '<br/>'.__('Show All Labels').": ");
 	echo '</td><td></br>';
 	echo Form::checkbox('show_empty_name', null, $data['show_names']==1);
@@ -201,7 +201,7 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    What level should labels zoom at select box
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo '</td></tr><tr class="advanced"><td>';
 	echo Form::label('label_zoom_level', '</br>'.__('Zoom level to show labels').': ');
 	$label_zoom_options = array('-1'=>'Always Visible', 0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5, 6=>6, 7=>7, 8=>8, 9=>9, 10=>10, 11=>11, 12=>12, 13=>13, 14=>14, 15=>15, 16=>16, 17=>17, 18=>18, 19=>19);
 	echo '</td><td></br>';
@@ -211,7 +211,7 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    Font size for the Region names
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo '</td></tr><tr class="advanced"><td>';
 	echo Form::label('region_label', '</br>'.__('Font size of region names').": ");
 	$label_font_options = array(8=>'8 px', 10=>'10 px', 12=>'12 px', 14=>'14 px', 16=>'16 px', 18=>'18 px', 20=>'20 px', 22=>'22 px', 24=>'24 px', 26=>'26 px', 28=>'28 px', 
 			30=>'30 px', 32=>'32 px', 34=>'34 px', 36=>'36 px', 38=>'38 px', 40=>'40 px', 42=>'42 px', 44=>'44 px', 46=>'46 px', 48=>'48 px');
@@ -222,7 +222,7 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    Font size for the region data
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo '</td></tr><tr class="advanced"><td>';
 	echo Form::label('data_label', '<br/>'.__('Font size of data values').": ");
 	echo '</td><td></br>';
 	echo Form::select('value_label_font', $label_font_options, $data['value_label_font']);
@@ -232,25 +232,25 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    Region border color picker
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo '</td></tr><tr class="advanced"><td>';
 	echo Form::label('border_color_description', '<br/>'.__('Color of region borders').": ");
 	echo '</td><td></br>';
-	echo '<input id="border_color_pick" class="color {valueElement: border_color, pickerClosable:true}" style="width:30px"><input id="border_color" name="border_color" value="'.$data['border_color'].'" style="display:none">';
+	echo '<input id="border_color_pick" class="color {valueElement: border_color, pickerClosable:true}"><input id="border_color" name="border_color" value="'.$data['border_color'].'">';
 	echo Form::label('border_color_explain', '    '.__('Will change the color of the borders between regions.'));
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    Region color picker
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo '</td></tr><tr class="advanced"><td>';
 	echo Form::label('region_color', '<br/>'.__('Default color of regions').": ");
 	echo '</td><td></br>';
-	echo '<input id="region_color_pick" class="color {valueElement: region_color, pickerClosable:true}" style="width:30px"><input id="region_color" name="region_color" value="'.substr($data['region_color'], 0, 6).'" style="display:none">';
+	echo '<input id="region_color_pick" class="color {valueElement: region_color, pickerClosable:true}"><input id="region_color" name="region_color" value="'.substr($data['region_color'], 0, 6).'">';
 	echo Form::label('region_color_explain', '    '.__('Color of regions that are not being affected by an indicator.'));
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    Gradient check box
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo '</td></tr><tr class="advanced"><td>';
 	echo Form::label('gradient_label', '<br/>'.__('Make regions have a gradient?'));
 	echo '</td><td></br>';
 	echo Form::checkbox('gradient', null, $data['gradient']==1, array('id' => 'gradient', 'onclick' => 'openGradient()', 'value' => '"'.$data['gradient'].'"'));
@@ -259,13 +259,13 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    Region shading color picker 1
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo '</td></tr><tr class="advanced"><td>';
 	echo Form::label('polygon_color_shade', '<br/>'.__('Color of region shading').": ");
 	echo '</td><td></br>';
 	echo '<input id="polygon_color_pick" class="color {valueElement: polygon_color, pickerClosable:true, minS:0.8}" style="width:30px"><input id="polygon_color" name="polygon_color" value="'.substr($data['polygon_color'], 0, 6).'" style="display:none">';
 	echo Form::label('polygon_color_explain', '    '.__('Color of regions that are being affected by an indicator.'));
 	
-	echo '</td></tr><td></td><td class="gradient_explain" style="display:none;">';
+	echo '</td></tr><td></td><td class="gradient_explain">';
 	$secondColor = '';
 	if(strlen($data['polygon_color']) < 8){
 		$secondColor = 'FFFFFF';
@@ -276,13 +276,13 @@
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    Region shading color picker 2
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '<input id="region_two_picker" class="color {valueElement: regionTwo, pickerClosable:true}" style="width:30px"><input id="regionTwo" name="regionTwo" value="'.$secondColor.'" style="display:none">';
+	echo '<input id="region_two_picker" class="color {valueElement: regionTwo, pickerClosable:true}"><input id="regionTwo" name="regionTwo" value="'.$secondColor.'">';
 	echo  '  '.__('Regions will gradient into this color from the default color.');
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//                    Concurrent color across all sheets option
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo '</td></tr><tr class="advanced"><td>';
 	echo Form::label('same_color_explain', '<br/>'.__('Make map colors same'));
 	echo '</td><td></br>';
 	echo Form::checkbox('extend_range', null, $data['extend_range']==1, array('id' => 'gradient'));
@@ -290,30 +290,30 @@
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    Graph default bar color picker
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo '</td></tr><tr class="advanced"><td>';
 	echo Form::label('bar_color_description', '<br/>'.__('Color of bars in graphs').": ");
 	echo '</td><td></br>';
-	echo '<input id="bar_color_pick" class="color {valueElement: graph_bar_color, pickerClosable:true}" style="width:30px"><input id="graph_bar_color" name="graph_bar_color" value="'.$data['graph_bar_color'].'" style="display:none">';
+	echo '<input id="bar_color_pick" class="color {valueElement: graph_bar_color, pickerClosable:true}"><input id="graph_bar_color" name="graph_bar_color" value="'.$data['graph_bar_color'].'">';
 	echo Form::label('graph_color_explain', '    '.__('Color of bars in all graphs.'));
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    Graph selected bar color picker
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo '</td></tr><tr class="advanced"><td>';
 	echo Form::label('region_color', '<br/>'.__('Color of selected regions in graphs').": ");
 	echo '</td><td></br>';
-	echo '<input id="bar_select_color_pick" class="color {valueElement: graph_select_color, pickerClosable:true}" style="width:30px"><input id="graph_select_color" name="graph_select_color" value='.$data['graph_select_color'].' style="display:none">';
+	echo '<input id="bar_select_color_pick" class="color {valueElement: graph_select_color, pickerClosable:true}"><input id="graph_select_color" name="graph_select_color" value='.$data['graph_select_color'].'>';
 	echo Form::label('selected_color_explain', '    '.__('Color of bars in graphs that indicate the region selected currently.'));
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //                    Map css text box
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo '</td></tr><tr class="advanced"><td>';
 	echo Form::label('CSS', __('Map CSS').": ");
 	echo '</td><td>';
 	echo Form::label('CSS_description', '<br/>'.__('CSS can be used to edit the style of the map menubar and legend.').'<br/>'.__('To learn more about the use of CSS see: '));
 	echo Form::label('CSS_description','<a href="http://www.w3schools.com/css/">http://www.w3schools.com/css/</a> <br />');
-	echo Form::textarea('CSS', $data['CSS'], array('id'=>'CSS', 'style'=>'width:600px;'));
+	echo Form::textarea('CSS', $data['CSS'], array('id'=>'CSS'));
 	
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -324,9 +324,9 @@
 	echo '</td><td>';
 	echo Form::label('map_style_description', '<br/>'.__('The map styles can be used to edit the style of the background map.').'<br/>'.__('To learn more about the use of map styles see: '));
 	echo Form::label('map_style_description', '<br/><a href="https://developers.google.com/maps/documentation/javascript/styling">https://developers.google.com/maps/documentation/javascript/styling</a> <br />');
-	echo Form::textarea('map_style', $data['map_style'], array('id'=>'map_style', 'style'=>'width:600px;'));
+	echo Form::textarea('map_style', $data['map_style'], array('id'=>'map_style'));
 	
-	echo '</td></tr><tr class="advanced" style="display:none"><td>';
+	echo '</td></tr><tr class="advanced"><td>';
 	echo Form::label('default_map_style', __('Revert to default map style').": ");
 	echo '</td><td>';
 	echo Form::button('default_map_style', __('Default'), array('type'=>'button', 'id'=>'default_map_button', 'onclick'=>'set_default_map_style("map_style"); return false'));

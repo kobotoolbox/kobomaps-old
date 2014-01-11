@@ -144,7 +144,7 @@
   echo '</br></br>';
   
   /*********** Create menu ***************/
-  echo '<div id="createMenu" style="float:left; width: 300px">';
+  echo '<div id="createMenu">';
   echo '<table class="createMenuTable"><tr><td><strong>';
   echo Form::label('menuCreate', __('Create a new menu.'));
   echo '</strong</td><td></td></tr><tr><td>';

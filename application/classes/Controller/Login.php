@@ -22,6 +22,7 @@ class Controller_Login extends Controller_Main {
 		{
 			HTTP::redirect(Session::instance()->get_once('returnUrl','home'));
 		}
+		
 		 
 		$this->template->html_head->title = __("Login");
 		$this->template->content = View::factory('login/login');

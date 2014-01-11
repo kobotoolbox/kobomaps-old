@@ -62,11 +62,11 @@ echo Form::hidden('waterActive','false', array('id'=>'waterActive'));
 ?>
 
 <div id="styleDiv" class="scroll_table">
-	<table id="styleTable" style="width:450px">
+	<table id="styleTable">
 	<thead>
-		<th id="styleName" style="width:229px"> <?php echo __('Map Features')?> </th>
-		<th id="styleType" style="width:155px"> <?php echo __('Style Types')?> </th>
-		<th id="styleStyles" style="width:186px"> <?php echo __('Options')?> </th>
+		<th id="styleName"> <?php echo __('Map Features')?> </th>
+		<th id="styleType"> <?php echo __('Style Types')?> </th>
+		<th id="styleStyles"> <?php echo __('Options')?> </th>
 	</thead>
 	<?php 	
 		foreach($style as $sets){

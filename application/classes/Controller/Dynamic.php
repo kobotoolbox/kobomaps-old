@@ -89,9 +89,7 @@ class Controller_Dynamic extends Controller_Main {
 	public function viewMap($map)
 	{
 		$this->auto_render = false;
-	
-		$user = null;
-	
+		
 		//if the map isn't ready send it back to where it needs to go
 		if(intval($map->map_creation_progress) != 6)
 		{
@@ -105,7 +103,7 @@ class Controller_Dynamic extends Controller_Main {
 		{
 			$user = ORM::factory('user',$auth->get_user());
 		}
-		 
+		
 		$share = Model_Sharing::get_share($map->id, $user);
 		 
 		if($map->is_private)
@@ -133,6 +131,7 @@ class Controller_Dynamic extends Controller_Main {
 		{
 			Model_Usagestatistics::increment_visit($map->id);
 		}
+		
 		 
 		$map_template = ORM::factory('Template', $map->template_id);
 		$this->template = false;
@@ -151,10 +150,7 @@ class Controller_Dynamic extends Controller_Main {
 		$view->user = $user;
 		 
 		echo $view;
-		 
-	
-	
-	
+		
 	}//end action_view()
 	
 		
