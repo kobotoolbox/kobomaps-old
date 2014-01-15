@@ -6,8 +6,11 @@
 * Started on 2013-01-21
 *************************************************************/
 ?>
+
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-52d0945017398e4e"></script>
 	
 <div class="shareWindow" id="shareWindow_<?php echo $map->id;?>">
+
 <h2><?php echo __('Sharing Settings:');?> <?php echo $map->title;?></h2>
 
 
@@ -23,18 +26,31 @@
 		$body = rawurlencode($body); 
 		$subject = rawurlencode(__('Sharing'). ' '.$map->title. ' '.__('map'));
 	?>
-	<ul class="sharingTasks">
-		<li>
+	<div class="sharingTasks">
 			<a href="mailto:?subject=<?php echo $subject;?>&body=<?php echo $body;?>">
 				<img class="emailShare" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1">
-			</a>
-		</li>
+			</a>                                                               
+			<!-- AddThis Button BEGIN -->
+			<span style="position:relative"class="addthis_toolbox addthis_default_style" addthis:url="<?php echo URL::site(NULL, TRUE)?><?php echo $map->slug?>">
+			<a class="addthis_button_preferred_1"></a>
+			<a class="addthis_button_preferred_2"></a>
+			<a class="addthis_button_preferred_3"></a>
+			<a class="addthis_button_preferred_4"></a>
+			<a class="addthis_button_compact"></a>
+			<a class="addthis_counter addthis_bubble_style"></a>
+			</span>&nbsp;&nbsp;&nbsp;&nbsp;
+			<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-52d6a64f3241f4e1"></script>
+			<!-- AddThis Button END -->
+		<!-- AddThis Button END -->
+		 
+		<!--
 		<li>
 			<a href="" onclick="postMapLinkToFacebookFeed(); return false;">
 				<img class="fbShare" src="<?php echo URL::base();?>media/img/img_trans.gif" width="1" height="1">
 			</a>
 		</li>
-	</ul>
+		-->
+	</div>
 	
 	<br/>
 	<br/>

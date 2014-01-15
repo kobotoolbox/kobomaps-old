@@ -898,16 +898,16 @@ a, a:visited, a:link{
 }
 
 .messageTable th.selectTH{
-	width: 60px;
+	width: 65px;
 }
 .messageTable th.sentTH{
-	width: 167px;
+	width: 80px;
 }
-.messageTable th.nameTH, th.messageTable.emailTH{
-	width: 285px;
+.messageTable th.nameTH, .messageTable th.emailTH{
+	width: 300px;
 }
 .messageTable th.tasksTH{
-	width: 90px;
+	width: 92px;
 }
 .messageTable.noMessages{
 	width: 880px;
@@ -1058,7 +1058,7 @@ ul.sharingTasks li{
 	background-repeat: no-repeat;
 }
 .sharingTasks img.emailShare{
-	background: url('../img/shareSprite.png') 0px 0px;	
+	background: url('../img/shareSprite.png') 0px -7px;	
 	width:32px;
 	}
 .sharingTasks img.fbShare{
