@@ -176,8 +176,10 @@ var sheetControl = (function(){
 		
 		var s = $('#totalChartFrame').attr('src');
 		var newS = s.substring(0, s.indexOf('indicator='));
-		$('#totalChartHREF').attr('href', newS + 'indicator=' + indicator);
-		$('#totalChartFrame').attr('src', $('#totalChartHREF').attr('href'));
+		$('#expandDiv').attr('href', newS + 'indicator=' + indicator);
+		$('#totalChartFrame').attr('src', $('#expandDiv').attr('href'));
+		//Apparently changing the href removes the click listener, so have to reapply it
+		$('#expandDiv').bind('click');
 
 		//make sure the appropriate sheet tab is highlighted
 		//first remove the active class from all sheet tabs

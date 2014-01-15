@@ -161,10 +161,12 @@
 				       	</br></br>
 				       	<a id="totalChartHREF" rel="#overlay" style="display:none" href="<?php echo url::base()?>public/totalchart?id=<?php echo $map->id?>&indicator=<?php 
 				       			echo isset($_GET['indicator'])? $_GET['indicator'] : '';?>"></a>
-				       	<div id="iFrameWrapper" style="position:relative">
-				       		<div id="iframeBlocker"></div> 
+				       	<div id="iFrameWrapper">
+				       		<a id="expandDiv" rel="#overlay" style="float:right; display:none" href="<?php echo url::base()?>public/totalchart?id=<?php echo $map->id?>&indicator=<?php 
+				       			echo isset($_GET['indicator'])? $_GET['indicator'] : '';?>"><?php echo __('Expand')?></a>
 				       		<iframe id="totalChartFrame" scrolling="no" src="<?php echo url::base()?>public/totalchart?id=<?php echo $map->id?>&indicator=<?php 
-				       			echo isset($_GET['indicator'])? $_GET['indicator'] : ''?>"></iframe>	
+				       			echo isset($_GET['indicator'])? $_GET['indicator'] : ''?>"></iframe>
+				       			
 				       	</div>
 				    </div>
 				       <div id="sourcetext">

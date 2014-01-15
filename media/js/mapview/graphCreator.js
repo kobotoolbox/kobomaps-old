@@ -262,7 +262,7 @@ var graphCreator = (function(){
 			graphYAxis.reverse();
 		
 			//attempt to change height and width of nationalIndicatorChart div
-			var kmapInfochartHeight = calculateBarHeight(graphYAxis.length);
+			var kmapInfochartHeight = 1.1 * calculateBarHeight(graphYAxis.length);
 			//add in a new chart
 			$("#nationalIndicatorChart").empty();
 			$("#nationalIndicatorChart").height(kmapInfochartHeight);

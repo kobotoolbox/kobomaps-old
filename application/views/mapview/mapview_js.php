@@ -292,6 +292,7 @@ function UpdateAreaAllData(title, data, nationalAverage, indicator, unit, totalL
 	{
 		$("#nationalaveragediv").show();
 		$("#nationalIndicatorChart").show();
+		$('#expandDiv').show();
 
 		//total label -- defaults to "Total"
 		if(typeof totalLabel == "undefined")

@@ -129,7 +129,7 @@ body {
 	color:#000;
 }
 #nationalIndicatorChart{
-	width: 300px;
+	width: 400px;
 }
 #sourcetext {
 	clear:both;
@@ -342,13 +342,7 @@ div#sheetlinks div#sheetnamesWrapper{
 	height:40px;
 	overflow:hidden;
 }
-#iframeBlocker{
-	position: absolute;
-	 top: 0; 
-	 left: 0;
-	  width: 375px; 
-	  height: 125px;
-}
+
 
 /***************************************
  				map buttons
