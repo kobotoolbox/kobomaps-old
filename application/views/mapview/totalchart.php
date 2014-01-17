@@ -11,8 +11,4 @@
 
 <div id="nationalIndicatorChart"></div>
 
-
-<?php 
-?>
-
 <div style="clear:both"></div>

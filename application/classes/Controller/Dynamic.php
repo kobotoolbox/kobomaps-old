@@ -101,7 +101,7 @@ class Controller_Dynamic extends Controller_Main {
 		//is the user logged in?
 		if($auth->logged_in())
 		{
-			$user = ORM::factory('user',$auth->get_user());
+			$user = ORM::factory('User',$auth->get_user());
 		}
 		
 		$share = Model_Sharing::get_share($map->id, $user);

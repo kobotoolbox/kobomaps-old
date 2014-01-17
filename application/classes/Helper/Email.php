@@ -32,8 +32,7 @@ class Helper_Email
 			->setSubject($subject)
 			->setFrom($from)
 			->setTo($to)
-			->setBody($body, 'text/html')
-			->setReturnPath('dylan@ethertontech.com');
+			->setBody($body, 'text/html');
 			//echo($message->toString());
 			//phpinfo();
 			//Send the message

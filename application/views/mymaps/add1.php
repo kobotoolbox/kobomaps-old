@@ -68,7 +68,7 @@
 	$logged_in = $auth->logged_in() OR $auth->auto_login();
 	if($logged_in)
 	{
-		$user = ORM::factory('user',$auth->get_user());
+		$user = ORM::factory('User',$auth->get_user());
 	}
 	else{
 		$user = null;

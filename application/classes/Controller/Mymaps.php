@@ -2041,7 +2041,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	}
 	 
 	 	$auth = Auth::instance();
-	 	$user = ORM::factory('user',$auth->get_user());
+	 	$user = ORM::factory('User',$auth->get_user());
 	 	$directory = DOCROOT.'uploads/data/'.$user->username.'/';
 	 	if(!file_exists($directory)){
 	 		mkdir($directory, 0777);
@@ -2068,7 +2068,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 protected function _save_google_doc($link, $map)
 	 {
 	 	$auth = Auth::instance();
-	 	$user = ORM::factory('user',$auth->get_user());
+	 	$user = ORM::factory('User',$auth->get_user());
 	 	$directory = DOCROOT.'uploads/data/'.$user->username.'/';
 	 	if(!file_exists($directory)){
 	 		mkdir($directory, 0777);

@@ -47,7 +47,6 @@ class Controller_Message extends Controller_Main {
   * @return string of JSON if the $message form is empty, else returns string saying success
   */
 	public function action_submitmessage(){
-		//require_once('recaptchalib.php');
 		$this->auto_render = false;
 		//$this->response->headers('Content-Type','application/json');
 

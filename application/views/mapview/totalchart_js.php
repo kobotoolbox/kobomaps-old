@@ -28,7 +28,7 @@ var mapData;
 * Controls the content of the divs by asking for the information for the page that was selected
 */
 $(document).ready(function(){
-	$.get('<?php echo URL::base() .'uploads/data/'.ORM::factory('user', $map->user_id)->username.'/'. $map->json_file; ?>', function(data){
+	$.get('<?php echo URL::base() .'uploads/data/'.ORM::factory('User', $map->user_id)->username.'/'. $map->json_file; ?>', function(data){
 		mapData = data;
 		
 		if('<?php echo $_GET['indicator']?>' != undefined && typeof mapData !== "undefined" && typeof mapData.sheets !== "undefined")

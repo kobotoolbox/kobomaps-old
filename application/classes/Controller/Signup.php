@@ -150,7 +150,7 @@ class Controller_Signup extends Controller_Main {
 			if($auth->logged_in() OR $auth->auto_login())
 			{
 				//if so get the user info 
-				$user = ORM::factory('user',$auth->get_user());
+				$user = ORM::factory('User',$auth->get_user());
 				//has this user already verified their email
 				if(intval($user->email_verified) == 1)
 				{
@@ -159,7 +159,7 @@ class Controller_Signup extends Controller_Main {
 			}
 			else
 			{
-				$user = ORM::factory('user', $_GET['id']);
+				$user = ORM::factory('User', $_GET['id']);
 				//has this user already verified their email
 				if(intval($user->email_verified) == 1)
 				{

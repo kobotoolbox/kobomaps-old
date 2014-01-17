@@ -23,7 +23,7 @@ class Controller_Main extends Controller_Template {
 		//is the user logged in?
 		if($auth->logged_in())
 		{
-			$this->user = ORM::factory('user',$auth->get_user());
+			$this->user = ORM::factory('User',$auth->get_user());
 		}
 		$this->session = Session::instance();
 		//if auto rendere set this up

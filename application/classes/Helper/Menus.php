@@ -20,7 +20,7 @@ class Helper_Menus
 		$logged_in = $auth->logged_in() OR $auth->auto_login();
 		if($logged_in)
 		{
-			$user = ORM::factory('user',$auth->get_user());
+			$user = ORM::factory('User',$auth->get_user());
 		}
 		
 		//Don't show the register link if the user is logged in
@@ -230,7 +230,7 @@ class Helper_Menus
 		$admin_role = ORM::factory('Role')->where('name', '=', 'admin')->find();
 		if($logged_in)
 		{
-			$user = ORM::factory('user',$auth->get_user());
+			$user = ORM::factory('User',$auth->get_user());
 		}
 
 		switch($page)
@@ -637,7 +637,7 @@ class Helper_Menus
 		$logged_in = $auth->logged_in() OR $auth->auto_login();
 		if($logged_in)
 		{
-			$user = ORM::factory('user',$auth->get_user());
+			$user = ORM::factory('User',$auth->get_user());
 			$user_name = $user->first_name. ' ' . $user->last_name;
 			echo ' <li class="loginMenu">';
 			echo '<a href="'.url::base().'mymaps">'.$user_name .'</a>';

@@ -21,7 +21,7 @@ class Controller_Share extends Controller_Main {
 		//is the user logged in?
 		if($this->auth->logged_in())
 		{
-			$this->user = ORM::factory('user',$this->auth->get_user());
+			$this->user = ORM::factory('User',$this->auth->get_user());
 		}
 
 	}

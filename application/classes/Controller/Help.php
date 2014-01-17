@@ -54,7 +54,7 @@ class Controller_Help extends Controller_Main {
 		$admin_role = ORM::factory('Role')->where('name', '=', 'admin')->find();
 		if($logged_in)
 		{
-			$user = ORM::factory('user',$auth->get_user());
+			$user = ORM::factory('User',$auth->get_user());
 		}
 		else{
 			$user = null;
