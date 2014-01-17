@@ -96,6 +96,21 @@ class Controller_Signup extends Controller_Main {
 				}
 				else
 				{
+					//Send them an email about signing up
+					//figure out the no reply email address
+					$config = Kohana::$config->load('config');
+					$no_reply = $config->get('no_reply_email');
+					
+					$to = array($user->email=>$user->first_name. ' '. $user->last_name);
+					$from =array($no_reply=>__('KoboMaps System'));
+					$subject = __('Thanks for joining KoboMaps.');
+					$body = __('Thanks for joining KoboMaps,').' '.$user->first_name.'. &#13;&#13;'.__('Username').': '.$user->username.'.&#13;'.__('You can go to').'<a href="'.URL::site(NULL, 'http').'login/"> KoboMaps Login </a>'
+							.__('to log in.').'&#13;'.__('If you forget your password, visit').' <a href="'.URL::site(NULL, 'http').'login/"> KoboMaps Login </a>'.__('and click on Reset Password?').'&#13; <a href="http://www.kobotoolbox.org/contact">'.__('Please contact us on http://www.kobotoolbox.org/contact if you are having any issues.')
+							.'</a>&#13;&#13;'.__('Thank you again for joining KoboMaps!');
+					
+					Helper_Email::send_email($to, $from, $subject, $body);
+					
+					//Then lead them to the maps page
 					HTTP::redirect('/mymaps');
 				}
 			}

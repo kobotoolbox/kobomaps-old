@@ -388,6 +388,14 @@ return array
 		'Must agree to terms of use' => 'Must agree to terms of use',
 		'has already been used. Please choose another.' => 'has already been used. Please choose another.',
 		'The' => 'The',
+		'Thanks for joining KoboMaps.' => 'Thanks for joining KoboMaps.',
+		'Username' => 'Username',
+		'Thank you again for joining KoboMaps!' => 'Thank you again for joining KoboMaps!',
+		'You can go to' => 'You can go to',
+		'to log in.' => 'to log in.',
+		'If you forget your password, visit' => 'If you forget your password, visit',
+		'and click on Reset Password?' => 'and click on Reset Password?',
+		'Please contact us on http://www.kobotoolbox.org/contact if you are having any issues.' => 'Please contact us on http://www.kobotoolbox.org/contact if you are having any issues.',
 		
 		//my maps main page
 		'Select a map to edit or create a new one'=>'Select a map to edit or create a new one',
