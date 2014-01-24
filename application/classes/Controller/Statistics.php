@@ -8,6 +8,10 @@
 *************************************************************/
 
 class Controller_Statistics extends Controller_Loggedin {
+	
+	public function action_before(){
+		parent::before();
+	}
 
 	/**
 	 * Creates the statistic page where view usage of maps are seen

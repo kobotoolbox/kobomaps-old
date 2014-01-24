@@ -9,7 +9,9 @@
 
 class Controller_Dynamic extends Controller_Main {
 
-	
+	public function action_before(){
+		parent::before();
+	}
 	/**
 	 handles all requests
 	 */

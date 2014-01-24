@@ -8,6 +8,12 @@
 
 class Controller_Message extends Controller_Main {
 
+	
+	public function action_before(){
+		parent::before();
+	}
+	
+	
 	/**
 	where users go to submit a comment
 	*/

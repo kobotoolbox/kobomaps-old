@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /***********************************************************
-* Excel.php - Helper
+* Email.php - Helper
 * Used to send email to unsuspecting victims.
 * This software is copy righted by Kobo 2013
 * Writen by John Etherton <john@ethertontech.com>, Etherton Technologies <http://ethertontech.com>
@@ -24,7 +24,9 @@ class Helper_Email
 		if($_SERVER["SERVER_NAME"] != 'localhost' AND $_SERVER["SERVER_NAME"] != '127.0.0.1'){
 			require Kohana::find_file('swiftmailer', 'classes/lib/swift_required');
 			//Create the Transport
-			$transport = Swift_SmtpTransport::newInstance('localhost', 25);
+			$transport = Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, "ssl")
+				->setUsername('maps@kobotoolbox.org')
+				->setPassword("fy7D.rhf'f");
 			//Create the Mailer using your created Transport
 			$mailer = Swift_Mailer::newInstance($transport);
 			//Create a message

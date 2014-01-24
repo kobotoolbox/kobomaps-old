@@ -15,7 +15,6 @@ class Controller_Help extends Controller_Main {
 	public function before()
 	{
 		parent::before();
-	
 	}
 	
 	/**

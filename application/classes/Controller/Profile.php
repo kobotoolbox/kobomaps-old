@@ -8,7 +8,9 @@
 
 class Controller_Profile extends Controller_Loggedin {
 
-	
+	public function action_before(){
+		parent::before();
+	}
   	
 	/**
 	where users go to sign up

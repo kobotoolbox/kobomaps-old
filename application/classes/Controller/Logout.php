@@ -9,7 +9,9 @@
 class Controller_Logout extends Controller_Main {
 
 	
-  	
+  	public function action_before(){
+  		parent::before();
+  	}
 	/**
 	where users go to sign up
 	*/

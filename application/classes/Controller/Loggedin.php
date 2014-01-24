@@ -20,7 +20,6 @@ class Controller_Loggedin extends Controller_Main {
 	{
 		parent::before();
 
-
 		//is no one logged in
 		if($this->user == null)
 		{		

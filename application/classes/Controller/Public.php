@@ -10,7 +10,9 @@
 class Controller_Public extends Controller_Main {
 
 
-  	
+  	public function action_before(){
+  		parent::before();
+  	}
 	
 	/**
 	 where users go to change their profile

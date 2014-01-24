@@ -17,7 +17,6 @@ class Controller_Main extends Controller_Template {
 	public function before()
 	{
 		parent::before();
-		
 		$this->user = null; //not logged in
 		$auth = Auth::instance();
 		//is the user logged in?

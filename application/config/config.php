@@ -2,7 +2,7 @@
 
 return array(
 
-	'no_reply_email'=>'noreply@kobomaps.org',
+	'no_reply_email'=>'maps@kobomaps.org',
 	'controllers'=>array('dynamic',
 			'loggedin',
 			'login',

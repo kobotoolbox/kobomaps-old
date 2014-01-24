@@ -15,7 +15,6 @@ class Controller_Mymaps extends Controller_Loggedin {
 	public function before()
 	{
 		parent::before();
-	
 	}
 	
 

@@ -13,7 +13,6 @@ class Controller_Menuedit extends Controller_Loggedin {
 	public function before()
 	{
 		parent::before();	
-		
 		$auth = Auth::instance();
 		//only admins should be allowed to see the page in the first place, and if not, are redirected to mymaps
 		if(!$auth->logged_in('admin'))

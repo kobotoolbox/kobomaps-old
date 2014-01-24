@@ -19,6 +19,7 @@ class Controller_Templates extends Controller_Loggedin {
 	{
 		parent::before();
 		$this->is_admin = false;
+		
 	}
 
 
