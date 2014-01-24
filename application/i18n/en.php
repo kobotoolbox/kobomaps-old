@@ -396,6 +396,10 @@ return array
 		'If you forget your password, visit' => 'If you forget your password, visit',
 		'and click on Reset Password?' => 'and click on Reset Password?',
 		'Please contact us on http://www.kobotoolbox.org/contact if you are having any issues.' => 'Please contact us on http://www.kobotoolbox.org/contact if you are having any issues.',
+		'KoBoMaps allows you to create interactive maps or your research indicators and is part of the KoBoToolbox suite of software tools - created for demanding field applications.' => 'KoBoMaps allows you to create interactive maps or your research indicators and is part of the KoBoToolbox suite of software tools - created for demanding field applications.',
+		'To learn more about KoBoToolbox and all its features, check out:' => 'To learn more about KoBoToolbox and all its features, check out:',
+		'The KoBoMaps Team' => 'The KoBoMaps Team',
+		'If you don\'t wish to reset your password, disregard this email and no action will be taken.' => 'If you don\'t wish to reset your password, disregard this email and no action will be taken.',
 		
 		//my maps main page
 		'Select a map to edit or create a new one'=>'Select a map to edit or create a new one',

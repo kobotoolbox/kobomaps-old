@@ -102,11 +102,11 @@ class Controller_Signup extends Controller_Main {
 					$no_reply = $config->get('no_reply_email');
 					
 					$to = array($user->email=>$user->first_name. ' '. $user->last_name);
-					$from =array($no_reply=>__('KoboMaps System'));
+					$from =array($no_reply=>__('KoBoMaps at KoBoToolbox'));
 					$subject = __('Thanks for joining KoboMaps.');
-					$body = __('Thanks for joining KoboMaps,').' '.$user->first_name.'. &#13;&#13;'.__('Username').': '.$user->username.'.&#13;'.__('You can go to').'<a href="'.URL::site(NULL, 'http').'login/"> KoboMaps Login </a>'
-							.__('to log in.').'&#13;'.__('If you forget your password, visit').' <a href="'.URL::site(NULL, 'http').'login/"> KoboMaps Login </a>'.__('and click on Reset Password?').'&#13; <a href="http://www.kobotoolbox.org/contact">'.__('Please contact us on http://www.kobotoolbox.org/contact if you are having any issues.')
-							.'</a>&#13;&#13;'.__('Thank you again for joining KoboMaps!');
+					$body = '<p>'.__('Thanks for joining KoboMaps,').' '.$user->first_name.'. </p><p>'.__('Username').': '.$user->username.'. </p><p>'.__('You can go to').'<a href="'.URL::site(NULL, 'http').'login/"> KoboMaps Login </a>'
+							.__('to log in.').__('If you forget your password, visit').' <a href="'.URL::site(NULL, 'http').'login/"> KoboMaps Login </a>'.__('and click on Reset Password?').'</p><p> <a href="http://www.kobotoolbox.org/contact">'.__('Please contact us on http://www.kobotoolbox.org/contact if you are having any issues.')
+							.'</a></p><p>'.__('Thank you again for joining KoboMaps!').'</p>';
 					
 					Helper_Email::send_email($to, $from, $subject, $body);
 					

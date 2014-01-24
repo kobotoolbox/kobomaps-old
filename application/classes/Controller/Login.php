@@ -344,9 +344,15 @@ class Controller_Login extends Controller_Main {
 		$no_reply = $config->get('no_reply_email');
 
 		$to = array($user->email=>$user->first_name. ' '. $user->last_name);
-		$from =array($no_reply=>__('KoboMaps System'));
+		$from =array($no_reply=>__('KoBoMaps at KoBoToolbox'));
 		$subject = __('KoboMaps Password Reset');		
-		$body = $user->first_name.' '.__('reset your password by following this link:').' '. $secret_link;		
+		$body = '<p>'.__('Hi').' '.$user->first_name.'! '.__('Someone (hopefully you) has request a password rest for your KoBoMaps account. Follow the link below to set a new password:').'</p><p>'
+				.$secret_link 
+				.'</p><p>'
+				.__('If you don\'t wish to reset your password, disregard this email and no action will be taken.')
+				.'</p><ul><li>'.__('The KoBoMaps Team').' <a href="http://www.kobomaps.org">http://www.kobomaps.org</a></li></ul>'
+				.'<p>'.__('KoBoMaps allows you to create interactive maps or your research indicators and is part of the KoBoToolbox suite of software tools - created for demanding field applications.')
+				.'</p><p>'.__('To learn more about KoBoToolbox and all its features, check out:').'<a href="http://www.kobotoolbox.org">http://www.kobotoolbox.org</a>';		
 		
 		Helper_Email::send_email($to, $from, $subject, $body);
 
