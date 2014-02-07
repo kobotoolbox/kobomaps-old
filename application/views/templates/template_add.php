@@ -28,6 +28,7 @@
 </p>
 <?php }?>
 
+<?php echo __('If you moved the area labels and then saved, the template may take a few minutes to fully update, but rest assured the locations will have been saved.')?>
 
 <?php if(count($errors) > 0 )
 {
@@ -78,6 +79,8 @@ if($data['id']!=0){?>
 	echo Form::open(NULL, array('id'=>'edit_maps_form', 'enctype'=>'multipart/form-data')); 
 	echo Form::hidden('action','edit', array('id'=>'action'));
 	echo Form::hidden('id',$data['id'], array('id'=>'id'));
+	echo Form::hidden('markers', $data['marker_coordinates'], array('id' => 'markerForm'));
+	echo Form::hidden('markerBool', 'false', array('id' => 'markerBool'));
 	//echo Form::hidden('user_id',$data['user_id'], array('id'=>'user_id'));
 	echo '<table><tr><td>';
 	echo Form::label('title', __('Template Title').": ");

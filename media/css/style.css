@@ -1104,7 +1104,7 @@ div#accessList td{
 	width: 600px;
 }
 #category_editor #googledoc, #category_editor #border_color, #category_editor #region_color, 
-	#category_editor.gradient_explain, #category_editor #regionTwo, #category_editor #graph_bar_color, #category_editor #graph_select_color{
+	#category_editor .gradient_explain, #category_editor #regionTwo, #category_editor #graph_bar_color, #category_editor #graph_select_color{
 	display:none;
 }
 #category_editor #blankGSrow td{

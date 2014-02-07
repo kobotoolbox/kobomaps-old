@@ -179,7 +179,9 @@ class Controller_Templates extends Controller_Loggedin {
 			'lon'=>'',
 			'zoom'=>4,
 			'regions'=>array(),
-			'kml_file'=>'');
+			'kml_file'=>'',
+			'marker_coordinates' => ''
+		);
 		
 		$template = null;
 		
@@ -240,10 +242,11 @@ class Controller_Templates extends Controller_Loggedin {
 		/******* Handle incoming data*****/
 		if(!empty($_POST)) // They've submitted the form to update his/her wish
 		{
-			//print_r($_POST);
-			//exit;
+
 			try
 			{
+				
+				
 				$first_time = false; //used to know if we should blow away everything if there's an error
 				$utferror = false; //small error with utf not catching and telling
 				$ormerror = false; //just in case it doesn't catch these errors either
@@ -317,6 +320,11 @@ class Controller_Templates extends Controller_Loggedin {
 				{
 					$filename = $this->_save_file(null, $template);
 				}
+				if($_POST['edit'] != 'Add'){
+					if($_POST['markerBool'] == 'true'){
+						$template->marker_coordinates = $_POST['markers'];
+					}
+				}
 				$template->save();
 				$this->template->content->messages[] = __('Template Saved');	
 				//check if we deleted any regions
@@ -369,6 +377,7 @@ class Controller_Templates extends Controller_Loggedin {
 				$data['zoom'] =  $_POST['zoom'];
 				$data['lat'] =  $_POST['lat'];
 				$data['lon'] =  $_POST['lon'];
+				$data['marker_coordinates'] = $template->marker_coordinates;
 			}
 			catch (UTF_Character_Exception $e)
 			{
@@ -382,6 +391,7 @@ class Controller_Templates extends Controller_Loggedin {
 				$data['zoom'] =  $_POST['zoom'];
 				$data['lat'] =  $_POST['lat'];
 				$data['lon'] =  $_POST['lon'];
+				$data['marker_coordinates'] = $template->marker_coordinates;
 			}
 			//if we just created a new template, go to that page
 			//checks if errors occured, this was overwritting the errors before
@@ -404,6 +414,7 @@ class Controller_Templates extends Controller_Loggedin {
 			$data['lat'] =  $template->lat;
 			$data['lon'] =  $template->lon;
 			$data['kml_file'] = $template->kml_file;
+			$data['marker_coordinates'] = $template->marker_coordinates;
 			
 			$regions = ORM::factory('Templateregion')
 				->where('template_id', '=', $template->id)

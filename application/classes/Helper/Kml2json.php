@@ -1,4 +1,5 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php use ForceUTF8\Helper_Encoding;
+defined('SYSPATH') or die('No direct access allowed.');
 /***********************************************************
 * Kml2json.php - Helper
 * This software is copy righted by Kobo 2012
@@ -204,7 +205,7 @@ class Helper_Kml2json
 			{
 				echo ",";
 			}
-			$this->parsePlacemark($placemark, $region);
+			$this->parsePlacemark($placemark, $region, $template->marker_coordinates);
 		}
 		
 		//delete regions that weren't used
@@ -223,13 +224,19 @@ class Helper_Kml2json
 	 * @param ORM::region the region to get placemarks for
 	 * echoes JSON string that contains the placemark
 	 */
-	public static function parsePlacemark ($placemark, $region)
+	public static function parsePlacemark ($placemark, $region, $markerCoordinates = null)
 	{
+
 		set_time_limit(30);//because this could take a long freaking time.
 		$cumaltive_lat = 0;
 		$cumaltive_lon = 0;
 		$count = 0;
-	
+		
+		$marks = json_decode($markerCoordinates, true);
+		
+		//Check to see if a center coordinate has already been set
+		$center = isset($placemark->MultiGeometry->Point) ? $placemark->MultiGeometry->Point : null;
+		
 		//startup the area, it's name and points
 		$name = $region->title;
 		echo '{"area":"'.strval($name).'","points":[';
@@ -243,6 +250,7 @@ class Helper_Kml2json
 			$polygons = $placemark->Polygon;
 		}
 		$polygonCount = 0;
+		
 		foreach($polygons as $polygon)
 		{
 			//handle commas
@@ -379,7 +387,6 @@ class Helper_Kml2json
 					}
 				}
 				
-				
 				$offset ++;
 
 				echo "[$roundedLat,$roundedLon]";
@@ -389,23 +396,28 @@ class Helper_Kml2json
 		}
 		echo "],";
 		//calculate center point
-		print_r($maxLon.' '. $minLon.' and x '.$maxLat.' '.$minLat);
 		//exit;
 		if($count > 0)
 		{
-			
-			$marker_lon = ($maxLon + $minLon + ($cumaltive_lon/$count))/3;
-			$marker_lat = ($minLat + $maxLat + ($cumaltive_lat/$count))/3;
-			
-			print_r($marker_lat.' '.$marker_lon);
-			exit;
-			echo '"marker":['.$marker_lat.','.$marker_lon.']}';
-			
+			if(isset($marks[$name])){
+				echo '"marker":['.intval($marks[$name][0]).','.intval($marks[$name][1]).']}';
+			}
+			else if($center == null){
+				$marker_lon = ($maxLon + $minLon + ($cumaltive_lon/$count))/3;
+				$marker_lat = ($minLat + $maxLat + ($cumaltive_lat/$count))/3;
+		
+				echo '"marker":['.$marker_lat.','.$marker_lon.']}';
+			}
+			else if($center != null){
+				//We have a predefined center already
+				$coordinatesCenter = $center->coordinates[0];
+				$coordinateCenterArray =  explode(',', $coordinatesCenter);
+				echo '"marker":['.intval($coordinateCenterArray[0]).','.intval($coordinateCenterArray[1]).']}';
+			}
 		}
 		else
 		{
 			echo '"marker":[0,0]}';
-			exit;
 		}
 	
 	}//end function placePlacemark

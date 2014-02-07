@@ -33,6 +33,11 @@ var areaCenterPoints = new Array();
 var labels = new Array();
 
 /**
+ * global variable to hold the markers to move the labels, only viewable in edit
+ */
+var markers = new Array();
+
+/**
  * The map object
  */
  var map = null;
@@ -152,15 +157,18 @@ var labels = new Array();
 		//now parse the json
 
 		//Calling the boundaries and data files. The variables need to be defined in the container file as they are country-specific
-		parseJsonToGmap('<?php echo URL::base().'uploads/templates/'.$template->file; ?>');
+		parseJsonToGmap('<?php echo URL::base().'uploads/templates/'.$template->file; ?>', '<?php echo urlencode($template->marker_coordinates)?>');
+		
 	});
 
 
 	/**
 	* @param string jsonUrl of the file to be parsed
 	*/
-	function parseJsonToGmap(jsonUrl)
+	function parseJsonToGmap(jsonUrl, oldCoordinates)
 	 {	
+		oldCoordinates = decodeURIComponent(oldCoordinates).replace(/\+/g, '');
+		marker = $.parseJSON(oldCoordinates);
 		//initalizes our global county point array
 		areaPoints = new Array(); 
 		
@@ -198,11 +206,28 @@ var labels = new Array();
 				areaCenterPoints[areaName] = new google.maps.LatLng(areaData.marker[0], areaData.marker[1]);
 				
 				var tempLabel = new Label({map: map});
+				
+				//if(marker->areaName != null){
+				//	console.log(marker.areaName);
+				//}
 				tempLabel.set('position', new google.maps.LatLng(areaData.marker[0], areaData.marker[1]));
 				tempLabel.set('areaName', areaName);
-				labels[areaName] = tempLabel;
-			
 				
+				var tempMarker = new google.maps.Marker({
+					position: new google.maps.LatLng(areaData.marker[0], areaData.marker[1]),
+					draggable: true,
+					map: map,
+					title: areaName});
+					
+				labels[areaName] = tempLabel;
+				markers[areaName] = tempMarker;				
+			}
+			
+			/**
+			* Add a drag listener to all of the markers
+			*/
+			for(var marker in markers){
+					google.maps.event.addListener(markers[marker], 'drag', moveLabel);
 			}
 			
 			//now loops over the array of points and creates polygons
@@ -230,9 +255,8 @@ var labels = new Array();
 					 this.setOptions({fillOpacity: 0.75}); 
 				});
 			}
-			
+
 		});
-		
 
 	 }//end parse json
 		
@@ -265,6 +289,29 @@ var labels = new Array();
 		 	map.setCenter(latLon);
 		 }
 		 return true;
+	 }
+
+	 /**
+	 *	Function to pull the labels with their markers 
+	 */
+	 var moveLabel = function(event){
+		$('#markerBool').val('true');
+		labels[this.title].set('position', event.latLng);
+		$('#markerForm').val(formatMarkers());
+	 }
+
+	 //Update all of the marker locations to be uploaded with the form
+	 function formatMarkers(){
+		var list = '';
+		list += '{';
+		for(var marker in markers){
+			list += '"' + marker + '": ["' + markers[marker].position.d + '","' + markers[marker].position.e + '"], ';
+		}
+		//json not valid with trailing ,
+		list = list.slice(0, list.lastIndexOf(","));
+		list += '}';
+
+		return (list);
 	 }
 
 </script>

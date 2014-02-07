@@ -601,3 +601,7 @@ UPDATE `metadata` SET `v` = '1.0.053' WHERE `metadata`.`k` = 'Database Version';
 /** Dylan Gillespie 9/05/2013 -- Adding Extend_range option for maps **/
 ALTER TABLE  `maps` ADD  `extend_range` BOOLEAN NOT NULL DEFAULT FALSE AFTER  `gradient`;
 UPDATE `metadata` SET `v` = '1.0.054' WHERE `metadata`.`k` = 'Database Version';
+
+/** Dylan Gillespie 1/31/2014 --Adding marker_coordinates for templates to be defined by user **/
+ALTER TABLE  `templates` ADD  `marker_coordinates` TEXTCHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';
+UPDATE `metadata` SET `v` = '1.0.055' WHERE `metadata`.`k` = 'Database Version';

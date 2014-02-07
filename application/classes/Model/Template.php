@@ -21,6 +21,7 @@ class Model_Template extends ORM {
 	protected $_has_one = array(
 		'user' => array('model' => 'user'),
 	);
+	
 
 	
 	/**
@@ -69,7 +70,7 @@ class Model_Template extends ORM {
 	public function update_template($values)
 	{
 	
-		$expected = array('title', 'description', 'admin_level', 'file', 'decimals', 'lat', 'lon', 'zoom', 'user_id', 'is_official','is_private');
+		$expected = array('title', 'description', 'admin_level', 'file', 'decimals', 'lat', 'lon', 'zoom', 'user_id', 'is_official','is_private', 'marker_coordinates');
 	
 		$this->values($values, $expected);
 		$this->check();

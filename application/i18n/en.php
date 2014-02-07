@@ -729,6 +729,7 @@ return array
 		'Personal and Publically owned templates.' => 'Personal and Publically owned templates.',
 		'Kobomaps does not currently have templates for Moldova or Singapore.' => 'Kobomaps does not currently have templates for Moldova or Singapore.',
 		'Official templates provided by Kobomaps. These templates were gathered from GADM.org.' => 'Official templates provided by Kobomaps. These templates were gathered from GADM.org.',
+		'If you moved the area labels and then saved, the template may take a few minutes to fully update, but rest assured the locations will have been saved.' => 'If you moved the area labels and then saved, the template may take a few minutes to fully update, but rest assured the locations will have been saved.',
 	
 		
 		
