@@ -468,6 +468,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 	//get the id
 	 	$map_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 	 	//something when wrong, kick them back to add1
+	 	
 	 	if($map_id == 0)
 	 	{
 	 		HTTP::redirect('mymaps/add1');
