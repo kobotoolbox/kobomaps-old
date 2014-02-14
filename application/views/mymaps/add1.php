@@ -96,7 +96,10 @@
 	echo Form::label('slug', __('Map Slug').": ");
 	echo '</td><td>';
 	echo '<br/>'.__('This will be the URL to access this map. It should be short and sweet').'.</br>';
-	echo URL::site(null,'HTTP').$username.'/'.Form::input('slug', $data['slug'], array('id'=>'slug', 'maxlength'=>128));
+	if(strpos($data['slug'], '/') !== false){
+		$data['slug'] = substr($data['slug'], strpos($data['slug'], '/') + 1);
+	}
+	echo URL::site(null,'https').$username.'/'.Form::input('slug', $data['slug'], array('id'=>'slug', 'maxlength'=>128));
 	
 
 	echo '</td></tr><tr><td>';
@@ -265,7 +268,7 @@
 	echo '<input id="polygon_color_pick" class="color {valueElement: polygon_color, pickerClosable:true, minS:0.8}" style="width:30px"><input id="polygon_color" name="polygon_color" value="'.substr($data['polygon_color'], 0, 6).'" style="display:none">';
 	echo Form::label('polygon_color_explain', '    '.__('Color of regions that are being affected by an indicator.'));
 	
-	echo '</td></tr><td></td><td class="gradient_explain">';
+	echo '</td></tr><td></td><td class="gradient_explain" style="display:none">';
 	$secondColor = '';
 	if(strlen($data['polygon_color']) < 8){
 		$secondColor = 'FFFFFF';

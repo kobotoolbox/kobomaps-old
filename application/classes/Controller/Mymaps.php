@@ -181,7 +181,7 @@ class Controller_Mymaps extends Controller_Loggedin {
 			$data['id'] = $map_id;
 			$data['title'] = $map->title;
 			$data['description'] = $map->description;
-			$data['slug']= $this->_protectSlug($this->user->username).'/'.$map->slug;
+			$data['slug']= $map->slug;
 			$data['CSS'] = $map->CSS;
 			$data['lat'] = $map->lat;
 			$data['lon'] = $map->lon;
@@ -2287,9 +2287,11 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 						continue;
 	 					}
 	 					
- 						
+ 						//print_r($sheet);
+ 						//exit;
 	 					$region_name_xls = trim($sheet[$header_row->name][$region_column->name]);
 	 					$region_name_kml = $region_id_to_name[$region_column->template_region_id];
+	 					//$region_name_kml = $sheet[1][$region_column->name];
 	 					if($region_name_kml == null OR $region_name_kml == '')
 	 					{
 	 						continue;
@@ -2302,10 +2304,10 @@ class Controller_Mymaps extends Controller_Loggedin {
 	 					$value = trim($value);
 	 					
 
-	 					$data[$region_name_kml] = array('name'=>$region_name_xls, 'value'=>$value);
+	 					$data[$region_name_kml] = array('name'=>$sheet[1][$region_column->name], 'value'=>$value);
 	 					
 	 					
-	 					//todo need a better way to know what's been ignored, both for the purpose
+	 					//TODO need a better way to know what's been ignored, both for the purpose
 	 					//of showing ignored things in the UI to the user, and so we don't have to check for empty.	 					
 	 					
 	 				}

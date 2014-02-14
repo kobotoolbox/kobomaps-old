@@ -10,7 +10,7 @@
 	
 
 
-<script src='http://connect.facebook.net/en_US/all.js'></script>
+<script src='https://connect.facebook.net/en_US/all.js'></script>
 <script type="text/javascript">
 
 	$(document).ready(function() {
