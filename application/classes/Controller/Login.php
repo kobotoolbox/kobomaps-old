@@ -348,7 +348,7 @@ class Controller_Login extends Controller_Main {
 		$to = array($user->email=>$user->first_name. ' '. $user->last_name);
 		$from =array($no_reply=>__('KoBoMaps at KoBoToolbox'));
 		$subject = __('KoboMaps Password Reset');		
-		$body = '<p>'.__('Hi').' '.$user->first_name.'! '.__('Someone (hopefully you) has request a password rest for your KoBoMaps account. Follow the link below to set a new password:').'</p><p>'
+		$body = '<p>'.__('Hi').' '.$user->first_name.'! '.__('Someone (hopefully you) has requested a password rest for your KoBoMaps account. Follow the link below to set a new password:').'</p><p>'
 				.$secret_link 
 				.'</p><p>'
 				.__('If you don\'t wish to reset your password, disregard this email and no action will be taken.')

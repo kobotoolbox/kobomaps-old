@@ -217,17 +217,21 @@ var markers = new Array();
 				//}
 				var tempMarker = null;
 				var prevMark = false;
+				
 				if(savedMarker != null){
 					for(var mark in savedMarker){
 						if(mark == areaName){
 							tempLabel.set('position', new google.maps.LatLng(parseInt(savedMarker[areaName][0]), parseInt(savedMarker[areaName][1])));
 							tempLabel.set('areaName', areaName);
-							
-							tempMarker = new google.maps.Marker({
-								position: new google.maps.LatLng(parseInt(savedMarker[areaName][0]), parseInt(savedMarker[areaName][1])),
-								draggable: true,
-								map: map,
-								title: areaName});
+
+							//we don't want it on the view pages
+							if($(location).attr('href').indexOf('view') == -1){
+								tempMarker = new google.maps.Marker({
+									position: new google.maps.LatLng(parseInt(savedMarker[areaName][0]), parseInt(savedMarker[areaName][1])),
+									draggable: true,
+									map: map,
+									title: areaName});
+							}
 							prevMark = true;
 							break;
 						}
@@ -236,12 +240,15 @@ var markers = new Array();
 				if(!prevMark){
 					tempLabel.set('position', new google.maps.LatLng(areaData.marker[0], areaData.marker[1]));
 					tempLabel.set('areaName', areaName);
-					
-					tempMarker = new google.maps.Marker({
-						position: new google.maps.LatLng(areaData.marker[0], areaData.marker[1]),
-						draggable: true,
-						map: map,
-						title: areaName});
+
+					//we don't want it on the view pages
+					if($(location).attr('href').indexOf('view') == -1){
+						tempMarker = new google.maps.Marker({
+							position: new google.maps.LatLng(areaData.marker[0], areaData.marker[1]),
+							draggable: true,
+							map: map,
+							title: areaName});
+					}
 				}
 				labels[areaName] = tempLabel;
 				markers[areaName] = tempMarker;				
@@ -250,8 +257,10 @@ var markers = new Array();
 			/**
 			* Add a drag listener to all of the markers
 			*/
-			for(var marker in markers){
-					google.maps.event.addListener(markers[marker], 'drag', moveLabel);
+			if($(location).attr('href').indexOf('view') == -1){
+				for(var marker in markers){
+						google.maps.event.addListener(markers[marker], 'drag', moveLabel);
+				}	
 			}
 			
 			//now loops over the array of points and creates polygons
