@@ -411,7 +411,7 @@ class Helper_Kml2json
 				//We have a predefined center already
 				$coordinatesCenter = $center->coordinates[0];
 				$coordinateCenterArray =  explode(',', $coordinatesCenter);
-				echo '"marker":['.intval($coordinateCenterArray[0]).','.intval($coordinateCenterArray[1]).']}';
+				echo '"marker":['.floatval($coordinateCenterArray[0]).','.floatval($coordinateCenterArray[1]).']}';
 			}
 		}
 		else
@@ -423,7 +423,7 @@ class Helper_Kml2json
 				//We have a predefined center already
 				$coordinatesCenter = $center->coordinates[0];
 				$coordinateCenterArray =  explode(',', $coordinatesCenter);
-				echo '"marker":['.intval($coordinateCenterArray[0]).','.intval($coordinateCenterArray[1]).']}';
+				echo '"marker":['.floatval($coordinateCenterArray[0]).','.floatval($coordinateCenterArray[1]).']}';
 			}
 			else {echo '"marker":[0,0]}';}
 		}

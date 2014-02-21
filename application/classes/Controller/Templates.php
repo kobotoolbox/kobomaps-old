@@ -391,6 +391,7 @@ class Controller_Templates extends Controller_Loggedin {
 				$data['zoom'] =  $_POST['zoom'];
 				$data['lat'] =  $_POST['lat'];
 				$data['lon'] =  $_POST['lon'];
+				$data['marker_coordinates'] = $_POST['markers'];
 			}
 			//if we just created a new template, go to that page
 			//checks if errors occured, this was overwritting the errors before
@@ -451,7 +452,9 @@ class Controller_Templates extends Controller_Loggedin {
 	 			'lon'=>'',
 	 			'zoom'=>4,
 	 			'regions'=>array(),
-	 			'kml_file'=>'');
+	 			'kml_file'=>'',
+	 			'marker_coordinates' => ''
+	 	);
 	 
 	 	$template = null;
 	 
@@ -518,6 +521,7 @@ class Controller_Templates extends Controller_Loggedin {
  		$data['lat'] =  $template->lat;
  		$data['lon'] =  $template->lon;
  		$data['kml_file'] = $template->kml_file;
+ 		$data['marker_coordinates'] = $template->marker_coordinates;
  			
  		$regions = ORM::factory('Templateregion')
 	 		->where('template_id', '=', $template->id)

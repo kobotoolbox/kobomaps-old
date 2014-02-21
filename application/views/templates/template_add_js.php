@@ -221,13 +221,13 @@ var markers = new Array();
 				if(savedMarker != null){
 					for(var mark in savedMarker){
 						if(mark == areaName){
-							tempLabel.set('position', new google.maps.LatLng(parseInt(savedMarker[areaName][0]), parseInt(savedMarker[areaName][1])));
+							tempLabel.set('position', new google.maps.LatLng(parseFloat(savedMarker[areaName][0]), parseFloat(savedMarker[areaName][1])));
 							tempLabel.set('areaName', areaName);
 
 							//we don't want it on the view pages
 							if($(location).attr('href').indexOf('view') == -1){
 								tempMarker = new google.maps.Marker({
-									position: new google.maps.LatLng(parseInt(savedMarker[areaName][0]), parseInt(savedMarker[areaName][1])),
+									position: new google.maps.LatLng(parseFloat(savedMarker[areaName][0]), parseFloat(savedMarker[areaName][1])),
 									draggable: true,
 									map: map,
 									title: areaName});
@@ -343,7 +343,6 @@ var markers = new Array();
 		//json not valid with trailing ,
 		list = list.slice(0, list.lastIndexOf(","));
 		list += '}';
-
 		return (list);
 	 }
 
