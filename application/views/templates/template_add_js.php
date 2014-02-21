@@ -38,6 +38,11 @@ var labels = new Array();
 var markers = new Array();
 
 /**
+ * global variable for incoming markers that have already been saved
+ */
+ var savedMarker = new Array();
+
+/**
  * The map object
  */
  var map = null;
@@ -168,7 +173,7 @@ var markers = new Array();
 	function parseJsonToGmap(jsonUrl, oldCoordinates)
 	 {	
 		oldCoordinates = decodeURIComponent(oldCoordinates).replace(/\+/g, '');
-		marker = $.parseJSON(oldCoordinates);
+		savedMarker = $.parseJSON(oldCoordinates);
 		//initalizes our global county point array
 		areaPoints = new Array(); 
 		
@@ -210,15 +215,34 @@ var markers = new Array();
 				//if(marker->areaName != null){
 				//	console.log(marker.areaName);
 				//}
-				tempLabel.set('position', new google.maps.LatLng(areaData.marker[0], areaData.marker[1]));
-				tempLabel.set('areaName', areaName);
-				
-				var tempMarker = new google.maps.Marker({
-					position: new google.maps.LatLng(areaData.marker[0], areaData.marker[1]),
-					draggable: true,
-					map: map,
-					title: areaName});
+				var tempMarker = null;
+				var prevMark = false;
+				if(savedMarker != null){
+					for(var mark in savedMarker){
+						if(mark == areaName){
+							tempLabel.set('position', new google.maps.LatLng(parseInt(savedMarker[areaName][0]), parseInt(savedMarker[areaName][1])));
+							tempLabel.set('areaName', areaName);
+							
+							tempMarker = new google.maps.Marker({
+								position: new google.maps.LatLng(parseInt(savedMarker[areaName][0]), parseInt(savedMarker[areaName][1])),
+								draggable: true,
+								map: map,
+								title: areaName});
+							prevMark = true;
+							break;
+						}
+					}
+				}
+				if(!prevMark){
+					tempLabel.set('position', new google.maps.LatLng(areaData.marker[0], areaData.marker[1]));
+					tempLabel.set('areaName', areaName);
 					
+					tempMarker = new google.maps.Marker({
+						position: new google.maps.LatLng(areaData.marker[0], areaData.marker[1]),
+						draggable: true,
+						map: map,
+						title: areaName});
+				}
 				labels[areaName] = tempLabel;
 				markers[areaName] = tempMarker;				
 			}

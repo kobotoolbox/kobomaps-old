@@ -396,11 +396,10 @@ class Helper_Kml2json
 		}
 		echo "],";
 		//calculate center point
-		//exit;
 		if($count > 0)
 		{
 			if(isset($marks[$name])){
-				echo '"marker":['.intval($marks[$name][0]).','.intval($marks[$name][1]).']}';
+				echo '"marker":['.$marks[$name][0].','.$marks[$name][1].']}';
 			}
 			else if($center == null){
 				$marker_lon = ($maxLon + $minLon + ($cumaltive_lon/$count))/3;
@@ -417,7 +416,16 @@ class Helper_Kml2json
 		}
 		else
 		{
-			echo '"marker":[0,0]}';
+			if(isset($marks[$name])){
+				echo '"marker":['.$marks[$name][0].','.$marks[$name][1].']}';
+			}
+			else if($center != null){
+				//We have a predefined center already
+				$coordinatesCenter = $center->coordinates[0];
+				$coordinateCenterArray =  explode(',', $coordinatesCenter);
+				echo '"marker":['.intval($coordinateCenterArray[0]).','.intval($coordinateCenterArray[1]).']}';
+			}
+			else {echo '"marker":[0,0]}';}
 		}
 	
 	}//end function placePlacemark

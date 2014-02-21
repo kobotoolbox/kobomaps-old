@@ -320,11 +320,11 @@ class Controller_Templates extends Controller_Loggedin {
 				{
 					$filename = $this->_save_file(null, $template);
 				}
-				if($_POST['edit'] != 'Add'){
+				//if($_POST['edit'] != 'Add'){
 					if($_POST['markerBool'] == 'true'){
 						$template->marker_coordinates = $_POST['markers'];
 					}
-				}
+				//}
 				$template->save();
 				$this->template->content->messages[] = __('Template Saved');	
 				//check if we deleted any regions
@@ -377,7 +377,7 @@ class Controller_Templates extends Controller_Loggedin {
 				$data['zoom'] =  $_POST['zoom'];
 				$data['lat'] =  $_POST['lat'];
 				$data['lon'] =  $_POST['lon'];
-				$data['marker_coordinates'] = $template->marker_coordinates;
+				$data['marker_coordinates'] = $_POST['markers'];
 			}
 			catch (UTF_Character_Exception $e)
 			{
@@ -391,7 +391,6 @@ class Controller_Templates extends Controller_Loggedin {
 				$data['zoom'] =  $_POST['zoom'];
 				$data['lat'] =  $_POST['lat'];
 				$data['lon'] =  $_POST['lon'];
-				$data['marker_coordinates'] = $template->marker_coordinates;
 			}
 			//if we just created a new template, go to that page
 			//checks if errors occured, this was overwritting the errors before
