@@ -162,7 +162,7 @@ var markers = new Array();
 		//now parse the json
 
 		//Calling the boundaries and data files. The variables need to be defined in the container file as they are country-specific
-		parseJsonToGmap('<?php echo URL::base().'uploads/templates/'.$template->file; ?>', '<?php echo urlencode($template->marker_coordinates)?>');
+		parseJsonToGmap('<?php echo URL::base().'uploads/templates/'.$template->file; ?>', encodeURIComponent($('#markerForm').val()));
 		
 	});
 
