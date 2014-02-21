@@ -66,6 +66,7 @@
 <br/>
 <div >
 <?php 	
+	echo Form::hidden('marker', $data['marker_coordinates'], array('id' => 'markerForm'));
 	echo '<table><tr><td>';
 	echo Form::label('title', __('Template Title').": ");
 	echo '</td><td>';
