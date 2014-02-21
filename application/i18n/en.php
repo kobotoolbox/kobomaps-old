@@ -376,6 +376,11 @@ return array
 		'Password Reset'=>'Password Reset',
 		'Your passwords don\'t match'=>'Your passwords don\'t match',
 		'Facebook login failed.'=>'Facebook login failed.',
+		'Someone (hopefully you) has requested a password rest for your KoBoMaps account. Follow the link below to set a new password:' => 'Someone (hopefully you) has requested a password rest for your KoBoMaps account. Follow the link below to set a new password:',
+		'If you don\'t wish to reset your password, disregard this email and no action will be taken.' => 'If you don\'t wish to reset your password, disregard this email and no action will be taken.',
+		'The KoBoMaps Team' => 'The KoBoMaps Team',
+		'KoBoMaps allows you to create interactive maps or your research indicators and is part of the KoBoToolbox suite of software tools - created for demanding field applications.' => 'KoBoMaps allows you to create interactive maps or your research indicators and is part of the KoBoToolbox suite of software tools - created for demanding field applications.',
+		'To learn more about KoBoToolbox and all its features, check out:' => 'To learn more about KoBoToolbox and all its features, check out:',
 		
 		
 		//sign up page
