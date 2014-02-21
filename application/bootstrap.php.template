@@ -123,7 +123,8 @@ Kohana::modules(array(
 
 $controllers_array =  Kohana::$config->load('config')->get('controllers');
 $controllers_string = implode('|', $controllers_array);
-
+$config['site_protocol'] = 'https';
+$_SERVER['HTTPS'] = 'on';
 /**
  * Sets the routing here. Our first routing step is to see if the URL contains a controller name, if so we'll 
  * direct the user to the controler. If not we send them to the dynamic controler that grabs maps from the DB
