@@ -366,7 +366,7 @@ class Helper_Kml2json
 				}
 				
 				if($distance != 0){
-					if($distance >= .1){
+					if($distance >= .01){
 						/*
 						print_r($old_x.' old_x, ');
 						print_r($old_y.' old_y, ');
