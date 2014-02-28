@@ -318,9 +318,9 @@ class Model_Map extends ORM {
 
 		
 		$new_map->update_map($copy_array);
-		
+		$map_user = ORM::factory('User', $user_id);
 		//copy the map files
-		$path = DOCROOT.'uploads/data/'; 
+		$path = DOCROOT.'uploads/data/'. $map_user->username.'/'; 
 		
 		//copy the json file
 		$new_json = $new_map->id.'.json';
