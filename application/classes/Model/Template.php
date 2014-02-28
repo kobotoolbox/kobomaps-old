@@ -152,6 +152,7 @@ class Model_Template extends ORM {
 		$new_template->file = $new_file;
 		$new_template->kml_file = $new_kml;
 		$new_template->is_official = 0;
+		$new_template->is_private = 1;
 		
 		$new_template->save();
 		
