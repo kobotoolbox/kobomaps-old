@@ -571,7 +571,7 @@ class Controller_Templates extends Controller_Loggedin {
 	 
 		$new_template = $template->copy($this->user->id);
 		
-		HTTP::redirect('templates/edit?id='.$new_template->id);
+		HTTP::redirect('templates/edit?id='.$new_template->id.'&copy');
 	 }//end action_view
 	 
 

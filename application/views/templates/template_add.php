@@ -159,7 +159,12 @@ if($data['id']!=0){?>
 		echo '</td></tr><tr><td>';
 	}
 	
-	echo Form::submit('edit', $data['id']==0?__('Add'): __('Edit'), array('id'=>'edit_button'));
+	if(isset($_GET['copy'])){
+		echo Form::submit('edit', __('Save'), array('id'=>'edit_button'));
+	}
+	else{
+		echo Form::submit('edit', $data['id']==0?__('Add'): __('Edit'), array('id'=>'edit_button'));
+	}
 	echo '</td><td></td></tr></table>';
 	echo Form::close();
 ?>
