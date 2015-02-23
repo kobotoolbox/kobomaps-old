@@ -523,7 +523,7 @@ ALTER TABLE menu_items DROP INDEX menu_2;
 ALTER TABLE  `menu_items` DROP FOREIGN KEY  `menu_items_ibfk_1` ;
 ALTER TABLE menu_items DROP INDEX menu;
 ALTER TABLE  `menu_items` CHANGE  `menu`  `menu_id` INT( 11 ) NOT NULL;
-ALTER TABLE  `menu_items` ADD FOREIGN KEY (  `menu_id` ) REFERENCES  `kobomaps`.`menus` (
+ALTER TABLE  `menu_items` ADD FOREIGN KEY (  `menu_id` ) REFERENCES  `menus` (
 	`id`) ON DELETE CASCADE ON UPDATE NO ACTION ;
 UPDATE `metadata` SET  `v` =  '1.0.047' WHERE  `metadata`.`k` ='Database Version';
 	
@@ -603,5 +603,5 @@ ALTER TABLE  `maps` ADD  `extend_range` BOOLEAN NOT NULL DEFAULT FALSE AFTER  `g
 UPDATE `metadata` SET `v` = '1.0.054' WHERE `metadata`.`k` = 'Database Version';
 
 /** Dylan Gillespie 1/31/2014 --Adding marker_coordinates for templates to be defined by user **/
-ALTER TABLE  `templates` ADD  `marker_coordinates` TEXTCHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';
+ALTER TABLE  `templates` ADD  `marker_coordinates` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT  '';
 UPDATE `metadata` SET `v` = '1.0.055' WHERE `metadata`.`k` = 'Database Version';
